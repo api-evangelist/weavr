@@ -1,0 +1,1083 @@
+openapi: 3.1.0
+info:
+  version: v3
+  title: Weavr Multi Product BackOffice Access Token Trusted Payees API
+  x-logo:
+    url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
+    backgroundColor: '#FFFFFF'
+    altText: Weavr
+  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
+
+    identities and their instruments, without requiring the users to be logged in.
+
+
+    A token is to be obtained through the `access_token` method, and this will allow relevant operations
+
+    to be performed on behalf of this same identity.
+
+    '
+  contact:
+    name: Weavr
+    url: https://weavr.io
+servers:
+- description: Weavr Sandbox Environment
+  url: https://sandbox.weavr.io/multi/backoffice
+tags:
+- name: Trusted Payees
+  description: 'Manage a list of trusted payees for Outgoing wire transfers and Sends.
+
+
+    Aside from convenience and a reduced chance of making errors when making transactions,
+
+    this allows for the introduction an SCA exemption, where the account holder can request
+
+    that transactions to `TRUSTED` payees to be exempted from the requirement to pass
+
+    an SCA challenge every time.
+
+    '
+paths:
+  /beneficiaries:
+    post:
+      tags:
+      - Trusted Payees
+      description: Payees (previously "beneficiaries"). Create one or more payees for the logged-in corporate or consumer identity.
+      summary: Add payees
+      operationId: beneficiaryBatchCreate
+      x-permissions:
+      - i:beneficiaries:create
+      parameters:
+      - $ref: '#/components/parameters/idempotency-ref'
+      requestBody:
+        $ref: '#/components/requestBodies/BeneficiaryBatchCreateRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/BeneficiaryBatchResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+    get:
+      tags:
+      - Trusted Payees
+      description: Payees (previously "beneficiaries"). Retrieves the payees that match the query parameters.
+      summary: Get all payees
+      operationId: beneficiariesGet
+      x-permissions:
+      - i:beneficiaries:list
+      parameters:
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/limit'
+      - name: batchId
+        in: query
+        required: false
+        description: Search by the payee batch id.
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            pattern: ^[0-9]+$
+      - name: group
+        in: query
+        required: false
+        description: Search by the payee group.
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/BeneficiaryPageResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+  /beneficiaries/remove:
+    post:
+      tags:
+      - Trusted Payees
+      description: Payees (previously "beneficiaries"). Removes one or more payees from the payees list identified by the id path parameter used in the array.
+      summary: Remove payees
+      operationId: beneficiaryBatchRemove
+      x-permissions:
+      - i:beneficiaries:remove
+      parameters:
+      - $ref: '#/components/parameters/idempotency-ref'
+      requestBody:
+        $ref: '#/components/requestBodies/BeneficiaryBatchRemoveRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/BeneficiaryBatchResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+  /beneficiaries/{id}:
+    get:
+      tags:
+      - Trusted Payees
+      description: Payees (previously "beneficiaries"). Retrieves a payee identified by the id path parameter.
+      summary: Get a payee
+      operationId: beneficiaryGet
+      x-permissions:
+      - i:beneficiaries:get
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of a payee.
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9]+$
+      responses:
+        '200':
+          $ref: '#/components/responses/BeneficiaryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+  /beneficiaries/batch:
+    get:
+      tags:
+      - Trusted Payees
+      description: Payees (previously "beneficiaries"). Retrieves all payee batches matching the query parameters and that belong to the logged-in identity.
+      summary: Get all payee batches
+      operationId: beneficiaryBatchesGet
+      x-permissions:
+      - i:beneficiaries:list_batches
+      parameters:
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/limit'
+      - name: state
+        in: query
+        required: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/BeneficiaryBatchState'
+      - name: operation
+        in: query
+        required: false
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: '#/components/schemas/BeneficiaryBatchOperation'
+      - name: tag
+        in: query
+        required: false
+        description: Filter by the payee batch tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all entries.
+        schema:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/BeneficiaryBatchPageResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+  /beneficiaries/batch/{id}:
+    get:
+      tags:
+      - Trusted Payees
+      description: Payees (previously "beneficiaries"). Retrieves the details of a payee batch identified by the batchId path parameter.
+      summary: Get a batch of payees
+      operationId: beneficiaryBatchGet
+      x-permissions:
+      - i:beneficiaries:get_batch
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of a payee batch.
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9]+$
+      responses:
+        '200':
+          $ref: '#/components/responses/BeneficiaryBatchResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+  /beneficiaries/batch/{id}/challenges/otp/{channel}:
+    post:
+      tags:
+      - Trusted Payees
+      description: 'Payees (previously "beneficiaries"). Starts the verification process for updating the payees batch in which a one-time password is sent to a device belonging to the logged-in user that was previously enrolled through the `/authentication_factors/otp/{channel}` endpoint.
+
+
+        You should only start this process if the payee update `state` is `PENDING_CHALLENGE`.
+
+
+        _Note that on the Sandbox Environment, text messages are not sent and the one-time-password is always \"123456\"._
+
+        '
+      summary: Issue OTP to verify batch
+      operationId: beneficiaryBatchSCAChallenge
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The unique identifier of the Payee Batch Operation.
+        schema:
+          type: string
+          pattern: ^[0-9]+$
+      - $ref: '#/components/parameters/channel'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '409':
+          $ref: '#/components/responses/BeneficiaryBatchSCAChallengeConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+  /beneficiaries/batch/{id}/challenges/otp/{channel}/verify:
+    post:
+      tags:
+      - Trusted Payees
+      description: 'Payees (previously "beneficiaries"). Completes the verification process for updating the payee batch.
+
+
+        If the outcome of the verification is successful, the payee update batch is executed.
+
+
+        _Note that on the Sandbox Environment, text messages are not sent and the verificationCode is always \"123456\"._
+
+        '
+      summary: Verify batch using OTP
+      operationId: beneficiaryBatchSCAVerify
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The unique identifier of the Payee Batch Operation.
+        schema:
+          type: string
+          pattern: ^[0-9]+$
+      - $ref: '#/components/parameters/channel'
+      requestBody:
+        $ref: '#/components/requestBodies/SCAVerifyRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/BeneficiaryBatchSCAVerifyConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+  /beneficiaries/batch/{id}/challenges/push/{channel}:
+    post:
+      tags:
+      - Trusted Payees
+      description: 'Payees (previously "beneficiaries"). Starts the verification process for updating a payee batch in which a push notification is sent to a device belonging to the logged-in user that was previously enrolled through the `/authentication_factors/push/{channel}` endpoint.
+
+
+        You should only start this process if the payee update operation `state` is `PENDING_CHALLENGE`.
+
+        '
+      summary: Issue push to verify batch
+      operationId: beneficiaryBatchSCAChallengePush
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The unique identifier of the Payee Batch Operation.
+        schema:
+          type: string
+          pattern: ^[0-9]+$
+      - $ref: '#/components/parameters/scaPushChannel'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '409':
+          $ref: '#/components/responses/BeneficiaryBatchSCAChallengePushConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+components:
+  schemas:
+    BeneficiaryTrustLevel:
+      type: string
+      description: The value that determines whether a Beneficiary is trusted or not.
+      enum:
+      - TRUSTED
+    FasterPaymentsBankDetailsOrBACSBankDetails:
+      required:
+      - accountNumber
+      - sortCode
+      type: object
+      description: Bank details used in case the wire transfer is executed over Faster Payments.
+      properties:
+        accountNumber:
+          type: string
+          pattern: ^[0-9]{8}$
+          description: Account number, required for wire transfer over Faster Payments.
+        sortCode:
+          type: string
+          pattern: ^[0-9]{6}$
+          description: Sort code, required for wire transfer over Faster Payments.
+        secondaryReference:
+          type: string
+    BankAccountDetailsBeneficiary:
+      required:
+      - bankAccountDetails
+      type: object
+      description: Represent the beneficiary bank account typically used in Outgoing Wire Transfer transactions.
+      properties:
+        address:
+          maxLength: 150
+          minLength: 1
+          type: string
+          description: The beneficiary's address.
+        bankName:
+          type: string
+          description: The beneficiary's bank name.
+        bankAddress:
+          maxLength: 150
+          minLength: 1
+          type: string
+          description: The beneficiary's bank address.
+        bankCountry:
+          type: string
+          description: The beneficiary's bank country in ISO 3166 alpha-2 format.
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]{2}$
+        bankAccountDetails:
+          description: Details of the beneficiary bank account, depending on the type of transfer chosen.
+          oneOf:
+          - $ref: '#/components/schemas/IBANDetails'
+          - $ref: '#/components/schemas/FasterPaymentsBankDetailsOrBACSBankDetails'
+    SyntaxError:
+      type: object
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      properties:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
+    BusinessBeneficiaryType:
+      required:
+      - businessName
+      type: object
+      properties:
+        businessName:
+          type: string
+          description: 'The business beneficiary name. The allowed length and pattern is dependent on the beneficiary details type:
+
+
+            `InstrumentDetailsBeneficiary` or `BankAccountDetailsBeneficiary` with `IBANDetails`: >= `1` character and <= `150` characters
+
+
+            `BankAccountDetailsBeneficiary` with `FasterPaymentsBankDetailsOrBACSBankDetails`: >= `1` character and <= `140` characters with a pattern of `^[a-zA-Z0-9\/\-?:().,’+\s#=!"%&*<>;\{@\r\n]*$`
+
+            (please note that the `’` symbol is the unicode value U+2019 (right single quotation mark) and not the unicode value U+0027 (apostrophe))
+
+            '
+    BeneficiaryBatchState:
+      type: string
+      enum:
+      - INITIALISED
+      - FAILED
+      - PENDING_CHALLENGE
+      - CHALLENGE_FAILED
+      - CHALLENGE_COMPLETED
+      - COMPLETED
+    BeneficiaryValidationFailure:
+      type: string
+      enum:
+      - INSTRUMENT_DETAILS_NOT_FOUND
+      - BENEFICIARY_DETAILS_ALREADY_EXIST
+      - BENEFICIARY_BELONGS_TO_SAME_IDENTITY
+    IBANDetails:
+      required:
+      - iban
+      type: object
+      description: Bank details used in case the wire transfer is executed over SEPA or RIX
+      properties:
+        iban:
+          type: string
+          minLength: 15
+          maxLength: 34
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
+          description: International Bank Account Number, required for wire transfer over SEPA or RIX
+        bankIdentifierCode:
+          type: string
+          minLength: 8
+          maxLength: 11
+          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
+          description: BIC, for wire transfer over SEPA or RIX
+    BeneficiaryBatchOperation:
+      type: string
+      enum:
+      - CREATE
+      - REMOVE
+    BeneficiaryBatch:
+      type: object
+      required:
+      - operationBatchId
+      - state
+      properties:
+        operationBatchId:
+          $ref: '#/components/schemas/BeneficiaryOperationBatchId'
+        tag:
+          $ref: '#/components/schemas/Tag'
+        state:
+          $ref: '#/components/schemas/BeneficiaryBatchState'
+    SCAPushChannel:
+      type: string
+      enum:
+      - AUTHY
+      - BIOMETRIC
+      description: '- "AUTHY": The push notification is sent on the user''s device using [Twilio Authy](https://www.twilio.com/authy)
+
+        - "BIOMETRIC": The push notification is sent to the user''s device
+
+        '
+    Nonce:
+      type: string
+      description: A randomly generated one-time use code.
+      pattern: ^[0-9]{6}$
+    ConsumerBeneficiaryType:
+      required:
+      - fullName
+      type: object
+      properties:
+        nationality:
+          type: string
+          description: The nationality of the consumer. Must be a valid ISO 3166-1 alpha-2 country code (e.g., 'GB', 'FR').
+          pattern: ^[A-Z]{2}$
+        dateOfBirth:
+          type: string
+          description: The date of birth of the consumer. Must be a valid date in ISO 8601 format (YYYY-MM-DD) and should not be a future date.
+          format: date
+        fullName:
+          type: string
+          description: 'The person beneficiary name. The allowed length and pattern is dependent on the beneficiary details type:
+
+
+            `InstrumentDetailsBeneficiary` or `BankAccountDetailsBeneficiary` with `IBANDetails`: >= `1` character and <= `150` characters
+
+
+            `BankAccountDetailsBeneficiary` with `FasterPaymentsBankDetailsOrBACSBankDetails`: >= `1` character and <= `140` characters with a pattern of `^[a-zA-Z0-9\/\-?:().,’+\s#=!"%&*<>;\{@\r\n]*$`
+
+            (please note that the `’` symbol is the unicode value U+2019 (right single quotation mark) and not the unicode value U+0027 (apostrophe))
+
+            '
+    InstrumentDetailsBeneficiary:
+      required:
+      - instrument
+      type: object
+      description: Represents a Weavr beneficiary instrument typically used in Send transactions.
+      properties:
+        instrument:
+          $ref: '#/components/schemas/InstrumentId'
+    SCAOtpChannel:
+      type: string
+      enum:
+      - SMS
+      description: '- "SMS": The one-time-password is sent as a text message
+
+        '
+    BasicBeneficiary:
+      required:
+      - trustLevel
+      - beneficiaryInformation
+      - beneficiaryDetails
+      type: object
+      properties:
+        trustLevel:
+          description: The value that determines whether a Beneficiary is trusted or not.
+          $ref: '#/components/schemas/BeneficiaryTrustLevel'
+        externalRefs:
+          description: The id of the entity as it is represented on the caller system.
+          type: array
+          items:
+            type: string
+        group:
+          description: A custom field that can be used to categorise a beneficiary for easier searching and filtering.
+          type: string
+          maxLength: 150
+        beneficiaryInformation:
+          description: The object representing the beneficiary details.
+          oneOf:
+          - $ref: '#/components/schemas/BusinessBeneficiaryType'
+          - $ref: '#/components/schemas/ConsumerBeneficiaryType'
+        beneficiaryDetails:
+          description: The object representing the beneficiary instrument details.
+          oneOf:
+          - $ref: '#/components/schemas/InstrumentDetailsBeneficiary'
+          - $ref: '#/components/schemas/BankAccountDetailsBeneficiary'
+    InstrumentType:
+      type: string
+      enum:
+      - managed_cards
+      - managed_accounts
+    InstrumentId:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        type:
+          $ref: '#/components/schemas/InstrumentType'
+    Id:
+      type: string
+      pattern: ^[0-9]+$
+    Beneficiary:
+      allOf:
+      - $ref: '#/components/schemas/BasicBeneficiary'
+      - type: object
+        required:
+        - id
+        - relatedOperationBatches
+        - state
+        properties:
+          id:
+            type: string
+            pattern: ^[0-9]+$
+            description: The unique identifier of a Beneficiary.
+          relatedOperationBatches:
+            description: The object representing the list of batch IDs and the operations that occurred for each batch.
+            type: array
+            items:
+              $ref: '#/components/schemas/BeneficiaryOperationBatchId'
+          state:
+            $ref: '#/components/schemas/BeneficiaryState'
+          validationFailure:
+            $ref: '#/components/schemas/BeneficiaryValidationFailure'
+    BeneficiaryOperationBatchId:
+      required:
+      - batchId
+      - operation
+      type: object
+      properties:
+        batchId:
+          description: The unique identifier of a Beneficiary.
+          type: string
+          pattern: ^[0-9]+$
+        operation:
+          description: Describes the operation that has occurred on a beneficiary batch.
+          $ref: '#/components/schemas/BeneficiaryBatchOperation'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    BeneficiaryState:
+      type: string
+      enum:
+      - INITIALISED
+      - INVALID
+      - PENDING_CHALLENGE
+      - CHALLENGE_FAILED
+      - ACTIVE
+      - REMOVED
+    Tag:
+      type: string
+      description: The tag field is a custom field that can be used to search and filter.
+      maxLength: 50
+      pattern: ^[a-zA-Z0-9_-]+$
+  parameters:
+    scaPushChannel:
+      name: channel
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/SCAPushChannel'
+    channel:
+      name: channel
+      in: path
+      required: true
+      description: The unique identifier for the channel.
+      schema:
+        $ref: '#/components/schemas/SCAOtpChannel'
+    idempotency-ref:
+      name: idempotency-ref
+      in: header
+      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
+      required: false
+      schema:
+        type: string
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: The limit of the results for paging, starting at the offset. Limit is always capped at 100.
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+    offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+  responses:
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    BeneficiaryBatchSCAChallengeConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                description: "Error codes:\n  * `STATE_INVALID` - The operation no longer requires additional verification, it was either cancelled or completed.\n  * `CHANNEL_NOT_SUPPORTED` - The channel selected cannot be used to verify this type of operation.\n  * `CHANNEL_NOT_REGISTERED` - The channel selected must be enrolled to receive one-time passwords before it can be used to verify this type of operation.\n"
+                type: string
+                enum:
+                - STATE_INVALID
+                - CHANNEL_NOT_SUPPORTED
+                - CHANNEL_NOT_REGISTERED
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    BeneficiaryBatchPageResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              batches:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BeneficiaryBatch'
+              count:
+                type: integer
+                description: The total number of records (excluding the paging limit).
+                format: int32
+              responseCount:
+                type: integer
+                description: The total number of records returned in this response (always capped at 100).
+                format: int32
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BeneficiaryPageResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              beneficiaries:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Beneficiary'
+              count:
+                type: integer
+                description: The total number of records (excluding the paging limit).
+                format: int32
+              responseCount:
+                type: integer
+                description: The total number of records returned in this response (always capped at 100).
+                format: int32
+    BeneficiaryBatchResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BeneficiaryBatch'
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    MethodNotAllowed:
+      description: Method Not Allowed - The request was received but has been rejected for the requested resource.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BeneficiaryBatchSCAVerifyConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - STATE_INVALID
+                - CHANNEL_NOT_SUPPORTED
+                - CHANNEL_NOT_REGISTERED
+                - VERIFICATION_CODE_EXPIRED
+                - VERIFICATION_CODE_INVALID
+                - ONE_CHALLENGE_LIMIT_REMAINING
+                - CHALLENGE_LIMIT_EXCEEDED
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    NoContent:
+      description: Success - No Content.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    BeneficiaryBatchSCAChallengePushConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - STATE_INVALID
+                - CHANNEL_NOT_SUPPORTED
+                - CHANNEL_NOT_REGISTERED
+                - CHALLENGE_LIMIT_EXCEEDED
+    BeneficiaryResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Beneficiary'
+  headers:
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    x-ratelimit-limit:
+      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+        The first number (20) is the limit that has been exceeded.
+
+        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+        '
+      required: true
+      schema:
+        type: string
+  requestBodies:
+    BeneficiaryBatchCreateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - beneficiaries
+            type: object
+            properties:
+              tag:
+                $ref: '#/components/schemas/Tag'
+              beneficiaries:
+                type: array
+                description: The object representing the beneficiaries' details.
+                items:
+                  $ref: '#/components/schemas/BasicBeneficiary'
+    BeneficiaryBatchRemoveRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - beneficiaryIds
+            type: object
+            properties:
+              beneficiaryIds:
+                type: array
+                description: A list of Beneficiary Ids.
+                minItems: 1
+                items:
+                  type: string
+                  pattern: ^[0-9]+$
+    SCAVerifyRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - verificationCode
+            type: object
+            properties:
+              verificationCode:
+                description: The code received by the user on the device.
+                $ref: '#/components/schemas/Nonce'
+  securitySchemes:
+    api_key:
+      type: apiKey
+      description: The API Key representing your Multi account.
+      name: api-key
+      in: header
+    auth_token:
+      type: http
+      description: The authentication token representing the user. This will be included in the login response object.
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Access
+  tags:
+  - Access Token
+  - User Impersonation
+  - Consent Request
+- name: Identities
+  tags:
+  - Corporates
+  - Consumers
+- name: User Management
+  tags:
+  - Authorised Users
+- name: Instruments
+  tags:
+  - Managed Accounts
+  - Managed Cards
+- name: Transactions
+  tags:
+  - Transfers
+- name: Fees
+  tags:
+  - Fees
+- name: Bulk Operations [Beta]
+  tags:
+  - Operations
+  - Manage

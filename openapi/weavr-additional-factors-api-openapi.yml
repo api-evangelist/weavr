@@ -1,0 +1,460 @@
+openapi: 3.1.0
+info:
+  version: v3
+  title: Weavr Multi Product BackOffice Access Token Additional Factors API
+  x-logo:
+    url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
+    backgroundColor: '#FFFFFF'
+    altText: Weavr
+  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
+
+    identities and their instruments, without requiring the users to be logged in.
+
+
+    A token is to be obtained through the `access_token` method, and this will allow relevant operations
+
+    to be performed on behalf of this same identity.
+
+    '
+  contact:
+    name: Weavr
+    url: https://weavr.io
+servers:
+- description: Weavr Sandbox Environment
+  url: https://sandbox.weavr.io/multi/backoffice
+tags:
+- name: Additional Factors
+paths:
+  /v1/authentication_factors/otp/{channel}:
+    post:
+      operationId: enrolDeviceUsingOtpStepOne
+      description: 'This is the first step in enrolling the logged-in user''s mobile device, where a one-time password is sent to the device.
+
+
+        _Note that on the Sandbox Environment, text messages are not sent and the one-time-password is always \"123456\"._
+
+        '
+      summary: Enrol a user device for authentication using one-time passwords
+      tags:
+      - Additional Factors
+      parameters:
+      - name: channel
+        in: path
+        required: true
+        description: The unique identifier for the channel.
+        schema:
+          type: string
+          enum:
+          - SMS
+          description: '- "SMS": The one-time-password is sent as a text message'
+      responses:
+        '204':
+          description: Success - No Content.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '400':
+          description: Bad Request Error - Your request is invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    maxLength: 255
+                    type: string
+                    description: When present helps to identify and fix the problem.
+                  syntaxErrors:
+                    type: object
+                    description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+                    properties:
+                      invalidFields:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            params:
+                              type: array
+                              items:
+                                type: string
+                            fieldName:
+                              type: string
+                            error:
+                              type: string
+                              enum:
+                              - REQUIRED
+                              - HAS_TEXT
+                              - REQUIRES
+                              - SIZE
+                              - RANGE
+                              - IN
+                              - NOT_IN
+                              - REGEX
+                              - EXACTLY
+                              - AT_LEAST
+                              - AT_MOST
+                              - ALL_OR_NONE
+        '401':
+          description: Unauthorized - Your credentials or access token are invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '403':
+          description: Forbidden - Access to the requested resource or action is forbidden.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - INSUFFICIENT_PERMISSIONS
+        '404':
+          description: Not found - The requested resource couldn't be found.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - CHANNEL_NOT_SUPPORTED
+                    - CHANNEL_ALREADY_REGISTERED
+                    - MOBILE_NUMBER_NOT_AVAILABLE
+                    - MOBILE_NUMBER_INVALID
+                    - MOBILE_COUNTRY_NOT_SUPPORTED
+                    - CREDENTIALS_INACTIVE
+        '429':
+          description: Too many requests.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+            x-ratelimit-limit:
+              description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+                The first number (20) is the limit that has been exceeded.
+
+                The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+                '
+              required: true
+              schema:
+                type: string
+            x-ratelimit-reset:
+              description: The number of seconds until the window is reset.
+              required: true
+              schema:
+                minimum: 0
+                type: integer
+                format: int32
+        '500':
+          description: Internal Server Error - There is a problem with the server. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '503':
+          description: Service Unavailable - We're temporarily offline for maintenance. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+  /v1/authentication_factors/otp/{channel}/verify:
+    post:
+      operationId: enrolDeviceUsingOtpStepTwo
+      description: 'The second step in enrolling the logged-in user (root or authorised user) to use one-time-passwords to enable verification of transactions.
+
+
+        _Note that on the Sandbox Environment, text messages are not sent and the `verificationCode` is always set to \"123456\"._
+
+        '
+      summary: Verify enrolment of a user device for authentication using one-time passwords
+      tags:
+      - Additional Factors
+      parameters:
+      - name: channel
+        in: path
+        required: true
+        description: The unique identifier for the channel.
+        schema:
+          type: string
+          enum:
+          - SMS
+          description: '- "SMS": The one-time-password is sent as a text message'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - verificationCode
+              properties:
+                verificationCode:
+                  type: string
+                  description: The code received by the user on the device.
+                  minLength: 6
+                  maxLength: 6
+                  pattern: ^[0-9]*$
+      responses:
+        '204':
+          description: Success - No Content.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '400':
+          description: Bad Request Error - Your request is invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    maxLength: 255
+                    type: string
+                    description: When present helps to identify and fix the problem.
+                  syntaxErrors:
+                    type: object
+                    description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+                    properties:
+                      invalidFields:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            params:
+                              type: array
+                              items:
+                                type: string
+                            fieldName:
+                              type: string
+                            error:
+                              type: string
+                              enum:
+                              - REQUIRED
+                              - HAS_TEXT
+                              - REQUIRES
+                              - SIZE
+                              - RANGE
+                              - IN
+                              - NOT_IN
+                              - REGEX
+                              - EXACTLY
+                              - AT_LEAST
+                              - AT_MOST
+                              - ALL_OR_NONE
+        '401':
+          description: Unauthorized - Your credentials or access token are invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '403':
+          description: Forbidden - Access to the requested resource or action is forbidden.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - INSUFFICIENT_PERMISSIONS
+        '404':
+          description: Not found - The requested resource couldn't be found.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - CHANNEL_NOT_SUPPORTED
+                    - CHANNEL_ALREADY_REGISTERED
+                    - VERIFICATION_CODE_EXPIRED
+                    - VERIFICATION_CODE_INVALID
+                    - CREDENTIALS_INACTIVE
+                    - ONE_CHALLENGE_LIMIT_REMAINING
+                    - CHALLENGE_LIMIT_EXCEEDED
+        '429':
+          description: Too many requests.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+            x-ratelimit-limit:
+              description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+                The first number (20) is the limit that has been exceeded.
+
+                The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+                '
+              required: true
+              schema:
+                type: string
+            x-ratelimit-reset:
+              description: The number of seconds until the window is reset.
+              required: true
+              schema:
+                minimum: 0
+                type: integer
+                format: int32
+        '500':
+          description: Internal Server Error - There is a problem with the server. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '503':
+          description: Service Unavailable - We're temporarily offline for maintenance. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      description: The API Key representing your Multi account.
+      name: api-key
+      in: header
+    auth_token:
+      type: http
+      description: The authentication token representing the user. This will be included in the login response object.
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Access
+  tags:
+  - Access Token
+  - User Impersonation
+  - Consent Request
+- name: Identities
+  tags:
+  - Corporates
+  - Consumers
+- name: User Management
+  tags:
+  - Authorised Users
+- name: Instruments
+  tags:
+  - Managed Accounts
+  - Managed Cards
+- name: Transactions
+  tags:
+  - Transfers
+- name: Fees
+  tags:
+  - Fees
+- name: Bulk Operations [Beta]
+  tags:
+  - Operations
+  - Manage

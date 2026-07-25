@@ -1,0 +1,1342 @@
+openapi: 3.1.0
+info:
+  version: v3
+  title: Weavr Multi Product BackOffice Access Token Setup API
+  x-logo:
+    url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
+    backgroundColor: '#FFFFFF'
+    altText: Weavr
+  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
+
+    identities and their instruments, without requiring the users to be logged in.
+
+
+    A token is to be obtained through the `access_token` method, and this will allow relevant operations
+
+    to be performed on behalf of this same identity.
+
+    '
+  contact:
+    name: Weavr
+    url: https://weavr.io
+servers:
+- description: Weavr Sandbox Environment
+  url: https://sandbox.weavr.io/multi/backoffice
+tags:
+- name: Setup
+  description: 'Register and manage the lifecycle of users that can access an identity, including authorised users invited by a Corporate or Consumer root user.
+
+    '
+paths:
+  /users:
+    post:
+      x-permissions:
+      - i:users:create
+      tags:
+      - Setup
+      description: "Creates a user linked to the logged-in corporate or consumer identity.\n\nOnce on-boarded, users have access to all instruments (cards and accounts) of the identity.\n\nApplication-specific permissions to limit what each user can view and do need to be implemented in your application.\n\nIn order to Create an Authorised User you would need a stepped-up token. Before calling `/multi/users` you need to step-up ( issue a challenge `multi/stepup/challenges/otp/{channel}` )\n\nMore details on how to step-up a token can be found here [Step-Up](/tag/Step-up#operation/stepupSCAChallenge ) \n"
+      summary: Register a user
+      operationId: userCreate
+      parameters:
+      - $ref: '#/components/parameters/idempotency-ref'
+      requestBody:
+        $ref: '#/components/requestBodies/UserCreateRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/UserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/UserForbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/UserCreateConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+    get:
+      tags:
+      - Setup
+      description: Fetches all users associated with the corporate or consumer identity the logged-in user belongs to.
+      summary: Get all users
+      operationId: usersGet
+      x-permissions:
+      - i:users:list
+      parameters:
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/active'
+      - $ref: '#/components/parameters/email'
+      - $ref: '#/components/parameters/tag'
+      - name: roles
+        in: query
+        required: false
+        explode: true
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserPredefinedRole'
+        description: Filter users by role. Multiple roles use OR logic.
+      responses:
+        '200':
+          $ref: '#/components/responses/UsersGetResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+  /users/{user_id}:
+    get:
+      tags:
+      - Setup
+      description: Retrieves the user identified by the `user_id` path parameter.
+      summary: Get a user
+      operationId: userGetById
+      x-permissions:
+      - i:users:get
+      - i:users:get:own
+      parameters:
+      - $ref: '#/components/parameters/userId'
+      responses:
+        '200':
+          $ref: '#/components/responses/UserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+    patch:
+      tags:
+      - Setup
+      description: 'Update the details of a user identified by the `user_id` in the the path parameter.
+
+
+        Only the fields that are specified in the request body will be updated. All other fields will remain unchanged.
+
+
+        When patching a mobile number, the new mobile number should be enrolled for Authentication Factors.
+
+        '
+      summary: Update a user
+      operationId: userUpdate
+      x-permissions:
+      - i:users:update
+      - i:users:update:own
+      parameters:
+      - $ref: '#/components/parameters/userId'
+      - $ref: '#/components/parameters/idempotency-ref'
+      requestBody:
+        $ref: '#/components/requestBodies/UserPatchRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/UserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/UserPatchConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+  /identities:
+    get:
+      tags:
+      - Setup
+      description: Retrieves a list of identities available to the holder of the token.
+      summary: Get linked identities
+      operationId: userIdentities
+      parameters:
+      - name: offset
+        in: query
+        required: false
+        description: The number of results to skip from the beginning of the dataset.
+        schema:
+          type: integer
+          minimum: 0
+      - name: limit
+        in: query
+        required: false
+        description: The maximum number of identities to return.
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+      responses:
+        '200':
+          $ref: '#/components/responses/UserIdentitiesGetResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/UserIdentitiesConflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+      - api-key: []
+  /users/{user_id}/invite:
+    post:
+      x-permissions:
+      - i:users:send_invite
+      tags:
+      - Setup
+      summary: Invite a user to become an authorised user
+      operationId: userInviteSend
+      description: 'Once a user is created using the _userCreate_ operation, the user needs to setup his/her password.
+
+
+        An invitation needs to be sent to the user in order to be able to set up the password for the first time. The invitation email, which remains valid for 1 month, will contain a URL having all information required to setup the password via the _userInviteConsume_.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/idempotency-ref'
+      - $ref: '#/components/parameters/userIdExplode'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/UserInviteSendConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+  /users/{user_id}/invite/validate:
+    post:
+      tags:
+      - Setup
+      description: Check if a user's invite is still valid. This operation is useful to avoid having the user fill in a form only to be held by a validation issue (eg. expired invite).
+      summary: Validate a user's invite
+      operationId: userInviteValidate
+      parameters:
+      - $ref: '#/components/parameters/userIdExplode'
+      requestBody:
+        $ref: '#/components/requestBodies/UserInviteValidateRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/UserInviteValidateConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - api-key: []
+  /users/{user_id}/invite/consume:
+    post:
+      tags:
+      - Setup
+      description: 'Consumes an invitation perviously sent to the user via _userInviteSend_. This is needed so that the invited user sets up the password.
+
+
+        _Note that on the Sandbox Environment, the `inviteCode` is always set to \"123456\"._
+
+        '
+      summary: Consume a user's invite
+      operationId: userInviteConsume
+      parameters:
+      - $ref: '#/components/parameters/idempotency-ref'
+      - $ref: '#/components/parameters/userIdExplode'
+      requestBody:
+        $ref: '#/components/requestBodies/UserInviteConsumeRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/TokenResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFoundToken'
+        '409':
+          $ref: '#/components/responses/UserInviteConsumeConflict'
+        '410':
+          $ref: '#/components/responses/TokenExpired'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - api-key: []
+  /users/verification/email/send:
+    post:
+      tags:
+      - Setup
+      description: 'The first step in verifying an authorised user''s email. The authorised user whose email address is to be verified is sent an email containing a randomly generated code.
+
+
+        This code must then be provided in the _authorisedUserEmailVerify_ operation to verify the authorised user''s email address.
+
+
+        _Note that on the Sandbox Environment, the `verificationCode` is always set to \"123456\"._
+
+        '
+      summary: Send an email verification code to a user
+      operationId: authorisedUserEmailVerificationCodeSend
+      parameters:
+      - $ref: '#/components/parameters/idempotency-ref'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - email
+              type: object
+              properties:
+                email:
+                  $ref: '#/components/schemas/Email'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - EMAIL_NOT_FOUND
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - api-key: []
+  /users/verification/email/verify:
+    post:
+      tags:
+      - Setup
+      description: 'The second step in verifying the authorised user''s email. The randomly generated code sent to the authorised user via
+
+        email, using the _authorisedUserEmailVerificationCodeSend_ operation, is submitted here to verify the authorised user''s email.
+
+
+        This is needed as part of the verification process for basic due diligence.
+
+
+        _Note that on the Sandbox Environment, the `verificationCode` is always set to \"123456\"._
+
+        '
+      summary: Verify email of the authorised user
+      operationId: authorisedUserEmailVerify
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - email
+              - verificationCode
+              type: object
+              properties:
+                email:
+                  $ref: '#/components/schemas/Email'
+                verificationCode:
+                  $ref: '#/components/schemas/VerificationCode'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - VERIFICATION_CODE_INVALID
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - api-key: []
+  /users/{user_id}/deactivate:
+    post:
+      tags:
+      - Setup
+      description: 'De-activate the user identified by the `user_id` path parameter.
+
+
+        Deactivated users cannot log in or execute any operations with their credentials.
+
+
+        This operations is not final and a user can be re-activated using the userActivate operation. Note that another active user would need to log in so as to re-activate the de-activated user.
+
+        '
+      summary: Deactivate an authorised user
+      operationId: userDeactivate
+      x-permissions:
+      - i:users:deactivate
+      parameters:
+      - $ref: '#/components/parameters/userId'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+  /users/{user_id}/activate:
+    post:
+      tags:
+      - Setup
+      description: 'Activate the user identified by the `user_id` path parameter.
+
+
+        By default, any new users created will be automatically activated. This operation needs to be used only if the user was previously de-activated using the _userDeactivate_ operation, or if the user was de-activated automatically after multiple incorrect login attempts.
+
+        '
+      summary: Reactivate an authorised user
+      operationId: userActivate
+      x-permissions:
+      - i:users:activate
+      parameters:
+      - $ref: '#/components/parameters/userId'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+  /users/kyc:
+    post:
+      tags:
+      - Setup
+      description: 'Perform the kyc for a corporate user.
+
+        '
+      summary: Start KYC to elevate an authorised user to signatory
+      operationId: userKyc
+      responses:
+        '200':
+          description: Success
+          headers:
+            request-ref:
+              $ref: '#/components/headers/request-ref'
+          content:
+            application/json:
+              schema:
+                required:
+                - reference
+                type: object
+                properties:
+                  reference:
+                    type: string
+                    pattern: ^[0-9]+$
+                    description: The reference required to initialise the KYB UI Component.
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - EMAIL_NOT_VERIFIED
+                    - MOBILE_NOT_VERIFIED
+                    - KYC_ALREADY_APPROVED
+                    - KYC_PENDING_REVIEW
+                    - KYC_REJECTED
+                    - KYB_IDENTITY_NOT_APPROVED
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+      - api-key: []
+components:
+  requestBodies:
+    UserInviteValidateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - inviteCode
+            type: object
+            properties:
+              inviteCode:
+                $ref: '#/components/schemas/Nonce'
+    UserCreateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - email
+            - name
+            - surname
+            type: object
+            properties:
+              name:
+                minLength: 1
+                maxLength: 50
+                type: string
+                description: The first name of the user.
+              surname:
+                minLength: 1
+                maxLength: 50
+                type: string
+                description: The last name of the user.
+              email:
+                $ref: '#/components/schemas/Email'
+              mobile:
+                $ref: '#/components/schemas/Mobile'
+              dateOfBirth:
+                description: Date of birth of the authorised user.
+                $ref: '#/components/schemas/Date'
+              tag:
+                $ref: '#/components/schemas/Tag'
+              countryOfResidence:
+                type: string
+                maxLength: 2
+                minLength: 2
+                pattern: ^[A-Z]+$
+              locale:
+                $ref: '#/components/schemas/UserLocale'
+              brand:
+                $ref: '#/components/schemas/Brand'
+              roles:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserPredefinedRole'
+                description: Optional roles to assign to the user. For a full description of the permissions associated with each role, see our product documentation.
+    UserInviteConsumeRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - inviteCode
+            - password
+            type: object
+            properties:
+              inviteCode:
+                $ref: '#/components/schemas/Nonce'
+              password:
+                $ref: '#/components/schemas/SensitivePassword'
+              mobile:
+                $ref: '#/components/schemas/Mobile'
+                description: Optional mobile number for the user. If provided, the user's mobile is set/replaced as part of consuming the invite. The new number is left unverified — it must be enrolled afterwards.
+    UserPatchRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name:
+                minLength: 1
+                maxLength: 50
+                type: string
+                description: The first name of the user.
+              surname:
+                minLength: 1
+                maxLength: 50
+                type: string
+                description: The last name of the user.
+              email:
+                $ref: '#/components/schemas/Email'
+              mobile:
+                $ref: '#/components/schemas/Mobile'
+              dateOfBirth:
+                description: Date of birth of the authorised user.
+                $ref: '#/components/schemas/Date'
+              tag:
+                $ref: '#/components/schemas/Tag'
+              locale:
+                $ref: '#/components/schemas/UserLocale'
+              brand:
+                $ref: '#/components/schemas/Brand'
+              roles:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserPredefinedRole'
+                description: Optional roles to assign to the user. This uses overwrite behaviour - roles included in this list will be assigned, and roles not included will be unassigned. Users cannot update their own roles. For a full description of the permissions associated to each role, see our product documentation.
+  responses:
+    UsersGetResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              users:
+                type: array
+                description: The list of users matching the criteria specified.
+                items:
+                  $ref: '#/components/schemas/User'
+              count:
+                type: integer
+                description: The total number of records (excluding the paging limit).
+                format: int32
+              responseCount:
+                type: integer
+                description: The total number of records returned in this response (always capped at 100).
+                format: int32
+    UserCreateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - EMAIL_NOT_UNIQUE
+                - MOBILE_OR_COUNTRY_CODE_INVALID
+                - EMAIL_DOMAIN_NOT_ALLOWED
+                - COUNTRY_OF_RESIDENCE_INVALID
+                - ROLE_NOT_FOUND
+                - CANNOT_MODIFY_OWN_ROLES
+                - ADMIN_ROLE_REMOVAL_NOT_ALLOWED
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    TokenExpired:
+      description: Gone - The requested token is expired.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TokenError'
+    UserResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UserInviteSendConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INVITE_ALREADY_CONSUMED
+    UserIdentitiesConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - IDENTITY_TYPE_NOT_SUPPORTED
+    UserPatchConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - EMAIL_NOT_UNIQUE
+                - MOBILE_OR_COUNTRY_CODE_INVALID
+                - MOBILE_NO_CHANGE_LIMIT_EXCEEDED
+                - TOO_FREQUENT_EMAIL_CHANGES
+                - EMAIL_DOMAIN_NOT_ALLOWED
+                - MOBILE_CHANGE_NOT_ALLOWED
+                - UNSUPPORTED_CURRENCY
+                - ROLE_NOT_FOUND
+                - CANNOT_MODIFY_OWN_ROLES
+                - ADMIN_ROLE_REMOVAL_NOT_ALLOWED
+    UserInviteConsumeConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INVITE_OR_INVITE_CODE_INVALID
+                - UNRESOLVED_IDENTITY
+                - PASSWORD_ALREADY_USED
+                - PASSWORD_PROFILE_NOT_CONFIGURED_FOR_CREDENTIAL_TYPE
+                - PASSWORD_TOO_SHORT
+                - PASSWORD_TOO_LONG
+                - PASSWORD_TOO_SIMPLE
+                - PASSWORD_KEY_ALREADY_IN_USE
+                - PASSWORD_ALREADY_CREATED
+    UserForbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - STEP_UP_REQUIRED
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    UserIdentitiesGetResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserIdentitiesGetResponseSchema'
+    UserInviteValidateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INVITE_OR_INVITE_CODE_INVALID
+    NotFoundToken:
+      description: Not found - The requested token couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TokenError'
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    NoContent:
+      description: Success - No Content.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    TokenResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TokenResponse'
+  schemas:
+    Brand:
+      type: string
+      pattern: ^[a-zA-Z0-9]+$
+      description: 'Brand identifier used to determine the set of email and SMS user notification templates. Must be alphanumeric, up to 25 characters, and contain no spaces.
+
+        '
+      maxLength: 25
+    UserId:
+      type: string
+      pattern: ^[0-9]+$
+    Date:
+      required:
+      - year
+      - month
+      - day
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int32
+          maximum: 2100
+          minimum: 1900
+        month:
+          type: integer
+          format: int32
+          maximum: 12
+          minimum: 1
+        day:
+          type: integer
+          format: int32
+          maximum: 31
+          minimum: 1
+    SyntaxError:
+      type: object
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      properties:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
+    TokenError:
+      description: The used token is expired or not found
+      type: object
+      properties:
+        errorCode:
+          type: string
+          enum:
+          - TOKEN_EXPIRED
+          - TOKEN_NOT_FOUND
+    UserLocale:
+      type: string
+      pattern: ^[a-z]{2}(-[A-Z]{2})?$
+      description: 'BCP47 locale code (e.g. en, en-US). The locale determines which email and SMS user notification templates are used.
+
+        '
+      maxLength: 5
+      example: en-GB
+    SensitivePassword:
+      type: object
+      description: "The user's password or passcode used to log in a user.\nPasswords must be:\n  - minimum 8 characters for end-users (Consumers and Corporates); 12 characters for others\n  - maximum 30 characters\n  - include a lowercase character\n  - include an uppercase character\n  - include a digit and a special character\n  - different from any of the 5 last such passwords used.\n\nFor non-PCI compliant integrations, the password submitted must be **tokenised**.\n"
+      required:
+      - value
+      properties:
+        value:
+          maxLength: 100
+          type: string
+          format: password
+    VerificationCode:
+      type: string
+      description: A randomly generated one-time use code used to verify the user's email address or mobile number.
+      pattern: ^[0-9]{6}$
+    Nonce:
+      type: string
+      description: A randomly generated one-time use code.
+      pattern: ^[0-9]{6}$
+    Email:
+      type: string
+      description: E-mail Address of the user
+      format: email
+    UserIdentity:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          description: The unique identifier of the Corporate Identity.
+          $ref: '#/components/schemas/IdentityId'
+        name:
+          type: string
+          description: The name of the company.
+    IdentityId:
+      required:
+      - type
+      - id
+      type: object
+      properties:
+        type:
+          enum:
+          - CONSUMER
+          - CORPORATE
+          type: string
+          description: Indicates the identity type.
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The identifier for the identity.
+    TokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: An authorisation token to be used in the Authorization header for secured operations.
+    Mobile:
+      required:
+      - number
+      - countryCode
+      type: object
+      properties:
+        countryCode:
+          maxLength: 4
+          minLength: 1
+          type: string
+          pattern: ^\+[0-9]+$
+          description: The country code of the user mobile number (e.g. +44).
+        number:
+          pattern: ^[0-9]{1,12}$
+          type: string
+          description: The mobile number of the user - excluding country code.
+    UserIdentitiesGetResponseSchema:
+      required:
+      - identities
+      - count
+      - responseCount
+      type: object
+      properties:
+        identities:
+          type: array
+          description: The list of identities available to user.
+          items:
+            $ref: '#/components/schemas/UserIdentity'
+        count:
+          type: integer
+          description: The total number of records (excluding the paging limit).
+          format: int32
+        responseCount:
+          type: integer
+          description: The total number of records returned in this response (always capped at 100).
+          format: int32
+    User:
+      required:
+      - id
+      - email
+      - name
+      - surname
+      - identity
+      - active
+      type: object
+      properties:
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The unique identifier of the user.
+        identity:
+          description: The identity that the user belongs to.
+          $ref: '#/components/schemas/IdentityId'
+        name:
+          maxLength: 100
+          type: string
+          description: The first name of the user.
+        surname:
+          maxLength: 100
+          type: string
+          description: The last name of the user.
+        email:
+          $ref: '#/components/schemas/Email'
+        mobile:
+          $ref: '#/components/schemas/Mobile'
+        active:
+          type: boolean
+          description: The state of the user. If the `active` attribute is false, then the user will not be able to log in.
+        dateOfBirth:
+          description: Date of birth of the authorised user.
+          $ref: '#/components/schemas/Date'
+        tag:
+          $ref: '#/components/schemas/Tag'
+        countryOfResidence:
+          type: string
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]+$
+        locale:
+          $ref: '#/components/schemas/UserLocale'
+        brand:
+          $ref: '#/components/schemas/Brand'
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserPredefinedRole'
+    UserPredefinedRole:
+      type: string
+      enum:
+      - CARD_ASSIGNEE
+      - CARDS_MANAGEMENT_ROLE
+      - FUNDS_MANAGEMENT_ROLE
+      - ACCESS_MANAGEMENT_ROLE
+      - ADMIN
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    Tag:
+      type: string
+      description: The tag field is a custom field that can be used to search and filter.
+      maxLength: 50
+      pattern: ^[a-zA-Z0-9_-]+$
+  headers:
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    x-ratelimit-limit:
+      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+        The first number (20) is the limit that has been exceeded.
+
+        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+        '
+      required: true
+      schema:
+        type: string
+  parameters:
+    active:
+      name: active
+      in: query
+      required: false
+      description: Filter for active or deactivated users. Leave out to fetch all users.
+      schema:
+        type: boolean
+    email:
+      name: email
+      in: query
+      required: false
+      description: Filter by the email address of the user.
+      schema:
+        $ref: '#/components/schemas/Email'
+    userId:
+      name: user_id
+      in: path
+      required: true
+      description: The unique identifier for the user.
+      schema:
+        $ref: '#/components/schemas/UserId'
+    idempotency-ref:
+      name: idempotency-ref
+      in: header
+      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
+      required: false
+      schema:
+        type: string
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: The limit of the results for paging, starting at the offset. Limit is always capped at 100.
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+    tag:
+      name: tag
+      in: query
+      required: false
+      description: Filter by the managed account/card tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all managed accounts/card.
+      schema:
+        type: string
+    userIdExplode:
+      name: user_id
+      in: path
+      required: true
+      description: The unique identifier for the user.
+      style: simple
+      explode: false
+      schema:
+        $ref: '#/components/schemas/UserId'
+    offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+  securitySchemes:
+    api_key:
+      type: apiKey
+      description: The API Key representing your Multi account.
+      name: api-key
+      in: header
+    auth_token:
+      type: http
+      description: The authentication token representing the user. This will be included in the login response object.
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Access
+  tags:
+  - Access Token
+  - User Impersonation
+  - Consent Request
+- name: Identities
+  tags:
+  - Corporates
+  - Consumers
+- name: User Management
+  tags:
+  - Authorised Users
+- name: Instruments
+  tags:
+  - Managed Accounts
+  - Managed Cards
+- name: Transactions
+  tags:
+  - Transfers
+- name: Fees
+  tags:
+  - Fees
+- name: Bulk Operations [Beta]
+  tags:
+  - Operations
+  - Manage

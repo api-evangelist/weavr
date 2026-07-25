@@ -1,0 +1,745 @@
+openapi: 3.1.0
+info:
+  version: v3
+  title: Weavr Multi Product BackOffice Access Token Fees API
+  x-logo:
+    url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
+    backgroundColor: '#FFFFFF'
+    altText: Weavr
+  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
+
+    identities and their instruments, without requiring the users to be logged in.
+
+
+    A token is to be obtained through the `access_token` method, and this will allow relevant operations
+
+    to be performed on behalf of this same identity.
+
+    '
+  contact:
+    name: Weavr
+    url: https://weavr.io
+servers:
+- description: Weavr Sandbox Environment
+  url: https://sandbox.weavr.io/multi/backoffice
+tags:
+- name: Fees
+paths:
+  /fees/charge:
+    post:
+      tags:
+      - Fees
+      description: 'Charge a fee to the identity identified by the auth token, based on a pre-defined custom fee. Custom fees can be configured in the Multi Portal.
+
+
+        The fees collected will be deposited into your Revenue Account. The balance and transaction history of your revenue account can be viewed in the Multi Portal.
+
+        '
+      summary: 'Charge identity a pre-defined custom fee '
+      operationId: chargeFee
+      parameters:
+      - $ref: '#/components/parameters/idempotency-ref'
+      requestBody:
+        $ref: '#/components/requestBodies/ChargeFeeRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/ChargeFeeResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/ChargeFeeConflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api_key: []
+  /corporates/fees/charge:
+    post:
+      tags:
+      - Fees
+      description: 'Charge a fee to the corporate identified by the auth token, based on a pre-defined custom fee. Custom fees can be configured in the Multi Portal.
+
+
+        The fees collected will be deposited into your Revenue Account. The balance and transaction history of your revenue account can be viewed in the Multi Portal.
+
+        '
+      summary: Charge fee to a corporate
+      operationId: corporateChargeFee
+      x-permissions:
+      - i:corporates:charge_fee
+      parameters:
+      - $ref: '#/components/parameters/idempotency-ref'
+      requestBody:
+        $ref: '#/components/requestBodies/ChargeFeeRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/ChargeFeeResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/ChargeFeeConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+  /fees:
+    get:
+      tags:
+      - Fees
+      description: 'Returns the fee transactions accrued by the logged-in identity — every `FeeTransaction` posted against any of the identity''s instruments, filterable by time window.
+
+
+        For surfaces that need fees inline with their parent activity, the same `FeeTransaction` records are also exposed via the Transaction Activity API and on Statements V2.
+
+        '
+      summary: (NEW) Get all fees
+      operationId: feesGet
+      x-permissions:
+      - i:fees:get
+      parameters:
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/creationTimestampFrom'
+      - $ref: '#/components/parameters/creationTimestampTo'
+      - $ref: '#/components/parameters/sortOrder'
+      responses:
+        '200':
+          $ref: '#/components/responses/FeeTransactionListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+  /consumers/fees/charge:
+    post:
+      tags:
+      - Fees
+      description: 'Charge a fee to the logged-in consumer based on a pre-defined custom fee. Custom fees can be configured in the Multi Portal.
+
+
+        The fees collected will be deposited into your Revenue Account. The balance and transaction history of your revenue account can be viewed in the Multi Portal.
+
+        '
+      summary: Charge fee to a consumer
+      operationId: consumerChargeFee
+      x-permissions:
+      - i:consumers:charge_fee
+      parameters:
+      - $ref: '#/components/parameters/idempotency-ref'
+      requestBody:
+        $ref: '#/components/requestBodies/ChargeFeeRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/ChargeFeeResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/ChargeFeeConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+components:
+  schemas:
+    CurrencyAmount:
+      required:
+      - currency
+      - amount
+      type: object
+      properties:
+        currency:
+          $ref: '#/components/schemas/Currency'
+        amount:
+          type: integer
+          format: int64
+          description: 'The monetary amount, scaled to the lowest denomination of the currency.
+
+
+            Example, an amount of 1000 for a EUR currency is actually 1000 Euro cents or EUR 10.00.
+
+            '
+      description: The object representing a monetary amount in a particular currency.
+    FeeSubtype:
+      type: string
+      description: The category of fee — indicates the activity or instrument-lifecycle event the fee relates to.
+      enum:
+      - fee_reversals
+      - incoming_wire_fees
+      - withdrawal_fees
+      - purchase_fees
+      - refund_fees
+      - atm_withdrawal_fees
+      - chargeback_fees
+      - transfer_fees
+      - send_fees
+      - outgoing_wire_transfer_fees
+      - custom_fees
+      - other_fees
+      - instrument_delete_fees
+      - funds_redemption_fees
+      - system_transaction_fees
+    Fee:
+      required:
+      - feeType
+      - source
+      type: object
+      properties:
+        feeType:
+          type: string
+          description: The fee type as defined in the Multi Portal.
+        source:
+          description: The instrument from where the fee should be deducted.
+          $ref: '#/components/schemas/InstrumentId'
+    SyntaxError:
+      type: object
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      properties:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
+    TransactionState:
+      type: string
+      description: Status of the transaction.
+      enum:
+      - INITIALISED
+      - COMPLETED
+      - REJECTED
+      - FAILED
+      - PENDING
+      - SCHEDULED
+      - CANCELLED
+    FeeTransactionList:
+      type: object
+      description: A paginated list of fee transactions.
+      properties:
+        fees:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeeTransaction'
+        count:
+          type: integer
+          format: int64
+          description: The total number of records matching the filter criteria.
+        responseCount:
+          type: integer
+          format: int64
+    FeeTransactionStatus:
+      type: string
+      description: "Lifecycle status of a fee transaction:\n  - PENDING: Fee accompanies a transaction that is still processing; it may still be cancelled.\n  - COMPLETED: Fee was charged and posted to the instrument balance.\n  - CANCELLED: Fee was cancelled before being charged.\n  - REVERSED: Fee was previously charged and has been reversed.\n"
+      enum:
+      - PENDING
+      - COMPLETED
+      - CANCELLED
+      - REVERSED
+    TransactionId:
+      required:
+      - type
+      - id
+      type: object
+      properties:
+        type:
+          enum:
+          - AUTHORISATION
+          - SETTLEMENT
+          - MANUAL_TRANSACTION
+          - TRANSFER
+          - SEND
+          - DEPOSIT
+          - AUTHORISATION_REVERSAL
+          - AUTHORISATION_EXPIRY
+          - AUTHORISATION_DECLINE
+          - AUTHORISATION_MANUAL_CLOSE
+          - MERCHANT_REFUND
+          - MERCHANT_REFUND_REVERSAL
+          - ORIGINAL_CREDIT_TRANSACTION
+          - SETTLEMENT_REVERSAL
+          - ADJUSTMENT
+          - CHARGE_FEE
+          - WITHDRAWAL_RESERVE
+          - WITHDRAWAL_RELEASE
+          - FEE_REVERSAL
+          - OUTGOING_WIRE_TRANSFER
+          - AUTHORISATION_CANCELLATION
+          - SYSTEM_TRANSACTION
+          - OUTGOING_DIRECT_DEBIT_COLLECTION
+          - OUTGOING_DIRECT_DEBIT_REFUND
+          - LINKED_ACCOUNT_VERIFICATION_TRANSFER
+          - INCOMING_WIRE_TRANSFER
+          - FUNDING
+          - TEST_FUNDING
+          - CORRESPONDENT_BANK_TRANSFER
+          type: string
+          x-enumDescriptions:
+            AUTHORISATION: ''
+            SETTLEMENT: ''
+            MANUAL_TRANSACTION: 'For a manual transaction, the `additionalFields`: `note` will contain a description with the reason for the transaction. This will start with one of the following prefixes:
+
+
+              - Account Closure
+
+              - Chargebacks - Represented
+
+              - Chargebacks - Won
+
+              - Deleted Card - Transfer from
+
+              - Deleted Card - Transfer to
+
+              - Duplicate Authorisation Issue
+
+              - Duplicate Settlement Issue
+
+              - Expired Card - Transfer from
+
+              - Expired Card - Transfer to
+
+              - Forex Padding Release Issue
+
+              - Funds Redemption & Account Closure
+
+              - Manual Auth Expiry
+
+              - Missing Settlement Issue
+
+              - Negative Card Balance
+
+              - Reversal - Duplicate Transaction
+
+              - Reversal - Manual Auth Expiry
+
+              - Reversal - Manual Transaction
+
+              - Amend Balance - Auth Expiry
+
+              - Balance Adjustment
+
+              - Completing Deposit
+
+              - Duplicate Deposit
+
+              '
+            TRANSFER: ''
+            SEND: ''
+            DEPOSIT: ''
+            AUTHORISATION_REVERSAL: ''
+            AUTHORISATION_EXPIRY: ''
+            AUTHORISATION_DECLINE: ''
+            AUTHORISATION_MANUAL_CLOSE: ''
+            MERCHANT_REFUND: ''
+            MERCHANT_REFUND_REVERSAL: ''
+            ORIGINAL_CREDIT_TRANSACTION: ''
+            SETTLEMENT_REVERSAL: ''
+            ADJUSTMENT: ''
+            CHARGE_FEE: ''
+            WITHDRAWAL_RESERVE: ''
+            WITHDRAWAL_RELEASE: ''
+            FEE_REVERSAL: ''
+            OUTGOING_WIRE_TRANSFER: ''
+            AUTHORISATION_CANCELLATION: ''
+            SYSTEM_TRANSACTION: ''
+            OUTGOING_DIRECT_DEBIT_COLLECTION: ''
+            OUTGOING_DIRECT_DEBIT_REFUND: ''
+        id:
+          type: string
+          pattern: ^[0-9]+$
+    FeeTransaction:
+      type: object
+      required:
+      - id
+      - feeType
+      - amount
+      - instrument
+      - status
+      - creationTimestamp
+      description: 'A fee charged or reversed on an instrument. Surfaced through `GET /fees`,
+
+        `GET /transactions` (Transaction Activity), and as line items on statements.
+
+        '
+      properties:
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The unique identifier of the fee transaction.
+        feeType:
+          $ref: '#/components/schemas/FeeSubtype'
+        amount:
+          description: The fee amount in the instrument's currency.
+          $ref: '#/components/schemas/CurrencyAmount'
+        instrument:
+          description: The instrument the fee was charged against.
+          $ref: '#/components/schemas/InstrumentId'
+        status:
+          $ref: '#/components/schemas/FeeTransactionStatus'
+        description:
+          type: string
+          maxLength: 255
+        relatedTransactionId:
+          type: string
+          pattern: ^[0-9]+$
+          description: The parent transaction this fee relates to, if any.
+        creationTimestamp:
+          type: integer
+          format: int64
+        lastUpdatedTimestamp:
+          type: integer
+          format: int64
+    ChargeFee:
+      required:
+      - transactionId
+      - profileId
+      - feeType
+      - source
+      - destination
+      - availableBalanceAdjustment
+      - state
+      - creationTimestamp
+      type: object
+      properties:
+        transactionId:
+          $ref: '#/components/schemas/TransactionId'
+          description: The unique identifier of the transaction.
+        profileId:
+          type: string
+          description: The profile Id which a specific identity, instrument or transaction type is linked to.
+        feeType:
+          type: string
+          description: The fee type as defined in the Multi Portal, and as sent in the request.
+        source:
+          $ref: '#/components/schemas/InstrumentId'
+        availableBalanceAdjustment:
+          $ref: '#/components/schemas/CurrencyAmount'
+          description: The object representing a monetary amount in a particular currency.
+        state:
+          $ref: '#/components/schemas/TransactionState'
+          description: The transaction entry state.
+        creationTimestamp:
+          type: integer
+          format: int64
+    InstrumentType:
+      type: string
+      enum:
+      - managed_cards
+      - managed_accounts
+    InstrumentId:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        type:
+          $ref: '#/components/schemas/InstrumentType'
+    Currency:
+      type: string
+      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
+      maxLength: 3
+      minLength: 3
+      pattern: ^[A-Z]*$
+    Id:
+      type: string
+      pattern: ^[0-9]+$
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+  responses:
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    ChargeFeeResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ChargeFee'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    FeeTransactionListResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FeeTransactionList'
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    ChargeFeeConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - UNRESOLVED_FEE_TYPE
+                - UNRESOLVED_CURRENCY
+                - UNRESOLVED_INSTRUMENT
+                - FUNDS_INSUFFICIENT
+                - IDENTITY_NOT_OWNER_OF_INSTRUMENT
+                - FEE_AMOUNT_NOT_SET
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+  headers:
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    x-ratelimit-limit:
+      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+        The first number (20) is the limit that has been exceeded.
+
+        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+        '
+      required: true
+      schema:
+        type: string
+  parameters:
+    creationTimestampTo:
+      name: creationTimestampTo
+      in: query
+      required: false
+      description: Filter for transactions created before this timestamp. Epoch timestamp using millisecond precision.
+      schema:
+        type: integer
+        format: int64
+    idempotency-ref:
+      name: idempotency-ref
+      in: header
+      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
+      required: false
+      schema:
+        type: string
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: The limit of the results for paging, starting at the offset. Limit is always capped at 100.
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+    creationTimestampFrom:
+      name: creationTimestampFrom
+      in: query
+      required: false
+      description: Filter for transactions created after this timestamp. Epoch timestamp using millisecond precision.
+      schema:
+        type: integer
+        format: int64
+    sortOrder:
+      name: sortOrder
+      in: query
+      required: false
+      description: "Sort order for the results:\n  - ASC: Ascending order, oldest first.\n  - DESC: Descending order, most recent first.\n"
+      schema:
+        type: string
+        enum:
+        - ASC
+        - DESC
+    offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+  requestBodies:
+    ChargeFeeRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            description: The custom fee to be charged to the consumer/corporate.
+            $ref: '#/components/schemas/Fee'
+  securitySchemes:
+    api_key:
+      type: apiKey
+      description: The API Key representing your Multi account.
+      name: api-key
+      in: header
+    auth_token:
+      type: http
+      description: The authentication token representing the user. This will be included in the login response object.
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Access
+  tags:
+  - Access Token
+  - User Impersonation
+  - Consent Request
+- name: Identities
+  tags:
+  - Corporates
+  - Consumers
+- name: User Management
+  tags:
+  - Authorised Users
+- name: Instruments
+  tags:
+  - Managed Accounts
+  - Managed Cards
+- name: Transactions
+  tags:
+  - Transfers
+- name: Fees
+  tags:
+  - Fees
+- name: Bulk Operations [Beta]
+  tags:
+  - Operations
+  - Manage

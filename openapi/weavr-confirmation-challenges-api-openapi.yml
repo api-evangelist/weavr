@@ -1,0 +1,489 @@
+openapi: 3.1.0
+info:
+  version: v3
+  title: Weavr Multi Product BackOffice Access Token Confirmation Challenges API
+  x-logo:
+    url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
+    backgroundColor: '#FFFFFF'
+    altText: Weavr
+  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
+
+    identities and their instruments, without requiring the users to be logged in.
+
+
+    A token is to be obtained through the `access_token` method, and this will allow relevant operations
+
+    to be performed on behalf of this same identity.
+
+    '
+  contact:
+    name: Weavr
+    url: https://weavr.io
+servers:
+- description: Weavr Sandbox Environment
+  url: https://sandbox.weavr.io/multi/backoffice
+tags:
+- name: Confirmation Challenges
+  description: Issue and verify confirmation challenges used to authorise lists of resources.
+paths:
+  /challenges/otp/{channel}:
+    post:
+      tags:
+      - Confirmation Challenges
+      description: "Starts the verification process for a list of resources in which a one-time password is sent to a device belonging to the logged-in user that was previously enrolled through the `/authentication_factors/otp/{channel}` endpoint. \n\nThis endpoint can be used to challenge _Outgoing Wire Transfers_, _Sends_, and _Linked Account Declarations_.\n\nYou should only start this process if the operation `state` is `PENDING_CHALLENGE`.\n\n_Note that on the Sandbox Environment, text messages are not sent and the one-time-password is always \\\"123456\\\"._\n"
+      summary: Issue a one-time password that can be used to verify a list of resources
+      operationId: multipleSCAChallenge
+      parameters:
+      - $ref: '#/components/parameters/idempotency-ref'
+      - $ref: '#/components/parameters/channel'
+      requestBody:
+        $ref: '#/components/requestBodies/MultipleSCAChallengeRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/SCAChallengeResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '409':
+          $ref: '#/components/responses/MultipleSCAChallengeConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+  /challenges/{scaChallengeId}/otp/{channel}/verify:
+    post:
+      tags:
+      - Confirmation Challenges
+      description: 'Completes the verification process for a list of resources.
+
+
+        This endpoint can be used to challenge _Outgoing Wire Transfers_ & _Sends_.
+
+
+        If the outcome of the verification is successful, the resource is executed.
+
+
+        If not verified challenge expires after 5 minutes and the number of incorrect OTP attempts is limited to reduce the risk of fraud.
+
+
+        _Note that on the Sandbox Environment, text messages are not sent and the `verificationCode` is always \"123456\"._
+
+        '
+      summary: Verify a list of resources using a one-time password
+      operationId: multipleSCAVerify
+      parameters:
+      - $ref: '#/components/parameters/idempotency-ref'
+      - name: scaChallengeId
+        in: path
+        required: true
+        description: The unique identifier of the SCA challenge.
+        schema:
+          type: string
+          pattern: ^[0-9]+$
+      - $ref: '#/components/parameters/channel'
+      requestBody:
+        $ref: '#/components/requestBodies/MultipleSCAVerifyRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/MultipleSCAVerifyConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+  /challenges/push/{channel}:
+    post:
+      tags:
+      - Confirmation Challenges
+      description: 'Starts the verification process for a list of resources in which a push notification is sent to a device belonging to the logged-in user that was previously enrolled through the `/authentication_factors/push/{channel}` endpoint.
+
+
+        This endpoint can be used to challenge _Outgoing Wire Transfers_ & _Sends_.
+
+
+        You should only start this process if the resource `state` is `PENDING_CHALLENGE`.
+
+        '
+      summary: Issue a push notification that can be used to verify a list of resources
+      operationId: multipleSCAChallengePush
+      parameters:
+      - $ref: '#/components/parameters/idempotency-ref'
+      - $ref: '#/components/parameters/scaPushChannel'
+      requestBody:
+        $ref: '#/components/requestBodies/MultipleSCAChallengeRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/SCAChallengeResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '409':
+          $ref: '#/components/responses/MultipleSCAChallengePushConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+components:
+  parameters:
+    scaPushChannel:
+      name: channel
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/SCAPushChannel'
+    channel:
+      name: channel
+      in: path
+      required: true
+      description: The unique identifier for the channel.
+      schema:
+        $ref: '#/components/schemas/SCAOtpChannel'
+    idempotency-ref:
+      name: idempotency-ref
+      in: header
+      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
+      required: false
+      schema:
+        type: string
+  responses:
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    SCAChallengeResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              scaChallengeId:
+                $ref: '#/components/schemas/Id'
+    MultipleSCAVerifyConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - STATE_INVALID
+                - CHANNEL_NOT_SUPPORTED
+                - CHANNEL_NOT_REGISTERED
+                - VERIFICATION_CODE_EXPIRED
+                - VERIFICATION_CODE_INVALID
+                - CHALLENGE_LIMIT_EXCEEDED
+                - ONE_CHALLENGE_LIMIT_REMAINING
+    MultipleSCAChallengeConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                description: "Error codes:\n  * `STATE_INVALID` - The operation no longer requires additional verification, it was either cancelled or completed.\n  * `CHANNEL_NOT_SUPPORTED` - The channel selected cannot be used to verify this type of operation.\n  * `CHANNEL_NOT_REGISTERED` - The channel selected must be enrolled to receive one-time passwords before it can be used to verify this type of operation.\n  * `RETRY_IN_15_SECS` - The endpoint can be called again in 15 seconds. Once called successfully, a new SMS will be sent (with a different OTP to the original SMS).\n  * `CHALLENGE_LIMIT_EXCEEDED` - No more SMS OTPs can be requested. If verification was not completed, the original action must be started again from the beginning.\n"
+                type: string
+                enum:
+                - STATE_INVALID
+                - CHANNEL_NOT_SUPPORTED
+                - CHANNEL_NOT_REGISTERED
+                - RETRY_IN_15SEC
+                - CHALLENGE_LIMIT_EXCEEDED
+    MultipleSCAChallengePushConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - STATE_INVALID
+                - CHANNEL_NOT_SUPPORTED
+                - CHANNEL_NOT_REGISTERED
+                - CHALLENGE_LIMIT_EXCEEDED
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    NoContent:
+      description: Success - No Content.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    MethodNotAllowed:
+      description: Method Not Allowed - The request was received but has been rejected for the requested resource.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  headers:
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    x-ratelimit-limit:
+      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+        The first number (20) is the limit that has been exceeded.
+
+        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+        '
+      required: true
+      schema:
+        type: string
+  schemas:
+    SyntaxError:
+      type: object
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      properties:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
+    MultipleSCAResourceType:
+      type: string
+      description: 'The operation type upon which an SCA Challenge is being contested.
+
+        '
+      enum:
+      - outgoing_wire_transfers
+      - sends
+      - linked_account_declaration
+      - correspondent_bank_transfers
+    SCAPushChannel:
+      type: string
+      enum:
+      - AUTHY
+      - BIOMETRIC
+      description: '- "AUTHY": The push notification is sent on the user''s device using [Twilio Authy](https://www.twilio.com/authy)
+
+        - "BIOMETRIC": The push notification is sent to the user''s device
+
+        '
+    Nonce:
+      type: string
+      description: A randomly generated one-time use code.
+      pattern: ^[0-9]{6}$
+    SCAOtpChannel:
+      type: string
+      enum:
+      - SMS
+      description: '- "SMS": The one-time-password is sent as a text message
+
+        '
+    Id:
+      type: string
+      pattern: ^[0-9]+$
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+  requestBodies:
+    MultipleSCAChallengeRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - resourceType
+            - resourceIds
+            type: object
+            properties:
+              resourceType:
+                description: The resource type that the subsequent Ids pertain to. Note that the `linked_account_declaration` can only be performed by a logged in Root User.
+                $ref: '#/components/schemas/MultipleSCAResourceType'
+              resourceIds:
+                type: array
+                description: Can be used with a single or a list of resource Ids. A resource Id is the unique identifier of the resource type that was provided in the response when the resource (such as a transaction) was created.
+                items:
+                  type: string
+                  pattern: ^[0-9]{1,}$
+    MultipleSCAVerifyRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - verificationCode
+            - resourceType
+            type: object
+            properties:
+              verificationCode:
+                description: The code received by the user on the device.
+                $ref: '#/components/schemas/Nonce'
+              resourceType:
+                description: The resource type that the subsequent Ids pertain to. Note that the `linked_account_declaration` can only be performed by a logged in Root User.
+                $ref: '#/components/schemas/MultipleSCAResourceType'
+  securitySchemes:
+    api_key:
+      type: apiKey
+      description: The API Key representing your Multi account.
+      name: api-key
+      in: header
+    auth_token:
+      type: http
+      description: The authentication token representing the user. This will be included in the login response object.
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Access
+  tags:
+  - Access Token
+  - User Impersonation
+  - Consent Request
+- name: Identities
+  tags:
+  - Corporates
+  - Consumers
+- name: User Management
+  tags:
+  - Authorised Users
+- name: Instruments
+  tags:
+  - Managed Accounts
+  - Managed Cards
+- name: Transactions
+  tags:
+  - Transfers
+- name: Fees
+  tags:
+  - Fees
+- name: Bulk Operations [Beta]
+  tags:
+  - Operations
+  - Manage

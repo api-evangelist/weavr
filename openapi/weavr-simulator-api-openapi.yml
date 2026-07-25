@@ -1,0 +1,1476 @@
+openapi: 3.1.0
+info:
+  version: v3
+  title: Weavr Multi Product BackOffice Access Token Simulator API
+  x-logo:
+    url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
+    backgroundColor: '#FFFFFF'
+    altText: Weavr
+  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
+
+    identities and their instruments, without requiring the users to be logged in.
+
+
+    A token is to be obtained through the `access_token` method, and this will allow relevant operations
+
+    to be performed on behalf of this same identity.
+
+    '
+  contact:
+    name: Weavr
+    url: https://weavr.io
+servers:
+- description: Weavr Sandbox Environment
+  url: https://sandbox.weavr.io/multi/backoffice
+tags:
+- name: Simulator
+  description: 'Simulators enable you to trigger processes in Sandbox that in Production are triggered from an external action rather than from your application. this way you can test scenarios that otherwise you would only encounter in the Live environment.
+
+
+    *Note: These endpoints are only available on Sandbox and won’t work in the Live environment.*
+
+    '
+paths:
+  /simulate/v1/payment_runs/{payment_run_id}/fund_group/{reference}:
+    post:
+      x-sandbox-only: true
+      operationId: postFundPaymentRunGroup
+      summary: Simulate Fund a Payment run
+      description: 'Simulate funding a payment run using a linked account.
+
+
+        *This endpoint will only function in Sandbox and should not be used in the Live environment.*
+
+        '
+      tags:
+      - Simulator
+      security:
+      - apiKey: []
+      parameters:
+      - name: payment_run_id
+        in: path
+        required: true
+        schema:
+          pattern: ^[0-9a-fA-F]{24}$
+          type: string
+      - name: reference
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Success
+        '400':
+          description: Bad Request Error - Your request is invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    maxLength: 255
+                    type: string
+                    description: When present helps to identify and fix the problem.
+                  syntaxErrors:
+                    type: object
+                    description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+                    properties:
+                      invalidFields:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            params:
+                              type: array
+                              items:
+                                type: string
+                            fieldName:
+                              type: string
+                            error:
+                              type: string
+                              enum:
+                              - REQUIRED
+                              - HAS_TEXT
+                              - REQUIRES
+                              - SIZE
+                              - RANGE
+                              - IN
+                              - NOT_IN
+                              - REGEX
+                              - EXACTLY
+                              - AT_LEAST
+                              - AT_MOST
+                              - ALL_OR_NONE
+        '401':
+          description: Unauthorized - Your credentials or access token are invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '403':
+          description: Forbidden - Access to the requested resource or action is forbidden.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - INSUFFICIENT_PERMISSIONS
+        '404':
+          description: Not found - The requested resource couldn't be found.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - BUYER_ID_INVALID
+                    - UNSUPPORTED_CURRENCY
+        '500':
+          description: Internal Server Error - There is a problem with the server. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '503':
+          description: Service Unavailable - We're temporarily offline for maintenance. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+  /simulate/v1/linked_accounts:
+    post:
+      x-sandbox-only: true
+      operationId: postLinkedAccounts
+      summary: Simulate Creating a Linked Account via Open Banking
+      description: 'The Linked Account Simulator allows you to create a simulated linked account that can be used for funding payment runs.
+
+
+        *This endpoint will only function in Sandbox and should not be used in the Live environment.*
+
+        '
+      tags:
+      - Simulator
+      security:
+      - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - buyerId
+              - accountIdentification
+              properties:
+                institutionId:
+                  type: string
+                  deprecated: true
+                buyerId:
+                  type: string
+                createdBy:
+                  type: string
+                  deprecated: true
+                accountIdentification:
+                  description: The bank details that uniquely identify the account on the banking systems.
+                  oneOf:
+                  - title: FasterPaymentsBankDetails
+                    required:
+                    - accountNumber
+                    - sortCode
+                    type: object
+                    description: Bank details used in case the wire transfer is executed over Faster Payments.
+                    properties:
+                      accountNumber:
+                        type: string
+                        minLength: 8
+                        maxLength: 8
+                        pattern: ^[0-9]{8}$
+                        description: Account number, required for wire transfer over Faster Payments.
+                      sortCode:
+                        type: string
+                        minLength: 6
+                        maxLength: 6
+                        pattern: ^[0-9]{6}$
+                        description: Sort code, required for wire transfer over Faster Payments.
+                      secondaryReference:
+                        type: string
+                        description: Secondary reference data if applicable.
+                  - title: SepaBankDetails
+                    required:
+                    - iban
+                    type: object
+                    description: Bank details used in case the wire transfer is executed over SEPA.
+                    properties:
+                      iban:
+                        type: string
+                        minLength: 15
+                        maxLength: 34
+                        pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
+                        description: International Bank Account Number, required for wire transfer over SEPA.
+                      bankIdentifierCode:
+                        type: string
+                        minLength: 8
+                        maxLength: 11
+                        pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
+                        description: BIC, for wire transfer over SEPA.
+                currency:
+                  type: string
+                  description: The currency expressed in ISO-4217 code.
+                  maxLength: 3
+                  minLength: 3
+                  enum:
+                  - GBP
+                  - EUR
+                  deprecated: true
+                  default: GBP
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                - type: object
+                  required:
+                  - id
+                  - accountIdentification
+                  - currency
+                  - institution
+                  - consent
+                  - status
+                  properties:
+                    id:
+                      description: The unique identifier of the linked account
+                      type: string
+                      pattern: ^[0-9a-fA-F]{24}$
+                      example: 652d25b73541d8084a88a38d
+                    accountIdentification:
+                      description: The bank details that uniquely identify the account on the banking systems.
+                      oneOf:
+                      - title: FasterPaymentsBankDetails
+                        required:
+                        - accountNumber
+                        - sortCode
+                        type: object
+                        description: Bank details used in case the wire transfer is executed over Faster Payments.
+                        properties:
+                          accountNumber:
+                            type: string
+                            minLength: 8
+                            maxLength: 8
+                            pattern: ^[0-9]{8}$
+                            description: Account number, required for wire transfer over Faster Payments.
+                          sortCode:
+                            type: string
+                            minLength: 6
+                            maxLength: 6
+                            pattern: ^[0-9]{6}$
+                            description: Sort code, required for wire transfer over Faster Payments.
+                          secondaryReference:
+                            type: string
+                            description: Secondary reference data if applicable.
+                      - title: SepaBankDetails
+                        required:
+                        - iban
+                        type: object
+                        description: Bank details used in case the wire transfer is executed over SEPA.
+                        properties:
+                          iban:
+                            type: string
+                            minLength: 15
+                            maxLength: 34
+                            pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
+                            description: International Bank Account Number, required for wire transfer over SEPA.
+                          bankIdentifierCode:
+                            type: string
+                            minLength: 8
+                            maxLength: 11
+                            pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
+                            description: BIC, for wire transfer over SEPA.
+                    currency:
+                      type: string
+                      description: The primary currency associated with the account
+                      maxLength: 3
+                      minLength: 3
+                      enum:
+                      - GBP
+                      - EUR
+                    institution:
+                      type: object
+                      required:
+                      - countries
+                      properties:
+                        displayName:
+                          description: The name to be used when displaying the institution to users on user interfaces
+                          type: string
+                        countries:
+                          type: array
+                          description: The institution's supported countries
+                          items:
+                            type: string
+                            maxLength: 2
+                            minLength: 2
+                            pattern: ^[A-Z]+$
+                            enum:
+                            - GB
+                            - AT
+                            - BE
+                            - BG
+                            - HR
+                            - CY
+                            - CZ
+                            - DK
+                            - EE
+                            - FI
+                            - FR
+                            - DE
+                            - GI
+                            - GR
+                            - HU
+                            - IS
+                            - IE
+                            - IT
+                            - LV
+                            - LI
+                            - LT
+                            - LU
+                            - MT
+                            - NL
+                            - 'NO'
+                            - PL
+                            - PT
+                            - RO
+                            - SK
+                            - SI
+                            - ES
+                            - SE
+                        images:
+                          type: object
+                          description: The images that should be used when displaying the institution
+                          properties:
+                            icon:
+                              type: string
+                            logo:
+                              type: string
+                        info:
+                          type: object
+                          properties:
+                            loginUrl:
+                              type: string
+                            helplinePhoneNumber:
+                              type: string
+                    consent:
+                      type: object
+                      required:
+                      - expiresAt
+                      - expiresIn
+                      - status
+                      properties:
+                        expiresAt:
+                          type: string
+                          format: date-time
+                        expiresIn:
+                          type: integer
+                        status:
+                          type: string
+                          enum:
+                          - ACTIVE
+                          - EXPIRED
+                          - REVOKED
+                    status:
+                      type: string
+                      description: 'The status of the linked account. The status can be one of the following:
+
+
+                        - `PENDING_CHALLENGE`: The Linked Account is pending challenge
+
+                        - `PENDING_VERIFICATION`: The Linked Account is pending the completion of the required verification steps
+
+                        - `PENDING_FUNDING`: Awaiting a wire transfer as part of the verification process when adding an account without Open Banking
+
+                        - `REJECTED`: The Linked Account did not pass one or more verification steps and is not eligible for use
+
+                        - `LINKED`: The linked account is linked and ready for use
+
+                        - `UNLINKED`: The linked account is not linked and cannot be used
+
+                        '
+                      enum:
+                      - LINKED
+                      - UNLINKED
+                      - PENDING_CHALLENGE
+                      - PENDING_FUNDING
+                      - PENDING_VERIFICATION
+                      - REJECTED
+                    friendlyName:
+                      type: string
+                      maxLength: 80
+                      description: A user-friendly name for the linked account
+                - type: object
+                  properties:
+                    createdAt:
+                      type: string
+        '400':
+          description: Bad Request Error - Your request is invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    maxLength: 255
+                    type: string
+                    description: When present helps to identify and fix the problem.
+                  syntaxErrors:
+                    type: object
+                    description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+                    properties:
+                      invalidFields:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            params:
+                              type: array
+                              items:
+                                type: string
+                            fieldName:
+                              type: string
+                            error:
+                              type: string
+                              enum:
+                              - REQUIRED
+                              - HAS_TEXT
+                              - REQUIRES
+                              - SIZE
+                              - RANGE
+                              - IN
+                              - NOT_IN
+                              - REGEX
+                              - EXACTLY
+                              - AT_LEAST
+                              - AT_MOST
+                              - ALL_OR_NONE
+        '401':
+          description: Unauthorized - Your credentials or access token are invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '403':
+          description: Forbidden - Access to the requested resource or action is forbidden.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - INSUFFICIENT_PERMISSIONS
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - BUYER_ID_INVALID
+                    - UNSUPPORTED_CURRENCY
+        '500':
+          description: Internal Server Error - There is a problem with the server. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '503':
+          description: Service Unavailable - We're temporarily offline for maintenance. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+  /simulate/v1/linked_accounts/{linked_account_id}/fund:
+    post:
+      operationId: postSimulateLinkedAccountFundVerification
+      summary: Simulate Control Check via Test Funding Transaction
+      description: Simulate Control Check via Test Funding Transaction
+      tags:
+      - Simulator
+      parameters:
+      - name: linked_account_id
+        in: path
+        required: true
+        schema:
+          pattern: ^[0-9a-fA-F]{24}$
+          type: string
+      responses:
+        '204':
+          description: Success - No Content.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '400':
+          description: Bad Request Error - Your request is invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    maxLength: 255
+                    type: string
+                    description: When present helps to identify and fix the problem.
+                  syntaxErrors:
+                    type: object
+                    description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+                    properties:
+                      invalidFields:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            params:
+                              type: array
+                              items:
+                                type: string
+                            fieldName:
+                              type: string
+                            error:
+                              type: string
+                              enum:
+                              - REQUIRED
+                              - HAS_TEXT
+                              - REQUIRES
+                              - SIZE
+                              - RANGE
+                              - IN
+                              - NOT_IN
+                              - REGEX
+                              - EXACTLY
+                              - AT_LEAST
+                              - AT_MOST
+                              - ALL_OR_NONE
+        '401':
+          description: Unauthorized - Your credentials or access token are invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '403':
+          description: Forbidden - Access to the requested resource or action is forbidden.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - INSUFFICIENT_PERMISSIONS
+        '404':
+          description: Not found - The requested resource couldn't be found.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - STATE_INVALID
+        '500':
+          description: Internal Server Error - There is a problem with the server. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '503':
+          description: Service Unavailable - We're temporarily offline for maintenance. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+  /simulate/v1/buyers/{buyer_id}/verify:
+    post:
+      operationId: verifyBuyerKyb
+      summary: Simulate Buyer KYB Verify
+      description: 'Simulates due diligence (KYB) for Buyers.
+
+
+        *This endpoint will only function in Sandbox and should not be used in the Live environment.*
+
+        '
+      x-sandbox-only: true
+      tags:
+      - Simulator
+      parameters:
+      - name: buyer_id
+        in: path
+        required: true
+        schema:
+          type: string
+      security:
+      - apiKey: []
+      responses:
+        '204':
+          description: Success - No Content.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '400':
+          description: Bad Request Error - Your request is invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    maxLength: 255
+                    type: string
+                    description: When present helps to identify and fix the problem.
+                  syntaxErrors:
+                    type: object
+                    description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+                    properties:
+                      invalidFields:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            params:
+                              type: array
+                              items:
+                                type: string
+                            fieldName:
+                              type: string
+                            error:
+                              type: string
+                              enum:
+                              - REQUIRED
+                              - HAS_TEXT
+                              - REQUIRES
+                              - SIZE
+                              - RANGE
+                              - IN
+                              - NOT_IN
+                              - REGEX
+                              - EXACTLY
+                              - AT_LEAST
+                              - AT_MOST
+                              - ALL_OR_NONE
+        '401':
+          description: Unauthorized - Your credentials or access token are invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '403':
+          description: Forbidden - Access to the requested resource or action is forbidden.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - INSUFFICIENT_PERMISSIONS
+        '404':
+          description: Not found - The requested resource couldn't be found.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+        '500':
+          description: Internal Server Error - There is a problem with the server. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '503':
+          description: Service Unavailable - We're temporarily offline for maintenance. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+  /simulate/v1/consents/{linked_account_id}/change_status:
+    post:
+      operationId: postSimulateConsentStatusChange
+      summary: Simulate AIS consent status change
+      description: 'Simulate AIS consent status change.
+
+
+        *This endpoint will only function in Sandbox and should not be used in the Live environment.*
+
+        '
+      x-sandbox-only: true
+      tags:
+      - Simulator
+      parameters:
+      - name: linked_account_id
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[0-9a-fA-F]{24}$
+      security:
+      - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - action
+              properties:
+                action:
+                  type: string
+                  enum:
+                  - REVOKED
+                  - EXPIRED
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request Error - Your request is invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    maxLength: 255
+                    type: string
+                    description: When present helps to identify and fix the problem.
+                  syntaxErrors:
+                    type: object
+                    description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+                    properties:
+                      invalidFields:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            params:
+                              type: array
+                              items:
+                                type: string
+                            fieldName:
+                              type: string
+                            error:
+                              type: string
+                              enum:
+                              - REQUIRED
+                              - HAS_TEXT
+                              - REQUIRES
+                              - SIZE
+                              - RANGE
+                              - IN
+                              - NOT_IN
+                              - REGEX
+                              - EXACTLY
+                              - AT_LEAST
+                              - AT_MOST
+                              - ALL_OR_NONE
+        '401':
+          description: Unauthorized - Your credentials or access token are invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '403':
+          description: Forbidden - Access to the requested resource or action is forbidden.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - INSUFFICIENT_PERMISSIONS
+        '404':
+          description: Not found - The requested resource couldn't be found.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - LINKED_ACCOUNT_NOT_FOUND
+        '500':
+          description: Internal Server Error - There is a problem with the server. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '503':
+          description: Service Unavailable - We're temporarily offline for maintenance. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+  /simulate/v1/payment_run_sca/{payment_run_id}/challenges/otp/{channel}:
+    post:
+      operationId: issuePaymentRunChallengeSimulate
+      summary: Simulate issuing a Payment Run SCA Challenge
+      description: 'Simulates issuing the SCA challenge for a payment run.
+
+
+        *This endpoint will only function in Sandbox and should not be used in the Live environment.*
+
+        '
+      x-sandbox-only: true
+      tags:
+      - Simulator
+      parameters:
+      - name: channel
+        in: path
+        required: true
+        description: The unique identifier for the channel.
+        schema:
+          type: string
+          enum:
+          - SMS
+          description: '- "SMS": The one-time-password is sent as a text message'
+      - in: path
+        name: payment_run_id
+        required: true
+        description: The unique identifier for the payment run.
+        schema:
+          type: string
+          pattern: ^[0-9a-fA-F]{24}$
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request Error - Your request is invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    maxLength: 255
+                    type: string
+                    description: When present helps to identify and fix the problem.
+                  syntaxErrors:
+                    type: object
+                    description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+                    properties:
+                      invalidFields:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            params:
+                              type: array
+                              items:
+                                type: string
+                            fieldName:
+                              type: string
+                            error:
+                              type: string
+                              enum:
+                              - REQUIRED
+                              - HAS_TEXT
+                              - REQUIRES
+                              - SIZE
+                              - RANGE
+                              - IN
+                              - NOT_IN
+                              - REGEX
+                              - EXACTLY
+                              - AT_LEAST
+                              - AT_MOST
+                              - ALL_OR_NONE
+        '401':
+          description: Unauthorized - Your credentials or access token are invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '403':
+          description: Forbidden - Access to the requested resource or action is forbidden.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - INSUFFICIENT_PERMISSIONS
+        '404':
+          description: Not found - The requested resource couldn't be found.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    description: '- `STATE_INVALID` - The operation no longer requires additional verification, it was either cancelled or completed.
+
+                      - `CHANNEL_NOT_SUPPORTED` - The channel selected cannot be used to verify this type of operation.
+
+                      - `CHANNEL_NOT_REGISTERED` - The channel selected must be enrolled to receive one-time passwords before it can be used to verify this type of operation.
+
+                      '
+                    type: string
+                    enum:
+                    - STATE_INVALID
+                    - CHANNEL_NOT_SUPPORTED
+                    - CHANNEL_NOT_REGISTERED
+        '429':
+          description: Too many requests.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+            x-ratelimit-limit:
+              description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+                The first number (20) is the limit that has been exceeded.
+
+                The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+                '
+              required: true
+              schema:
+                type: string
+            x-ratelimit-reset:
+              description: The number of seconds until the window is reset.
+              required: true
+              schema:
+                minimum: 0
+                type: integer
+                format: int32
+        '500':
+          description: Internal Server Error - There is a problem with the server. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '503':
+          description: Service Unavailable - We're temporarily offline for maintenance. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+  /simulate/v1/payment_run_sca/{payment_run_id}/challenges/otp/{channel}/verify:
+    post:
+      operationId: verifyPaymentRunChallengeSimulate
+      summary: Simulate verifying a payment run SCA Challenge
+      description: 'Simulates verifying the SCA challenge for a payment run.
+
+
+        *This endpoint will only function in Sandbox and should not be used in the Live environment.*
+
+        '
+      x-sandbox-only: true
+      tags:
+      - Simulator
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - verificationCode
+              properties:
+                verificationCode:
+                  type: string
+                  minLength: 1
+      parameters:
+      - name: channel
+        in: path
+        required: true
+        description: The unique identifier for the channel.
+        schema:
+          type: string
+          enum:
+          - SMS
+          description: '- "SMS": The one-time-password is sent as a text message'
+      - in: path
+        name: payment_run_id
+        required: true
+        description: The unique identifier for the payment run.
+        schema:
+          type: string
+          pattern: ^[0-9a-fA-F]{24}$
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request Error - Your request is invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    maxLength: 255
+                    type: string
+                    description: When present helps to identify and fix the problem.
+                  syntaxErrors:
+                    type: object
+                    description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+                    properties:
+                      invalidFields:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            params:
+                              type: array
+                              items:
+                                type: string
+                            fieldName:
+                              type: string
+                            error:
+                              type: string
+                              enum:
+                              - REQUIRED
+                              - HAS_TEXT
+                              - REQUIRES
+                              - SIZE
+                              - RANGE
+                              - IN
+                              - NOT_IN
+                              - REGEX
+                              - EXACTLY
+                              - AT_LEAST
+                              - AT_MOST
+                              - ALL_OR_NONE
+        '401':
+          description: Unauthorized - Your credentials or access token are invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '403':
+          description: Forbidden - Access to the requested resource or action is forbidden.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - INSUFFICIENT_PERMISSIONS
+        '404':
+          description: Not found - The requested resource couldn't be found.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - STATE_INVALID
+                    - CHANNEL_NOT_SUPPORTED
+                    - CHANNEL_NOT_REGISTERED
+                    - VERIFICATION_CODE_EXPIRED
+                    - VERIFICATION_CODE_INVALID
+                    - PAYMENT_RUN_SCA_CHALLENGE_VERIFY_FAILED
+                    - ONE_CHALLENGE_LIMIT_REMAINING
+                    - CHALLENGE_LIMIT_EXCEEDED
+        '429':
+          description: Too many requests.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+            x-ratelimit-limit:
+              description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+                The first number (20) is the limit that has been exceeded.
+
+                The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+                '
+              required: true
+              schema:
+                type: string
+            x-ratelimit-reset:
+              description: The number of seconds until the window is reset.
+              required: true
+              schema:
+                minimum: 0
+                type: integer
+                format: int32
+        '500':
+          description: Internal Server Error - There is a problem with the server. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '503':
+          description: Service Unavailable - We're temporarily offline for maintenance. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      description: The API Key representing your Multi account.
+      name: api-key
+      in: header
+    auth_token:
+      type: http
+      description: The authentication token representing the user. This will be included in the login response object.
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Access
+  tags:
+  - Access Token
+  - User Impersonation
+  - Consent Request
+- name: Identities
+  tags:
+  - Corporates
+  - Consumers
+- name: User Management
+  tags:
+  - Authorised Users
+- name: Instruments
+  tags:
+  - Managed Accounts
+  - Managed Cards
+- name: Transactions
+  tags:
+  - Transfers
+- name: Fees
+  tags:
+  - Fees
+- name: Bulk Operations [Beta]
+  tags:
+  - Operations
+  - Manage

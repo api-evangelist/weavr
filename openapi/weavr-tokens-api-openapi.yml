@@ -1,0 +1,450 @@
+openapi: 3.1.0
+info:
+  version: v3
+  title: Weavr Multi Product BackOffice Access Token Tokens API
+  x-logo:
+    url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
+    backgroundColor: '#FFFFFF'
+    altText: Weavr
+  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
+
+    identities and their instruments, without requiring the users to be logged in.
+
+
+    A token is to be obtained through the `access_token` method, and this will allow relevant operations
+
+    to be performed on behalf of this same identity.
+
+    '
+  contact:
+    name: Weavr
+    url: https://weavr.io
+servers:
+- description: Weavr Sandbox Environment
+  url: https://sandbox.weavr.io/multi/backoffice
+tags:
+- name: Tokens
+paths:
+  /v1/login_with_password:
+    post:
+      operationId: acquireAuthToken
+      description: 'Authenticate a user with the `email` and `password` that they provided when registering.
+
+
+        Given that the user credentials are correct, this returns a `token` that can then be used to authorise
+
+        other secured operations. In case the password is expired, a temporary `token` is returned, which can be used
+
+        solely for updating the password.
+
+
+        The token returned is valid for 5 minutes from last activity.
+
+        '
+      summary: Acquire auth token
+      tags:
+      - Tokens
+      security:
+      - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+              - email
+              - password
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: E-mail Address of the user
+                  format: email
+                password:
+                  type: object
+                  description: "The user's password or passcode used to log in a user.\nPasswords must be:\n  - between 8 and 30 characters\n  - include a lowercase character\n  - include an uppercase character\n  - include a digit and a special character\n  - different from any of the 5 last such passwords used.\n\nFor non-PCI compliant integrations, the password submitted must be **tokenised**.\n"
+                  required:
+                  - value
+                  properties:
+                    value:
+                      minLength: 1
+                      maxLength: 100
+                      type: string
+                      format: password
+      responses:
+        '200':
+          description: OK
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: An authorisation token (valid for 5 minutes from last activity) identifying the user to be used in the `auth_token` authorization header for secured operations.
+                  tokenType:
+                    type: string
+                    description: "The auth token received can only be used to access the following endpoints:\n  - `/identities`\n  - `/access_token`\n"
+                    enum:
+                    - AUTH
+                    - ACCESS
+                  identity:
+                    description: The identity to which the logged-in user belongs to.
+                    type: object
+                    required:
+                    - type
+                    - id
+                    properties:
+                      type:
+                        enum:
+                        - BUYER
+                        type: string
+                        description: Indicates the identity type.
+                      id:
+                        type: string
+                        pattern: ^[0-9]+$
+                        description: The identifier for the identity.
+                  credentials:
+                    description: The unique identifier for the logged-in user.
+                    required:
+                    - type
+                    - id
+                    type: object
+                    properties:
+                      type:
+                        maxLength: 50
+                        pattern: ^[a-zA-Z0-9_-]+$
+                        type: string
+                        enum:
+                        - ADMIN
+                        - USER
+                        description: The type of user.
+                      id:
+                        type: string
+                        pattern: ^[0-9]+$
+                        description: The identifier of the user.
+        '400':
+          description: Bad Request Error - Your request is invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    maxLength: 255
+                    type: string
+                    description: When present helps to identify and fix the problem.
+                  syntaxErrors:
+                    type: object
+                    description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+                    properties:
+                      invalidFields:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            params:
+                              type: array
+                              items:
+                                type: string
+                            fieldName:
+                              type: string
+                            error:
+                              type: string
+                              enum:
+                              - REQUIRED
+                              - HAS_TEXT
+                              - REQUIRES
+                              - SIZE
+                              - RANGE
+                              - IN
+                              - NOT_IN
+                              - REGEX
+                              - EXACTLY
+                              - AT_LEAST
+                              - AT_MOST
+                              - ALL_OR_NONE
+        '401':
+          description: Unauthorized - Your credentials or access token are invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '403':
+          description: Forbidden - Access to the requested resource or action is forbidden.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - INSUFFICIENT_PERMISSIONS
+        '409':
+          description: The user's password has expired. Use the returned temporary token to update their password via the  '_/passwords/update_' endpoint.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: Temporary authorisation token required to initiate the _passwordUpdate_ operation.
+        '429':
+          description: Too many requests.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+            x-ratelimit-limit:
+              description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+                The first number (20) is the limit that has been exceeded.
+
+                The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+                '
+              required: true
+              schema:
+                type: string
+            x-ratelimit-reset:
+              description: The number of seconds until the window is reset.
+              required: true
+              schema:
+                minimum: 0
+                type: integer
+                format: int32
+        '500':
+          description: Internal Server Error - There is a problem with the server. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '503':
+          description: Service Unavailable - We're temporarily offline for maintenance. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+  /v1/logout:
+    post:
+      operationId: logout
+      description: 'Logs out the user and terminates the session identified by the
+
+        `auth_token` in the Authorization Header.
+
+        '
+      summary: Logout
+      tags:
+      - Tokens
+      responses:
+        '204':
+          description: Success - No Content.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '400':
+          description: Bad Request Error - Your request is invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    maxLength: 255
+                    type: string
+                    description: When present helps to identify and fix the problem.
+                  syntaxErrors:
+                    type: object
+                    description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+                    properties:
+                      invalidFields:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            params:
+                              type: array
+                              items:
+                                type: string
+                            fieldName:
+                              type: string
+                            error:
+                              type: string
+                              enum:
+                              - REQUIRED
+                              - HAS_TEXT
+                              - REQUIRES
+                              - SIZE
+                              - RANGE
+                              - IN
+                              - NOT_IN
+                              - REGEX
+                              - EXACTLY
+                              - AT_LEAST
+                              - AT_MOST
+                              - ALL_OR_NONE
+        '401':
+          description: Unauthorized - Your credentials or access token are invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '403':
+          description: Forbidden - Access to the requested resource or action is forbidden.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - INSUFFICIENT_PERMISSIONS
+        '429':
+          description: Too many requests.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+            x-ratelimit-limit:
+              description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+                The first number (20) is the limit that has been exceeded.
+
+                The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+                '
+              required: true
+              schema:
+                type: string
+            x-ratelimit-reset:
+              description: The number of seconds until the window is reset.
+              required: true
+              schema:
+                minimum: 0
+                type: integer
+                format: int32
+        '500':
+          description: Internal Server Error - There is a problem with the server. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '503':
+          description: Service Unavailable - We're temporarily offline for maintenance. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      description: The API Key representing your Multi account.
+      name: api-key
+      in: header
+    auth_token:
+      type: http
+      description: The authentication token representing the user. This will be included in the login response object.
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Access
+  tags:
+  - Access Token
+  - User Impersonation
+  - Consent Request
+- name: Identities
+  tags:
+  - Corporates
+  - Consumers
+- name: User Management
+  tags:
+  - Authorised Users
+- name: Instruments
+  tags:
+  - Managed Accounts
+  - Managed Cards
+- name: Transactions
+  tags:
+  - Transfers
+- name: Fees
+  tags:
+  - Fees
+- name: Bulk Operations [Beta]
+  tags:
+  - Operations
+  - Manage

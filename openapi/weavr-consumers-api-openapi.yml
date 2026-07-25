@@ -1,0 +1,1103 @@
+openapi: 3.1.0
+info:
+  version: v3
+  title: Weavr Multi Product BackOffice Access Token Consumers API
+  x-logo:
+    url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
+    backgroundColor: '#FFFFFF'
+    altText: Weavr
+  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
+
+    identities and their instruments, without requiring the users to be logged in.
+
+
+    A token is to be obtained through the `access_token` method, and this will allow relevant operations
+
+    to be performed on behalf of this same identity.
+
+    '
+  contact:
+    name: Weavr
+    url: https://weavr.io
+servers:
+- description: Weavr Sandbox Environment
+  url: https://sandbox.weavr.io/multi/backoffice
+tags:
+- name: Consumers
+paths:
+  /consumers/fees/charge:
+    post:
+      deprecated: true
+      tags:
+      - Consumers
+      description: 'Charge a fee to the logged-in consumer based on a pre-defined custom fee. Custom fees can be configured in the Multi Portal.
+
+
+        The fees collected will be deposited into your Revenue Account. The balance and transaction history of your revenue account can be viewed in the Multi Portal.
+
+        '
+      summary: Charge fee to a consumer
+      operationId: consumerChargeFee
+      parameters:
+      - $ref: '#/components/parameters/idempotency-ref'
+      requestBody:
+        $ref: '#/components/requestBodies/ChargeFeeRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/ChargeFeeResponse'
+        '400':
+          $ref: '#/components/responses/BackofficeBadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/ChargeFeeConflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api_key: []
+  /consumers:
+    post:
+      tags:
+      - Consumers
+      description: 'Create a Consumer Identity to represent an Individual.
+
+
+        The information provided must be accurate as it will be passed on for KYC verification with our partner.
+
+
+        *Incorrect information may incur a re-processing fee.*
+
+        '
+      summary: Register a consumer
+      operationId: consumerCreate
+      parameters:
+      - $ref: '#/components/parameters/idempotency-ref'
+      requestBody:
+        $ref: '#/components/requestBodies/ConsumerCreateRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/ConsumerResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/ConsumerCreateConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - api-key: []
+  /consumers/{consumer_id}/verify:
+    post:
+      tags:
+      - Consumers
+      summary: Simulate verification of a consumer identity
+      description: Fully verify a consumer identity. Will set emailVerified, mobileVerified, isPep (as false), isSanctioned (as false) and fullDueDiligence (as APPROVED).
+      operationId: consumers_consumer_id_verify
+      parameters:
+      - name: consumer_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      - $ref: '#/components/parameters/call-ref'
+      responses:
+        '204':
+          description: Success - No Content
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInvalidRequest'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+      security:
+      - API_Secret_Key: []
+components:
+  schemas:
+    CurrencyAmount:
+      required:
+      - currency
+      - amount
+      type: object
+      properties:
+        currency:
+          $ref: '#/components/schemas/Currency'
+        amount:
+          type: integer
+          format: int64
+          description: 'The monetary amount, scaled to the lowest denomination of the currency.
+
+
+            Example, an amount of 1000 for a EUR currency is actually 1000 Euro cents or EUR 10.00.
+
+            '
+      description: The object representing a monetary amount in a particular currency.
+    ValidationError:
+      type: array
+      description: Is returned as part of an HTTP error response whenever a validation error is detected. A list of the fields together with their syntax error will be provided.
+      items:
+        type: object
+        properties:
+          fieldName:
+            type: string
+          message:
+            maxLength: 255
+            type: string
+            description: When present helps to identify and fix the problem.
+          error:
+            type: string
+            enum:
+            - MUST_BE_FALSE
+            - MUST_BE_TRUE
+            - AT_MOST
+            - AT_LEAST
+            - FUTURE
+            - FUTURE_OR_PRESENT
+            - PAST
+            - PAST_OR_PRESENT
+            - LESS_THAN_ZERO
+            - LESS_THAN_OR_EQUAL_TO_ZERO
+            - GREATER_THAN_ZERO
+            - GREATER_THAN_OR_EQUAL_TO_ZERO
+            - HAS_TEXT
+            - REQUIRED
+            - REGEX
+            - RANGE
+            - IN
+            - NOT_IN
+            - NOT_EMPTY
+            - ALL_OR_NONE
+            - MUST_BE_EMPTY
+            - DEPENDS_ON
+            - INVALID_TYPE_OR_VALUE
+            - INVALID_REQUEST
+          params:
+            type: array
+            items:
+              type: string
+          invalidValue:
+            type: array
+            items:
+              type: string
+    Fee:
+      required:
+      - feeType
+      - source
+      type: object
+      properties:
+        feeType:
+          type: string
+          description: The fee type as defined in the Multi Portal.
+        source:
+          description: The instrument from where the fee should be deducted.
+          $ref: '#/components/schemas/InstrumentId'
+    Brand:
+      type: string
+      pattern: ^[a-zA-Z0-9]+$
+      description: 'Brand identifier used to determine the set of email and SMS user notification templates. Must be alphanumeric, up to 25 characters, and contain no spaces.
+
+        '
+      maxLength: 25
+    Tag:
+      type: string
+      description: The tag field is a custom field that can be used to search and filter.
+      maxLength: 50
+      pattern: ^[a-zA-Z0-9_-]+$
+    ClientInvalidRequest:
+      type: object
+      properties:
+        message:
+          maxLength: 255
+          type: string
+          description: When present helps to identify and fix the problem.
+          x-fieldValidation: size(_,255)
+        validation:
+          allOf:
+          - $ref: '#/components/schemas/MessageValidation'
+          - description: Description of fields which were invalid.
+    Date:
+      required:
+      - year
+      - month
+      - day
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int32
+          maximum: 2100
+          minimum: 1900
+        month:
+          type: integer
+          format: int32
+          maximum: 12
+          minimum: 1
+        day:
+          type: integer
+          format: int32
+          maximum: 31
+          minimum: 1
+    SyntaxError:
+      type: object
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      properties:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
+    TransactionState:
+      type: string
+      description: Status of the transaction.
+      enum:
+      - INITIALISED
+      - COMPLETED
+      - REJECTED
+      - FAILED
+      - PENDING
+      - SCHEDULED
+      - CANCELLED
+    UserLocale:
+      type: string
+      pattern: ^[a-z]{2}(-[A-Z]{2})?$
+      description: 'BCP47 locale code (e.g. en, en-US). The locale determines which email and SMS user notification templates are used.
+
+        '
+      maxLength: 5
+      example: en-GB
+    AddressWithCountryRequired:
+      required:
+      - country
+      type: object
+      description: The address, with none of the separate fields being set as required.
+      properties:
+        addressLine1:
+          type: string
+          description: The first line of the address.
+        addressLine2:
+          type: string
+          description: The second line of the address.
+        city:
+          type: string
+          description: The city of the address.
+        postCode:
+          maxLength: 10
+          pattern: ^[A-Za-z0-9 -]*$
+          type: string
+          description: The post code associated with the address.
+        state:
+          maxLength: 50
+          type: string
+          description: The state of the address.
+        country:
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]+$
+          type: string
+          description: The country of the address expressed in ISO 3166 alpha-2 format.
+    ConsumerRootUser:
+      required:
+      - id
+      - email
+      - name
+      - surname
+      - active
+      - mobile
+      - emailVerified
+      - mobileNumberVerified
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/IdentityId'
+        name:
+          maxLength: 100
+          type: string
+          description: First name of the root user.
+        surname:
+          maxLength: 100
+          type: string
+          description: Last name of the root user.
+        email:
+          $ref: '#/components/schemas/Email'
+        mobile:
+          $ref: '#/components/schemas/Mobile'
+        occupation:
+          $ref: '#/components/schemas/Occupation'
+        active:
+          type: boolean
+          description: The state of the root user. If false, then the user will not be able to log in.
+        emailVerified:
+          type: boolean
+          description: Indicates if the root user's email has been verified.
+        mobileNumberVerified:
+          type: boolean
+          description: Indicates if the root user's mobile number has been verified.
+        dateOfBirth:
+          description: Date of birth of the consumer root user.
+          $ref: '#/components/schemas/Date'
+        address:
+          description: Address of the consumer root user.
+          $ref: '#/components/schemas/AddressWithNoRequiredFields'
+        nationality:
+          description: Nationality of the consumer root user, in ISO 3166 alpha-2 format.
+          $ref: '#/components/schemas/Nationality'
+        placeOfBirth:
+          type: string
+          description: The place of birth of the consumer root user.
+        tag:
+          $ref: '#/components/schemas/Tag'
+        locale:
+          $ref: '#/components/schemas/UserLocale'
+        brand:
+          $ref: '#/components/schemas/Brand'
+    TransactionId:
+      required:
+      - type
+      - id
+      type: object
+      properties:
+        type:
+          enum:
+          - AUTHORISATION
+          - SETTLEMENT
+          - MANUAL_TRANSACTION
+          - TRANSFER
+          - SEND
+          - DEPOSIT
+          - AUTHORISATION_REVERSAL
+          - AUTHORISATION_EXPIRY
+          - AUTHORISATION_DECLINE
+          - AUTHORISATION_MANUAL_CLOSE
+          - MERCHANT_REFUND
+          - MERCHANT_REFUND_REVERSAL
+          - ORIGINAL_CREDIT_TRANSACTION
+          - SETTLEMENT_REVERSAL
+          - ADJUSTMENT
+          - CHARGE_FEE
+          - WITHDRAWAL_RESERVE
+          - WITHDRAWAL_RELEASE
+          - FEE_REVERSAL
+          - OUTGOING_WIRE_TRANSFER
+          - AUTHORISATION_CANCELLATION
+          - SYSTEM_TRANSACTION
+          - OUTGOING_DIRECT_DEBIT_COLLECTION
+          - OUTGOING_DIRECT_DEBIT_REFUND
+          - LINKED_ACCOUNT_VERIFICATION_TRANSFER
+          - INCOMING_WIRE_TRANSFER
+          - FUNDING
+          - TEST_FUNDING
+          - CORRESPONDENT_BANK_TRANSFER
+          type: string
+          x-enumDescriptions:
+            AUTHORISATION: ''
+            SETTLEMENT: ''
+            MANUAL_TRANSACTION: 'For a manual transaction, the `additionalFields`: `note` will contain a description with the reason for the transaction. This will start with one of the following prefixes:
+
+
+              - Account Closure
+
+              - Chargebacks - Represented
+
+              - Chargebacks - Won
+
+              - Deleted Card - Transfer from
+
+              - Deleted Card - Transfer to
+
+              - Duplicate Authorisation Issue
+
+              - Duplicate Settlement Issue
+
+              - Expired Card - Transfer from
+
+              - Expired Card - Transfer to
+
+              - Forex Padding Release Issue
+
+              - Funds Redemption & Account Closure
+
+              - Manual Auth Expiry
+
+              - Missing Settlement Issue
+
+              - Negative Card Balance
+
+              - Reversal - Duplicate Transaction
+
+              - Reversal - Manual Auth Expiry
+
+              - Reversal - Manual Transaction
+
+              - Amend Balance - Auth Expiry
+
+              - Balance Adjustment
+
+              - Completing Deposit
+
+              - Duplicate Deposit
+
+              '
+            TRANSFER: ''
+            SEND: ''
+            DEPOSIT: ''
+            AUTHORISATION_REVERSAL: ''
+            AUTHORISATION_EXPIRY: ''
+            AUTHORISATION_DECLINE: ''
+            AUTHORISATION_MANUAL_CLOSE: ''
+            MERCHANT_REFUND: ''
+            MERCHANT_REFUND_REVERSAL: ''
+            ORIGINAL_CREDIT_TRANSACTION: ''
+            SETTLEMENT_REVERSAL: ''
+            ADJUSTMENT: ''
+            CHARGE_FEE: ''
+            WITHDRAWAL_RESERVE: ''
+            WITHDRAWAL_RELEASE: ''
+            FEE_REVERSAL: ''
+            OUTGOING_WIRE_TRANSFER: ''
+            AUTHORISATION_CANCELLATION: ''
+            SYSTEM_TRANSACTION: ''
+            OUTGOING_DIRECT_DEBIT_COLLECTION: ''
+            OUTGOING_DIRECT_DEBIT_REFUND: ''
+        id:
+          type: string
+          pattern: ^[0-9]+$
+    ConsumerSourceOfFunds:
+      deprecated: true
+      type: string
+      description: The consumer's source of funds.
+      enum:
+      - PERSONAL_SAVINGS
+      - FAMILY_SAVINGS
+      - LABOUR_CONTRACT
+      - CIVIL_CONTRACT
+      - RENT
+      - FUNDS_FROM_OTHER_AUXILIARY_SOURCES
+      - SALE_OF_MOVABLE_ASSETS
+      - SALE_OF_REAL_ESTATE
+      - ORDINARY_BUSINESS_ACTIVITY
+      - DIVIDENDS
+      - LOAN_FROM_FINANCIAL_INSTITUTIONS_CREDIT_UNIONS
+      - LOAN_FROM_THIRD_PARTIES
+      - INHERITANCE
+      - SALE_OF_COMPANY_SHARES_BUSINESS
+      - OTHER
+    Email:
+      type: string
+      description: E-mail Address of the user
+      format: email
+    InstrumentType:
+      type: string
+      enum:
+      - managed_cards
+      - managed_accounts
+    InstrumentId:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        type:
+          $ref: '#/components/schemas/InstrumentType'
+    Occupation:
+      type: string
+      description: The industry of the identity.
+      deprecated: true
+      enum:
+      - ACCOUNTING
+      - AUDIT
+      - FINANCE
+      - PUBLIC_SECTOR_ADMINISTRATION
+      - ART_ENTERTAINMENT
+      - AUTO_AVIATION
+      - BANKING_LENDING
+      - BUSINESS_CONSULTANCY_LEGAL
+      - CONSTRUCTION_REPAIR
+      - EDUCATION_PROFESSIONAL_SERVICES
+      - INFORMATIONAL_TECHNOLOGIES
+      - TOBACCO_ALCOHOL
+      - GAMING_GAMBLING
+      - MEDICAL_SERVICES
+      - MANUFACTURING
+      - PR_MARKETING
+      - PRECIOUS_GOODS_JEWELRY
+      - NON_GOVERNMENTAL_ORGANIZATION
+      - INSURANCE_SECURITY
+      - RETAIL_WHOLESALE
+      - TRAVEL_TOURISM
+      - FREELANCER
+      - STUDENT
+      - UNEMPLOYED
+      - RETIRED
+      - OTHER
+    ProfileId:
+      type: string
+      description: 'The profile Id which a specific identity, instrument or transaction type is linked to.
+
+
+        Profiles contain configuration and determine behavioral aspects of the newly created transaction, for example, fees that may apply.
+
+
+        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s needs.
+
+
+        Profile Ids can be found in the Multi Portal, in the API Credentials page.
+
+        '
+      pattern: ^[0-9]+$
+    Consumer:
+      required:
+      - id
+      - profileId
+      - rootUser
+      - ipAddress
+      - creationTimestamp
+      type: object
+      properties:
+        id:
+          description: The unique identifier of the Consumer Identity.
+          $ref: '#/components/schemas/IdentityId'
+        profileId:
+          $ref: '#/components/schemas/ProfileId'
+        tag:
+          $ref: '#/components/schemas/Tag'
+        rootUser:
+          description: The root user of the Consumer Identity.
+          $ref: '#/components/schemas/ConsumerRootUser'
+        creationTimestamp:
+          type: integer
+          format: int64
+          description: The time when this consumer was created, expressed in Epoch timestamp using millisecond precision.
+        ipAddress:
+          maxLength: 45
+          minLength: 5
+          type: string
+          description: The IP address of the consumer user doing the registration.
+        acceptedTerms:
+          type: boolean
+          description: Must be set to *true* to indicate that the consumer root user has accepted the terms and conditions.
+        baseCurrency:
+          $ref: '#/components/schemas/Currency'
+        feeGroup:
+          type: string
+          description: The fee group which the consumer is bound to.
+        sourceOfFunds:
+          $ref: '#/components/schemas/ConsumerSourceOfFunds'
+        sourceOfFundsOther:
+          type: string
+          description: Description of source of funds in case `OTHER` was chosen.
+          deprecated: true
+    Currency:
+      type: string
+      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
+      maxLength: 3
+      minLength: 3
+      pattern: ^[A-Z]*$
+    MessageValidation:
+      type: object
+      properties:
+        invalid:
+          type: boolean
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidationErrors'
+    Id:
+      type: string
+      pattern: ^[0-9]+$
+    IdentityId:
+      required:
+      - type
+      - id
+      type: object
+      properties:
+        type:
+          enum:
+          - CONSUMER
+          - CORPORATE
+          type: string
+          description: Indicates the identity type.
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The identifier for the identity.
+    FieldValidationType:
+      type: string
+      enum:
+      - REQUIRED
+      - HAS_TEXT
+      - REQUIRES
+      - SIZE
+      - RANGE
+      - IN
+      - NOT_IN
+      - REGEX
+      - EXACTLY
+      - AT_LEAST
+      - AT_MOST
+      - ALL_OR_NONE
+    Mobile:
+      required:
+      - number
+      - countryCode
+      type: object
+      properties:
+        countryCode:
+          maxLength: 4
+          minLength: 1
+          type: string
+          pattern: ^\+[0-9]+$
+          description: The country code of the user mobile number (e.g. +44).
+        number:
+          pattern: ^[0-9]{1,12}$
+          type: string
+          description: The mobile number of the user - excluding country code.
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    DefaultError:
+      type: object
+      properties:
+        message:
+          maxLength: 255
+          type: string
+          description: When present helps to identify and fix the problem.
+          x-fieldValidation: size(_,255)
+      description: A default error model in case of errors other than 400, 409 or 504.
+    AddressWithNoRequiredFields:
+      type: object
+      description: The address, with none of the separate fields being set as required.
+      properties:
+        addressLine1:
+          type: string
+          description: The first line of the address.
+        addressLine2:
+          type: string
+          description: The second line of the address.
+        city:
+          type: string
+          description: The city of the address.
+        postCode:
+          maxLength: 10
+          pattern: ^[A-Za-z0-9 -]*$
+          type: string
+          description: The post code associated with the address.
+        state:
+          maxLength: 50
+          type: string
+          description: The state of the address.
+        country:
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]+$
+          type: string
+          description: The country of the address expressed in ISO 3166 alpha-2 format.
+    Nationality:
+      maxLength: 2
+      minLength: 2
+      pattern: ^[A-Z]+$
+      type: string
+      description: Nationality of the user - using ISO 3166 alpha-2.
+    ChargeFee:
+      required:
+      - transactionId
+      - profileId
+      - feeType
+      - source
+      - destination
+      - availableBalanceAdjustment
+      - state
+      - creationTimestamp
+      type: object
+      properties:
+        transactionId:
+          $ref: '#/components/schemas/TransactionId'
+          description: The unique identifier of the transaction.
+        profileId:
+          type: string
+          description: The profile Id which a specific identity, instrument or transaction type is linked to.
+        feeType:
+          type: string
+          description: The fee type as defined in the Multi Portal, and as sent in the request.
+        source:
+          $ref: '#/components/schemas/InstrumentId'
+        availableBalanceAdjustment:
+          $ref: '#/components/schemas/CurrencyAmount'
+          description: The object representing a monetary amount in a particular currency.
+        state:
+          $ref: '#/components/schemas/TransactionState'
+          description: The transaction entry state.
+        creationTimestamp:
+          type: integer
+          format: int64
+    FieldValidation:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/FieldValidationType'
+        params:
+          type: array
+          items:
+            type: string
+    FieldValidationErrors:
+      type: object
+      properties:
+        name:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidation'
+  responses:
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    ChargeFeeResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ChargeFee'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    ChargeFeeConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - UNRESOLVED_FEE_TYPE
+                - UNRESOLVED_CURRENCY
+                - UNRESOLVED_INSTRUMENT
+                - FUNDS_INSUFFICIENT
+                - IDENTITY_NOT_OWNER_OF_INSTRUMENT
+                - FEE_AMOUNT_NOT_SET
+    ConsumerCreateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - PAYMENT_MODEL_CONSTRAINTS_VIOLATED
+                - PROFILE_NOT_FOUND
+                - PROFILE_INACTIVE
+                - ROOT_EMAIL_NOT_UNIQUE
+                - CURRENCY_UNSUPPORTED
+                - FEE_GROUP_INVALID
+                - COUNTRY_INVALID
+                - MOBILE_OR_COUNTRY_CODE_INVALID
+                - COUNTRY_UNSUPPORTED
+                - EMAIL_DOMAIN_NOT_ALLOWED
+                - CONSUMER_ALREADY_EXISTS
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    BackofficeBadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              validationErrors:
+                $ref: '#/components/schemas/ValidationError'
+    ConsumerResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Consumer'
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+  headers:
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    x-ratelimit-limit:
+      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+        The first number (20) is the limit that has been exceeded.
+
+        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+        '
+      required: true
+      schema:
+        type: string
+  parameters:
+    call-ref:
+      name: call-ref
+      in: header
+      description: A call reference generated by the caller and unique to the caller to provide correlation between the caller and system with a maximum length of 255
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+    idempotency-ref:
+      name: idempotency-ref
+      in: header
+      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
+      required: false
+      schema:
+        type: string
+  requestBodies:
+    ChargeFeeRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            description: The custom fee to be charged to the consumer/corporate.
+            $ref: '#/components/schemas/Fee'
+    ConsumerCreateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - profileId
+            - rootUser
+            - ipAddress
+            type: object
+            properties:
+              profileId:
+                $ref: '#/components/schemas/ProfileId'
+              tag:
+                $ref: '#/components/schemas/Tag'
+              rootUser:
+                required:
+                - name
+                - surname
+                - email
+                - mobile
+                - dateOfBirth
+                - address
+                type: object
+                description: 'The root user represents the identity.
+
+
+                  Root users need to verify their email address and mobile number, as well as complete KYC, as part of the Consumer''s due diligence process.
+
+                  '
+                properties:
+                  name:
+                    maxLength: 50
+                    type: string
+                    description: The first name of the root user.
+                  surname:
+                    maxLength: 50
+                    type: string
+                    description: The last name of the root user.
+                  email:
+                    $ref: '#/components/schemas/Email'
+                  mobile:
+                    $ref: '#/components/schemas/Mobile'
+                  dateOfBirth:
+                    description: Date of birth of the consumer root user.
+                    $ref: '#/components/schemas/Date'
+                  occupation:
+                    $ref: '#/components/schemas/Occupation'
+                  address:
+                    description: Address of the consumer root user.
+                    $ref: '#/components/schemas/AddressWithCountryRequired'
+                  placeOfBirth:
+                    type: string
+                    description: Place of birth of the consumer root user.
+                  nationality:
+                    description: Nationality of the root user, in ISO 3166 alpha-2 format."
+                    $ref: '#/components/schemas/Nationality'
+                  tag:
+                    description: Tag to be assigned to the consumer root user.
+                    $ref: '#/components/schemas/Tag'
+                  locale:
+                    $ref: '#/components/schemas/UserLocale'
+                  brand:
+                    $ref: '#/components/schemas/Brand'
+              ipAddress:
+                maxLength: 45
+                minLength: 5
+                type: string
+                description: The IP address of the user doing the registration.
+              acceptedTerms:
+                type: boolean
+                description: Must be set to *true* to indicate that the consumer has accepted the terms and conditions.
+                deprecated: true
+              baseCurrency:
+                $ref: '#/components/schemas/Currency'
+              feeGroup:
+                type: string
+                description: The fee group which the consumer is bound to. Fee groups provide the possibility of different fees to users under the same profile. If fee groups are not required, ignore this field.
+              sourceOfFunds:
+                $ref: '#/components/schemas/ConsumerSourceOfFunds'
+              sourceOfFundsOther:
+                deprecated: true
+                type: string
+                description: Description of source of funds in case `OTHER` was chosen.
+  securitySchemes:
+    api_key:
+      type: apiKey
+      description: The API Key representing your Multi account.
+      name: api-key
+      in: header
+    auth_token:
+      type: http
+      description: The authentication token representing the user. This will be included in the login response object.
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Access
+  tags:
+  - Access Token
+  - User Impersonation
+  - Consent Request
+- name: Identities
+  tags:
+  - Corporates
+  - Consumers
+- name: User Management
+  tags:
+  - Authorised Users
+- name: Instruments
+  tags:
+  - Managed Accounts
+  - Managed Cards
+- name: Transactions
+  tags:
+  - Transfers
+- name: Fees
+  tags:
+  - Fees
+- name: Bulk Operations [Beta]
+  tags:
+  - Operations
+  - Manage

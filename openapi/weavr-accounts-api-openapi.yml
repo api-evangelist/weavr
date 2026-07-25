@@ -1,0 +1,440 @@
+openapi: 3.1.0
+info:
+  version: v3
+  title: Weavr Multi Product BackOffice Access Token Accounts API
+  x-logo:
+    url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
+    backgroundColor: '#FFFFFF'
+    altText: Weavr
+  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
+
+    identities and their instruments, without requiring the users to be logged in.
+
+
+    A token is to be obtained through the `access_token` method, and this will allow relevant operations
+
+    to be performed on behalf of this same identity.
+
+    '
+  contact:
+    name: Weavr
+    url: https://weavr.io
+servers:
+- description: Weavr Sandbox Environment
+  url: https://sandbox.weavr.io/multi/backoffice
+tags:
+- name: Accounts
+paths:
+  /accounts/{account_id}/deposit:
+    post:
+      tags:
+      - Accounts
+      summary: Simulate incoming wire transfer using account id
+      description: This tool is a quick and easy way to put funds on a Managed Account (previously called ‘deposit’), that you may need for testing elsewhere. Provide account id and transaction amount and the transaction will be processed through the system. This method skips some of the steps when processing IWTs. To test this fully, please use the accounts_deposit endpoint.
+      operationId: accounts_account_id_deposit
+      parameters:
+      - name: account_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      - $ref: '#/components/parameters/call-ref'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepositRequestByAccountId'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepositResponse0'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInvalidRequest'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+      security:
+      - API_Secret_Key: []
+  /accounts/deposit:
+    post:
+      tags:
+      - Accounts
+      summary: Simulate an incoming wire transfer using IBAN
+      description: This tool is used to simulate incoming wire transfers (IWT) into managed accounts. IWTs are processed in line with the configuration of your application. For EUR and USD IWTs provide the destinationIbanDetails of your Managed Account, for GBP IWTs provide destinationFasterPaymentDetails or destinationIbanDetails of your Managed Account. Sender Details can also be added that is used to identify whether the IWT originated from a Linked Account (if configured) or a third party.
+      operationId: accounts_deposit
+      parameters:
+      - $ref: '#/components/parameters/call-ref'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepositRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepositResponse1'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInvalidRequest'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+      security:
+      - API_Secret_Key: []
+components:
+  schemas:
+    CurrencyAmount:
+      required:
+      - currency
+      type: object
+      properties:
+        currency:
+          maxLength: 3
+          minLength: 3
+          pattern: ^[A-Z]*$
+          type: string
+          description: The currency ISO-4217 code, i.e. a three letter uppercase code, such as GBP, EUR, USD.
+          x-fieldValidation: required size(3,3) regex([A-Z]*)
+        amount:
+          type: integer
+          description: The monetary amount, scaled to the lowest denomination of the currency. For example, an amount of 1000 for a EUR currency is actually 1000 Euro cents, i.e. EUR 10.00.
+          format: int64
+      description: A message representing a monetary amount in a particular currency.
+    DepositResponseDepositResponseCode0:
+      type: string
+      enum:
+      - COMPLETED
+      - DENIED_ACCOUNT_NOT_FOUND
+      - DENIED_AMOUNT_NOT_POSITIVE
+      - DENIED_CURRENCY_NOT_ACCOUNT_CURRENCY
+      - DENIED_ACCOUNT_INACTIVE
+      - DENIED_INVALID_TX_ID
+      - DENIED_OTHER
+    AccountDescriptorDetails:
+      required:
+      - accountDescriptor
+      type: object
+      properties:
+        accountDescriptor:
+          maxLength: 50
+          type: string
+          description: An identifier of an account that has neither an IBAN nor Faster Payments details.
+          x-fieldValidation: required size(_,50)
+    ClientInvalidRequest:
+      type: object
+      properties:
+        message:
+          maxLength: 255
+          type: string
+          description: When present helps to identify and fix the problem.
+          x-fieldValidation: size(_,255)
+        validation:
+          allOf:
+          - $ref: '#/components/schemas/MessageValidation'
+          - description: Description of fields which were invalid.
+    DepositRequest:
+      required:
+      - depositAmount
+      type: object
+      properties:
+        iban:
+          type: string
+          description: The iban of the account the incoming wire transfer should be processed against
+          deprecated: true
+        paymentReference:
+          type: string
+          description: The payment reference is needed to identify which account, in cases where the same iban is used
+        depositAmount:
+          allOf:
+          - $ref: '#/components/schemas/CurrencyAmount'
+          - description: The amount of the incoming wire transfer
+            x-fieldValidation: required
+        senderName:
+          type: string
+          description: The name of the person or business sending the incoming wire transfer
+        reference:
+          type: string
+          description: A reference provided by the sender of the incoming wire transfer.
+        receiverName:
+          type: string
+          description: The name of the recipient of the incoming wire transfer
+        txId:
+          type: integer
+          description: Id used for the transaction if provided, otherwise one will be generated
+          format: int64
+        senderIbanDetails:
+          $ref: '#/components/schemas/IbanDetails'
+        senderFasterPaymentsDetails:
+          $ref: '#/components/schemas/FasterPaymentsDetails'
+        senderAccountDescriptorDetails:
+          $ref: '#/components/schemas/AccountDescriptorDetails'
+        destinationIbanDetails:
+          $ref: '#/components/schemas/IbanDetails'
+        destinationFasterPaymentsDetails:
+          $ref: '#/components/schemas/FasterPaymentsDetails'
+        paymentNetwork:
+          allOf:
+          - $ref: '#/components/schemas/TransferType'
+          - description: Optional field which indicates the payment network to use. If not provided, a default payment network will be chosen based on the currency.
+    FasterPaymentsBankDetails:
+      required:
+      - accountNumber
+      - sortCode
+      type: object
+      properties:
+        accountNumber:
+          maxLength: 8
+          minLength: 8
+          pattern: ^[0-9]{8}$
+          type: string
+          description: Account number, required for wire transfer over Faster Payments.
+          x-fieldValidation: required size(8,8) regex(^[0-9]{8}$)
+        sortCode:
+          maxLength: 6
+          minLength: 6
+          pattern: ^[0-9]{6}$
+          type: string
+          description: Sort code, required for wire transfer over Faster Payments.
+          x-fieldValidation: required size(6,6) regex(^[0-9]{6}$)
+    IbanDetails:
+      required:
+      - iban
+      type: object
+      properties:
+        iban:
+          pattern: ^[A-Z0-9]*$
+          type: string
+          x-fieldValidation: required regex([A-Z0-9]*)
+        bankIdentifierCode:
+          pattern: ^[A-Z0-9]*$
+          type: string
+          x-fieldValidation: regex([A-Z0-9]*)
+    DepositRequestByAccountId:
+      required:
+      - depositAmount
+      type: object
+      properties:
+        depositAmount:
+          allOf:
+          - $ref: '#/components/schemas/CurrencyAmount'
+          - description: The amount of the incoming wire transfer
+            x-fieldValidation: required
+        senderName:
+          type: string
+          description: The name of the person or business sending the incoming wire transfer
+        reference:
+          type: string
+          description: The reference is the transaction description
+        receiverName:
+          type: string
+          description: The name of the recipient of the incoming wire transfer
+        txId:
+          type: integer
+          description: Id used for the transaction if provided, otherwise one will be generated
+          format: int64
+        senderIban:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9_-]+$
+          type: string
+          x-fieldValidation: size(_,50) regex(^[a-zA-Z0-9_-]+$)
+        sepa:
+          $ref: '#/components/schemas/IBANDetails'
+        fasterPayments:
+          $ref: '#/components/schemas/FasterPaymentsBankDetails'
+        accountDescriptor:
+          $ref: '#/components/schemas/AccountDescriptorDetails'
+        paymentNetwork:
+          allOf:
+          - $ref: '#/components/schemas/TransferType'
+          - description: Optional field which indicates the payment network to use. If not provided, a default payment network will be chosen based on the currency.
+    IBANDetails:
+      required:
+      - iban
+      type: object
+      properties:
+        iban:
+          maxLength: 34
+          minLength: 15
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
+          type: string
+          description: International Bank Account Number, required for wire transfer over SEPA or RIX
+          x-fieldValidation: required size(15,34) regex(^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$)
+        bankIdentifierCode:
+          maxLength: 11
+          minLength: 8
+          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
+          type: string
+          description: BIC, for wire transfer over SEPA or RIX
+          x-fieldValidation: size(8,11) regex(^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$)
+    DepositResponse1:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/DepositResponseDepositResponseCode0'
+    FasterPaymentsDetails:
+      required:
+      - accountNumber
+      - sortCode
+      type: object
+      properties:
+        sortCode:
+          maxLength: 6
+          minLength: 6
+          pattern: ^[0-9]*$
+          type: string
+          x-fieldValidation: required size(6,6) regex([0-9]*)
+        accountNumber:
+          pattern: ^[0-9]*$
+          type: string
+          x-fieldValidation: required regex([0-9]*)
+        secondaryReference:
+          type: string
+          description: Supplementary identifier used by financial institutions for accounts without unique sort codes, ensuring distinction between different accounts or customers
+    DepositResponse0:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/DepositResponseDepositResponseCode1'
+    MessageValidation:
+      type: object
+      properties:
+        invalid:
+          type: boolean
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidationErrors'
+    TransferType:
+      type: string
+      enum:
+      - SEPA
+      - FASTER_PAYMENTS
+      - SWIFT
+      - BACS
+      - CHAPS
+      - RIX
+    FieldValidationType:
+      type: string
+      enum:
+      - REQUIRED
+      - HAS_TEXT
+      - REQUIRES
+      - SIZE
+      - RANGE
+      - IN
+      - NOT_IN
+      - REGEX
+      - EXACTLY
+      - AT_LEAST
+      - AT_MOST
+      - ALL_OR_NONE
+    DefaultError:
+      type: object
+      properties:
+        message:
+          maxLength: 255
+          type: string
+          description: When present helps to identify and fix the problem.
+          x-fieldValidation: size(_,255)
+      description: A default error model in case of errors other than 400, 409 or 504.
+    DepositResponseDepositResponseCode1:
+      type: string
+      enum:
+      - COMPLETED
+      - DENIED_ACCOUNT_NOT_FOUND
+      - DENIED_AMOUNT_NOT_POSITIVE
+      - DENIED_CURRENCY_NOT_ACCOUNT_CURRENCY
+      - DENIED_ACCOUNT_INACTIVE
+      - DENIED_INVALID_TX_ID
+      - DENIED_OTHER
+      - DENIED_ACCOUNT_NOT_UPGRADED_TO_IBAN
+    FieldValidation:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/FieldValidationType'
+        params:
+          type: array
+          items:
+            type: string
+    FieldValidationErrors:
+      type: object
+      properties:
+        name:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidation'
+  parameters:
+    call-ref:
+      name: call-ref
+      in: header
+      description: A call reference generated by the caller and unique to the caller to provide correlation between the caller and system with a maximum length of 255
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+  securitySchemes:
+    api_key:
+      type: apiKey
+      description: The API Key representing your Multi account.
+      name: api-key
+      in: header
+    auth_token:
+      type: http
+      description: The authentication token representing the user. This will be included in the login response object.
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Access
+  tags:
+  - Access Token
+  - User Impersonation
+  - Consent Request
+- name: Identities
+  tags:
+  - Corporates
+  - Consumers
+- name: User Management
+  tags:
+  - Authorised Users
+- name: Instruments
+  tags:
+  - Managed Accounts
+  - Managed Cards
+- name: Transactions
+  tags:
+  - Transfers
+- name: Fees
+  tags:
+  - Fees
+- name: Bulk Operations [Beta]
+  tags:
+  - Operations
+  - Manage

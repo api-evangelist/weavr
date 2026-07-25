@@ -1,0 +1,366 @@
+openapi: 3.1.0
+info:
+  version: v3
+  title: Weavr Multi Product BackOffice Access Token Simulator Linked accounts API
+  x-logo:
+    url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
+    backgroundColor: '#FFFFFF'
+    altText: Weavr
+  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
+
+    identities and their instruments, without requiring the users to be logged in.
+
+
+    A token is to be obtained through the `access_token` method, and this will allow relevant operations
+
+    to be performed on behalf of this same identity.
+
+    '
+  contact:
+    name: Weavr
+    url: https://weavr.io
+servers:
+- description: Weavr Sandbox Environment
+  url: https://sandbox.weavr.io/multi/backoffice
+tags:
+- name: Simulator Linked accounts
+paths:
+  /simulate/v1/consents/{consent_id}/extend:
+    post:
+      operationId: postSimulateConsentExtension
+      summary: Simulate Extend AIS consent
+      description: Simulate Extend AIS consent
+      x-sandbox-only: true
+      tags:
+      - Simulator Linked accounts
+      parameters:
+      - in: path
+        name: consent_id
+        required: true
+        schema:
+          type: string
+      security:
+      - apiKey: []
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request Error - Your request is invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    maxLength: 255
+                    type: string
+                    description: When present helps to identify and fix the problem.
+                  syntaxErrors:
+                    type: object
+                    description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+                    properties:
+                      invalidFields:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            params:
+                              type: array
+                              items:
+                                type: string
+                            fieldName:
+                              type: string
+                            error:
+                              type: string
+                              enum:
+                              - REQUIRED
+                              - HAS_TEXT
+                              - REQUIRES
+                              - SIZE
+                              - RANGE
+                              - IN
+                              - NOT_IN
+                              - REGEX
+                              - EXACTLY
+                              - AT_LEAST
+                              - AT_MOST
+                              - ALL_OR_NONE
+        '401':
+          description: Unauthorized - Your credentials or access token are invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '403':
+          description: Forbidden - Access to the requested resource or action is forbidden.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - INSUFFICIENT_PERMISSIONS
+        '404':
+          description: Not found - The requested resource couldn't be found.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - CONSENT_EXPIRED
+                    - LINKED_ACCOUNT_NOT_FOUND
+        '500':
+          description: Internal Server Error - There is a problem with the server. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '503':
+          description: Service Unavailable - We're temporarily offline for maintenance. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+  /simulate/v1/linked_accounts/{linked_account_id}:
+    delete:
+      operationId: deleteLinkedAccount
+      summary: Simulate Delete linked account
+      description: Simulate deletion of a linked account
+      tags:
+      - Simulator Linked accounts
+      parameters:
+      - name: linked_account_id
+        in: path
+        required: true
+        schema:
+          pattern: ^[0-9a-fA-F]{24}$
+          type: string
+      security:
+      - apiKey: []
+      responses:
+        '204':
+          description: Success - No Content.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '400':
+          description: Bad Request Error - Your request is invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    maxLength: 255
+                    type: string
+                    description: When present helps to identify and fix the problem.
+                  syntaxErrors:
+                    type: object
+                    description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+                    properties:
+                      invalidFields:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            params:
+                              type: array
+                              items:
+                                type: string
+                            fieldName:
+                              type: string
+                            error:
+                              type: string
+                              enum:
+                              - REQUIRED
+                              - HAS_TEXT
+                              - REQUIRES
+                              - SIZE
+                              - RANGE
+                              - IN
+                              - NOT_IN
+                              - REGEX
+                              - EXACTLY
+                              - AT_LEAST
+                              - AT_MOST
+                              - ALL_OR_NONE
+        '401':
+          description: Unauthorized - Your credentials or access token are invalid.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '403':
+          description: Forbidden - Access to the requested resource or action is forbidden.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - INSUFFICIENT_PERMISSIONS
+        '404':
+          description: Not found - The requested resource couldn't be found.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    enum:
+                    - LINKED_ACCOUNT_ID_INVALID
+                    - STATE_INVALID
+        '500':
+          description: Internal Server Error - There is a problem with the server. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        '503':
+          description: Service Unavailable - We're temporarily offline for maintenance. Please try again later.
+          headers:
+            request-ref:
+              description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+              required: true
+              schema:
+                type: string
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  message:
+                    type: string
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      description: The API Key representing your Multi account.
+      name: api-key
+      in: header
+    auth_token:
+      type: http
+      description: The authentication token representing the user. This will be included in the login response object.
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Access
+  tags:
+  - Access Token
+  - User Impersonation
+  - Consent Request
+- name: Identities
+  tags:
+  - Corporates
+  - Consumers
+- name: User Management
+  tags:
+  - Authorised Users
+- name: Instruments
+  tags:
+  - Managed Accounts
+  - Managed Cards
+- name: Transactions
+  tags:
+  - Transfers
+- name: Fees
+  tags:
+  - Fees
+- name: Bulk Operations [Beta]
+  tags:
+  - Operations
+  - Manage

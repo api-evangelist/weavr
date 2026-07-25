@@ -1,0 +1,705 @@
+openapi: 3.1.0
+info:
+  version: v3
+  title: Weavr Multi Product BackOffice Access Token Spend Controls API
+  x-logo:
+    url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
+    backgroundColor: '#FFFFFF'
+    altText: Weavr
+  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
+
+    identities and their instruments, without requiring the users to be logged in.
+
+
+    A token is to be obtained through the `access_token` method, and this will allow relevant operations
+
+    to be performed on behalf of this same identity.
+
+    '
+  contact:
+    name: Weavr
+    url: https://weavr.io
+servers:
+- description: Weavr Sandbox Environment
+  url: https://sandbox.weavr.io/multi/backoffice
+tags:
+- name: Spend Controls
+  description: Manage spend rules and authorisation forwarding to approve or reject card payments in real time.
+paths:
+  /managed_cards/{id}/spend_rules:
+    get:
+      tags:
+      - Spend Controls
+      summary: Get all spend rules for a managed card
+      operationId: managedCardSpendRulesGet
+      x-permissions:
+      - i:managed_cards:get_spendrules
+      - i:managed_cards:get_spendrules:own
+      description: Fetch the list of spend rules associated with the managed card identified by the `id` path parameter.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        schema:
+          type: string
+          pattern: ^[0-9]+$
+      responses:
+        '200':
+          $ref: '#/components/responses/ManagedCardSpendRulesGetResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+    post:
+      tags:
+      - Spend Controls
+      summary: Create spend rules for a managed card
+      operationId: managedCardSpendRulesCreate
+      x-permissions:
+      - i:managed_cards:create_spendrules
+      description: Create the spend rules associated with the managed card identified by the `id` path parameter.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        schema:
+          type: string
+          pattern: ^[0-9]+$
+      - $ref: '#/components/parameters/idempotency-ref'
+      requestBody:
+        $ref: '#/components/requestBodies/CardLevelSpendRulesRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/ManagedCardSpendRulesCreateConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+    patch:
+      tags:
+      - Spend Controls
+      summary: Update spend rules for a managed card
+      operationId: managedCardSpendRulesUpdate
+      x-permissions:
+      - i:managed_cards:update_spendrules
+      description: Must be user after a POST, to update individual spend rules associated with the managed card identified by the `id` path parameter.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        schema:
+          type: string
+          pattern: ^[0-9]+$
+      - $ref: '#/components/parameters/idempotency-ref'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateCardLevelSpendRulesRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/ManagedCardSpendRulesUpdateConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+    delete:
+      tags:
+      - Spend Controls
+      summary: Delete all spend rules for a managed card
+      operationId: managedCardSpendRulesDelete
+      description: Remove all spend rules associated with the managed card identified by the `id` path parameter.
+      x-permissions:
+      - i:managed_cards:delete_spendrules
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        schema:
+          type: string
+          pattern: ^[0-9]+$
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+components:
+  schemas:
+    CurrencyAmount:
+      required:
+      - currency
+      - amount
+      type: object
+      properties:
+        currency:
+          $ref: '#/components/schemas/Currency'
+        amount:
+          type: integer
+          format: int64
+          description: 'The monetary amount, scaled to the lowest denomination of the currency.
+
+
+            Example, an amount of 1000 for a EUR currency is actually 1000 Euro cents or EUR 10.00.
+
+            '
+      description: The object representing a monetary amount in a particular currency.
+    SpendLimit:
+      type: object
+      required:
+      - value
+      - interval
+      properties:
+        startTimestamp:
+          description: The start timestamp of the spend limit, expressed in Epoch timestamp using millisecond precision.
+          type: integer
+          format: int64
+        value:
+          description: The spend limit, as amount and currency, (for the given interval).
+          $ref: '#/components/schemas/CurrencyAmount'
+        interval:
+          $ref: '#/components/schemas/SpendLimitInterval'
+    BaseCardLevelSpendRules:
+      allOf:
+      - $ref: '#/components/schemas/CommonLevelSpendRules'
+      - type: object
+        properties:
+          spendLimit:
+            description: The total amount of funds that can be spent using this card, in a given time interval.
+            type: array
+            items:
+              $ref: '#/components/schemas/SpendLimit'
+    CommonLevelSpendRules:
+      type: object
+      properties:
+        allowedMerchantCategories:
+          type: array
+          maxItems: 200
+          items:
+            type: string
+          description: 'Whitelist MCC: A list of allowed merchant category codes (MCCs). If the MCC does not match, then the transaction will be declined. If an MCC is also in the blocked list, the blocked list will take precedence.'
+        blockedMerchantCategories:
+          type: array
+          maxItems: 200
+          items:
+            type: string
+          description: 'Blacklist MCC: A list of disallowed merchant category codes (MCCs). If the MCC matches, then the transaction will be declined. If an MCC is also in the allowed list, the blocked list will take precedence.'
+        allowedMerchantIds:
+          type: array
+          maxItems: 200
+          items:
+            type: string
+          description: 'Whitelist Merchant Id: A list of allowed merchant IDs. If the Merchant Id does not match, then the transaction will be declined. If a Merchant Id is also provided in the blocked list, the blocked list will take precedence.'
+        blockedMerchantIds:
+          type: array
+          maxItems: 200
+          items:
+            type: string
+          description: 'Blacklist Merchant Id: A list of disallowed merchant IDs. If the Merchant Id matches, then the transaction will be declined. If a Merchant Id is also in the allowed list, the blocked list will take precedence.'
+        allowedMerchantCountries:
+          type: array
+          maxItems: 50
+          items:
+            maxLength: 2
+            minLength: 2
+            pattern: ^[A-Z]{2}$
+            type: string
+          description: 'Whitelist Merchant Country: A list of allowed merchant countries, in ISO 3166-1 alpha-2 format. If the Merchant country does not match, then the transaction will be declined. If a Merchant Country is also provided in the blocked list, the blocked list will take precedence.'
+        blockedMerchantCountries:
+          type: array
+          maxItems: 50
+          items:
+            maxLength: 2
+            minLength: 2
+            pattern: ^[A-Z]{2}$
+            type: string
+          description: 'Blacklist Merchant Country: A list of disallowed merchant countries, in ISO 3166-1 alpha-2 format. If the Merchant country matches, then the transaction will be declined. If a Merchant Country is also in the allowed list, the blocked list will take precedence.'
+        allowContactless:
+          type: boolean
+          description: Indicates if a contactless transaction is allowed on the card.
+        allowAtm:
+          type: boolean
+          description: Indicates if an ATM Withdrawal transaction is allowed on the card.
+        allowECommerce:
+          type: boolean
+          description: Indicates if an online transaction is allowed on the card.
+        allowCashback:
+          type: boolean
+          description: Indicates if a cashback transaction at a physical terminal is allowed on the card.
+        allowCreditAuthorisations:
+          type: boolean
+          description: Indicates if a the card can receive a credit transaction.
+        rolloverPolicy:
+          $ref: '#/components/schemas/RolloverPolicy'
+    AllLevelSpendRules:
+      type: object
+      properties:
+        allowedMerchantCategories:
+          deprecated: true
+          type: array
+          maxItems: 200
+          items:
+            type: string
+          description: 'Whitelist MCC: A list of allowed merchant category codes (MCCs). If the MCC does not match, then the transaction will be declined. If an MCC is also in the blocked list, the blocked list will take precedence. This field is deprecated - use "cardLevelSpendRules"."allowedMerchantCategories" instead.'
+        blockedMerchantCategories:
+          deprecated: true
+          type: array
+          maxItems: 200
+          items:
+            type: string
+          description: 'Blacklist MCC: A list of disallowed merchant category codes (MCCs). If the MCC matches, then the transaction will be declined. If an MCC is also in the allowed list, the blocked list will take precedence. This field is deprecated - use "cardLevelSpendRules"."blockedMerchantCategories" instead.'
+        allowedMerchantIds:
+          deprecated: true
+          type: array
+          maxItems: 200
+          items:
+            type: string
+          description: 'Whitelist Merchant Id: A list of allowed merchant IDs. If the Merchant Id does not match, then the transaction will be declined. If a Merchant Id is also provided in the blocked list, the blocked list will take precedence. This field is deprecated - use "cardLevelSpendRules"."allowedMerchantIds" instead.'
+        blockedMerchantIds:
+          deprecated: true
+          type: array
+          maxItems: 200
+          items:
+            type: string
+          description: 'Blacklist Merchant Id: A list of disallowed merchant IDs. If the Merchant Id matches, then the transaction will be declined. If a Merchant Id is also in the allowed list, the blocked list will take precedence. This field is deprecated - use "cardLevelSpendRules"."blockedMerchantIds" instead.'
+        allowedMerchantCountries:
+          deprecated: true
+          type: array
+          maxItems: 50
+          items:
+            maxLength: 2
+            minLength: 2
+            pattern: ^[A-Z]{2}$
+            type: string
+          description: 'Whitelist Merchant Country: A list of allowed merchant countries, in ISO 3166-1 alpha-2 format. If the Merchant country does not match, then the transaction will be declined. If a Merchant Country is also provided in the blocked list, the blocked list will take precedence. This field is deprecated - use "cardLevelSpendRules"."allowedMerchantCountries" instead.'
+        blockedMerchantCountries:
+          deprecated: true
+          type: array
+          maxItems: 50
+          items:
+            maxLength: 2
+            minLength: 2
+            pattern: ^[A-Z]{2}$
+            type: string
+          description: 'Blacklist Merchant Country: A list of disallowed merchant countries, in ISO 3166-1 alpha-2 format. If the Merchant country matches, then the transaction will be declined. If a Merchant Country is also in the allowed list, the blocked list will take precedence. This field is deprecated - use "cardLevelSpendRules"."blockedMerchantCountries" instead.'
+        allowContactless:
+          deprecated: true
+          type: boolean
+          description: Indicates if a contactless transaction is allowed on the card. This field is deprecated - use "cardLevelSpendRules"."allowContactless" instead.
+        allowAtm:
+          deprecated: true
+          type: boolean
+          description: Indicates if an ATM Withdrawal transaction is allowed on the card. This field is deprecated - use "cardLevelSpendRules"."allowAtm" instead.
+        allowECommerce:
+          deprecated: true
+          type: boolean
+          description: Indicates if an online transaction is allowed on the card. This field is deprecated - use "cardLevelSpendRules"."allowECommerce" instead.
+        allowCashback:
+          deprecated: true
+          type: boolean
+          description: Indicates if a cashback transaction at a physical terminal is allowed on the card. This field is deprecated - use "cardLevelSpendRules"."allowCashback" instead.
+        allowCreditAuthorisations:
+          deprecated: true
+          type: boolean
+          description: Indicates if a the card can receive a credit transaction. This field is deprecated - use "cardLevelSpendRules"."allowCashback" instead.
+        minTransactionAmount:
+          deprecated: true
+          type: integer
+          minimum: 0
+          format: int64
+          description: The minimum transaction amount, in card currency, that is allowed. If the transaction amount is less than this value, then the transaction will be declined. Omit this, or set to 0 if no maximum transaction amount is to be set. This field is deprecated - use "cardLevelSpendRules"."minTransactionAmount" instead.
+        maxTransactionAmount:
+          deprecated: true
+          type: integer
+          minimum: 0
+          format: int64
+          description: The maximum transaction amount, in card currency, that is allowed. If the transaction amount is greater than this value, then the transaction will be declined. Omit this, or set to 0 if no maximum transaction amount is to be set. This field is deprecated - use "cardLevelSpendRules"."maxTransactionAmount" instead.
+        spendLimit:
+          deprecated: true
+          description: The total amount of funds that can be spent using this card, in a given time interval. This field is deprecated - use "cardLevelSpendRules"."spendLimit" instead.
+          type: array
+          items:
+            $ref: '#/components/schemas/SpendLimit'
+        cardLevelSpendRules:
+          $ref: '#/components/schemas/CardLevelSpendRules'
+        profileLevelSpendRules:
+          $ref: '#/components/schemas/ProfileLevelSpendRules'
+        identityLevelSpendRules:
+          $ref: '#/components/schemas/IdentityLevelSpendRules'
+    SyntaxError:
+      type: object
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      properties:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
+    CardLevelSpendRules:
+      allOf:
+      - $ref: '#/components/schemas/BaseCardLevelSpendRules'
+      - type: object
+        properties:
+          minTransactionAmount:
+            type: integer
+            minimum: 0
+            format: int64
+            description: The minimum transaction amount, in card currency, that is allowed. If the transaction amount is less than this value, then the transaction will be declined.
+          maxTransactionAmount:
+            type: integer
+            minimum: 0
+            format: int64
+            description: The maximum transaction amount, in card currency, that is allowed. If the transaction amount is greater than this value, then the transaction will be declined.
+    IdentityLevelSpendRules:
+      allOf:
+      - $ref: '#/components/schemas/CommonLevelSpendRules'
+      - type: object
+        properties:
+          minTransactionAmount:
+            type: integer
+            minimum: 0
+            format: int64
+            description: The minimum transaction amount, in card currency, that is allowed. If the transaction amount is less than this value, then the transaction will be declined. Omit this, or set to 0 if no maximum transaction amount is to be set.
+          maxTransactionAmount:
+            type: integer
+            minimum: 0
+            format: int64
+            description: The maximum transaction amount, in card currency, that is allowed. If the transaction amount is greater than this value, then the transaction will be declined.
+    UpdateCardLevelSpendRules:
+      allOf:
+      - $ref: '#/components/schemas/CardLevelSpendRules'
+      - type: object
+        properties:
+          updateSpendLimitMethod:
+            $ref: '#/components/schemas/SpendLimitUpdateMethod'
+    SpendLimitInterval:
+      description: "The time period for which the `spendLimit` is valid.\n - DAILY: starting from 00:00:00 UTC of current day to 23:59:59 UTC of current day\n - WEEKLY: 00:00:00 UTC Monday of current week to following Sunday 23:59:59 UTC\n - MONTHLY: 1st of current calendar month to end of current calendar month\n - QUARTERLY: starting from beginning of current quarter where quarters are defined as follows:\n  - 1 January 00:00:00 UTC to 31 March 23:59:59 UTC\n  - 1 April 00:00:00 UTC to 30 Jun 23:59:59 UTC\n  - 1 July 00:00:00 UTC to 30 September 23:59:59 UTC\n  - 1 October 00:00:00 UTC to 31 December 23:59:59 UTC\n\n- YEARLY: 1 January 00:00:00 UTC of current calendar year to 31 December 23:59:59 UTC of current calendar year.\n- ALWAYS: This indicates that the `spendLimit` is the total amount that can be spent through the card throughout the whole lifetime of the card.\n"
+      type: string
+      enum:
+      - DAILY
+      - WEEKLY
+      - MONTHLY
+      - QUARTERLY
+      - YEARLY
+      - ALWAYS
+    Currency:
+      type: string
+      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
+      maxLength: 3
+      minLength: 3
+      pattern: ^[A-Z]*$
+    ProfileLevelSpendRules:
+      allOf:
+      - $ref: '#/components/schemas/CommonLevelSpendRules'
+      - type: object
+        properties:
+          authForwardingEnabled:
+            type: boolean
+            description: Indicates if auth forwarding is enabled on profile level
+    SpendLimitUpdateMethod:
+      type: string
+      description: "The spend limit update method to apply. Currently supported:\n  - OVERWRITE: (default option if nothing selected). Overwrites the previous values for the spendLimit object i.e. sets new limits\n  - INCREMENT : This will increase the existing value of the spend limit by the amount input the value field. If used in conjunction with an ALWAYS interval, this can be used to increment a spend limit on a periodic basis (controlled by you, e.g. monthly), and means that any 'unused' balance from the previous period will still available to spend. See examples in our documentation\n"
+      enum:
+      - OVERWRITE
+      - INCREMENT
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    RolloverPolicy:
+      type: object
+      description: The rollover policy will dictate how Weavr handles any eventual overspending. This is possible if a merchant clears more funds than authorised, or when a merchant clears funds without authorising, resulting in the `availableToSpend` value to go into negative. Rollover is relative to a `spendLimit.interval`
+      required:
+      - rolloverNegative
+      properties:
+        rolloverNegative:
+          type: boolean
+          description: If set to true any overspend will keep rolling over and get deducted in the upcoming intervals until the `availableToSpend` is back to a positive value. Any overspend will be deducted from the `availableToSpend` at the beginning of the next interval.
+  responses:
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    ManagedCardSpendRulesUpdateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - SPEND_LIMIT_CURRENCY_DIFFERENT_FROM_CARD_CURRENCY
+                - SPEND_LIMIT_NOT_SUPPORTED_FOR_PREPAID_MODE_CARD
+                - SPEND_LIMIT_DUPLICATE_INTERVAL
+                - SPEND_LIMIT_AMOUNT_INVALID
+                - SPEND_LIMIT_CURRENCY_DIFFERENT_FROM_USER_CURRENCY
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    ManagedCardSpendRulesCreateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - SPEND_LIMIT_CURRENCY_DIFFERENT_FROM_CARD_CURRENCY
+                - SPEND_LIMIT_NOT_SUPPORTED_FOR_PREPAID_MODE_CARD
+                - SPEND_LIMIT_DUPLICATE_INTERVAL
+                - SPEND_LIMIT_AMOUNT_INVALID
+                - SPEND_RULE_ALREADY_SET
+                - SPEND_LIMIT_CURRENCY_DIFFERENT_FROM_USER_CURRENCY
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    NoContent:
+      description: Success - No Content.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    ManagedCardSpendRulesGetResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AllLevelSpendRules'
+  headers:
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    x-ratelimit-limit:
+      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+        The first number (20) is the limit that has been exceeded.
+
+        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+        '
+      required: true
+      schema:
+        type: string
+  requestBodies:
+    CardLevelSpendRulesRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CardLevelSpendRules'
+    UpdateCardLevelSpendRulesRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateCardLevelSpendRules'
+  parameters:
+    idempotency-ref:
+      name: idempotency-ref
+      in: header
+      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
+      required: false
+      schema:
+        type: string
+  securitySchemes:
+    api_key:
+      type: apiKey
+      description: The API Key representing your Multi account.
+      name: api-key
+      in: header
+    auth_token:
+      type: http
+      description: The authentication token representing the user. This will be included in the login response object.
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Access
+  tags:
+  - Access Token
+  - User Impersonation
+  - Consent Request
+- name: Identities
+  tags:
+  - Corporates
+  - Consumers
+- name: User Management
+  tags:
+  - Authorised Users
+- name: Instruments
+  tags:
+  - Managed Accounts
+  - Managed Cards
+- name: Transactions
+  tags:
+  - Transfers
+- name: Fees
+  tags:
+  - Fees
+- name: Bulk Operations [Beta]
+  tags:
+  - Operations
+  - Manage

@@ -1,0 +1,282 @@
+openapi: 3.1.0
+info:
+  version: v3
+  title: Weavr Multi Product BackOffice Access Token User Impersonation API
+  x-logo:
+    url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
+    backgroundColor: '#FFFFFF'
+    altText: Weavr
+  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
+
+    identities and their instruments, without requiring the users to be logged in.
+
+
+    A token is to be obtained through the `access_token` method, and this will allow relevant operations
+
+    to be performed on behalf of this same identity.
+
+    '
+  contact:
+    name: Weavr
+    url: https://weavr.io
+servers:
+- description: Weavr Sandbox Environment
+  url: https://sandbox.weavr.io/multi/backoffice
+tags:
+- name: User Impersonation
+paths:
+  /impersonate_identity_login:
+    post:
+      deprecated: true
+      tags:
+      - User Impersonation
+      description: 'Get a token representing the given `identity`. This token can then be used to authorise certain secure
+
+        operations on behalf of the identity.
+
+        '
+      summary: Impersonate login for an identity
+      operationId: impersonateIdentityLogin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImpersonateIdentityLoginRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/ImpersonateIdentityLoginResponse'
+        '400':
+          $ref: '#/components/responses/BackofficeBadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: The authentication credentials are not found or are incorrect.
+        '409':
+          $ref: '#/components/responses/ImpersonateIdentityLoginConflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api_key: []
+components:
+  schemas:
+    TokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: An authorisation token to be used in the Authorization header for secured operations.
+    ValidationError:
+      type: array
+      description: Is returned as part of an HTTP error response whenever a validation error is detected. A list of the fields together with their syntax error will be provided.
+      items:
+        type: object
+        properties:
+          fieldName:
+            type: string
+          message:
+            maxLength: 255
+            type: string
+            description: When present helps to identify and fix the problem.
+          error:
+            type: string
+            enum:
+            - MUST_BE_FALSE
+            - MUST_BE_TRUE
+            - AT_MOST
+            - AT_LEAST
+            - FUTURE
+            - FUTURE_OR_PRESENT
+            - PAST
+            - PAST_OR_PRESENT
+            - LESS_THAN_ZERO
+            - LESS_THAN_OR_EQUAL_TO_ZERO
+            - GREATER_THAN_ZERO
+            - GREATER_THAN_OR_EQUAL_TO_ZERO
+            - HAS_TEXT
+            - REQUIRED
+            - REGEX
+            - RANGE
+            - IN
+            - NOT_IN
+            - NOT_EMPTY
+            - ALL_OR_NONE
+            - MUST_BE_EMPTY
+            - DEPENDS_ON
+            - INVALID_TYPE_OR_VALUE
+            - INVALID_REQUEST
+          params:
+            type: array
+            items:
+              type: string
+          invalidValue:
+            type: array
+            items:
+              type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    ImpersonateIdentityLoginRequest:
+      required:
+      - identity
+      type: object
+      properties:
+        identity:
+          $ref: '#/components/schemas/IdentityId'
+        temp:
+          $ref: '#/components/schemas/IdentityId'
+    CredentialId:
+      required:
+      - type
+      - id
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9_-]+$
+          type: string
+          enum:
+          - ROOT
+          - USER
+          - API_CLIENT
+          description: The type of user.
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The identifier of the user.
+    IdentityId:
+      required:
+      - type
+      - id
+      type: object
+      properties:
+        type:
+          enum:
+          - CONSUMER
+          - CORPORATE
+          type: string
+          description: Indicates the identity type.
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The identifier for the identity.
+  responses:
+    ImpersonateIdentityLoginConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - UNRESOLVED_IDENTITY
+                - ALREADY_IMPERSONATED
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    BackofficeBadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              validationErrors:
+                $ref: '#/components/schemas/ValidationError'
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    ImpersonateIdentityLoginResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token:
+                description: An authorisation token identifying the user that will be impersonated in the `auth_token` authorization header for secured operations.
+                $ref: '#/components/schemas/TokenResponse'
+              identity:
+                $ref: '#/components/schemas/IdentityId'
+              credentials:
+                $ref: '#/components/schemas/CredentialId'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  headers:
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    api_key:
+      type: apiKey
+      description: The API Key representing your Multi account.
+      name: api-key
+      in: header
+    auth_token:
+      type: http
+      description: The authentication token representing the user. This will be included in the login response object.
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Access
+  tags:
+  - Access Token
+  - User Impersonation
+  - Consent Request
+- name: Identities
+  tags:
+  - Corporates
+  - Consumers
+- name: User Management
+  tags:
+  - Authorised Users
+- name: Instruments
+  tags:
+  - Managed Accounts
+  - Managed Cards
+- name: Transactions
+  tags:
+  - Transfers
+- name: Fees
+  tags:
+  - Fees
+- name: Bulk Operations [Beta]
+  tags:
+  - Operations
+  - Manage

@@ -1,0 +1,1043 @@
+openapi: 3.1.0
+info:
+  version: v3
+  title: Weavr Multi Product BackOffice Access Token Sends API
+  x-logo:
+    url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
+    backgroundColor: '#FFFFFF'
+    altText: Weavr
+  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
+
+    identities and their instruments, without requiring the users to be logged in.
+
+
+    A token is to be obtained through the `access_token` method, and this will allow relevant operations
+
+    to be performed on behalf of this same identity.
+
+    '
+  contact:
+    name: Weavr
+    url: https://weavr.io
+servers:
+- description: Weavr Sandbox Environment
+  url: https://sandbox.weavr.io/multi/backoffice
+tags:
+- name: Sends
+  description: 'The Send transaction is used to send funds between managed accounts and managed cards belonging to different identities.
+
+    '
+paths:
+  /sends:
+    post:
+      tags:
+      - Sends
+      description: 'Sends funds between managed accounts and managed cards belonging to *different* corporate or consumer identities.
+
+
+        The Send Profile (configured in the Multi Portal) specified determines the behaviour and restrictions of the transaction (for example, fees).
+
+        '
+      summary: Create a send transaction
+      operationId: sendCreate
+      x-permissions:
+      - i:sends:create
+      parameters:
+      - $ref: '#/components/parameters/idempotency-ref'
+      requestBody:
+        $ref: '#/components/requestBodies/SendCreateRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/SendResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/SendCreateConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+    get:
+      tags:
+      - Sends
+      description: Retrieves all the send transactions performed by the logged-in identity.
+      summary: Get all send transactions
+      operationId: sendsGet
+      x-permissions:
+      - i:sends:list
+      parameters:
+      - $ref: '#/components/parameters/offset'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/sendProfileId'
+      - $ref: '#/components/parameters/instrumentId'
+      - $ref: '#/components/parameters/sourceId'
+      - $ref: '#/components/parameters/sourceType'
+      - $ref: '#/components/parameters/sendState'
+      - $ref: '#/components/parameters/sendCreatedFrom'
+      - $ref: '#/components/parameters/sendCreatedTo'
+      - $ref: '#/components/parameters/sendExecutedFrom'
+      - $ref: '#/components/parameters/sendExecutedTo'
+      - $ref: '#/components/parameters/sendTag'
+      responses:
+        '200':
+          $ref: '#/components/responses/SendsGetPageResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InstrumentForbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+  /sends/{id}:
+    get:
+      tags:
+      - Sends
+      description: Retrieve the send transaction identified by the `id` path parameter.
+      summary: Get a send transaction
+      operationId: sendGet
+      x-permissions:
+      - i:sends:get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The unique identifier of the Send transaction.
+        schema:
+          type: string
+          pattern: ^[0-9]+$
+      responses:
+        '200':
+          $ref: '#/components/responses/SendResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InstrumentForbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+  /sends/{id}/cancel:
+    post:
+      tags:
+      - Sends
+      description: Cancel the send transaction identified by the `id` path parameter.
+      summary: Cancel a send transaction
+      operationId: sendSingleCancel
+      x-permissions:
+      - i:sends:cancel_bulk
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The unique identifier of the Send transaction.
+        schema:
+          type: string
+          pattern: ^[0-9]+$
+      requestBody:
+        $ref: '#/components/requestBodies/TransactionSingleCancelRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/SendResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InstrumentForbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/SendCancelConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+      security:
+      - auth_token: []
+        api-key: []
+  /sends/{id}/challenges/otp/{channel}:
+    post:
+      deprecated: true
+      tags:
+      - Sends
+      description: 'Deprecated in favour of [Challenges endpoints](#tag/Confirmation-Challenges/operation/multipleSCAChallenge)
+
+
+        Starts the verification process for a send in which a one-time password is sent to a device belonging to the logged-in user that was previously enrolled through the `/authentication_factors/otp/{channel}` endpoint.
+
+
+        You should only start this process if the send `state` is `PENDING_CHALLENGE`.
+
+
+        _Note that on the Sandbox Environment, text messages are not sent and the one-time-password is always \"123456\"._
+
+        '
+      summary: Issue a one-time password that can be used to verify a send
+      operationId: sendSCAChallenge
+      x-permissions:
+      - i:sends:send_sca_challenge
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The unique identifier of the send transaction.
+        schema:
+          type: string
+          pattern: ^[0-9]+$
+      - $ref: '#/components/parameters/channel'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '409':
+          $ref: '#/components/responses/SendSCAChallengeConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+  /sends/{id}/challenges/otp/{channel}/verify:
+    post:
+      deprecated: true
+      tags:
+      - Sends
+      description: 'Deprecated in favour of [Challenges endpoints](#tag/Confirmation-Challenges/operation/multipleSCAVerify)
+
+
+        Completes the verification process for a Send.
+
+
+        If the outcome of the verification is successful, the send is executed.
+
+
+        If not verified challenge expires after 5 minutes and the number of incorrect OTP attempts is limited to reduce the risk of fraud.
+
+
+        _Note that on the Sandbox Environment, text messages are not sent and the `verificationCode` is always \"123456\"._
+
+        '
+      summary: Verify a send using a one-time password
+      operationId: sendSCAVerify
+      x-permissions:
+      - i:sends:send_sca_verify
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The unique identifier of the send transaction.
+        schema:
+          type: string
+          pattern: ^[0-9]+$
+      - $ref: '#/components/parameters/channel'
+      requestBody:
+        $ref: '#/components/requestBodies/SCAVerifyRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/SendSCAVerifyConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+  /sends/{id}/challenges/push/{channel}:
+    post:
+      deprecated: true
+      tags:
+      - Sends
+      description: 'Deprecated in favour of [Challenges endpoints](#tag/Confirmation-Challenges/operation/multipleSCAChallengePush)
+
+
+        Starts the verification process for a Send in which a push notification is sent to a device belonging to the logged-in user that was previously enrolled through the `/authentication_factors/push/{channel}` endpoint.
+
+
+        You should only start this process if the Send transaction `state` is `PENDING_CHALLENGE`.
+
+        '
+      summary: Issue a push notification that can be used to verify Send transaction
+      operationId: sendSCAChallengePush
+      x-permissions:
+      - i:sends:send_sca_challenge_push
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The unique identifier of the send transaction.
+        schema:
+          type: string
+          pattern: ^[0-9]+$
+      - $ref: '#/components/parameters/scaPushChannel'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '405':
+          $ref: '#/components/responses/MethodNotAllowed'
+        '409':
+          $ref: '#/components/responses/SendSCAChallengePushConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+components:
+  parameters:
+    instrumentId:
+      name: instrumentId
+      in: query
+      required: false
+      description: Filter by the source instrument id.
+      schema:
+        $ref: '#/components/schemas/InstrumentId'
+    scaPushChannel:
+      name: channel
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/SCAPushChannel'
+    channel:
+      name: channel
+      in: path
+      required: true
+      description: The unique identifier for the channel.
+      schema:
+        $ref: '#/components/schemas/SCAOtpChannel'
+    sendTag:
+      name: tag
+      in: query
+      required: false
+      description: Filter by the send tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all entries.
+      schema:
+        type: string
+    sourceType:
+      name: source.type
+      in: query
+      required: false
+      description: Filter by the source instrument type. Must be specified when `source.id` is provided.
+      schema:
+        $ref: '#/components/schemas/InstrumentType'
+    idempotency-ref:
+      name: idempotency-ref
+      in: header
+      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
+      required: false
+      schema:
+        type: string
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: The limit of the results for paging, starting at the offset. Limit is always capped at 100.
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+    sendState:
+      name: state
+      in: query
+      required: false
+      description: Filter by the Send transaction state. Leave out to fetch all states.
+      schema:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/components/schemas/SendState'
+    sendCreatedTo:
+      name: createdTo
+      in: query
+      required: false
+      description: Filter for send transactions created before `createdTo` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all Send transactions.
+      schema:
+        type: integer
+        format: int64
+    sendExecutedTo:
+      name: executedTo
+      in: query
+      required: false
+      description: Filter for send transactions executed before `executedTo` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all Send transactions.
+      schema:
+        type: integer
+        format: int64
+    sendExecutedFrom:
+      name: executedFrom
+      in: query
+      required: false
+      description: Filter for send transactions executed after `executedFrom` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all Send transactions.
+      schema:
+        type: integer
+        format: int64
+    sendProfileId:
+      name: profileId
+      in: query
+      required: false
+      description: Filter by the Send profile. Leave out to fetch all entries.
+      schema:
+        $ref: '#/components/schemas/ProfileId'
+    sourceId:
+      name: source.id
+      in: query
+      required: false
+      description: Filter by the source instrument id. Must be specified when `source.type` is provided.
+      schema:
+        $ref: '#/components/schemas/Id'
+    offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    sendCreatedFrom:
+      name: createdFrom
+      in: query
+      required: false
+      description: Filter for send transactions created after `createdFrom` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all Send transactions.
+      schema:
+        type: integer
+        format: int64
+  schemas:
+    CurrencyAmount:
+      required:
+      - currency
+      - amount
+      type: object
+      properties:
+        currency:
+          $ref: '#/components/schemas/Currency'
+        amount:
+          type: integer
+          format: int64
+          description: 'The monetary amount, scaled to the lowest denomination of the currency.
+
+
+            Example, an amount of 1000 for a EUR currency is actually 1000 Euro cents or EUR 10.00.
+
+            '
+      description: The object representing a monetary amount in a particular currency.
+    TransactionCancellationReason:
+      type: string
+      pattern: ^[ a-zA-Z0-9_-]+$
+      maxLength: 50
+      description: The reason the scheduled transaction was cancelled.
+    Send:
+      required:
+      - id
+      - profileId
+      - creationTimestamp
+      - source
+      - destinationAmount
+      - state
+      - transactionAmount
+      type: object
+      properties:
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The unique identifier of a send transaction.
+        profileId:
+          $ref: '#/components/schemas/ProfileId'
+        tag:
+          $ref: '#/components/schemas/Tag'
+        source:
+          description: The source managed account or card from where the funds were sent.
+          $ref: '#/components/schemas/InstrumentId'
+        sourceFee:
+          allOf:
+          - $ref: '#/components/schemas/CurrencyAmount'
+          - type: object
+            description: The fee applied to the source.
+        destination:
+          description: The destination managed account or card to where the funds were sent.
+          oneOf:
+          - $ref: '#/components/schemas/InstrumentId'
+          - $ref: '#/components/schemas/BeneficiaryId'
+        destinationAmount:
+          description: The amount, in same currency as source and destination, that was sent from the source to the destination instrument.
+          $ref: '#/components/schemas/CurrencyAmount'
+        destinationFee:
+          allOf:
+          - $ref: '#/components/schemas/CurrencyAmount'
+          - type: object
+            description: The fee applied to the destination.
+        transactionAmount:
+          allOf:
+          - $ref: '#/components/schemas/CurrencyAmount'
+          - type: object
+            description: The original transaction amount before any fees were deducted.
+        description:
+          type: string
+          description: The description details that are passed to the beneficiary.
+          maxLength: 255
+          pattern: ^[a-zA-Z0-9\/\-?:().$_,'+\s#=!"%&*<>;\{@\r\n]*$
+        state:
+          $ref: '#/components/schemas/SendState'
+        challengeExemptionReason:
+          $ref: '#/components/schemas/ChallengeExemptionReason'
+        creationTimestamp:
+          type: integer
+          format: int64
+          description: The time when the transaction was created, expressed in Epoch timestamp using millisecond precision.
+        scheduledTimestamp:
+          $ref: '#/components/schemas/ScheduledTimestamp'
+        executionTimestamp:
+          $ref: '#/components/schemas/ExecutionTimestamp'
+        cancellationReason:
+          $ref: '#/components/schemas/TransactionCancellationReason'
+    SyntaxError:
+      type: object
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      properties:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
+    BeneficiaryId:
+      required:
+      - beneficiaryId
+      type: object
+      properties:
+        beneficiaryId:
+          $ref: '#/components/schemas/Id'
+    ScheduledTimestamp:
+      pattern: ^[0-9]+$
+      type: string
+      description: The epoch timestamp at which the transaction is scheduled to be executed.
+    TransactionSingleCancelRequest:
+      type: object
+      properties:
+        cancellationReason:
+          $ref: '#/components/schemas/TransactionCancellationReason'
+    Nonce:
+      type: string
+      description: A randomly generated one-time use code.
+      pattern: ^[0-9]{6}$
+    ChallengeExemptionReason:
+      type: string
+      enum:
+      - LOW_VALUE
+      - TRUSTED_BENEFICIARY
+      description: The Reason the transaction was exempted from SCA verification
+    SCAPushChannel:
+      type: string
+      enum:
+      - AUTHY
+      - BIOMETRIC
+      description: '- "AUTHY": The push notification is sent on the user''s device using [Twilio Authy](https://www.twilio.com/authy)
+
+        - "BIOMETRIC": The push notification is sent to the user''s device
+
+        '
+    SCAOtpChannel:
+      type: string
+      enum:
+      - SMS
+      description: '- "SMS": The one-time-password is sent as a text message
+
+        '
+    InstrumentType:
+      type: string
+      enum:
+      - managed_cards
+      - managed_accounts
+    InstrumentId:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        type:
+          $ref: '#/components/schemas/InstrumentType'
+    ProfileId:
+      type: string
+      description: 'The profile Id which a specific identity, instrument or transaction type is linked to.
+
+
+        Profiles contain configuration and determine behavioral aspects of the newly created transaction, for example, fees that may apply.
+
+
+        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s needs.
+
+
+        Profile Ids can be found in the Multi Portal, in the API Credentials page.
+
+        '
+      pattern: ^[0-9]+$
+    Currency:
+      type: string
+      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
+      maxLength: 3
+      minLength: 3
+      pattern: ^[A-Z]*$
+    Id:
+      type: string
+      pattern: ^[0-9]+$
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    SendCreateRequest:
+      required:
+      - profileId
+      - source
+      - destination
+      - destinationAmount
+      type: object
+      properties:
+        profileId:
+          $ref: '#/components/schemas/ProfileId'
+        tag:
+          $ref: '#/components/schemas/Tag'
+        source:
+          $ref: '#/components/schemas/InstrumentId'
+        destination:
+          oneOf:
+          - $ref: '#/components/schemas/InstrumentId'
+          - $ref: '#/components/schemas/BeneficiaryId'
+        destinationAmount:
+          $ref: '#/components/schemas/CurrencyAmount'
+        description:
+          type: string
+          maxLength: 255
+          pattern: ^[a-zA-Z0-9\/\-?:().$_,'+\s#=!"%&*<>;\{@\r\n]*$
+          description: The description details that are passed to the beneficiary.
+        scheduledTimestamp:
+          $ref: '#/components/schemas/ScheduledTimestamp'
+    SendState:
+      type: string
+      description: "The state of the send transaction, as follows:\n - INVALID: The send transaction has failed initial validation checks. \n - INITIALISED: The initial state of a send transaction when SCA is not required.\n - PENDING_CHALLENGE: The send transaction requires the completion of a transaction confirmation challenge before it can be submitted.\n - PENDING: The send transaction has exceeded the destination limit and is pending treasury approval.\n - APPROVED: The send transaction that was submitted has been approved.\n - COMPLETED: The requested funds have been sent from the source instrument.\n - REJECTED: The send transaction that was submitted was rejected.\n - FAILED: There was an issue with the send transaction, and the transaction has failed.\n - RETURNED: The send transaction has been returned to the sender.\n - SCHEDULED: The send transaction will be executed at the scheduled time.\n - CANCELLED: The scheduled send transaction has been cancelled.\n"
+      enum:
+      - INVALID
+      - INITIALISED
+      - COMPLETED
+      - REJECTED
+      - FAILED
+      - PENDING
+      - PENDING_CHALLENGE
+      - APPROVED
+      - RETURNED
+      - SCHEDULED
+      - CANCELLED
+    ExecutionTimestamp:
+      pattern: ^[0-9]+$
+      type: string
+      description: The epoch timestamp at which the transaction was executed, transitioning to a final state such as COMPLETED, REJECTED, or FAILED.
+    Tag:
+      type: string
+      description: The tag field is a custom field that can be used to search and filter.
+      maxLength: 50
+      pattern: ^[a-zA-Z0-9_-]+$
+  responses:
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    SendSCAChallengePushConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - STATE_INVALID
+                - CHANNEL_NOT_SUPPORTED
+                - CHANNEL_NOT_REGISTERED
+                - CHALLENGE_LIMIT_EXCEEDED
+                - SCA_EXEMPTION_APPLIED
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    SendCreateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            required:
+            - errorCode
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - PROFILE_INACTIVE
+                - MODEL_CONSTRAINTS_VIOLATED
+                - INTERCEPTOR_DENIED_TRANSACTION
+                - INSTRUMENT_DENIED_TRANSACTION
+                - FOREX_TRADE_DENIED_TRANSACTION
+                - CURRENCY_MISMATCH
+                - SOURCE_INSTRUMENT_BLOCKED
+                - DESTINATION_INSTRUMENT_BLOCKED
+                - SOURCE_NOT_FOUND
+                - DESTINATION_NOT_FOUND
+                - FEE_NOT_CONFIGURED_FOR_CURRENCY
+                - DESTINATION_LIMIT_EXCEEDED
+                - FUNDS_INSUFFICIENT
+                - AMOUNT_INVALID
+                - SOURCE_CANNOT_BE_DEBIT_MODE_CARD
+                - DESTINATION_CANNOT_BE_DEBIT_MODE_CARD
+                - SEND_TO_INSTRUMENT_UNSUPPORTED
+                - SOURCE_INSTRUMENT_DESTROYED
+                - DESTINATION_INSTRUMENT_DESTROYED
+                - SOURCE_AND_DESTINATION_MUST_BE_DIFFERENT
+                - IDENTITY_KYC_LEVEL_STEPUP_REQUIRED
+                - DESTINATION_BELONGS_TO_SAME_IDENTITY
+                - SOURCE_AND_DESTINATION_MUST_BE_IN_SAME_PROGRAMME
+                - BENEFICIARY_NOT_FOUND
+                - BENEFICIARY_TYPE_INVALID
+                - PROFILE_NOT_FOUND
+                - SCHEDULED_TIMESTAMP_INVALID
+                - DESTINATION_FEE_EXCEEDS_TRANSACTION_AMOUNT
+    SendSCAVerifyConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - STATE_INVALID
+                - CHANNEL_NOT_SUPPORTED
+                - CHANNEL_NOT_REGISTERED
+                - VERIFICATION_CODE_EXPIRED
+                - VERIFICATION_CODE_INVALID
+                - SCA_EXEMPTION_APPLIED
+                - CHALLENGE_NOT_PENDING
+                - CHALLENGE_LIMIT_EXCEEDED
+                - ONE_CHALLENGE_LIMIT_REMAINING
+    InstrumentForbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - STEP_UP_REQUIRED
+                - ACCESS_TOKEN_REQUIRED
+                - INSUFFICIENT_PERMISSIONS
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    SendSCAChallengeConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - STATE_INVALID
+                - CHANNEL_NOT_SUPPORTED
+                - CHANNEL_NOT_REGISTERED
+                - SCA_EXEMPTION_APPLIED
+    MethodNotAllowed:
+      description: Method Not Allowed - The request was received but has been rejected for the requested resource.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    SendResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Send'
+    SendCancelConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INVALID_STATE
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    NoContent:
+      description: Success - No Content.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    SendsGetPageResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              send:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Send'
+              count:
+                type: integer
+                description: Total number of records (excluding the paging limit).
+                format: int32
+              responseCount:
+                type: integer
+                description: Total number of records returned in this response.
+                format: int32
+  headers:
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    x-ratelimit-limit:
+      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+        The first number (20) is the limit that has been exceeded.
+
+        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+        '
+      required: true
+      schema:
+        type: string
+  requestBodies:
+    TransactionSingleCancelRequest:
+      required: false
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TransactionSingleCancelRequest'
+    SCAVerifyRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - verificationCode
+            type: object
+            properties:
+              verificationCode:
+                description: The code received by the user on the device.
+                $ref: '#/components/schemas/Nonce'
+    SendCreateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SendCreateRequest'
+  securitySchemes:
+    api_key:
+      type: apiKey
+      description: The API Key representing your Multi account.
+      name: api-key
+      in: header
+    auth_token:
+      type: http
+      description: The authentication token representing the user. This will be included in the login response object.
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Access
+  tags:
+  - Access Token
+  - User Impersonation
+  - Consent Request
+- name: Identities
+  tags:
+  - Corporates
+  - Consumers
+- name: User Management
+  tags:
+  - Authorised Users
+- name: Instruments
+  tags:
+  - Managed Accounts
+  - Managed Cards
+- name: Transactions
+  tags:
+  - Transfers
+- name: Fees
+  tags:
+  - Fees
+- name: Bulk Operations [Beta]
+  tags:
+  - Operations
+  - Manage

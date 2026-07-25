@@ -1,0 +1,1028 @@
+openapi: 3.1.0
+info:
+  version: v3
+  title: Weavr Multi Product BackOffice Access Token Authentication Factors API
+  x-logo:
+    url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
+    backgroundColor: '#FFFFFF'
+    altText: Weavr
+  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
+
+    identities and their instruments, without requiring the users to be logged in.
+
+
+    A token is to be obtained through the `access_token` method, and this will allow relevant operations
+
+    to be performed on behalf of this same identity.
+
+    '
+  contact:
+    name: Weavr
+    url: https://weavr.io
+servers:
+- description: Weavr Sandbox Environment
+  url: https://sandbox.weavr.io/multi/backoffice
+tags:
+- name: Authentication Factors
+  description: 'Manage user authentication factors, including passwords and device-based factors (OTP and push).
+
+    '
+paths:
+  /passwords/{user_id}/create:
+    post:
+      tags:
+      - Authentication Factors
+      description: Create a new password for the user identified by the `user_id` path parameter.
+      summary: Create a password
+      operationId: passwordCreate
+      parameters:
+      - $ref: '#/components/parameters/userId'
+      requestBody:
+        $ref: '#/components/requestBodies/PasswordCreateRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/PasswordResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFoundToken'
+        '409':
+          $ref: '#/components/responses/CreatePasswordConflict'
+        '410':
+          $ref: '#/components/responses/TokenExpired'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - api-key: []
+  /passwords/update:
+    post:
+      tags:
+      - Authentication Factors
+      description: Update the password for the logged-in user.
+      summary: Update a password
+      operationId: passwordUpdate
+      requestBody:
+        $ref: '#/components/requestBodies/PasswordUpdateRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/PasswordResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFoundToken'
+        '409':
+          $ref: '#/components/responses/PasswordUpdateConflict'
+        '410':
+          $ref: '#/components/responses/TokenExpired'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+  /passwords/validate:
+    post:
+      tags:
+      - Authentication Factors
+      description: Check that a password adheres to all complexity checks.
+      summary: Validate a password
+      operationId: passwordValidate
+      requestBody:
+        $ref: '#/components/requestBodies/PasswordValidateRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFoundToken'
+        '409':
+          $ref: '#/components/responses/PasswordValidateConflict'
+        '410':
+          $ref: '#/components/responses/TokenExpired'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - api-key: []
+  /passwords/lost_password/start:
+    post:
+      tags:
+      - Authentication Factors
+      description: 'Initiate the lost password process.
+
+
+        If the email address provided is associated with an active user, an email will be sent, containing a URL that redirects the user to change their password.
+
+        The URL contains request parameters for all of the parameters required to change the password for the user via the `/passwords/lost_password/resume` POST endpoint.
+
+        '
+      summary: Initiate lost password process
+      operationId: lostPasswordInitiate
+      requestBody:
+        $ref: '#/components/requestBodies/EmailRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/LostPasswordInitiateConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - api-key: []
+  /passwords/lost_password/resume:
+    post:
+      tags:
+      - Authentication Factors
+      description: This is the second and final step in updating the password of a user who forgot their password.
+      summary: Resume lost password process
+      operationId: lostPasswordResume
+      requestBody:
+        $ref: '#/components/requestBodies/LostPasswordResumeRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/TokenResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFoundToken'
+        '409':
+          $ref: '#/components/responses/LostPasswordResumeConflict'
+        '410':
+          $ref: '#/components/responses/TokenExpired'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - api-key: []
+  /authentication_factors:
+    get:
+      tags:
+      - Authentication Factors
+      description: Retrieves the list of authentication factors that can be used to verify the logged-in user.
+      summary: Get user authentication factors
+      operationId: authFactorsGet
+      responses:
+        '200':
+          $ref: '#/components/responses/AuthFactorsGetResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - auth_token: []
+        api-key: []
+  /authentication_factors/otp/{channel}:
+    post:
+      tags:
+      - Authentication Factors
+      description: 'This is the first step in enrolling the logged-in user''s mobile device, where a one-time password is sent to the device.
+
+
+        _Note that on the Sandbox Environment, text messages are not sent and the one-time-password is always \"123456\"._
+
+        '
+      summary: Enrol a user device for authentication using one-time passwords
+      operationId: enrolDeviceUsingOtpStepOne
+      parameters:
+      - $ref: '#/components/parameters/idempotency-ref'
+      - $ref: '#/components/parameters/channel'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/EnrolDeviceUsingOtpStepOneConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - api-key: []
+        auth_token: []
+  /authentication_factors/otp/{channel}/verify:
+    post:
+      tags:
+      - Authentication Factors
+      description: 'The second step in enrolling the logged-in user (root or authorised user) to use one-time-passwords to enable verification of transactions.
+
+        The challenge expires after 5 minutes and the number of incorrect OTP attempts is limited to reduce the risk of fraud, in that case challenge has to be issued again.
+
+
+        _Note that on the Sandbox Environment, text messages are not sent and the `verificationCode` is always set to \"123456\"._
+
+        '
+      summary: Verify enrolment of a user device for authentication using one-time passwords
+      operationId: enrolDeviceUsingOtpStepTwo
+      parameters:
+      - $ref: '#/components/parameters/idempotency-ref'
+      - $ref: '#/components/parameters/channel'
+      requestBody:
+        $ref: '#/components/requestBodies/SCAVerifyRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/EnrolDeviceUsingOtpStepTwoConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - api-key: []
+        auth_token: []
+  /authentication_factors/push/{channel}:
+    post:
+      tags:
+      - Authentication Factors
+      description: 'This is the first step in enrolling the logged-in user''s mobile device, where a push notification is sent to the device.
+
+        '
+      summary: Enrol a user device for authentication using push notifications
+      operationId: enrolDeviceUsingPush
+      parameters:
+      - $ref: '#/components/parameters/idempotency-ref'
+      - $ref: '#/components/parameters/authFactorsPushChannel'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InstrumentForbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/EnrolDeviceUsingPushConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - api-key: []
+        auth_token: []
+    delete:
+      tags:
+      - Authentication Factors
+      description: Unlink a user device for authentication using push notifications
+      summary: Unlink a user device for authentication using push notifications
+      operationId: unlinkDeviceUsingPush
+      parameters:
+      - $ref: '#/components/parameters/idempotency-ref'
+      - $ref: '#/components/parameters/scaPushChannel'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InstrumentForbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/UnlinkDeviceUsingPushConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+      - api-key: []
+        auth_token: []
+components:
+  responses:
+    LostPasswordInitiateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - MULTIPLE_ACCOUNTS_FOUND
+                - ACCOUNT_NOT_FOUND
+    PasswordResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              passwordInfo:
+                $ref: '#/components/schemas/PasswordInfo'
+              token:
+                type: string
+                description: The authorisation token to be used in the Authorization header for secured operations.
+    EnrolDeviceUsingPushConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - CHANNEL_NOT_SUPPORTED
+                - CHANNEL_NOT_READY
+                - CHANNEL_ALREADY_REGISTERED
+                - MOBILE_NUMBER_NOT_AVAILABLE
+                - CHALLENGE_LIMIT_EXCEEDED
+                - PASSCODE_NOT_SET
+                - ENROLMENT_LIMIT_EXCEEDED
+                - MOBILE_COUNTRY_NOT_SUPPORTED
+                - TYPE_DOES_NOT_SUPPORT_ENROLMENT
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    PasswordValidateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - UNRESOLVED_IDENTITY
+                - PASSWORD_PROFILE_NOT_CONFIGURED_FOR_CREDENTIAL_TYPE
+                - PASSWORD_TOO_SHORT
+                - PASSWORD_TOO_LONG
+                - PASSWORD_TOO_SIMPLE
+    TokenExpired:
+      description: Gone - The requested token is expired.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TokenError'
+    CreatePasswordConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - UNRESOLVED_IDENTITY
+                - PASSWORD_PROFILE_NOT_CONFIGURED_FOR_CREDENTIAL_TYPE
+                - PASSWORD_TOO_SHORT
+                - PASSWORD_TOO_LONG
+                - PASSWORD_TOO_SIMPLE
+                - PASSWORD_KEY_ALREADY_IN_USE
+                - PASSWORD_ALREADY_CREATED
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    EnrolDeviceUsingOtpStepTwoConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - CHANNEL_NOT_SUPPORTED
+                - CHANNEL_ALREADY_REGISTERED
+                - VERIFICATION_CODE_EXPIRED
+                - VERIFICATION_CODE_INVALID
+                - CREDENTIALS_INACTIVE
+                - CHALLENGE_LIMIT_EXCEEDED
+                - ONE_CHALLENGE_LIMIT_REMAINING
+                - STATE_INVALID
+                - TYPE_DOES_NOT_SUPPORT_ENROLMENT
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InstrumentForbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - STEP_UP_REQUIRED
+                - ACCESS_TOKEN_REQUIRED
+                - INSUFFICIENT_PERMISSIONS
+    PasswordUpdateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - PASSWORD_ALREADY_USED
+                - PASSWORD_TOO_SHORT
+                - PASSWORD_TOO_LONG
+                - PASSWORD_TOO_SIMPLE
+                - PASSWORD_INCORRECT
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    EnrolDeviceUsingOtpStepOneConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - CHANNEL_NOT_SUPPORTED
+                - CHANNEL_ALREADY_REGISTERED
+                - MOBILE_NUMBER_NOT_AVAILABLE
+                - MOBILE_NUMBER_INVALID
+                - MOBILE_COUNTRY_NOT_SUPPORTED
+                - CREDENTIALS_INACTIVE
+                - TYPE_DOES_NOT_SUPPORT_ENROLMENT
+    AuthFactorsGetResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              factors:
+                type: array
+                description: The list of challenge types the logged-in user is enrolled on.
+                items:
+                  $ref: '#/components/schemas/SCAFactor'
+    LostPasswordResumeConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INVALID_NONCE_OR_EMAIL
+                - PASSWORD_ALREADY_USED
+                - PASSWORD_TOO_SHORT
+                - PASSWORD_TOO_LONG
+                - PASSWORD_TOO_SIMPLE
+                - PASSWORD_INCORRECT
+                - PASSWORD_NOT_SET
+    NotFoundToken:
+      description: Not found - The requested token couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TokenError'
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    NoContent:
+      description: Success - No Content.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    UnlinkDeviceUsingPushConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - CHANNEL_NOT_REGISTERED
+                - CREDENTIALS_INACTIVE
+    TokenResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TokenResponse'
+  parameters:
+    scaPushChannel:
+      name: channel
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/SCAPushChannel'
+    authFactorsPushChannel:
+      name: channel
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/AuthSCAPushChannel'
+    channel:
+      name: channel
+      in: path
+      required: true
+      description: The unique identifier for the channel.
+      schema:
+        $ref: '#/components/schemas/SCAOtpChannel'
+    userId:
+      name: user_id
+      in: path
+      required: true
+      description: The unique identifier for the user.
+      schema:
+        $ref: '#/components/schemas/UserId'
+    idempotency-ref:
+      name: idempotency-ref
+      in: header
+      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
+      required: false
+      schema:
+        type: string
+  schemas:
+    UserId:
+      type: string
+      pattern: ^[0-9]+$
+    SyntaxError:
+      type: object
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      properties:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
+    TokenError:
+      description: The used token is expired or not found
+      type: object
+      properties:
+        errorCode:
+          type: string
+          enum:
+          - TOKEN_EXPIRED
+          - TOKEN_NOT_FOUND
+    PasswordInfo:
+      required:
+      - identityId
+      type: object
+      description: Additional information related to the user's password.
+      properties:
+        identityId:
+          description: The identity to which the user's password information belongs to.
+          $ref: '#/components/schemas/IdentityId'
+        expiryDate:
+          minimum: 0
+          type: integer
+          format: int64
+          description: The millisecond timestamp indicating when the password will expire. If 0, then this password will not expire.
+    SensitivePassword:
+      type: object
+      description: "The user's password or passcode used to log in a user.\nPasswords must be:\n  - minimum 8 characters for end-users (Consumers and Corporates); 12 characters for others\n  - maximum 30 characters\n  - include a lowercase character\n  - include an uppercase character\n  - include a digit and a special character\n  - different from any of the 5 last such passwords used.\n\nFor non-PCI compliant integrations, the password submitted must be **tokenised**.\n"
+      required:
+      - value
+      properties:
+        value:
+          maxLength: 100
+          type: string
+          format: password
+    SCAPushChannel:
+      type: string
+      enum:
+      - AUTHY
+      - BIOMETRIC
+      description: '- "AUTHY": The push notification is sent on the user''s device using [Twilio Authy](https://www.twilio.com/authy)
+
+        - "BIOMETRIC": The push notification is sent to the user''s device
+
+        '
+    Nonce:
+      type: string
+      description: A randomly generated one-time use code.
+      pattern: ^[0-9]{6}$
+    SCAOtpChannel:
+      type: string
+      enum:
+      - SMS
+      description: '- "SMS": The one-time-password is sent as a text message
+
+        '
+    Email:
+      type: string
+      description: E-mail Address of the user
+      format: email
+    SCAFactorStatus:
+      type: string
+      description: 'The state of the factor type.
+
+        - `PENDING_VERIFICATION` : The user has started the enrolment process but still hasn''t completed enrolment. Challenges cannot be used before they are verified.
+
+        - `ACTIVE` : The user has successfully completed enrolment and the challenge can be used to verify transactions.
+
+        - `INACTIVE` : The user has rejected the enrolment.
+
+        '
+      enum:
+      - PENDING_VERIFICATION
+      - ACTIVE
+      - INACTIVE
+    TokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: An authorisation token to be used in the Authorization header for secured operations.
+    IdentityId:
+      required:
+      - type
+      - id
+      type: object
+      properties:
+        type:
+          enum:
+          - CONSUMER
+          - CORPORATE
+          type: string
+          description: Indicates the identity type.
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The identifier for the identity.
+    SCAChallengeType:
+      type: string
+      enum:
+      - OTP
+      - PUSH
+      - BIOMETRIC
+      description: '- "OTP": The OTP is sent as a text message
+
+        - "PUSH": The authorisation request is sent as a push notification
+
+        - "BIOMETRIC": The push notification is sent via Firebase to a mobile application
+
+        '
+    AuthSCAPushChannel:
+      type: string
+      enum:
+      - AUTHY
+      description: '- "AUTHY": The push notification is sent on the user''s device using [Twilio Authy](https://www.twilio.com/authy)
+
+        '
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    SCAFactor:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/SCAChallengeType'
+        status:
+          $ref: '#/components/schemas/SCAFactorStatus'
+        channel:
+          $ref: '#/components/schemas/SCAChannel'
+    SCAChannel:
+      type: string
+      enum:
+      - SMS
+      - AUTHY
+      - BIOMETRIC
+      description: '- "SMS": The one-time-password is sent as a text message
+
+        - "AUTHY": The push notification is sent to an Authy application
+
+        - "BIOMETRIC": The push notification is sent to an innovator application
+
+        '
+  requestBodies:
+    PasswordUpdateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - oldPassword
+            - newPassword
+            type: object
+            properties:
+              oldPassword:
+                $ref: '#/components/schemas/SensitivePassword'
+              newPassword:
+                $ref: '#/components/schemas/SensitivePassword'
+    LostPasswordResumeRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - email
+            - nonce
+            - newPassword
+            type: object
+            properties:
+              nonce:
+                $ref: '#/components/schemas/Nonce'
+              email:
+                $ref: '#/components/schemas/Email'
+              newPassword:
+                $ref: '#/components/schemas/SensitivePassword'
+    SCAVerifyRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - verificationCode
+            type: object
+            properties:
+              verificationCode:
+                description: The code received by the user on the device.
+                $ref: '#/components/schemas/Nonce'
+    PasswordValidateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - password
+            type: object
+            properties:
+              password:
+                $ref: '#/components/schemas/SensitivePassword'
+    EmailRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - email
+            type: object
+            properties:
+              email:
+                $ref: '#/components/schemas/Email'
+    PasswordCreateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - password
+            type: object
+            properties:
+              password:
+                $ref: '#/components/schemas/SensitivePassword'
+  headers:
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    x-ratelimit-limit:
+      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+        The first number (20) is the limit that has been exceeded.
+
+        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+        '
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    api_key:
+      type: apiKey
+      description: The API Key representing your Multi account.
+      name: api-key
+      in: header
+    auth_token:
+      type: http
+      description: The authentication token representing the user. This will be included in the login response object.
+      scheme: bearer
+      bearerFormat: JWT
+x-tagGroups:
+- name: Access
+  tags:
+  - Access Token
+  - User Impersonation
+  - Consent Request
+- name: Identities
+  tags:
+  - Corporates
+  - Consumers
+- name: User Management
+  tags:
+  - Authorised Users
+- name: Instruments
+  tags:
+  - Managed Accounts
+  - Managed Cards
+- name: Transactions
+  tags:
+  - Transfers
+- name: Fees
+  tags:
+  - Fees
+- name: Bulk Operations [Beta]
+  tags:
+  - Operations
+  - Manage
