@@ -1,0 +1,12 @@
+generated: '2026-07-21'
+method: derived
+source: arazzo/*.yml grounded in openapi/ operationIds
+workflows:
+- file: weavr-onboard-corporate-and-issue-card.yml
+  workflowId: onboardCorporateAndIssueCard
+  title: Onboard a corporate and issue a virtual card
+  summary: Corporate identity -> login -> KYB -> managed account -> virtual card.
+- file: weavr-fund-account-and-transfer.yml
+  workflowId: fundAccountAndTransfer
+  title: Fund a managed account and move money
+  summary: Simulate deposit -> internal transfer -> external send.

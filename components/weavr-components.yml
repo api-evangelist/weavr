@@ -1,0 +1,34 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.weavr.io/ + github.com/weavr-io/skills (weavr-components, weavr-sdk-*)
+summary: >-
+  Weavr "Secure UI Components" are embeddable, client-side components that
+  tokenize sensitive data (passwords, card PAN/PIN/CVV) so the embedder's app
+  and servers never touch raw secrets — the compliance boundary that keeps the
+  embedder out of PCI/DSS scope. Shipped as platform-specific component
+  libraries plus a web loader.
+families:
+- name: Secure UI Components (Web)
+  loader: https://sandbox.weavr.io/app/secure/static/client.1.js
+  docs: https://docs.weavr.io/build/sdks/web/
+  purpose: Tokenized input fields and card display components for web apps.
+- name: iOS Secure Components
+  repo: https://github.com/weavr-io/secure-components-ios
+  install: Swift Package Manager / CocoaPods
+  version: 3.7.0
+- name: Android Secure Components
+  docs: https://docs.weavr.io/build/sdks/android/
+  install: Gradle
+  version: 3.12.0
+- name: React Native Secure Components
+  docs: https://docs.weavr.io/build/sdks/react-native/
+  install: npm / Expo
+  version: 5.5.1
+- name: Push Provisioning
+  docs: https://docs.weavr.io/build/sdks/
+  purpose: Add issued cards to Apple Pay / Google Pay wallets (iOS/Android/React Native).
+capabilities:
+- Client-side tokenization of passwords and card secrets
+- Secure card display (PAN/CVV) and PIN entry with step-up SCA
+- Biometric authentication (iOS/Android SDKs)
+- Wallet push provisioning

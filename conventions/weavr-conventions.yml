@@ -1,0 +1,68 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.weavr.io/ + openapi/weavr-multi-openapi-original.yml
+summary: >-
+  Cross-cutting request/response semantics for the Weavr Multi API, harvested
+  from the docs and derived from the OpenAPI. Weavr is an embedded-finance
+  (BaaS) platform; requests carry an api-key plus (for user-scoped operations)
+  a bearer auth_token, monetary amounts are always in minor units, and
+  idempotency is supported via the idempotency-ref header.
+authentication:
+  style: api-key + bearer token
+  headers:
+  - name: api-key
+    where: header
+    description: Server-side API key identifying the account (all requests).
+  - name: programme-key
+    where: header
+    description: Programme identifier, required for identity creation.
+  - name: Authorization
+    where: header
+    description: "Bearer {auth_token} — the user auth token obtained after login."
+  step_up: >-
+    Sensitive operations (card display, PIN, high-value sends/transfers) require
+    step-up SCA (Strong Customer Authentication) via OTP or push challenges.
+  see: authentication/weavr-authentication.yml
+idempotency:
+  supported: true
+  mechanism: header
+  header: idempotency-ref
+  scope: "payload + operation"
+  retention: ">= 24 hours"
+  description: >-
+    A unique caller-generated reference that, taking the payload and the
+    operation into account, avoids duplicate operations. Uniqueness is
+    maintained for at least 24 hours. In-progress duplicates surface as
+    IDEMPOTENT_REQUEST_IN_PROGRESS.
+  source: components.parameters.idempotency-ref (multi, backoffice, payment-run)
+pagination:
+  style: offset
+  params:
+  - name: offset
+    description: Zero-based record offset.
+  - name: limit
+    description: Maximum number of records to return.
+  note: List endpoints across the Multi and Payment Run APIs use offset/limit.
+money:
+  representation: minor units
+  description: "All amounts are integers in the currency's minor unit (e.g. 1000 = 10.00 GBP)."
+  shape: "{ currency: GBP, amount: 1000 }"
+error_envelope:
+  format: json
+  see: errors/weavr-problem-types.yml
+  note: >-
+    Errors return a JSON body with a machine-readable code (e.g.
+    IDEMPOTENT_REQUEST_IN_PROGRESS) and validation detail; not RFC 9457
+    application/problem+json.
+versioning:
+  scheme: path/product
+  current: v3
+  note: Version is carried in the product path (e.g. /multi); info.version is v3.
+  see: lifecycle/weavr-lifecycle.yml
+rate_limiting:
+  signalled: true
+  status: 429
+  note: A 429 response indicates rate limiting; documented per-programme limits apply.
+request_correlation:
+  header: call-ref
+  note: "Optional call-ref header (max 255 chars) for request correlation (simulator + platform)."

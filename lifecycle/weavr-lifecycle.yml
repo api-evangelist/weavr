@@ -1,0 +1,21 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.weavr.io/ + https://weavr.statuspage.io/
+versioning:
+  scheme: product-path
+  current: v3
+  docs: https://docs.weavr.io/
+  note: >-
+    API version is carried in the product path (/multi, /multi/backoffice,
+    /payment-run). OpenAPI info.version is v3 for the Multi API.
+status_page: https://weavr.statuspage.io/
+changelog: https://docs.weavr.io/changelog/
+support: https://support.weavr.io/
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: >-
+    No formal published deprecation / RFC 8594 Sunset policy was found. SDK
+    versions move via semantic versioning; superseded major versions are
+    tracked in the changelog.
+deprecated_operations: []

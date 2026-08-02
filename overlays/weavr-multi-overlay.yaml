@@ -1,0 +1,13 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Weavr Multi Product API
+  version: 1.0.0
+extends: openapi/weavr-multi-openapi-original.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-07-21'
+    x-apievangelist-provider: weavr
+    x-apievangelist-conventions: conventions/weavr-conventions.yml
+    x-apievangelist-errors: errors/weavr-problem-types.yml
+    x-apievangelist-authentication: authentication/weavr-authentication.yml

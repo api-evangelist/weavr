@@ -1,0 +1,1481 @@
+openapi: 3.0.1
+info:
+  title: Weavr Simulator
+  x-logo:
+    url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
+    backgroundColor: '#FFFFFF'
+    altText: Weavr
+  description: >-
+    This is a Simulator API which is only available on the Weavr Sandbox
+    Environment
+  contact:
+    name: Weavr
+    url: http://weavr.io
+  version: v2
+servers:
+  - url: https://sandbox.weavr.io/simulate/api"
+paths:
+  /accounts/{account_id}/deposit:
+    post:
+      tags:
+        - Accounts
+      summary: Simulate incoming wire transfer using account id
+      description: >-
+        This tool is a quick and easy way to put funds on a Managed Account
+        (previously called ‘deposit’), that you may need for testing elsewhere.
+        Provide account id and transaction amount and the transaction will be
+        processed through the system. This method skips some of the steps when
+        processing IWTs. To test this fully, please use the accounts_deposit
+        endpoint.
+      operationId: accounts_account_id_deposit
+      parameters:
+        - name: account_id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/call-ref'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepositRequestByAccountId'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepositResponse0'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInvalidRequest'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+      security:
+        - API_Secret_Key: []
+  /accounts/deposit:
+    post:
+      tags:
+        - Accounts
+      summary: Simulate an incoming wire transfer using IBAN
+      description: >-
+        This tool is used to simulate incoming wire transfers (IWT) into managed
+        accounts. IWTs are processed in line with the configuration of your
+        application. For EUR and USD IWTs provide the destinationIbanDetails of
+        your Managed Account, for GBP IWTs provide
+        destinationFasterPaymentDetails or destinationIbanDetails of your
+        Managed Account. Sender Details can also be added that is used to
+        identify whether the IWT originated from a Linked Account (if
+        configured) or a third party.
+      operationId: accounts_deposit
+      parameters:
+        - $ref: '#/components/parameters/call-ref'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepositRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepositResponse1'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInvalidRequest'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+      security:
+        - API_Secret_Key: []
+  /cards/{card_id}/expire:
+    post:
+      tags:
+        - Cards
+      summary: Simulate expiry of card
+      description: >-
+        Expire a managed card by Card ID. Provide card id and the card will be
+        expired.
+      operationId: cards_card_id_expire
+      parameters:
+        - name: card_id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/call-ref'
+      responses:
+        '204':
+          description: Success - No Content
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInvalidRequest'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpireManagedCardConflict'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+      security:
+        - API_Secret_Key: []
+  /cards/{card_id}/about_to_expire:
+    post:
+      tags:
+        - Cards
+      summary: Simulate card about to expire
+      description: >-
+        Simulate a card about to expire by Card ID. Provide card id and the card
+        will be set to about to expire.
+      operationId: cards_card_id_about_to_expire
+      parameters:
+        - name: card_id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/call-ref'
+      responses:
+        '204':
+          description: Success - No Content
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInvalidRequest'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+      security:
+        - API_Secret_Key: []
+  /cards/{card_id}/purchase:
+    post:
+      tags:
+        - Cards
+      summary: Simulate card purchase using card id
+      description: >-
+        Simulate card purchases by Card ID. Provide card id and transaction
+        amount and the transaction will be processed through the system.
+      operationId: cards_card_id_purchase
+      parameters:
+        - name: card_id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/call-ref'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseRequestByCardId'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseResponse'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInvalidRequest'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+      security:
+        - API_Secret_Key: []
+  /cards/{card_id}/renew:
+    post:
+      tags:
+        - Cards
+      summary: Simulate renewal of card
+      description: >-
+        Renew a managed card by Card ID. Provide card id and the card will be
+        renewed.
+      operationId: cards_card_id_renew
+      parameters:
+        - name: card_id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/call-ref'
+      responses:
+        '204':
+          description: Success - No Content
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInvalidRequest'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RenewManagedCardConflict'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+      security:
+        - API_Secret_Key: []
+  /cards/{card_id}/merchant_refund:
+    post:
+      tags:
+        - Cards
+      summary: Simulate card merchant refund using card id
+      description: >-
+        Simulate card merchant refunds by Card ID. Provide card id and
+        transaction amount and the transaction will be processed through the
+        system.
+      operationId: cards_card_id_merchant_refund
+      parameters:
+        - name: card_id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/call-ref'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseRequestByCardId'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseResponse'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInvalidRequest'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+      security:
+        - API_Secret_Key: []
+  /cards/purchase:
+    post:
+      tags:
+        - Cards
+      summary: Simulate card purchase using card number
+      description: >-
+        Simulate card purchases. Provide card details and transaction amount and
+        the transaction will be processed through the system.
+      operationId: cards_purchase
+      parameters:
+        - $ref: '#/components/parameters/call-ref'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseResponse'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInvalidRequest'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+      security:
+        - API_Secret_Key: []
+  /cards/merchant_refund:
+    post:
+      tags:
+        - Cards
+      summary: Simulate card merchant refund using card number
+      description: >-
+        Simulate card merchant refunds. Provide card details and transaction
+        amount and the transaction will be processed through the system.
+      operationId: cards_merchant_refund
+      parameters:
+        - $ref: '#/components/parameters/call-ref'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseResponse'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInvalidRequest'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+      security:
+        - API_Secret_Key: []
+  /consumers/{consumer_id}/verify:
+    post:
+      tags:
+        - Consumers
+      summary: Simulate verification of a consumer identity
+      description: >-
+        Fully verify a consumer identity. Will set emailVerified,
+        mobileVerified, isPep (as false), isSanctioned (as false) and
+        fullDueDiligence (as APPROVED).
+      operationId: consumers_consumer_id_verify
+      parameters:
+        - name: consumer_id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/call-ref'
+      responses:
+        '204':
+          description: Success - No Content
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInvalidRequest'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+      security:
+        - API_Secret_Key: []
+  /corporates/{corporate_id}/verify:
+    post:
+      tags:
+        - Corporates
+      summary: Simulate verification of corporate identity
+      description: >-
+        Fully verify a corporate identity. Will set rootEmailVerified,
+        rootMobileVerified, directorsVerified, UBOsVerified,
+        basicCompanyChecksVerified and fullCompanyChecksVerified, while also
+        setting dummy KYB Company Details
+      operationId: corporates_corporate_id_verify
+      parameters:
+        - name: corporate_id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/call-ref'
+      responses:
+        '204':
+          description: Success - No Content
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInvalidRequest'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+      security:
+        - API_Secret_Key: []
+  /wiretransfers/outgoing/{outgoing_wire_transfer_id}/accept:
+    post:
+      tags:
+        - Wiretransfers
+      summary: Simulate completion of  an Outgoing Wire Transfer
+      description: >-
+        This endpoint is used to simulate the completion of an Outgoing Wire
+        Transfer that has been submitted in the system and sent over our payment
+        network.
+      operationId: wiretransfers_outgoing_outgoing_wire_transfer_id_accept
+      parameters:
+        - name: outgoing_wire_transfer_id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/call-ref'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInvalidRequest'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+      security:
+        - API_Secret_Key: []
+  /wiretransfers/outgoing/{outgoing_wire_transfer_id}/reject:
+    post:
+      tags:
+        - Wiretransfers
+      summary: Simulate rejection of an Outgoing Wire Transfer
+      description: >-
+        This endpoint is used to simulate the rejection of an Outgoing Wire
+        Transfer that has been submitted in the system and sent over our payment
+        network.
+      operationId: wiretransfers_outgoing_outgoing_wire_transfer_id_reject
+      parameters:
+        - name: outgoing_wire_transfer_id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/call-ref'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInvalidRequest'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+      security:
+        - API_Secret_Key: []
+  /factors/{credentials_id}/challenges/{challenge_id}/verify_invalid:
+    post:
+      tags:
+        - Factors
+      summary: Simulate invalid verification of specified challenge
+      operationId: factors_credentials_id_challenges_challenge_id_verify_invalid
+      parameters:
+        - name: credentials_id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+        - name: challenge_id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/call-ref'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulateVerifyChallengeResponse'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInvalidRequest'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+      security:
+        - Auth_Token: []
+          API_Secret_Key: []
+  /factors/{credentials_id}/challenges/{challenge_id}/verify_expired:
+    post:
+      tags:
+        - Factors
+      summary: Simulate expiry of specified challenge
+      operationId: factors_credentials_id_challenges_challenge_id_verify_expired
+      parameters:
+        - name: credentials_id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+        - name: challenge_id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/call-ref'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulateVerifyChallengeResponse'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInvalidRequest'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+      security:
+        - Auth_Token: []
+          API_Secret_Key: []
+  /factors/{credentials_id}/challenges/{challenge_id}/verify_success:
+    post:
+      tags:
+        - Factors
+      summary: Simulate successful verification of specified challenge
+      operationId: factors_credentials_id_challenges_challenge_id_verify_success
+      parameters:
+        - name: credentials_id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+        - name: challenge_id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/call-ref'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulateVerifyChallengeResponse'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInvalidRequest'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+      security:
+        - Auth_Token: []
+          API_Secret_Key: []
+  /linked_accounts/{account_id}/set:
+    post:
+      tags:
+        - Linked Accounts
+      description: |
+        Allows the verification or rejection of a linked account run
+        by specifying the account ID. This operation updates the status
+        of a linked account to either VERIFIED or REJECTED.
+      operationId: linked_accounts_account_id_set
+      parameters:
+        - name: account_id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/call-ref'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LinkedAccountRunRequest'
+        required: true
+      responses:
+        '204':
+          description: Success - No Content
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInvalidRequest'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+      security:
+        - API_Secret_Key: []
+  /linked_accounts/{account_id}/verify:
+    post:
+      tags:
+        - Linked Accounts
+      description: >-
+        This tool is used to simulate internal verification for linked accounts
+        by Account ID.
+      operationId: linked_accounts_account_id_verify
+      parameters:
+        - name: account_id
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/call-ref'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyRequestByAccountId'
+        required: true
+      responses:
+        '204':
+          description: Success - No Content
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientInvalidRequest'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyStepsRequestConflict'
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultError'
+      security:
+        - API_Secret_Key: []
+components:
+  schemas:
+    DepositRequestByAccountId:
+      required:
+        - depositAmount
+      type: object
+      properties:
+        depositAmount:
+          allOf:
+            - $ref: '#/components/schemas/CurrencyAmount'
+            - description: The amount of the incoming wire transfer
+              x-fieldValidation: required
+        senderName:
+          type: string
+          description: >-
+            The name of the person or business sending the incoming wire
+            transfer
+        reference:
+          type: string
+          description: The reference is the transaction description
+        receiverName:
+          type: string
+          description: The name of the recipient of the incoming wire transfer
+        txId:
+          type: integer
+          description: >-
+            Id used for the transaction if provided, otherwise one will be
+            generated
+          format: int64
+        senderIban:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9_-]+$
+          type: string
+          x-fieldValidation: size(_,50) regex(^[a-zA-Z0-9_-]+$)
+        sepa:
+          $ref: '#/components/schemas/IBANDetails'
+        fasterPayments:
+          $ref: '#/components/schemas/FasterPaymentsBankDetails'
+        accountDescriptor:
+          $ref: '#/components/schemas/AccountDescriptorDetails'
+        paymentNetwork:
+          allOf:
+            - $ref: '#/components/schemas/TransferType'
+            - description: >-
+                Optional field which indicates the payment network to use. If
+                not provided, a default payment network will be chosen based on
+                the currency.
+    CurrencyAmount:
+      required:
+        - currency
+      type: object
+      properties:
+        currency:
+          maxLength: 3
+          minLength: 3
+          pattern: ^[A-Z]*$
+          type: string
+          description: >-
+            The currency ISO-4217 code, i.e. a three letter uppercase code, such
+            as GBP, EUR, USD.
+          x-fieldValidation: required size(3,3) regex([A-Z]*)
+        amount:
+          type: integer
+          description: >-
+            The monetary amount, scaled to the lowest denomination of the
+            currency. For example, an amount of 1000 for a EUR currency is
+            actually 1000 Euro cents, i.e. EUR 10.00.
+          format: int64
+      description: A message representing a monetary amount in a particular currency.
+    IBANDetails:
+      required:
+        - iban
+      type: object
+      properties:
+        iban:
+          maxLength: 34
+          minLength: 15
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
+          type: string
+          description: >-
+            International Bank Account Number, required for wire transfer over
+            SEPA or RIX
+          x-fieldValidation: required size(15,34) regex(^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$)
+        bankIdentifierCode:
+          maxLength: 11
+          minLength: 8
+          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
+          type: string
+          description: BIC, for wire transfer over SEPA or RIX
+          x-fieldValidation: >-
+            size(8,11)
+            regex(^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$)
+    FasterPaymentsBankDetails:
+      required:
+        - accountNumber
+        - sortCode
+      type: object
+      properties:
+        accountNumber:
+          maxLength: 8
+          minLength: 8
+          pattern: ^[0-9]{8}$
+          type: string
+          description: Account number, required for wire transfer over Faster Payments.
+          x-fieldValidation: required size(8,8) regex(^[0-9]{8}$)
+        sortCode:
+          maxLength: 6
+          minLength: 6
+          pattern: ^[0-9]{6}$
+          type: string
+          description: Sort code, required for wire transfer over Faster Payments.
+          x-fieldValidation: required size(6,6) regex(^[0-9]{6}$)
+    AccountDescriptorDetails:
+      required:
+        - accountDescriptor
+      type: object
+      properties:
+        accountDescriptor:
+          maxLength: 50
+          type: string
+          description: >-
+            An identifier of an account that has neither an IBAN nor Faster
+            Payments details.
+          x-fieldValidation: required size(_,50)
+    TransferType:
+      type: string
+      enum:
+        - SEPA
+        - FASTER_PAYMENTS
+        - SWIFT
+        - BACS
+        - CHAPS
+        - RIX
+    DepositResponse0:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/DepositResponseDepositResponseCode1'
+    DepositResponseDepositResponseCode1:
+      type: string
+      enum:
+        - COMPLETED
+        - DENIED_ACCOUNT_NOT_FOUND
+        - DENIED_AMOUNT_NOT_POSITIVE
+        - DENIED_CURRENCY_NOT_ACCOUNT_CURRENCY
+        - DENIED_ACCOUNT_INACTIVE
+        - DENIED_INVALID_TX_ID
+        - DENIED_OTHER
+        - DENIED_ACCOUNT_NOT_UPGRADED_TO_IBAN
+    ClientInvalidRequest:
+      type: object
+      properties:
+        message:
+          maxLength: 255
+          type: string
+          description: When present helps to identify and fix the problem.
+          x-fieldValidation: size(_,255)
+        validation:
+          allOf:
+            - $ref: '#/components/schemas/MessageValidation'
+            - description: Description of fields which were invalid.
+    MessageValidation:
+      type: object
+      properties:
+        invalid:
+          type: boolean
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidationErrors'
+    FieldValidationErrors:
+      type: object
+      properties:
+        name:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidation'
+    FieldValidation:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/FieldValidationType'
+        params:
+          type: array
+          items:
+            type: string
+    FieldValidationType:
+      type: string
+      enum:
+        - REQUIRED
+        - HAS_TEXT
+        - REQUIRES
+        - SIZE
+        - RANGE
+        - IN
+        - NOT_IN
+        - REGEX
+        - EXACTLY
+        - AT_LEAST
+        - AT_MOST
+        - ALL_OR_NONE
+    DefaultError:
+      type: object
+      properties:
+        message:
+          maxLength: 255
+          type: string
+          description: When present helps to identify and fix the problem.
+          x-fieldValidation: size(_,255)
+      description: A default error model in case of errors other than 400, 409 or 504.
+    DepositRequest:
+      required:
+        - depositAmount
+      type: object
+      properties:
+        iban:
+          type: string
+          description: >-
+            The iban of the account the incoming wire transfer should be
+            processed against
+          deprecated: true
+        paymentReference:
+          type: string
+          description: >-
+            The payment reference is needed to identify which account, in cases
+            where the same iban is used
+        depositAmount:
+          allOf:
+            - $ref: '#/components/schemas/CurrencyAmount'
+            - description: The amount of the incoming wire transfer
+              x-fieldValidation: required
+        senderName:
+          type: string
+          description: >-
+            The name of the person or business sending the incoming wire
+            transfer
+        reference:
+          type: string
+          description: A reference provided by the sender of the incoming wire transfer.
+        receiverName:
+          type: string
+          description: The name of the recipient of the incoming wire transfer
+        txId:
+          type: integer
+          description: >-
+            Id used for the transaction if provided, otherwise one will be
+            generated
+          format: int64
+        senderIbanDetails:
+          $ref: '#/components/schemas/IbanDetails'
+        senderFasterPaymentsDetails:
+          $ref: '#/components/schemas/FasterPaymentsDetails'
+        senderAccountDescriptorDetails:
+          $ref: '#/components/schemas/AccountDescriptorDetails'
+        destinationIbanDetails:
+          $ref: '#/components/schemas/IbanDetails'
+        destinationFasterPaymentsDetails:
+          $ref: '#/components/schemas/FasterPaymentsDetails'
+        paymentNetwork:
+          allOf:
+            - $ref: '#/components/schemas/TransferType'
+            - description: >-
+                Optional field which indicates the payment network to use. If
+                not provided, a default payment network will be chosen based on
+                the currency.
+    IbanDetails:
+      required:
+        - iban
+      type: object
+      properties:
+        iban:
+          pattern: ^[A-Z0-9]*$
+          type: string
+          x-fieldValidation: required regex([A-Z0-9]*)
+        bankIdentifierCode:
+          pattern: ^[A-Z0-9]*$
+          type: string
+          x-fieldValidation: regex([A-Z0-9]*)
+    FasterPaymentsDetails:
+      required:
+        - accountNumber
+        - sortCode
+      type: object
+      properties:
+        sortCode:
+          maxLength: 6
+          minLength: 6
+          pattern: ^[0-9]*$
+          type: string
+          x-fieldValidation: required size(6,6) regex([0-9]*)
+        accountNumber:
+          pattern: ^[0-9]*$
+          type: string
+          x-fieldValidation: required regex([0-9]*)
+        secondaryReference:
+          type: string
+          description: >-
+            Supplementary identifier used by financial institutions for accounts
+            without unique sort codes, ensuring distinction between different
+            accounts or customers
+    DepositResponse1:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/DepositResponseDepositResponseCode0'
+    DepositResponseDepositResponseCode0:
+      type: string
+      enum:
+        - COMPLETED
+        - DENIED_ACCOUNT_NOT_FOUND
+        - DENIED_AMOUNT_NOT_POSITIVE
+        - DENIED_CURRENCY_NOT_ACCOUNT_CURRENCY
+        - DENIED_ACCOUNT_INACTIVE
+        - DENIED_INVALID_TX_ID
+        - DENIED_OTHER
+    ExpireManagedCardConflict:
+      type: object
+      properties:
+        errorCode:
+          $ref: '#/components/schemas/ExpireManagedCardConflictErrorCode'
+    ExpireManagedCardConflictErrorCode:
+      type: string
+      enum:
+        - INSTRUMENT_DESTROYED
+        - INSTRUMENT_NOT_EXPIRABLE
+        - TRANSACTION_BATCH_EXCEPTION
+    PurchaseRequestByCardId:
+      required:
+        - merchantName
+        - transactionAmount
+      type: object
+      properties:
+        merchantName:
+          maxLength: 50
+          minLength: 1
+          type: string
+          description: The merchant name
+          x-fieldValidation: required size(1,50)
+        merchantId:
+          maxLength: 15
+          minLength: 1
+          type: string
+          description: The merchant id (MID). If not specified, a random value will be used
+          x-fieldValidation: size(1,15)
+        merchantCategoryCode:
+          maxLength: 4
+          minLength: 1
+          type: string
+          description: >-
+            The merchant category code (MCC). If unspecified or an invalid MCC
+            is specified, the Merchant Code 5399 (Misc. General Merchandise)
+            will be used instead
+          x-fieldValidation: size(1,4)
+        transactionAmount:
+          allOf:
+            - $ref: '#/components/schemas/CurrencyAmount'
+            - description: The amount of the purchase
+              x-fieldValidation: required
+        transactionCountry:
+          maxLength: 3
+          minLength: 3
+          pattern: ^[A-Z]*$
+          type: string
+          description: The transaction country in ISO 3166 - alpha-3 format
+          x-fieldValidation: size(3,3) regex([A-Z]*)
+        forexFee:
+          type: integer
+          description: >-
+            If this is a cross-currency transaction, the forex fee amount in the
+            card currency. Deprecated; the forex fee percentage configured at
+            the card profile will be applied if this field is not provided
+          format: int64
+          deprecated: true
+        forexPadding:
+          type: integer
+          description: >-
+            If this is a cross-currency transaction, the forex padding amount in
+            the card currency. Deprecated; a 2% forex padding will be applied if
+            this field is not provided
+          format: int64
+          deprecated: true
+        atmWithdrawal:
+          type: boolean
+          description: >-
+            If set to true, this purchase simulates and ATM Withdrawal
+            transaction. MCC will automatically be set to 6011
+        additionalMerchantData:
+          allOf:
+            - $ref: '#/components/schemas/AdditionalMerchantData'
+            - description: Additional merchant data
+        cardHolderPresent:
+          allOf:
+            - $ref: '#/components/schemas/CardHolderPresent'
+            - description: >-
+                Optional detail indicating if the card holder was present when
+                the authorisation occurred.
+        cardPresent:
+          type: boolean
+          description: >-
+            Optional detail indicating if the card was present when the
+            authorisation occurred.
+        initiateBiometricThreeDSecure:
+          type: boolean
+          description: >-
+            If the card is enrolled for Biometric Authentication, a 3DS Flow is
+            initiated before the Purchase can resume.
+        transactionTimestamp:
+          type: integer
+          description: Epoch timestamp using millisecond precision.
+          format: int64
+    AdditionalMerchantData:
+      type: object
+      properties:
+        merchantStreet:
+          type: string
+        merchantCity:
+          type: string
+        merchantState:
+          type: string
+        merchantPostalCode:
+          type: string
+        merchantCountry:
+          maxLength: 3
+          minLength: 3
+          pattern: ^[A-Z]*$
+          type: string
+          x-fieldValidation: size(3,3) regex([A-Z]*)
+        merchantTelephone:
+          type: string
+        merchantURL:
+          type: string
+        merchantNameOther:
+          type: string
+        merchantNetworkId:
+          type: string
+        merchantContact:
+          type: string
+    CardHolderPresent:
+      type: string
+      enum:
+        - PRESENT
+        - NOT_PRESENT
+        - PRESENCE_UNKNOWN
+    PurchaseResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/PurchaseResponsePurchaseResponseCode'
+        threeDSecureChallengeId:
+          $ref: '#/components/schemas/NullableInt64'
+    PurchaseResponsePurchaseResponseCode:
+      type: string
+      enum:
+        - APPROVED
+        - DENIED_NOT_ENOUGH_FUNDS
+        - DENIED_CARD_NOT_FOUND
+        - DENIED_INCORRECT_CVV
+        - DENIED_CARD_EXPIRY
+        - DENIED_AMOUNT_NOT_POSITIVE
+        - DENIED_CARD_INACTIVE
+        - DENIED_OTHER
+        - DENIED_SPEND_CONTROL
+        - PENDING_BIOMETRIC_THREEDS_VERIFICATION
+        - CARD_NOT_ENROLLED_FOR_BIOMETRIC_THREEDS
+    NullableInt64:
+      type: object
+      properties:
+        value:
+          type: integer
+          description: If value is 0, set has_value to true
+          format: int64
+        hasValue:
+          type: boolean
+          description: >-
+            If value is default (0) then true indicates 0 while false indicates
+            null
+    RenewManagedCardConflict:
+      type: object
+      properties:
+        errorCode:
+          $ref: '#/components/schemas/RenewManagedCardConflictErrorCode'
+    RenewManagedCardConflictErrorCode:
+      type: string
+      enum:
+        - INSTRUMENT_DESTROYED
+        - INSTRUMENT_MARKED_LOST_STOLEN
+        - INSTRUMENT_NOT_RENEWABLE
+        - TRANSACTION_BATCH_EXCEPTION
+    PurchaseRequest:
+      required:
+        - cardNumber
+        - cvv
+        - expiryDate
+        - merchantName
+        - transactionAmount
+      type: object
+      properties:
+        cardNumber:
+          maxLength: 50
+          minLength: 16
+          pattern: ^[0-9 ]*$
+          type: string
+          description: The 16-digit card number.
+          x-fieldValidation: required has_text size(16,50) regex(^[0-9 ]*$)
+        cvv:
+          type: string
+          description: The 3-digit cvv
+          x-fieldValidation: required has_text
+        expiryDate:
+          type: string
+          description: The expiry date in format MMYY
+          x-fieldValidation: required has_text
+        merchantName:
+          maxLength: 50
+          minLength: 1
+          type: string
+          description: The merchant name
+          x-fieldValidation: required size(1,50)
+        merchantId:
+          maxLength: 15
+          minLength: 1
+          type: string
+          description: The merchant id (MID). If not specified, a random value will be used
+          x-fieldValidation: size(1,15)
+        merchantCategoryCode:
+          maxLength: 4
+          minLength: 1
+          type: string
+          description: >-
+            The merchant category code (MCC). If unspecified or an invalid MCC
+            is specified, the Merchant Code 5399 (Misc. General Merchandise)
+            will be used instead
+          x-fieldValidation: size(1,4)
+        transactionAmount:
+          allOf:
+            - $ref: '#/components/schemas/CurrencyAmount'
+            - description: The amount of the purchase
+              x-fieldValidation: required
+        forexFee:
+          type: integer
+          description: >-
+            If this is a cross-currency transaction, the forex fee amount in the
+            card currency. Deprecated; the forex fee percentage configured at
+            the card profile will be applied if this field is not provided
+          format: int64
+          deprecated: true
+        forexPadding:
+          type: integer
+          description: >-
+            If this is a cross-currency transaction, the forex padding amount in
+            the card currency. Deprecated; a 2% forex padding will be applied if
+            this field is not provided. Deprecated; a 2% forex padding will be
+            applied if this field is not provided
+          format: int64
+          deprecated: true
+        atmWithdrawal:
+          type: boolean
+          description: >-
+            If set to true, this purchase simulates and ATM Withdrawal
+            transaction. MCC will automatically be set to 6011
+        additionalMerchantData:
+          allOf:
+            - $ref: '#/components/schemas/AdditionalMerchantData'
+            - description: Additional merchant data
+        cardHolderPresent:
+          allOf:
+            - $ref: '#/components/schemas/CardHolderPresent'
+            - description: >-
+                Optional detail indicating if the card holder was present when
+                the authorisation occurred.
+        cardPresent:
+          type: boolean
+          description: >-
+            Optional detail indicating if the card was present when the
+            authorisation occurred.
+        initiateBiometricThreeDSecure:
+          type: boolean
+          description: >-
+            If the card is enrolled for Biometric Authentication, a 3DS Flow is
+            initiated before the Purchase can resume.
+        transactionTimestamp:
+          type: integer
+          description: Epoch timestamp using millisecond precision.
+          format: int64
+    Response:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/ResponseResponseCode'
+    ResponseResponseCode:
+      type: string
+      enum:
+        - COMPLETED
+        - DENIED
+        - DENIED_WIRE_TRANSFER_NOT_FOUND
+        - DENIED_WIRE_TRANSFER_ALREADY_COMPLETED
+    SimulateVerifyChallengeResponse:
+      required:
+        - code
+      type: object
+      properties:
+        code:
+          allOf:
+            - $ref: '#/components/schemas/SimulateVerifyChallengeResponseResponseCode'
+            - x-fieldValidation: required
+    SimulateVerifyChallengeResponseResponseCode:
+      type: string
+      enum:
+        - COMPLETED
+        - DENIED
+    LinkedAccountRunRequest:
+      type: object
+      properties:
+        state:
+          $ref: '#/components/schemas/LinkedAccountRunRequestState'
+    LinkedAccountRunRequestState:
+      type: string
+      enum:
+        - VERIFIED
+        - REJECTED
+    VerifyRequestByAccountId:
+      type: object
+      properties:
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/VerifyRequestByAccountIdVerificationStep'
+        result:
+          $ref: '#/components/schemas/VerifyRequestByAccountIdVerificationState'
+    VerifyRequestByAccountIdVerificationStep:
+      type: string
+      enum:
+        - INTERNAL_CHECKS
+        - TRANSFER_INSTRUCTION
+        - USER_DECLARATION_SCA_CHALLENGE
+        - MICRO_DEPOSIT
+    VerifyRequestByAccountIdVerificationState:
+      type: string
+      enum:
+        - COMPLETED
+        - REJECTED
+    VerifyStepsRequestConflict:
+      type: object
+      properties:
+        errorCode:
+          $ref: '#/components/schemas/VerifyStepsRequestConflictErrorCode'
+    VerifyStepsRequestConflictErrorCode:
+      type: string
+      enum:
+        - ALREADY_COMPLETED
+        - ALREADY_REJECTED
+  parameters:
+    call-ref:
+      name: call-ref
+      in: header
+      description: >-
+        A call reference generated by the caller and unique to the caller to
+        provide correlation between the caller and system with a maximum length
+        of 255
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+    programme-key:
+      name: programme-key
+      in: header
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+  headers:
+    create-id:
+      description: The generated id for the call
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+  securitySchemes:
+    API_Secret_Key:
+      type: apiKey
+      description: >-
+        The API Secret Key - available from the Configuration area of the
+        Innovator Portal
+      name: programme-key
+      in: header
+    Auth_Token:
+      type: http
+      description: >-
+        Authorization Token returned by login - example format:
+        e6YrWi53lW0Bb6TbBL4ADA==
+      scheme: bearer
+      bearerFormat: JWT

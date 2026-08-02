@@ -1,9 +1,32 @@
 aid: weavr
 name: Weavr
-description: Weavr is a company surfaced as a portfolio company of anthemis, qed-investors, seedcamp and
-  added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment
-  pipeline.
+description: >-
+  Weavr is an embedded-finance ("banking-as-a-service") platform that lets
+  software companies embed regulated financial products — managed accounts,
+  IBANs, virtual and physical cards, transfers, sends and wire payments —
+  directly inside their applications. Its Multi API issues accounts and cards to
+  corporate and consumer end-users with full KYB/KYC onboarding, Strong Customer
+  Authentication (SCA) step-up challenges, and client-side "Secure Components"
+  that tokenize sensitive data so the embedder stays out of PCI scope. Weavr
+  operates through regulated EMI partners (Paynetics AD in the EU, Paynetics UK
+  in the UK) and exposes a Multi API, a BackOffice programme-operations API, an
+  Embedded Payment Run API, a Webhooks event surface and a sandbox Simulator
+  API, backed by SDKs for Web, iOS, Android and React Native and an official
+  agent-skills pack.
 url: https://raw.githubusercontent.com/api-evangelist/weavr/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://www.weavr.io/wp-content/uploads/2025/12/Image-8-1.png
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
@@ -14,15 +37,606 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
+- Embedded Finance
+- Banking as a Service
+- Payments
+- Cards
+- Fintech
+- Accounts
+- KYC
 - Company
-apis: []
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- aid: weavr:weavr-access-token-api
+  name: Weavr Access Token API
+  description: >-
+    Acquire a token granting you access to perform sensitive operations on behalf of an identity.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Access Token
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-access-token-api-openapi.yml
+- aid: weavr:weavr-access-tokens-api
+  name: Weavr Access Tokens API
+  description: Acquire and revoke access tokens.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Access Tokens
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-access-tokens-api-openapi.yml
+- aid: weavr:weavr-accounts-api
+  name: Weavr Accounts API
+  description: The Accounts API from Weavr — 2 operation(s) for accounts.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-accounts-api-openapi.yml
+- aid: weavr:weavr-additional-factors-api
+  name: Weavr Additional Factors API
+  description: The Additional Factors API from Weavr — 2 operation(s) for additional factors.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Additional Factors
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-additional-factors-api-openapi.yml
+- aid: weavr:weavr-authentication-factors-api
+  name: Weavr Authentication Factors API
+  description: >-
+    Manage user authentication factors, including passwords and device-based factors (OTP and push).
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Authentication Factors
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-authentication-factors-api-openapi.yml
+- aid: weavr:weavr-authorised-signatories-api
+  name: Weavr Authorised Signatories API
+  description: >-
+    Verify the email of root users who act as authorised signatories of a Corporate or Consumer identity.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Authorised Signatories
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-authorised-signatories-api-openapi.yml
+- aid: weavr:weavr-authorised-users-api
+  name: Weavr Authorised Users API
+  description: "Corporate and Consumer identities can invite authorised users to access their account.\
+    \ Once on-boarded, authorised users can create and manage instruments and transactions on behalf of\
+    \ the identity they are on-boarded with.      \nWith the `access_token` representing the identity\
+    \ and the consent of the identity, you will be able to create and invite authorised users for the\
+    \ Identity.\n\nCreating and inviting users on behalf of identities are restricted features; by default\
+    \ these endpoints are not available for use."
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Authorised Users
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-authorised-users-api-openapi.yml
+- aid: weavr:weavr-buyer-authorised-users-api
+  name: Weavr Buyer Authorised Users API
+  description: >-
+    Buyers can invite authorised users to access their account. Once on-boarded, authorised users can
+    transact on behalf of the identity they are on-boarded with.
+
+
+    Authorised users are typically employees who have access to company's banking accounts.
+
+
+    Note that `/users` endpoints are to be used only for performing operations related to authorised users
+    - getting or updating the details of _admin_ users is to be done via `/buyers` endpoints.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Buyer Authorised Users
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-buyer-authorised-users-api-openapi.yml
+- aid: weavr:weavr-buyers-api
+  name: Weavr Buyers API
+  description: >-
+    Buyers are identities representing a business
+
+
+    Once on-boarded, Buyers can create payment runs and pay their suppliers in your application.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Buyers
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-buyers-api-openapi.yml
+- aid: weavr:weavr-card-payments-api
+  name: Weavr Card Payments API
+  description: >-
+    Retrieve card payment activity, including authorisations, settlements, and related events.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Card Payments
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-card-payments-api-openapi.yml
+- aid: weavr:weavr-cards-api
+  name: Weavr Cards API
+  description: The Cards API from Weavr — 7 operation(s) for cards.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Cards
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-cards-api-openapi.yml
+- aid: weavr:weavr-confirmation-challenges-api
+  name: Weavr Confirmation Challenges API
+  description: Issue and verify confirmation challenges used to authorise lists of resources.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Confirmation Challenges
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-confirmation-challenges-api-openapi.yml
+- aid: weavr:weavr-consumers-api
+  name: Weavr Consumers API
+  description: The Consumers API from Weavr — 3 operation(s) for consumers.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Consumers
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-consumers-api-openapi.yml
+- aid: weavr:weavr-corporates-api
+  name: Weavr Corporates API
+  description: The Corporates API from Weavr — 3 operation(s) for corporates.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Corporates
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-corporates-api-openapi.yml
+- aid: weavr:weavr-correspondent-bank-transfers-api
+  name: Weavr Correspondent Bank Transfers API
+  description: >-
+    Correspondent bank transfers allow financial institutions to initiate wire transfers on behalf of
+    originators (third parties).
+
+    These transfers comply with travel rule requirements by capturing and transmitting originator information.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Correspondent Bank Transfers
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-correspondent-bank-transfers-api-openapi.yml
+- aid: weavr:weavr-customer-data-due-diligence-api
+  name: Weavr Customer Data & Due Diligence API
+  description: >-
+    Manage customer profile data and KYC/KYB due diligence flows for corporates and consumers.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Customer Data & Due Diligence
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-customer-data-due-diligence-api-openapi.yml
+- aid: weavr:weavr-factors-api
+  name: Weavr Factors API
+  description: The Factors API from Weavr — 3 operation(s) for factors.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Factors
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-factors-api-openapi.yml
+- aid: weavr:weavr-fees-api
+  name: Weavr Fees API
+  description: The Fees API from Weavr — 4 operation(s) for fees.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Fees
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-fees-api-openapi.yml
+- aid: weavr:weavr-incoming-wire-transfers-api
+  name: Weavr Incoming Wire Transfers API
+  description: >-
+    Incoming wire transfers received from external bank accounts to managed accounts with IBANs.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Incoming Wire Transfers
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-incoming-wire-transfers-api-openapi.yml
+- aid: weavr:weavr-institutions-api
+  name: Weavr Institutions API
+  description: Institutions supported by Embedded Payment Run.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Institutions
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-institutions-api-openapi.yml
+- aid: weavr:weavr-linked-accounts-api
+  name: Weavr Linked Accounts API
+  description: The Linked Accounts API from Weavr — 11 operation(s) for linked accounts.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Linked Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-linked-accounts-api-openapi.yml
+- aid: weavr:weavr-manage-api
+  name: Weavr Manage API
+  description: The Manage API from Weavr — 7 operation(s) for manage.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Manage
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-manage-api-openapi.yml
+- aid: weavr:weavr-managed-accounts-api
+  name: Weavr Managed Accounts API
+  description: >-
+    Managed Accounts are a type of financial instrument offered by Weavr. They hold funds for their owner,
+    and can be upgraded to IBANs so as to receive and send funds to instruments outside of the Weavr Platform,
+    via Wire Transfers.
+
+    These accounts can also be used as sources and destinations in the `transfer` transaction.
+
+
+    With the `access_token` representing the identity and the consent of the identity, you will be able
+    to operations on the identity's managed accounts, such as getting a managed account's details and
+    retrieving its statement.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Managed Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-managed-accounts-api-openapi.yml
+- aid: weavr:weavr-managed-cards-api
+  name: Weavr Managed Cards API
+  description: "Managed Cards are a type of financial instrument offered by Weavr. \nCards created in\
+    \ prepaid mode have their own balance, whereas those created in debit mode tap into the balance of\
+    \ their parent Managed Accounts. \nApart from being used at merchants for puchases, prepaid mode cards\
+    \ can also be used as sources and destinations in the `transfer` transaction.\n\nWith the `access_token`\
+    \ representing the identity and the consent of the identity, you will be able to perform operations\
+    \ on the identity's Managed Cards,\nsuch as getting a Managed Card's details and managing its spend\
+    \ rules."
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Managed Cards
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-managed-cards-api-openapi.yml
+- aid: weavr:weavr-operations-api
+  name: Weavr Operations API
+  description: The Operations API from Weavr — 9 operation(s) for operations.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Operations
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-operations-api-openapi.yml
+- aid: weavr:weavr-outgoing-wire-transfers-api
+  name: Weavr Outgoing Wire Transfers API
+  description: >-
+    The Outgoing Wire Transfer transaction is used to transfer funds from managed accounts to an external
+    bank account.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Outgoing Wire Transfers
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-outgoing-wire-transfers-api-openapi.yml
+- aid: weavr:weavr-passwords-api
+  name: Weavr Passwords API
+  description: The Passwords API from Weavr — 5 operation(s) for passwords.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Passwords
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-passwords-api-openapi.yml
+- aid: weavr:weavr-payment-runs-api
+  name: Weavr Payment runs API
+  description: "A Payment run contains a list of supplier payments. A Payment run can be \n- created by\
+    \ a user with a `CREATOR` role \n- confirmed by a user with a `CONTROLLER` role\n- funded by a user\
+    \ with a `CONTROLLER` role\n\nNote that the Controller user must have their mobile device enrolled\
+    \ to SCA. \n\nBefore a payment run can be executed, it must be funded. Users with the `CONTROLLER`\
+    \ role must link their company's bank account(s) that are represented as Linked Accounts, which than\
+    \ can be used as the funding source for a payment run.\n\nDepending on the bank's constraints it may\
+    \ not be possible to deposit the total amount of funds required for a payment run, in which case the\
+    \ payment run will be automatically split into funding groups. All funding groups must be funded and\
+    \ executed for the payment run to be marked as completed. \n\nNote that even if the payment is created\
+    \ successfully, you still need to check its status in order to determine if it is `completed` or`failed`."
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Payment runs
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-payment-runs-api-openapi.yml
+- aid: weavr:weavr-roles-api
+  name: Weavr Roles API
+  description: The Roles API from Weavr — 1 operation(s) for roles.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Roles
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-roles-api-openapi.yml
+- aid: weavr:weavr-sends-api
+  name: Weavr Sends API
+  description: >-
+    The Send transaction is used to send funds between managed accounts and managed cards belonging to
+    different identities.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Sends
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-sends-api-openapi.yml
+- aid: weavr:weavr-setup-api
+  name: Weavr Setup API
+  description: >-
+    Register and manage the lifecycle of users that can access an identity, including authorised users
+    invited by a Corporate or Consumer root user.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Setup
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-setup-api-openapi.yml
+- aid: weavr:weavr-sign-in-api
+  name: Weavr Sign-in API
+  description: Sign users in using passwords, biometrics, or third-party auth providers.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Sign-in
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-sign-in-api-openapi.yml
+- aid: weavr:weavr-simulator-api
+  name: Weavr Simulator API
+  description: >-
+    Simulators enable you to trigger processes in Sandbox that in Production are triggered from an external
+    action rather than from your application. this way you can test scenarios that otherwise you would
+    only encounter in the Live environment.
+
+
+    *Note: These endpoints are only available on Sandbox and won’t work in the Live environment.*
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Simulator
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-simulator-api-openapi.yml
+- aid: weavr:weavr-simulator-linked-accounts-api
+  name: Weavr Simulator Linked accounts API
+  description: >-
+    The Simulator Linked accounts API from Weavr — 2 operation(s) for simulator linked accounts.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Simulator Linked accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-simulator-linked-accounts-api-openapi.yml
+- aid: weavr:weavr-spend-controls-api
+  name: Weavr Spend Controls API
+  description: >-
+    Manage spend rules and authorisation forwarding to approve or reject card payments in real time.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Spend Controls
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-spend-controls-api-openapi.yml
+- aid: weavr:weavr-step-up-api
+  name: Weavr Step up API
+  description: The Step up API from Weavr — 2 operation(s) for step up.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Step up
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-step-up-api-openapi.yml
+- aid: weavr:weavr-step-up-challenges-api
+  name: Weavr Step-up Challenges API
+  description: Issue and verify step-up challenges that elevate an existing user token.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Step-up Challenges
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-step-up-challenges-api-openapi.yml
+- aid: weavr:weavr-tokens-api
+  name: Weavr Tokens API
+  description: The Tokens API from Weavr — 2 operation(s) for tokens.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Tokens
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-tokens-api-openapi.yml
+- aid: weavr:weavr-transaction-activity-api
+  name: Weavr Transaction Activity API
+  description: Retrieve the consolidated transaction activity across instruments.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Transaction Activity
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-transaction-activity-api-openapi.yml
+- aid: weavr:weavr-transfers-api
+  name: Weavr Transfers API
+  description: The Transfers API from Weavr — 3 operation(s) for transfers.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Transfers
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-transfers-api-openapi.yml
+- aid: weavr:weavr-trusted-payees-api
+  name: Weavr Trusted Payees API
+  description: >-
+    Manage a list of trusted payees for Outgoing wire transfers and Sends.
+
+
+    Aside from convenience and a reduced chance of making errors when making transactions,
+
+    this allows for the introduction an SCA exemption, where the account holder can request
+
+    that transactions to `TRUSTED` payees to be exempted from the requirement to pass
+
+    an SCA challenge every time.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Trusted Payees
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-trusted-payees-api-openapi.yml
+- aid: weavr:weavr-user-impersonation-api
+  name: Weavr User Impersonation API
+  description: The User Impersonation API from Weavr — 1 operation(s) for user impersonation.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - User Impersonation
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-user-impersonation-api-openapi.yml
+- aid: weavr:weavr-wiretransfers-api
+  name: Weavr Wiretransfers API
+  description: The Wiretransfers API from Weavr — 2 operation(s) for wiretransfers.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Wiretransfers
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-wiretransfers-api-openapi.yml
 common:
 - type: Website
   url: https://www.weavr.io/
+- type: DeveloperPortal
+  url: https://www.weavr.io/developers/
+- type: Documentation
+  url: https://docs.weavr.io/
+- type: APIReference
+  url: https://api.weavr.io/products/multi/openapi
+- type: GettingStarted
+  url: https://docs.weavr.io/start/multi-welcome/
+- type: Support
+  url: https://support.weavr.io/
+- type: Blog
+  url: https://www.weavr.io/blog/
+- type: GitHubOrganization
+  url: https://github.com/weavr-io
+- type: SignUp
+  url: https://portal.weavr.io/
+- type: Pricing
+  url: https://www.weavr.io/pricing/
+- type: TermsOfService
+  url: https://www.weavr.io/terms-policies/
+- type: PrivacyPolicy
+  url: https://www.weavr.io/privacy-policy/
+- type: StatusPage
+  url: https://weavr.statuspage.io/
+- type: Authentication
+  url: authentication/weavr-authentication.yml
+- type: Conventions
+  url: conventions/weavr-conventions.yml
+- type: Idempotency
+  url: conventions/weavr-conventions.yml
+- type: ErrorCatalog
+  url: errors/weavr-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/weavr-lifecycle.yml
+- type: ChangeLog
+  url: changelog/weavr-changelog.yml
+- type: Sandbox
+  url: sandbox/weavr-sandbox.yml
+- type: Components
+  url: components/weavr-components.yml
+- type: DataModel
+  url: data-model/weavr-data-model.yml
+- type: Packages
+  url: packages/weavr-packages.yml
+- type: SDKs
+  url: packages/weavr-packages.yml
+- type: Webhooks
+  url: openapi/weavr-webhooks-openapi-original.yml
+- type: WellKnown
+  url: well-known/weavr-well-known.yml
+- type: MCPServer
+  url: mcp/weavr-mcp.yml
+- type: LLMsTxt
+  url: llms/weavr-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Conformance
+  url: conformance/weavr-conformance.yml
+- type: Compliance
+  url: https://security.weavr.io/
+- type: TrustCenter
+  url: security/weavr-trust-center.yml
+- type: DomainSecurity
+  url: security/weavr-domain-security.yml
+- type: AgenticAccess
+  url: agentic-access/weavr-agentic-access.yml
+- type: Arazzo
+  name: Onboard a corporate and issue a virtual card
+  url: arazzo/weavr-onboard-corporate-and-issue-card.yml
+- type: Arazzo
+  name: Fund a managed account and move money
+  url: arazzo/weavr-fund-account-and-transfer.yml
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 33
+  pass: local-v1

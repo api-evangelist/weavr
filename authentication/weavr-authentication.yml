@@ -1,0 +1,45 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/weavr-multi-backoffice-openapi-original.yml, openapi/weavr-multi-openapi-original.yml,
+  openapi/weavr-payment-run-openapi-original.yml, openapi/weavr-simulator-openapi-original.yml
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: api_key
+  type: apiKey
+  in: header
+  parameter: api-key
+  description: The API Key representing your Multi account.
+  sources:
+  - openapi/weavr-multi-backoffice-openapi-original.yml
+  - openapi/weavr-multi-openapi-original.yml
+  - openapi/weavr-payment-run-openapi-original.yml
+- name: auth_token
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: The authentication token representing the user. This will be included in the
+    login response object.
+  sources:
+  - openapi/weavr-multi-backoffice-openapi-original.yml
+  - openapi/weavr-multi-openapi-original.yml
+  - openapi/weavr-payment-run-openapi-original.yml
+  - openapi/weavr-simulator-openapi-original.yml
+- name: webhooks_key
+  type: apiKey
+  in: header
+  parameter: webhooks-key
+  description: The Webhooks key can be found in the API Credentials tab in your Portal Page.
+  sources:
+  - openapi/weavr-multi-openapi-original.yml
+- name: API_Secret_Key
+  type: apiKey
+  in: header
+  parameter: programme-key
+  description: The API Secret Key - available from the Configuration area of the Innovator Portal
+  sources:
+  - openapi/weavr-simulator-openapi-original.yml

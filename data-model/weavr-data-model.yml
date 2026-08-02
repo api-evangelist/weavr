@@ -1,0 +1,76 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/weavr-multi-openapi-original.yml + skills/weavr-api.md
+summary: >-
+  Entity-relationship graph for the Weavr Multi API, derived from the OpenAPI
+  paths and id-reference fields. Identities (corporate or consumer) own users
+  and financial instruments (managed accounts, managed cards); money movement
+  (transfers, sends, wire transfers) references those instruments and
+  beneficiaries.
+entities:
+- name: corporate
+  kind: identity
+  key_fields: [id, rootUser, company, baseCurrency]
+- name: consumer
+  kind: identity
+  key_fields: [id, rootUser, baseCurrency]
+- name: user
+  kind: authorised_user
+  key_fields: [id, name, email]
+- name: managed_account
+  key_fields: [id, profileId, friendlyName, currency, iban]
+- name: managed_card
+  key_fields: [id, profileId, friendlyName, currency]
+- name: transfer
+  key_fields: [id, source, destination, destinationAmount]
+- name: send
+  key_fields: [id, source, destination]
+- name: outgoing_wire_transfer
+  key_fields: [id, sourceInstrument, destinationBeneficiary]
+- name: beneficiary
+  key_fields: [id, beneficiaryDetails]
+- name: kyb
+  key_fields: [status]
+- name: kyc
+  key_fields: [status]
+relationships:
+- from: corporate
+  to: user
+  type: has_many
+  via: identity
+- from: corporate
+  to: kyb
+  type: has_one
+  via: corporateId
+- from: consumer
+  to: kyc
+  type: has_one
+  via: consumerId
+- from: corporate
+  to: managed_account
+  type: has_many
+  via: profileId
+- from: corporate
+  to: managed_card
+  type: has_many
+  via: profileId
+- from: managed_account
+  to: transfer
+  type: has_many
+  via: source/destination
+- from: managed_account
+  to: outgoing_wire_transfer
+  type: has_many
+  via: sourceInstrument
+- from: outgoing_wire_transfer
+  to: beneficiary
+  type: belongs_to
+  via: destinationBeneficiary
+- from: managed_card
+  to: send
+  type: has_many
+  via: source
+id_conventions:
+  amount_unit: minor units
+  currency_field: currency (ISO 4217)
+  instrument_reference: "{ type: managed_accounts|managed_cards, id }"

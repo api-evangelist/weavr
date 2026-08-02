@@ -1,0 +1,54 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/weavr-multi-openapi-original.yml + openapi/weavr-payment-run-openapi-original.yml
+format: json
+envelope: >-
+  Errors return a JSON body (application/json) with a machine-readable code and
+  validation detail. Weavr does NOT use RFC 9457 application/problem+json.
+notes: >-
+  HTTP status usage derived from OpenAPI responses across the Multi (153 ops),
+  BackOffice (32) and Payment Run (54) APIs. Named error codes such as
+  IDEMPOTENT_REQUEST_IN_PROGRESS appear in the schemas.
+problems:
+- status: 400
+  title: Bad request
+  detail: Validation error in the request payload or parameters.
+- status: 401
+  title: Unauthorized
+  detail: Missing or invalid api-key / auth_token.
+- status: 403
+  title: Forbidden
+  detail: Authenticated but insufficient permissions for the operation.
+- status: 404
+  title: Not found
+  detail: The referenced resource does not exist.
+- status: 405
+  title: Method not allowed
+  detail: HTTP method not supported on this resource.
+- status: 409
+  title: Conflict
+  detail: >-
+    Duplicate resource or conflicting state, including
+    IDEMPOTENT_REQUEST_IN_PROGRESS when a request with the same idempotency-ref
+    is still processing.
+- status: 410
+  title: Gone
+  detail: The resource is no longer available.
+- status: 413
+  title: Payload too large
+  detail: Request entity exceeds the allowed size (payment-run bulk operations).
+- status: 422
+  title: Unprocessable entity
+  detail: The request is well-formed but semantically invalid (payment-run).
+- status: 423
+  title: Locked
+  detail: The resource is locked (e.g. account/card in a non-actionable state).
+- status: 429
+  title: Too many requests
+  detail: Rate limit exceeded for the programme.
+- status: 500
+  title: Internal server error
+  detail: Unexpected server-side error.
+- status: 503
+  title: Service unavailable
+  detail: The service is temporarily unavailable.

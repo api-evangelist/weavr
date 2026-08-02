@@ -1,0 +1,48 @@
+generated: '2026-07-21'
+method: derived
+status: candidate
+source: openapi/weavr-multi-openapi-original.yml
+notes: >-
+  No official hosted/remote Weavr MCP server was found. Weavr does publish an
+  official Agent Skills pack (github.com/weavr-io/skills, see skills/) that gives
+  agents grounded API knowledge. The tool list below is a DERIVED candidate,
+  one tool per marquee operationId (verified against the Multi OpenAPI), for a
+  future MCP server built over the REST API.
+server:
+  name: weavr
+  transport: http
+  url: null
+tools:
+- name: create_corporate
+  description: Create a corporate identity.
+  source_operation: openapi/weavr-multi-openapi-original.yml#corporateCreate
+- name: get_corporate
+  description: Retrieve a corporate identity.
+  source_operation: openapi/weavr-multi-openapi-original.yml#corporateGet
+- name: start_kyb
+  description: Start KYB verification for a corporate.
+  source_operation: openapi/weavr-multi-openapi-original.yml#corporateKybStart
+- name: create_consumer
+  description: Create a consumer identity.
+  source_operation: openapi/weavr-multi-openapi-original.yml#consumerCreate
+- name: login_with_password
+  description: Authenticate a user and obtain an auth token.
+  source_operation: openapi/weavr-multi-openapi-original.yml#loginWithPassword
+- name: create_managed_account
+  description: Open a managed account for an identity.
+  source_operation: openapi/weavr-multi-openapi-original.yml#managedAccountCreate
+- name: create_managed_card
+  description: Issue a managed (virtual) card.
+  source_operation: openapi/weavr-multi-openapi-original.yml#managedCardCreate
+- name: create_transfer
+  description: Move funds between managed accounts.
+  source_operation: openapi/weavr-multi-openapi-original.yml#transferCreate
+- name: create_send
+  description: Send funds to an external destination.
+  source_operation: openapi/weavr-multi-openapi-original.yml#sendCreate
+- name: create_outgoing_wire_transfer
+  description: Initiate an outgoing wire transfer (SEPA/Faster Payments).
+  source_operation: openapi/weavr-multi-openapi-original.yml#outgoingWireTransferCreate
+- name: create_beneficiary_batch
+  description: Create a batch of trusted beneficiaries.
+  source_operation: openapi/weavr-multi-openapi-original.yml#beneficiaryBatchCreate

@@ -1,0 +1,34 @@
+generated: '2026-07-21'
+method: searched
+source: https://security.weavr.io/ + https://docs.weavr.io/ + openapi/
+notes: >-
+  Weavr operates as regulated embedded-finance infrastructure via EMI partners
+  (Paynetics AD in the EU, Paynetics UK in the UK). Security/compliance
+  certifications are published at security.weavr.io.
+standards:
+- id: pci-dss
+  conforms: true
+  evidence: PCI DSS listed on security.weavr.io trust page
+- id: iso-27001
+  conforms: true
+  evidence: ISO/IEC 27001 listed on security.weavr.io trust page
+- id: csa-star
+  conforms: true
+  evidence: CSA STAR listed on security.weavr.io trust page
+- id: psd2-sca
+  conforms: true
+  evidence: >-
+    Strong Customer Authentication (step-up SCA/OTP/push challenges) implemented
+    across the Multi API (Step-up Challenges, Confirmation Challenges tags)
+- id: gdpr
+  conforms: true
+  evidence: EU/UK regulated EMI operation; privacy policy at weavr.io/privacy-policy
+- id: oauth2
+  conforms: false
+  evidence: Auth is api-key + bearer auth_token, not OAuth2 authorization flows
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Errors return application/json with a code field, not application/problem+json
+- id: openapi-3-1
+  conforms: true
+  evidence: Multi, BackOffice and Webhooks specs are OpenAPI 3.1.0

@@ -1,0 +1,4470 @@
+openapi: 3.1.0
+info:
+  version: v3
+  title: Weavr Multi Product BackOffice API
+  x-logo:
+    url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
+    backgroundColor: '#FFFFFF'
+    altText: Weavr
+  description: >
+    Weavr Multi Back Office API allows you, as an innovator, to perform various
+    back office operations concerning
+
+    identities and their instruments, without requiring the users to be logged
+    in.
+
+
+    A token is to be obtained through the `access_token` method, and this will
+    allow relevant operations
+
+    to be performed on behalf of this same identity.
+  contact:
+    name: Weavr
+    url: https://weavr.io
+servers:
+  - description: Weavr Sandbox Environment
+    url: https://sandbox.weavr.io/multi/backoffice
+tags:
+  - name: Access Token
+    description: >
+      Acquire a token granting you access to perform sensitive operations on
+      behalf of an identity.
+  - name: Managed Accounts
+    description: >
+      Managed Accounts are a type of financial instrument offered by Weavr. They
+      hold funds for their owner, and can be upgraded to IBANs so as to receive
+      and send funds to instruments outside of the Weavr Platform, via Wire
+      Transfers.
+
+      These accounts can also be used as sources and destinations in the
+      `transfer` transaction.
+
+
+      With the `access_token` representing the identity and the consent of the
+      identity, you will be able to operations on the identity's managed
+      accounts, such as getting a managed account's details and retrieving its
+      statement.
+  - name: Managed Cards
+    description: >
+      Managed Cards are a type of financial instrument offered by Weavr. 
+
+      Cards created in prepaid mode have their own balance, whereas those
+      created in debit mode tap into the balance of their parent Managed
+      Accounts. 
+
+      Apart from being used at merchants for puchases, prepaid mode cards can
+      also be used as sources and destinations in the `transfer` transaction.
+
+
+      With the `access_token` representing the identity and the consent of the
+      identity, you will be able to perform operations on the identity's Managed
+      Cards,
+
+      such as getting a Managed Card's details and managing its spend rules.
+  - name: Authorised Users
+    description: >
+      Corporate and Consumer identities can invite authorised users to access
+      their account. Once on-boarded, authorised users can create and manage
+      instruments and transactions on behalf of the identity they are on-boarded
+      with.      
+
+      With the `access_token` representing the identity and the consent of the
+      identity, you will be able to create and invite authorised users for the
+      Identity.
+
+
+      Creating and inviting users on behalf of identities are restricted
+      features; by default these endpoints are not available for use.
+  - name: Authorised Users
+    description: >
+      Corporate and Consumer identities can invite authorised users to access
+      their account. Once on-boarded, authorised users can create and manage
+      instruments and transactions on behalf of the identity they are on-boarded
+      with.      
+
+      With the `access_token` representing the identity and the consent of the
+      identity, you will be able to create and invite authorised users for the
+      Identity.
+
+
+      Creating and inviting users on behalf of identities are restricted
+      features; by default these endpoints are not available for use.
+x-tagGroups:
+  - name: Access
+    tags:
+      - Access Token
+      - User Impersonation
+      - Consent Request
+  - name: Identities
+    tags:
+      - Corporates
+      - Consumers
+  - name: User Management
+    tags:
+      - Authorised Users
+  - name: Instruments
+    tags:
+      - Managed Accounts
+      - Managed Cards
+  - name: Transactions
+    tags:
+      - Transfers
+  - name: Fees
+    tags:
+      - Fees
+  - name: Bulk Operations [Beta]
+    tags:
+      - Operations
+      - Manage
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      description: The API Key representing your Multi account.
+      name: api-key
+      in: header
+    auth_token:
+      type: http
+      description: >-
+        The authentication token representing the user. This will be included in
+        the login response object.
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    offset:
+      name: offset
+      in: query
+      required: false
+      description: >-
+        The offset value for paging, indicating the initial item number to be
+        returned from the data set satisfying the given criteria. Leave out to
+        fetch the first page of results.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: >-
+        The limit of the results for paging, starting at the offset. Limit is
+        always capped at 100.
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+    bulkProcessStatus:
+      name: status
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/BulkProcessStatus'
+    bulkId:
+      name: bulk_id
+      in: path
+      required: true
+      description: The bulk id of the bulk process.
+      schema:
+        $ref: '#/components/schemas/BulkId'
+    sequence:
+      name: sequence
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+    bulkProcessOperationStatus:
+      name: status
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/BulkProcessOperationStatus'
+    idempotency-ref:
+      name: idempotency-ref
+      in: header
+      description: >-
+        A unique call reference generated by the caller that, taking into
+        consideration the payload as well as the operation itself, helps avoid
+        duplicate operations. Idempotency reference uniqueness is maintained for
+        at least 24 hours.
+      required: false
+      schema:
+        type: string
+    accept:
+      name: accept
+      in: header
+      description: >
+        A request parameter specifying the type of response the client would
+        like. Must be one of `application/json`, `application/pdf` or
+        `text/csv`.
+
+
+        The default response type (`application/json`) will be returned if
+        specified incorrectly or not specified.
+      required: false
+      schema:
+        type: string
+    statementLimit:
+      name: statementLimit
+      in: query
+      required: false
+      description: >-
+        The limit of the results for statements paging, starting at the offset.
+        Limit is capped at 500.
+      schema:
+        maximum: 500
+        minimum: 1
+        type: integer
+        format: int32
+    orderByTimestamp:
+      name: orderByTimestamp
+      in: query
+      required: false
+      description: |
+        Orders the result in ascending or descending order.
+          - ASC: Ascending order, oldest transactions first.
+          - DESC: Descending order, most recent transactions first.
+
+        If not specified, the transactions will be returned in descending order.
+      schema:
+        type: string
+        enum:
+          - ASC
+          - DESC
+    fromTimestamp:
+      name: fromTimestamp
+      in: query
+      required: false
+      description: >-
+        Filter for transactions having transaction timestamp after
+        `fromTimestamp`. Timestamp is expressed in Epoch timestamp using
+        millisecond precision. If omitted, all matching transactions up to the
+        present will be included.
+      schema:
+        type: integer
+        format: int64
+    toTimestamp:
+      name: toTimestamp
+      in: query
+      required: false
+      description: >-
+        Filter for transactions having transaction timestamp before
+        `toTimestamp`. Timestamp is expressed in Epoch timestamp using
+        millisecond precision. If omitted, all matching transactions up to the
+        present will be included. If both `fromTimestamp` and `toTimestamp` are
+        provided, `toTimestamp` must be greater than `fromTimestamp`.
+      schema:
+        type: integer
+        format: int64
+    showFundMovementsOnly:
+      name: showFundMovementsOnly
+      in: query
+      required: false
+      description: |
+        Deprecated. Use singleEntryPerTransaction instead.
+
+        Returns only the entries which contain fund movements.
+      schema:
+        type: boolean
+    singleEntryPerTransaction:
+      name: singleEntryPerTransaction
+      in: query
+      required: false
+      description: >
+        Returns transactions that span multiple movements as a single entry.
+
+        Only includes transactions that have been completed.
+
+        Defaults to true for PDF statements, false otherwise.
+
+        Note: due to the fact that only completed transactions are included,
+        some
+
+        transactions that are in progress and have modified the balance of the
+        instrument
+
+        will not be shown, which could lead to seemingly inconsistent balance
+        being displayed.
+      schema:
+        type: boolean
+    statementTransactionType:
+      name: transactionType
+      in: query
+      required: false
+      description: Filter by the transaction type. Leave out to fetch all entries.
+      schema:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/components/schemas/StatementTransactionType'
+    transferProfileId:
+      name: profileId
+      in: query
+      required: false
+      description: >-
+        Filter by the transfer profile. Leave out to fetch all transfer
+        transactions.
+      schema:
+        $ref: '#/components/schemas/ProfileId'
+    instrumentId:
+      name: instrumentId
+      in: query
+      required: false
+      description: Filter by the source instrument id.
+      schema:
+        $ref: '#/components/schemas/InstrumentId'
+    transactionState:
+      name: state
+      in: query
+      required: false
+      description: Filter by the transfer transaction state. Leave out to fetch all states.
+      schema:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/components/schemas/TransactionState'
+    transferCreatedFrom:
+      name: createdFrom
+      in: query
+      required: false
+      description: >-
+        Filter for transfer transactions created after `createdFrom` timestamp.
+        Timestamp is expressed in Epoch timestamp using millisecond precision.
+        Leave out to fetch all transfers.
+      schema:
+        type: integer
+        format: int64
+    transferCreatedTo:
+      name: createdTo
+      in: query
+      required: false
+      description: >-
+        Filter for transfer transactions created before `createdTo` timestamp.
+        Timestamp is expressed in Epoch timestamp using millisecond precision.
+        Leave out to fetch all transfers.
+      schema:
+        type: integer
+        format: int64
+    transferTag:
+      name: tag
+      in: query
+      required: false
+      description: >-
+        Filter by the transfer tag. The exact tag must be provided, as wildcards
+        are not supported. Leave out to fetch all entries.
+      schema:
+        type: string
+    userIdExplode:
+      name: user_id
+      in: path
+      required: true
+      description: The unique identifier for the user.
+      style: simple
+      explode: false
+      schema:
+        $ref: '#/components/schemas/UserId'
+  headers:
+    request-ref:
+      description: >-
+        A request identifier. Providing this reference when contacting our
+        support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
+    x-ratelimit-limit:
+      description: >
+        Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+        The first number (20) is the limit that has been exceeded.
+
+        The remaining numbers are the limits that are in force, with 'w' meaning
+        'window in seconds'. In this example `20;w=3600` was exceeded. 20 calls
+        in 3600secs (1hr)
+      required: true
+      schema:
+        type: string
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+  requestBodies:
+    BulkProcessExecute:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BulkProcessExecute'
+    ChargeFeeRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            description: The custom fee to be charged to the consumer/corporate.
+            $ref: '#/components/schemas/Fee'
+    ManagedCardRenewalTypeUpdateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - renewalType
+            properties:
+              renewalType:
+                $ref: '#/components/schemas/CardRenewalType'
+    CardLevelSpendRulesRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CardLevelSpendRules'
+    UpdateCardLevelSpendRulesRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdateCardLevelSpendRules'
+    CreateTransferRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+              - profileId
+              - source
+              - destination
+              - destinationAmount
+            type: object
+            properties:
+              profileId:
+                $ref: '#/components/schemas/ProfileId'
+              tag:
+                $ref: '#/components/schemas/Tag'
+              source:
+                description: >-
+                  The managed account or managed card from where the funds will
+                  be transferred.
+                $ref: '#/components/schemas/InstrumentId'
+              description:
+                type: string
+                maxLength: 255
+                pattern: ^[a-zA-Z0-9\/\-?:().$_,'+\s#=!"%&*<>;\{@\r\n]*$
+                description: >-
+                  The description details that are included in the transaction
+                  as reference.
+              destination:
+                description: >-
+                  The managed account or managed card to where the funds will be
+                  transferred.
+                $ref: '#/components/schemas/InstrumentId'
+              destinationAmount:
+                description: >-
+                  The amount, in same currency as the source and destination
+                  instruments, to be transferred to the destination (exclusive
+                  of any fee amount that may be specified in the profile).
+                $ref: '#/components/schemas/CurrencyAmount'
+              scheduledTimestamp:
+                $ref: '#/components/schemas/ScheduledTimestamp'
+    UserCreateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+              - email
+              - name
+              - surname
+            type: object
+            properties:
+              name:
+                minLength: 1
+                maxLength: 50
+                type: string
+                description: The first name of the user.
+              surname:
+                minLength: 1
+                maxLength: 50
+                type: string
+                description: The last name of the user.
+              email:
+                $ref: '#/components/schemas/Email'
+              mobile:
+                $ref: '#/components/schemas/Mobile'
+              dateOfBirth:
+                description: Date of birth of the authorised user.
+                $ref: '#/components/schemas/Date'
+              tag:
+                $ref: '#/components/schemas/Tag'
+              countryOfResidence:
+                type: string
+                maxLength: 2
+                minLength: 2
+                pattern: ^[A-Z]+$
+              locale:
+                $ref: '#/components/schemas/UserLocale'
+              brand:
+                $ref: '#/components/schemas/Brand'
+              roles:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserPredefinedRole'
+                description: >-
+                  Optional roles to assign to the user. For a full description
+                  of the permissions associated with each role, see our product
+                  documentation.
+  responses:
+    ImpersonateIdentityLoginResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token:
+                description: >-
+                  An authorisation token identifying the user that will be
+                  impersonated in the `auth_token` authorization header for
+                  secured operations.
+                $ref: '#/components/schemas/TokenResponse'
+              identity:
+                $ref: '#/components/schemas/IdentityId'
+              credentials:
+                $ref: '#/components/schemas/CredentialId'
+    BackofficeBadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              validationErrors:
+                $ref: '#/components/schemas/ValidationError'
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    ImpersonateIdentityLoginConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                  - UNRESOLVED_IDENTITY
+                  - ALREADY_IMPERSONATED
+    InternalServerError:
+      description: >-
+        Internal Server Error - There is a problem with the server. Please try
+        again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    ServiceUnavailable:
+      description: >-
+        Service Unavailable - The requested service is temporarily unavailable.
+        Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                  - INSUFFICIENT_PERMISSIONS
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BulkProcessorConflictResponse:
+      description: BulkProcessorConflict - bulk processor conflict.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BulkProcessConflict'
+    BulkProcessDetails:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BulkProcessDetails'
+    BulkProcessOperations:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BulkProcessOperationsPaged'
+    NoContent:
+      description: Success - No Content.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    ChargeFeeResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ChargeFee'
+    ChargeFeeConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                  - UNRESOLVED_FEE_TYPE
+                  - UNRESOLVED_CURRENCY
+                  - UNRESOLVED_INSTRUMENT
+                  - FUNDS_INSUFFICIENT
+                  - IDENTITY_NOT_OWNER_OF_INSTRUMENT
+                  - FEE_AMOUNT_NOT_SET
+    ManagedAccountResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ManagedAccount'
+    InstrumentForbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                  - STEP_UP_REQUIRED
+                  - ACCESS_TOKEN_REQUIRED
+                  - INSUFFICIENT_PERMISSIONS
+    ManagedAccountStatementResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Statement'
+        application/pdf:
+          schema:
+            type: string
+            format: binary
+        text/csv:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/StatementEntry'
+    ManagedCardGetResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ManagedCard'
+    ManagedCardUpdateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                  - INSTRUMENT_DESTROYED
+                  - INSTRUMENT_NOT_PHYSICAL
+                  - COUNTRY_INVALID
+                  - WALLETS_NOT_ENABLED
+                  - WALLET_ARTWORK_NOT_SPECIFIED
+                  - WALLET_ARTWORK_INVALID
+                  - PUSHPROVISIONING_NOT_ENABLED
+                  - AUTH_FORWARDING_NOT_ENABLED
+                  - THREEDS_DETAILS_NOT_PROVIDED
+                  - USER_NOT_ENROLLED_FOR_BIOMETRICS
+                  - BIOMETRIC_AUTHENTICATION_NOT_SUPPORTED
+                  - LINKED_USER_NOT_FOUND
+                  - USER_INACTIVE
+                  - INVALID_CHANNELS_SELECTED
+                  - INVALID_PRIMARY_CHANNEL_SELECTED
+                  - USER_MOBILE_NUMBER_DOES_NOT_EXIST
+                  - MORE_THAN_ONE_MOBILE_NUMBER_PROVIDED
+                  - MOBILE_NUMBER_ALREADY_EXISTS
+                  - TWILIO_AUTHY_AUTHENTICATION_NOT_SUPPORTED
+                  - USER_NOT_ENROLLED_FOR_TWILIO_AUTHY
+                  - DELIVERY_METHOD_INVALID
+                  - CONTACT_NUMBER_NEEDED_FOR_BULK_DELIVERY
+                  - PRODUCT_REFERENCE_INVALID
+                  - CARRIER_TYPE_INVALID
+                  - CONFIG_ERROR_CARD_BUREAU
+                  - RENEWAL_TYPE_NOT_SUPPORTED_BY_PROFILE
+                  - CANNOT_REASSIGN_ACTIVE_CARD
+    ManagedCardRemoveConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                  - BALANCE_NOT_ZERO
+                  - INSTRUMENT_ALREADY_REMOVED
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    ManagedCardBlockConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                  - INSTRUMENT_ALREADY_BLOCKED
+                  - INSTRUMENT_DESTROYED
+                  - INSTRUMENT_MARKED_LOST_STOLEN
+    ManagedCardUnblockConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                  - INSTRUMENT_NOT_BLOCKED
+                  - INSTRUMENT_DESTROYED
+                  - INSTRUMENT_MARKED_LOST_STOLEN
+    ManagedCardSpendRulesGetResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AllLevelSpendRules'
+    ManagedCardSpendRulesCreateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                  - SPEND_LIMIT_CURRENCY_DIFFERENT_FROM_CARD_CURRENCY
+                  - SPEND_LIMIT_NOT_SUPPORTED_FOR_PREPAID_MODE_CARD
+                  - SPEND_LIMIT_DUPLICATE_INTERVAL
+                  - SPEND_LIMIT_AMOUNT_INVALID
+                  - SPEND_RULE_ALREADY_SET
+                  - SPEND_LIMIT_CURRENCY_DIFFERENT_FROM_USER_CURRENCY
+    ManagedCardSpendRulesUpdateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                  - SPEND_LIMIT_CURRENCY_DIFFERENT_FROM_CARD_CURRENCY
+                  - SPEND_LIMIT_NOT_SUPPORTED_FOR_PREPAID_MODE_CARD
+                  - SPEND_LIMIT_DUPLICATE_INTERVAL
+                  - SPEND_LIMIT_AMOUNT_INVALID
+                  - SPEND_LIMIT_CURRENCY_DIFFERENT_FROM_USER_CURRENCY
+    ManagedCardStatementResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Statement'
+        application/pdf:
+          schema:
+            type: string
+            format: binary
+        text/csv:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/StatementEntry'
+    TransferResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Transfer'
+    TransferConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                  - PROFILE_INACTIVE
+                  - MODEL_CONSTRAINTS_VIOLATED
+                  - INTERCEPTOR_DENIED_TRANSACTION
+                  - INSTRUMENT_DENIED_TRANSACTION
+                  - SOURCE_INSTRUMENT_DESTROYED
+                  - DESTINATION_INSTRUMENT_DESTROYED
+                  - FOREX_TRADE_DENIED_TRANSACTION
+                  - CURRENCY_MISMATCH
+                  - SOURCE_INSTRUMENT_BLOCKED
+                  - DESTINATION_INSTRUMENT_BLOCKED
+                  - FUNDS_INSUFFICIENT
+                  - AMOUNT_INVALID
+                  - SOURCE_NOT_FOUND
+                  - DESTINATION_NOT_FOUND
+                  - FEE_NOT_CONFIGURED_FOR_CURRENCY
+                  - DESTINATION_LIMIT_EXCEEDED
+                  - SOURCE_CANNOT_BE_DEBIT_MODE_CARD
+                  - DESTINATION_CANNOT_BE_DEBIT_MODE_CARD
+                  - TRANSFER_BETWEEN_INSTRUMENTS_UNSUPPORTED
+                  - SOURCE_AND_DESTINATION_MUST_BE_DIFFERENT
+                  - SCHEDULED_TIMESTAMP_INVALID
+    TransfersGetResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              transfer:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transfer'
+              count:
+                type: integer
+                description: Total number of records (excluding the paging limit).
+                format: int32
+              responseCount:
+                type: integer
+                description: Total number of records returned in this response.
+                format: int32
+    UserResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+    UserCreateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                  - EMAIL_NOT_UNIQUE
+                  - MOBILE_OR_COUNTRY_CODE_INVALID
+                  - EMAIL_DOMAIN_NOT_ALLOWED
+                  - COUNTRY_OF_RESIDENCE_INVALID
+                  - ROLE_NOT_FOUND
+                  - CANNOT_MODIFY_OWN_ROLES
+                  - ADMIN_ROLE_REMOVAL_NOT_ALLOWED
+    UserDeactivateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                  - CARD_HAS_REMAINING_BALANCE
+    UserInviteSendConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                  - INVITE_ALREADY_CONSUMED
+  schemas:
+    ImpersonateIdentityLoginRequest:
+      required:
+        - identity
+      type: object
+      properties:
+        identity:
+          $ref: '#/components/schemas/IdentityId'
+        temp:
+          $ref: '#/components/schemas/IdentityId'
+    BulkProcessesPaged:
+      properties:
+        count:
+          description: Total number of records (excluding limit)
+          format: int32
+          type: integer
+        bulkProcesses:
+          items:
+            $ref: '#/components/schemas/BulkProcess'
+          type: array
+        responseCount:
+          description: Total number of records returned in this response
+          format: int32
+          type: integer
+      type: object
+    UpdateCardLevelSpendRules:
+      allOf:
+        - $ref: '#/components/schemas/CardLevelSpendRules'
+        - type: object
+          properties:
+            updateSpendLimitMethod:
+              $ref: '#/components/schemas/SpendLimitUpdateMethod'
+    ProfileId:
+      type: string
+      description: >
+        The profile Id which a specific identity, instrument or transaction type
+        is linked to.
+
+
+        Profiles contain configuration and determine behavioral aspects of the
+        newly created transaction, for example, fees that may apply.
+
+
+        You can have one or more profiles linked to your application, and these
+        can be used to drive different behaviors according to your product's
+        needs.
+
+
+        Profile Ids can be found in the Multi Portal, in the API Credentials
+        page.
+      pattern: ^[0-9]+$
+    Tag:
+      type: string
+      description: The tag field is a custom field that can be used to search and filter.
+      maxLength: 50
+      pattern: ^[a-zA-Z0-9_-]+$
+    InstrumentId:
+      required:
+        - id
+        - type
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        type:
+          $ref: '#/components/schemas/InstrumentType'
+    CurrencyAmount:
+      required:
+        - currency
+        - amount
+      type: object
+      properties:
+        currency:
+          $ref: '#/components/schemas/Currency'
+        amount:
+          type: integer
+          format: int64
+          description: >
+            The monetary amount, scaled to the lowest denomination of the
+            currency.
+
+
+            Example, an amount of 1000 for a EUR currency is actually 1000 Euro
+            cents or EUR 10.00.
+      description: The object representing a monetary amount in a particular currency.
+    ScheduledTimestamp:
+      pattern: ^[0-9]+$
+      type: string
+      description: >-
+        The epoch timestamp at which the transaction is scheduled to be
+        executed.
+    IdentityId:
+      required:
+        - type
+        - id
+      type: object
+      properties:
+        type:
+          enum:
+            - CONSUMER
+            - CORPORATE
+          type: string
+          description: Indicates the identity type.
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The identifier for the identity.
+    BulkProcess:
+      type: object
+      properties:
+        bulkId:
+          description: The bulk id of the bulk process
+          type: string
+        status:
+          description: >
+            "SUBMITTED": the data for the bulk process operations has been
+            persisted and bulk process is ready for execution. A bulk process in
+            this status can be executed or submitted. This is the initial state
+            for a bulk process
+
+
+            "RUNNING" :  the bulk process is currently being executed by the
+            system
+
+
+            "COMPLETED"  : the execution of the bulk process is complete and all
+            bulk operations of the bulk process were executed successfully. This
+            is a final state for the bulk process 
+
+
+            "PARTIALLY_COMPLETED"  the execution of the bulk process is complete
+            and some of the bulk operations of the bulk process failed. This is
+            a final state for the bulk process
+
+
+            "FAILED" : none of the operations of the bulk process have executed.
+            This is a final state for the bulk process
+
+
+            "PAUSED"  : the execution of bulk process has been paused through
+            the Pause bulk process operation  Execution can be resumed through
+            Resume bulk operation
+
+
+            "CANCELLED" : the execution of bulk process has been cancelled
+            through Cancel bulk operation. This is a final state for the bulk
+            process
+          type: string
+        submittedItemsCount:
+          description: The number of bulk operations in the bulk process
+          type: integer
+        executionStart:
+          description: Timestamp of when the execution of the Bulk Process started
+          type: integer
+          format: int64
+        executionFinish:
+          description: Timestamp of when the execution of the Bulk Process finished.
+          type: integer
+          format: int64
+        operation:
+          description: >-
+            The underlying operations contained within the Bulk; shown as the
+            endpoint for the equivalent single operation.
+          type: string
+        mode:
+          description: The mode that was instructed when execution was started
+          $ref: '#/components/schemas/BulkProcessMode'
+    CardLevelSpendRules:
+      allOf:
+        - $ref: '#/components/schemas/BaseCardLevelSpendRules'
+        - type: object
+          properties:
+            minTransactionAmount:
+              type: integer
+              minimum: 0
+              format: int64
+              description: >-
+                The minimum transaction amount, in card currency, that is
+                allowed. If the transaction amount is less than this value, then
+                the transaction will be declined.
+            maxTransactionAmount:
+              type: integer
+              minimum: 0
+              format: int64
+              description: >-
+                The maximum transaction amount, in card currency, that is
+                allowed. If the transaction amount is greater than this value,
+                then the transaction will be declined.
+    SpendLimitUpdateMethod:
+      type: string
+      description: |
+        The spend limit update method to apply. Currently supported:
+          - OVERWRITE: (default option if nothing selected). Overwrites the previous values for the spendLimit object i.e. sets new limits
+          - INCREMENT : This will increase the existing value of the spend limit by the amount input the value field. If used in conjunction with an ALWAYS interval, this can be used to increment a spend limit on a periodic basis (controlled by you, e.g. monthly), and means that any 'unused' balance from the previous period will still available to spend. See examples in our documentation
+      enum:
+        - OVERWRITE
+        - INCREMENT
+    Id:
+      type: string
+      pattern: ^[0-9]+$
+    InstrumentType:
+      type: string
+      enum:
+        - managed_cards
+        - managed_accounts
+    Currency:
+      type: string
+      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
+      maxLength: 3
+      minLength: 3
+      pattern: ^[A-Z]*$
+    TokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: >-
+            An authorisation token to be used in the Authorization header for
+            secured operations.
+    CredentialId:
+      required:
+        - type
+        - id
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9_-]+$
+          type: string
+          enum:
+            - ROOT
+            - USER
+            - API_CLIENT
+          description: The type of user.
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The identifier of the user.
+    ValidationError:
+      type: array
+      description: >-
+        Is returned as part of an HTTP error response whenever a validation
+        error is detected. A list of the fields together with their syntax error
+        will be provided.
+      items:
+        type: object
+        properties:
+          fieldName:
+            type: string
+          message:
+            maxLength: 255
+            type: string
+            description: When present helps to identify and fix the problem.
+          error:
+            type: string
+            enum:
+              - MUST_BE_FALSE
+              - MUST_BE_TRUE
+              - AT_MOST
+              - AT_LEAST
+              - FUTURE
+              - FUTURE_OR_PRESENT
+              - PAST
+              - PAST_OR_PRESENT
+              - LESS_THAN_ZERO
+              - LESS_THAN_OR_EQUAL_TO_ZERO
+              - GREATER_THAN_ZERO
+              - GREATER_THAN_OR_EQUAL_TO_ZERO
+              - HAS_TEXT
+              - REQUIRED
+              - REGEX
+              - RANGE
+              - IN
+              - NOT_IN
+              - NOT_EMPTY
+              - ALL_OR_NONE
+              - MUST_BE_EMPTY
+              - DEPENDS_ON
+              - INVALID_TYPE_OR_VALUE
+              - INVALID_REQUEST
+          params:
+            type: array
+            items:
+              type: string
+          invalidValue:
+            type: array
+            items:
+              type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    SyntaxError:
+      type: object
+      description: >-
+        Is returned as part of an HTTP error response whenever a syntax error is
+        detected. A list of the fields together with their syntax error will be
+        provided.
+      properties:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                  - REQUIRED
+                  - HAS_TEXT
+                  - REQUIRES
+                  - SIZE
+                  - RANGE
+                  - IN
+                  - NOT_IN
+                  - REGEX
+                  - EXACTLY
+                  - AT_LEAST
+                  - AT_MOST
+                  - ALL_OR_NONE
+    BulkProcessConflict:
+      properties:
+        errorCode:
+          $ref: '#/components/schemas/BulkProcessConflictErrorCode'
+      type: object
+    BulkProcessDetails:
+      allOf:
+        - $ref: '#/components/schemas/BulkProcess'
+        - type: object
+          properties:
+            operationStatusCounts:
+              type: array
+              items:
+                $ref: '#/components/schemas/BulkProcessOperationStatusCounts'
+    BulkProcessOperationsPaged:
+      properties:
+        count:
+          description: Total number of records (excluding limit)
+          format: int32
+          type: integer
+        operations:
+          items:
+            $ref: '#/components/schemas/BulkProcessOperation'
+          type: array
+        responseCount:
+          description: Total number of records returned in this response
+          format: int32
+          type: integer
+      type: object
+    ChargeFee:
+      required:
+        - transactionId
+        - profileId
+        - feeType
+        - source
+        - destination
+        - availableBalanceAdjustment
+        - state
+        - creationTimestamp
+      type: object
+      properties:
+        transactionId:
+          $ref: '#/components/schemas/TransactionId'
+          description: The unique identifier of the transaction.
+        profileId:
+          type: string
+          description: >-
+            The profile Id which a specific identity, instrument or transaction
+            type is linked to.
+        feeType:
+          type: string
+          description: >-
+            The fee type as defined in the Multi Portal, and as sent in the
+            request.
+        source:
+          $ref: '#/components/schemas/InstrumentId'
+        availableBalanceAdjustment:
+          $ref: '#/components/schemas/CurrencyAmount'
+          description: The object representing a monetary amount in a particular currency.
+        state:
+          $ref: '#/components/schemas/TransactionState'
+          description: The transaction entry state.
+        creationTimestamp:
+          type: integer
+          format: int64
+    ManagedAccount:
+      required:
+        - id
+        - profileId
+        - friendlyName
+        - currency
+        - balances
+        - creationTimestamp
+        - state
+      type: object
+      properties:
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The unique identifier of a Managed Account.
+        profileId:
+          $ref: '#/components/schemas/ProfileId'
+        tag:
+          $ref: '#/components/schemas/Tag'
+        friendlyName:
+          minLength: 1
+          maxLength: 50
+          type: string
+          description: The friendly name given to the managed account.
+        currency:
+          $ref: '#/components/schemas/Currency'
+        balances:
+          $ref: '#/components/schemas/ManagedInstrumentBalance'
+        state:
+          $ref: '#/components/schemas/ManagedInstrumentState'
+        creationTimestamp:
+          type: integer
+          format: int64
+          description: >-
+            The time when the managed account was created, expressed in Epoch
+            timestamp using millisecond precision.
+        lowBalanceThreshold:
+          $ref: '#/components/schemas/AccountLowBalanceThreshold'
+    Statement:
+      type: object
+      description: The list of statement entries.
+      properties:
+        entry:
+          type: array
+          items:
+            $ref: '#/components/schemas/StatementEntry'
+        count:
+          type: integer
+          description: The total number of records (excluding the paging limit).
+          format: int32
+        responseCount:
+          type: integer
+          description: The total number of records returned in this response.
+          format: int32
+        startBalance:
+          description: >-
+            The start balance amount in the instrument's currency. Empty for
+            debit cards.
+          $ref: '#/components/schemas/CurrencyAmount'
+        endBalance:
+          description: >-
+            The end balance amount in the instrument's currency. Empty for debit
+            cards.
+          $ref: '#/components/schemas/CurrencyAmount'
+        footer:
+          description: The footer description for the current statement
+          type: string
+    StatementEntry:
+      required:
+        - transactionAmount
+        - entryState
+        - transactionId
+        - processedTimestamp
+      type: object
+      properties:
+        transactionId:
+          description: The unique identifier of the transaction.
+          $ref: '#/components/schemas/TransactionId'
+        entryState:
+          $ref: '#/components/schemas/StatementEntryState'
+        originalAmount:
+          description: >
+            The transaction amount as originally requested. The original amount
+            currency may be different from the currency of the instrument.
+
+
+            In case of purchases, this will indicate the original currency and
+            amount that the merchant requested.
+          $ref: '#/components/schemas/CurrencyAmount'
+        forexRate:
+          description: >-
+            If the `originalAmount` is in a different currency from the
+            instrument's currency, the forex rate used will be provided.
+          $ref: '#/components/schemas/ScaledAmount'
+        transactionAmount:
+          description: The transaction amount in the instrument's currency.
+          $ref: '#/components/schemas/CurrencyAmount'
+        availableBalanceAdjustment:
+          description: >-
+            The amount of funds credited or debited on the available balance of
+            the instrument.
+          $ref: '#/components/schemas/CurrencyAmount'
+        actualBalanceAdjustment:
+          description: >-
+            The amount of funds credited or debited on the actual balance of the
+            instrument.
+          $ref: '#/components/schemas/CurrencyAmount'
+        balanceAfter:
+          description: The balance of the instrument after the transaction was executed.
+          $ref: '#/components/schemas/CurrencyAmount'
+        availableBalanceAfter:
+          description: >-
+            The available balance of the instrument after the transaction was
+            executed.
+          $ref: '#/components/schemas/CurrencyAmount'
+        actualBalanceAfter:
+          description: >-
+            The actual balance of the instrument after the transaction was
+            executed.
+          $ref: '#/components/schemas/CurrencyAmount'
+        transactionFee:
+          description: >-
+            The fee amount that was captured for you (Multi account owner). You
+            can set fees to be taken during transactions in the Multi Portal.
+          $ref: '#/components/schemas/CurrencyAmount'
+        cardholderFee:
+          description: >-
+            The fee amount that was captured for you (Multi account owner). You
+            can set fees to be taken during transactions in the Multi Portal.
+            This field is deprecated - use `transactionFee` instead.
+          $ref: '#/components/schemas/CurrencyAmount'
+        processedTimestamp:
+          type: integer
+          format: int64
+          description: >-
+            The timestamp when the transaction was processed by the system,
+            expressed in Epoch timestamp using millisecond precision.
+        sourceAmount:
+          description: >-
+            The source amount of the transaction, if the transaction involves
+            forex.
+          $ref: '#/components/schemas/CurrencyAmount'
+        userCurrencyTransactionDetails:
+          description: The object representing the user transaction's details
+          $ref: '#/components/schemas/UserCurrencyTransactionDetails'
+        additionalFields:
+          type: object
+          additionalProperties:
+            type: string
+          description: >-
+            A Map of additional fields. Possible values include fee information.
+            The possible entries are `merchantName`, `merchantCategoryCode`,
+            `merchantTerminalCountry`, `sourceInstrumentType`,
+            `sourceInstrumentId`, `destinationInstrumentType`,
+            `destinationInstrumentId`, `forexPaddingCurrency`,
+            `forexPaddingAmount`, `note`, `sourceInstrumentFriendlyName`,
+            `destinationInstrumentFriendlyName`, `sourceIdentityType`,
+            `sourceIdentityId`, `sourceIdentityName`, `destinationIdentityType`,
+            `destinationIdentityId`, `destinationIdentityName`, `exchangeRate`,
+            `authorisationState`, `authorisationRelatedId`,
+            `settlementRelatedId`, `chargeFeeType`, `relatedTransactionId`,
+            `relatedTransactionIdType`, `beneficiaryName`, `beneficiaryAccount`,
+            `beneficiaryBankCode`, `merchantId`, `merchantTransactionType`,
+            `systemTransactionType`, `authorisationCode`, `relatedCardId`,
+            `sender`, `forexFeeCurrency`, `forexFeeAmount`, `senderIban`,
+            `senderReference`, `mandateId`, `merchantReference`, `description`,
+            `declineReason`, `spendRuleFailedReason`, `authorisationCategory`
+            and `authorisationTransactionType`.
+    ManagedCard:
+      required:
+        - externalHandle
+        - cardBrand
+        - cardLevelClassification
+        - creationTimestamp
+        - currency
+        - expiryPeriodMonths
+        - friendlyName
+        - id
+        - nameOnCard
+        - profileId
+        - renewalType
+        - type
+        - mode
+        - state
+        - cardNumberFirstSix
+        - cardNumberLastFour
+        - startMmyy
+        - expiryMmyy
+        - billingAddress
+        - digitalWallets
+      type: object
+      properties:
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The unique identifier of the card.
+        profileId:
+          $ref: '#/components/schemas/ProfileId'
+        externalHandle:
+          type: string
+          description: >
+            A uniquely generated code used to identify a card.
+
+
+            This code is to be used instead of the sensitive card number in
+            order to refer to a card when opening a support ticket.
+        tag:
+          $ref: '#/components/schemas/Tag'
+        friendlyName:
+          maxLength: 50
+          minLength: 1
+          type: string
+          description: The friendly name given to the card.
+        currency:
+          $ref: '#/components/schemas/Currency'
+        state:
+          $ref: '#/components/schemas/ManagedInstrumentState'
+        type:
+          type: string
+          description: |
+            The type of card:
+              - VIRTUAL: Not a printed or embedded card. The card can be used online or added to digital wallets.
+              - PHYSICAL: A physical card that can be printed and shipped to your customers or embedded in a Wearable device. It can be used at physical terminals.
+          enum:
+            - VIRTUAL
+            - PHYSICAL
+        cardBrand:
+          type: string
+          description: The card scheme, or brand of the card.
+          enum:
+            - MASTERCARD
+            - VISA
+        cardNumber:
+          description: |
+            The full card number of the card.
+
+            This field is omitted when the card state is `NOT_ENABLED`.
+          $ref: '#/components/schemas/SensitiveCardNumber'
+        cvv:
+          description: |
+            The CVV of the card.
+
+            This field is omitted when the card state is `NOT_ENABLED`.
+          $ref: '#/components/schemas/SensitiveCvv'
+        cardNumberFirstSix:
+          pattern: ^[0-9]{6}$
+          type: string
+          description: The first six digits of the card number.
+        cardNumberLastFour:
+          pattern: ^[0-9]{4}$
+          type: string
+          description: The last four digits of the card number.
+        nameOnCard:
+          maxLength: 27
+          pattern: >-
+            ^[a-zA-Z0-9ßÀÁÂÃÄÅǍÆÇÈÉÊËÌÍÎÏÒÓÔÕÖØŠÙÚÛÜŸÝĄĆČĎĘĹĽŁŃŇÑŐŔŚȘȚŤŰŹŻŽàáâãäåǎæçèéêëìíîïòóôõöøšùúûüÿýąćčďęĺľłńňñőŕśșțťűźżž\-^.
+            '-]*$
+          type: string
+          description: >-
+            The card holder’s name for the card. This may be verified by
+            merchants when the card is used online. For Physical cards, this
+            field will be printed on the card. The maximum characters allowed
+            will depend on the design chosen and will be provided to you by
+            Weavr when setting up your plastic cards.
+        nameOnCardLine2:
+          maxLength: 27
+          pattern: >-
+            ^[a-zA-Z0-9ßÀÁÂÃÄÅǍÆÇÈÉÊËÌÍÎÏÒÓÔÕÖØŠÙÚÛÜŸÝĄĆČĎĘĹĽŁŃŇÑŐŔŚȘȚŤŰŹŻŽàáâãäåǎæçèéêëìíîïòóôõöøšùúûüÿýąćčďęĺľłńňñőŕśșțťűźżž\-^.
+            '-]*$
+          type: string
+          description: >-
+            Line 2 of the 'name on card' field. For Physical cards, this field
+            will be printed on the card. The maximum characters allowed will
+            depend on the design chosen and will be provided to you by Weavr
+            when setting up your plastic cards.
+        startMmyy:
+          maxLength: 4
+          minLength: 4
+          pattern: ^[0-9]*$
+          type: string
+          description: The start date of this card, in MMYY format.
+        expiryMmyy:
+          maxLength: 4
+          minLength: 4
+          type: string
+          description: The end date of this card, in MMYY format.
+        cardLevelClassification:
+          type: string
+          enum:
+            - CONSUMER
+            - CORPORATE
+          description: >-
+            The card classification determines whether the card is from Consumer
+            or Corporate BINs.
+        expiryPeriodMonths:
+          maximum: 120
+          minimum: 1
+          type: integer
+          format: int32
+          description: The validity timeframe of the card, in months.
+        renewalType:
+          $ref: '#/components/schemas/CardRenewalType'
+        renewalTimestamp:
+          type: integer
+          format: int64
+          description: >-
+            The timestamp when the card will be renewed, expressed in Epoch
+            timestamp using millisecond precision.
+        creationTimestamp:
+          type: integer
+          format: int64
+          description: >-
+            The timestamp when the card was created, expressed in Epoch
+            timestamp using millisecond precision.
+        cardholderMobileNumber:
+          description: >-
+            The mobile number including country code of the card holder, needed
+            for 3DS challenge.
+          maxLength: 15
+          minLength: 5
+          pattern: ^\+[0-9]+$
+          type: string
+          deprecated: true
+        billingAddress:
+          description: >-
+            The billing address set for the cardholder. This can be checked by
+            the merchant during online purchases.
+          $ref: '#/components/schemas/BillingAddress'
+        physicalCardDetails:
+          $ref: '#/components/schemas/PhysicalCardDetails'
+        digitalWallets:
+          $ref: '#/components/schemas/DigitalWallets'
+        authForwardingDefaultTimeoutDecision:
+          type: string
+          description: Default decision for auth forwarding on timeout
+          enum:
+            - APPROVE
+            - DECLINE
+        threeDSecureAuthConfig:
+          $ref: '#/components/schemas/ThreeDSecureAuthConfig'
+        mode:
+          type: string
+          description: >
+            The mode with which this card was created:
+
+
+            - A prepaid mode card has its own balance and can have funds
+            transferred to or from it.
+
+            - A debit mode card does not have its own balance but will be able
+            to spend funds belonging to its parent managed account, subject to a
+            configurable spend limit.
+        externalData:
+          $ref: '#/components/schemas/ExternalData'
+        userId:
+          $ref: '#/components/schemas/UserId'
+          description: >-
+            The Authorised User to be linked to the card, whose authentication
+            details will be used for actions such as 3DS authentication, or
+            manual provisioning to a digital wallet. This field can be used
+            instead of threeDSecureAuthConfig as it better describes the wider
+            scope of possible uses.
+        singleSpend:
+          type: boolean
+          description: >-
+            Indicates if the card is configured for single-spend mode. When
+            true, the card will be automatically blocked after the first
+            successful transaction.
+        replacement:
+          $ref: '#/components/schemas/ManagedCardReplacement'
+      discriminator:
+        propertyName: mode
+        mapping:
+          PREPAID_MODE: '#/components/schemas/PrepaidModeCard'
+          DEBIT_MODE: '#/components/schemas/DebitModeCard'
+    AllLevelSpendRules:
+      type: object
+      properties:
+        allowedMerchantCategories:
+          deprecated: true
+          type: array
+          maxItems: 200
+          items:
+            type: string
+          description: >-
+            Whitelist MCC: A list of allowed merchant category codes (MCCs). If
+            the MCC does not match, then the transaction will be declined. If an
+            MCC is also in the blocked list, the blocked list will take
+            precedence. This field is deprecated - use
+            "cardLevelSpendRules"."allowedMerchantCategories" instead.
+        blockedMerchantCategories:
+          deprecated: true
+          type: array
+          maxItems: 200
+          items:
+            type: string
+          description: >-
+            Blacklist MCC: A list of disallowed merchant category codes (MCCs).
+            If the MCC matches, then the transaction will be declined. If an MCC
+            is also in the allowed list, the blocked list will take precedence.
+            This field is deprecated - use
+            "cardLevelSpendRules"."blockedMerchantCategories" instead.
+        allowedMerchantIds:
+          deprecated: true
+          type: array
+          maxItems: 200
+          items:
+            type: string
+          description: >-
+            Whitelist Merchant Id: A list of allowed merchant IDs. If the
+            Merchant Id does not match, then the transaction will be declined.
+            If a Merchant Id is also provided in the blocked list, the blocked
+            list will take precedence. This field is deprecated - use
+            "cardLevelSpendRules"."allowedMerchantIds" instead.
+        blockedMerchantIds:
+          deprecated: true
+          type: array
+          maxItems: 200
+          items:
+            type: string
+          description: >-
+            Blacklist Merchant Id: A list of disallowed merchant IDs. If the
+            Merchant Id matches, then the transaction will be declined. If a
+            Merchant Id is also in the allowed list, the blocked list will take
+            precedence. This field is deprecated - use
+            "cardLevelSpendRules"."blockedMerchantIds" instead.
+        allowedMerchantCountries:
+          deprecated: true
+          type: array
+          maxItems: 50
+          items:
+            maxLength: 2
+            minLength: 2
+            pattern: ^[A-Z]{2}$
+            type: string
+          description: >-
+            Whitelist Merchant Country: A list of allowed merchant countries, in
+            ISO 3166-1 alpha-2 format. If the Merchant country does not match,
+            then the transaction will be declined. If a Merchant Country is also
+            provided in the blocked list, the blocked list will take precedence.
+            This field is deprecated - use
+            "cardLevelSpendRules"."allowedMerchantCountries" instead.
+        blockedMerchantCountries:
+          deprecated: true
+          type: array
+          maxItems: 50
+          items:
+            maxLength: 2
+            minLength: 2
+            pattern: ^[A-Z]{2}$
+            type: string
+          description: >-
+            Blacklist Merchant Country: A list of disallowed merchant countries,
+            in ISO 3166-1 alpha-2 format. If the Merchant country matches, then
+            the transaction will be declined. If a Merchant Country is also in
+            the allowed list, the blocked list will take precedence. This field
+            is deprecated - use "cardLevelSpendRules"."blockedMerchantCountries"
+            instead.
+        allowContactless:
+          deprecated: true
+          type: boolean
+          description: >-
+            Indicates if a contactless transaction is allowed on the card. This
+            field is deprecated - use "cardLevelSpendRules"."allowContactless"
+            instead.
+        allowAtm:
+          deprecated: true
+          type: boolean
+          description: >-
+            Indicates if an ATM Withdrawal transaction is allowed on the card.
+            This field is deprecated - use "cardLevelSpendRules"."allowAtm"
+            instead.
+        allowECommerce:
+          deprecated: true
+          type: boolean
+          description: >-
+            Indicates if an online transaction is allowed on the card. This
+            field is deprecated - use "cardLevelSpendRules"."allowECommerce"
+            instead.
+        allowCashback:
+          deprecated: true
+          type: boolean
+          description: >-
+            Indicates if a cashback transaction at a physical terminal is
+            allowed on the card. This field is deprecated - use
+            "cardLevelSpendRules"."allowCashback" instead.
+        allowCreditAuthorisations:
+          deprecated: true
+          type: boolean
+          description: >-
+            Indicates if a the card can receive a credit transaction. This field
+            is deprecated - use "cardLevelSpendRules"."allowCashback" instead.
+        minTransactionAmount:
+          deprecated: true
+          type: integer
+          minimum: 0
+          format: int64
+          description: >-
+            The minimum transaction amount, in card currency, that is allowed.
+            If the transaction amount is less than this value, then the
+            transaction will be declined. Omit this, or set to 0 if no maximum
+            transaction amount is to be set. This field is deprecated - use
+            "cardLevelSpendRules"."minTransactionAmount" instead.
+        maxTransactionAmount:
+          deprecated: true
+          type: integer
+          minimum: 0
+          format: int64
+          description: >-
+            The maximum transaction amount, in card currency, that is allowed.
+            If the transaction amount is greater than this value, then the
+            transaction will be declined. Omit this, or set to 0 if no maximum
+            transaction amount is to be set. This field is deprecated - use
+            "cardLevelSpendRules"."maxTransactionAmount" instead.
+        spendLimit:
+          deprecated: true
+          description: >-
+            The total amount of funds that can be spent using this card, in a
+            given time interval. This field is deprecated - use
+            "cardLevelSpendRules"."spendLimit" instead.
+          type: array
+          items:
+            $ref: '#/components/schemas/SpendLimit'
+        cardLevelSpendRules:
+          $ref: '#/components/schemas/CardLevelSpendRules'
+        profileLevelSpendRules:
+          $ref: '#/components/schemas/ProfileLevelSpendRules'
+        identityLevelSpendRules:
+          $ref: '#/components/schemas/IdentityLevelSpendRules'
+    Transfer:
+      required:
+        - id
+        - profileId
+        - creationTimestamp
+        - destination
+        - destinationAmount
+        - source
+        - state
+      type: object
+      properties:
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The unique identifier of a Transfer transaction.
+        profileId:
+          $ref: '#/components/schemas/ProfileId'
+        tag:
+          $ref: '#/components/schemas/Tag'
+        source:
+          description: >-
+            The source managed account or card from where the funds were
+            transferred.
+          $ref: '#/components/schemas/InstrumentId'
+        destination:
+          description: >-
+            The destination managed account or card to where the funds were
+            transferred.
+          $ref: '#/components/schemas/InstrumentId'
+        destinationAmount:
+          description: >-
+            The amount, in same currency as source and destination, that was
+            transferred from the source to the destination instrument.
+          $ref: '#/components/schemas/CurrencyAmount'
+        description:
+          type: string
+          maxLength: 255
+          pattern: ^[a-zA-Z0-9\/\-?:().$_,'+\s#=!"%&*<>;\{@\r\n]*$
+          description: >-
+            The description details that are included in the transaction as
+            reference.
+        state:
+          $ref: '#/components/schemas/TransactionState'
+        creationTimestamp:
+          type: integer
+          format: int64
+          description: >-
+            The time when the transaction was created, expressed in Epoch
+            timestamp using millisecond precision.
+        scheduledTimestamp:
+          $ref: '#/components/schemas/ScheduledTimestamp'
+        executionTimestamp:
+          $ref: '#/components/schemas/ExecutionTimestamp'
+        cancellationReason:
+          $ref: '#/components/schemas/TransactionCancellationReason'
+    User:
+      required:
+        - id
+        - email
+        - name
+        - surname
+        - identity
+        - active
+      type: object
+      properties:
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The unique identifier of the user.
+        identity:
+          description: The identity that the user belongs to.
+          $ref: '#/components/schemas/IdentityId'
+        name:
+          maxLength: 100
+          type: string
+          description: The first name of the user.
+        surname:
+          maxLength: 100
+          type: string
+          description: The last name of the user.
+        email:
+          $ref: '#/components/schemas/Email'
+        mobile:
+          $ref: '#/components/schemas/Mobile'
+        active:
+          type: boolean
+          description: >-
+            The state of the user. If the `active` attribute is false, then the
+            user will not be able to log in.
+        dateOfBirth:
+          description: Date of birth of the authorised user.
+          $ref: '#/components/schemas/Date'
+        tag:
+          $ref: '#/components/schemas/Tag'
+        countryOfResidence:
+          type: string
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]+$
+        locale:
+          $ref: '#/components/schemas/UserLocale'
+        brand:
+          $ref: '#/components/schemas/Brand'
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserPredefinedRole'
+    BulkProcessStatus:
+      type: string
+      enum:
+        - SUBMITTED
+        - RUNNING
+        - PARTIALLY_COMPLETED
+        - COMPLETED
+        - FAILED
+        - PAUSED
+        - CANCELLED
+    BulkId:
+      type: string
+      pattern: ^[0-9]+$
+    BulkProcessOperationStatus:
+      type: string
+      enum:
+        - SUBMITTED
+        - RUNNING
+        - COMPLETED
+        - FAILED
+        - CANCELLED
+    StatementTransactionType:
+      type: string
+      enum:
+        - AUTHORISATION
+        - SETTLEMENT
+        - MANUAL_TRANSACTION
+        - TRANSFER
+        - SEND
+        - DEPOSIT
+        - AUTHORISATION_REVERSAL
+        - AUTHORISATION_EXPIRY
+        - AUTHORISATION_DECLINE
+        - AUTHORISATION_MANUAL_CLOSE
+        - MERCHANT_REFUND
+        - MERCHANT_REFUND_REVERSAL
+        - ORIGINAL_CREDIT_TRANSACTION
+        - SETTLEMENT_REVERSAL
+        - ADJUSTMENT
+        - CHARGE_FEE
+        - WITHDRAWAL_RESERVE
+        - WITHDRAWAL_RELEASE
+        - FEE_REVERSAL
+        - OUTGOING_WIRE_TRANSFER
+        - AUTHORISATION_CANCELLATION
+        - SYSTEM_TRANSACTION
+        - OUTGOING_DIRECT_DEBIT_COLLECTION
+        - OUTGOING_DIRECT_DEBIT_REFUND
+        - CORRESPONDENT_BANK_TRANSFER
+    TransactionState:
+      type: string
+      description: Status of the transaction.
+      enum:
+        - INITIALISED
+        - COMPLETED
+        - REJECTED
+        - FAILED
+        - PENDING
+        - SCHEDULED
+        - CANCELLED
+    UserId:
+      type: string
+      pattern: ^[0-9]+$
+    BulkProcessExecute:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/BulkProcessMode'
+        webhookInterval:
+          description: >-
+            The count of operations after which a Bulk Process Progress will be
+            sent. For example, if set to 10, a webhook will be sent after every
+            10th operation is attempted. The minimum value fo count is 25% of
+            all operations. If a value below this is entered, a webhook will
+            only be sent for each 25% of operations attempted (i.e. 4 webhooks
+            per Bulk Process).
+          format: int32
+          type: integer
+    Fee:
+      required:
+        - feeType
+        - source
+      type: object
+      properties:
+        feeType:
+          type: string
+          description: The fee type as defined in the Multi Portal.
+        source:
+          description: The instrument from where the fee should be deducted.
+          $ref: '#/components/schemas/InstrumentId'
+    CardRenewalType:
+      description: |
+        Indicates how the card will be handled once it is close to expiring.
+          - RENEW: The card will be automatically renewed, keeping the same card number but with a new expiry date and CVV.
+          - NO_RENEW: Once the expiry date is reached, the card is destroyed.
+      enum:
+        - RENEW
+        - NO_RENEW
+      type: string
+    Email:
+      type: string
+      description: E-mail Address of the user
+      format: email
+    Mobile:
+      required:
+        - number
+        - countryCode
+      type: object
+      properties:
+        countryCode:
+          maxLength: 4
+          minLength: 1
+          type: string
+          pattern: ^\+[0-9]+$
+          description: The country code of the user mobile number (e.g. +44).
+        number:
+          pattern: ^[0-9]{1,12}$
+          type: string
+          description: The mobile number of the user - excluding country code.
+    Date:
+      required:
+        - year
+        - month
+        - day
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int32
+          maximum: 2100
+          minimum: 1900
+        month:
+          type: integer
+          format: int32
+          maximum: 12
+          minimum: 1
+        day:
+          type: integer
+          format: int32
+          maximum: 31
+          minimum: 1
+    UserLocale:
+      type: string
+      pattern: ^[a-z]{2}(-[A-Z]{2})?$
+      description: >
+        BCP47 locale code (e.g. en, en-US). The locale determines which email
+        and SMS user notification templates are used.
+      maxLength: 5
+      example: en-GB
+    Brand:
+      type: string
+      pattern: ^[a-zA-Z0-9]+$
+      description: >
+        Brand identifier used to determine the set of email and SMS user
+        notification templates. Must be alphanumeric, up to 25 characters, and
+        contain no spaces.
+      maxLength: 25
+    UserPredefinedRole:
+      type: string
+      enum:
+        - CARD_ASSIGNEE
+        - CARDS_MANAGEMENT_ROLE
+        - FUNDS_MANAGEMENT_ROLE
+        - ACCESS_MANAGEMENT_ROLE
+        - ADMIN
+    BulkProcessMode:
+      description: >
+        ON_FAILURE_STOP : the execution of the bulk process stops after the
+        first bulk operation that fails (operation returns a 4xx or 5xx response
+        code).
+
+        ON_FAILURE_CONTINUE: the execution of the bulk process resumes as normal
+        even when any of the bulk operations fail.
+      type: string
+      enum:
+        - ON_FAILURE_STOP
+        - ON_FAILURE_CONTINUE
+    BaseCardLevelSpendRules:
+      allOf:
+        - $ref: '#/components/schemas/CommonLevelSpendRules'
+        - type: object
+          properties:
+            spendLimit:
+              description: >-
+                The total amount of funds that can be spent using this card, in
+                a given time interval.
+              type: array
+              items:
+                $ref: '#/components/schemas/SpendLimit'
+    BulkProcessConflictErrorCode:
+      enum:
+        - VALIDATION_FAILED
+        - USER_VALIDATION_FAILED
+        - ALREADY_SUBMITTED
+        - DUPLICATE_OPERATION_TYPE
+        - NO_CONFIG_FOUND
+        - INVALID_STATE
+        - TOO_MANY_REQUESTS
+      type: string
+    BulkProcessOperationStatusCounts:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/BulkProcessOperationStatus'
+        count:
+          type: integer
+    BulkProcessOperation:
+      type: object
+      properties:
+        operationId:
+          description: >-
+            Id of a specific bulk operation. Useful only if you need to refer to
+            a specific operation when reporting an issue
+          type: string
+        sequence:
+          description: >-
+            The operations submitted in a Bulk Processes are executed in
+            sequence. This field indicates the position of this specific
+            operation in the context of such sequence
+          format: int32
+          type: integer
+        method:
+          description: >-
+            HTTP request method used for the executed operation within the Bulk
+            process
+          type: string
+        path:
+          description: The endpoint path for the Operation
+          type: string
+        status:
+          description: >
+            The execution status of the operation within the Bulk Process. This
+            can be one of: "SUBMITTED" "RUNNING" "COMPLETED" "FAILED"
+            "CANCELLED"
+          $ref: '#/components/schemas/BulkProcessOperationStatus'
+        requestPayload:
+          description: >-
+            This is the payload for the execution of an operation within the
+            context of a Bulk Process
+          type: string
+        responsePayload:
+          description: The response for the execution of the operation
+          type: string
+    TransactionId:
+      required:
+        - type
+        - id
+      type: object
+      properties:
+        type:
+          enum:
+            - AUTHORISATION
+            - SETTLEMENT
+            - MANUAL_TRANSACTION
+            - TRANSFER
+            - SEND
+            - DEPOSIT
+            - AUTHORISATION_REVERSAL
+            - AUTHORISATION_EXPIRY
+            - AUTHORISATION_DECLINE
+            - AUTHORISATION_MANUAL_CLOSE
+            - MERCHANT_REFUND
+            - MERCHANT_REFUND_REVERSAL
+            - ORIGINAL_CREDIT_TRANSACTION
+            - SETTLEMENT_REVERSAL
+            - ADJUSTMENT
+            - CHARGE_FEE
+            - WITHDRAWAL_RESERVE
+            - WITHDRAWAL_RELEASE
+            - FEE_REVERSAL
+            - OUTGOING_WIRE_TRANSFER
+            - AUTHORISATION_CANCELLATION
+            - SYSTEM_TRANSACTION
+            - OUTGOING_DIRECT_DEBIT_COLLECTION
+            - OUTGOING_DIRECT_DEBIT_REFUND
+            - LINKED_ACCOUNT_VERIFICATION_TRANSFER
+            - INCOMING_WIRE_TRANSFER
+            - FUNDING
+            - TEST_FUNDING
+            - CORRESPONDENT_BANK_TRANSFER
+          type: string
+          x-enumDescriptions:
+            AUTHORISATION: ''
+            SETTLEMENT: ''
+            MANUAL_TRANSACTION: >
+              For a manual transaction, the `additionalFields`: `note` will
+              contain a description with the reason for the transaction. This
+              will start with one of the following prefixes:
+
+
+              - Account Closure
+
+              - Chargebacks - Represented
+
+              - Chargebacks - Won
+
+              - Deleted Card - Transfer from
+
+              - Deleted Card - Transfer to
+
+              - Duplicate Authorisation Issue
+
+              - Duplicate Settlement Issue
+
+              - Expired Card - Transfer from
+
+              - Expired Card - Transfer to
+
+              - Forex Padding Release Issue
+
+              - Funds Redemption & Account Closure
+
+              - Manual Auth Expiry
+
+              - Missing Settlement Issue
+
+              - Negative Card Balance
+
+              - Reversal - Duplicate Transaction
+
+              - Reversal - Manual Auth Expiry
+
+              - Reversal - Manual Transaction
+
+              - Amend Balance - Auth Expiry
+
+              - Balance Adjustment
+
+              - Completing Deposit
+
+              - Duplicate Deposit
+            TRANSFER: ''
+            SEND: ''
+            DEPOSIT: ''
+            AUTHORISATION_REVERSAL: ''
+            AUTHORISATION_EXPIRY: ''
+            AUTHORISATION_DECLINE: ''
+            AUTHORISATION_MANUAL_CLOSE: ''
+            MERCHANT_REFUND: ''
+            MERCHANT_REFUND_REVERSAL: ''
+            ORIGINAL_CREDIT_TRANSACTION: ''
+            SETTLEMENT_REVERSAL: ''
+            ADJUSTMENT: ''
+            CHARGE_FEE: ''
+            WITHDRAWAL_RESERVE: ''
+            WITHDRAWAL_RELEASE: ''
+            FEE_REVERSAL: ''
+            OUTGOING_WIRE_TRANSFER: ''
+            AUTHORISATION_CANCELLATION: ''
+            SYSTEM_TRANSACTION: ''
+            OUTGOING_DIRECT_DEBIT_COLLECTION: ''
+            OUTGOING_DIRECT_DEBIT_REFUND: ''
+        id:
+          type: string
+          pattern: ^[0-9]+$
+    ManagedInstrumentBalance:
+      type: object
+      description: >-
+        Instruments with funds have 2 balances, the `availableBalance`
+        indicating the funds that are available for transactions such as
+        purchases, and the `actualBalance` indicating the funds that are
+        actually on the instrument.
+      properties:
+        availableBalance:
+          type: integer
+          format: int64
+          description: >-
+            The funds available for transactions on the instrument. Funds that
+            are blocked or pending are not included in the available balance.
+        actualBalance:
+          type: integer
+          format: int64
+          description: >-
+            The funds that are actually on the instrument. Funds that are
+            blocked or pending, due to for example, a purchase authorisation or
+            a pending deposit, are included in the actual balance.
+    ManagedInstrumentState:
+      required:
+        - state
+      type: object
+      properties:
+        state:
+          $ref: '#/components/schemas/InstrumentState'
+        blockedReason:
+          $ref: '#/components/schemas/BlockedReason'
+        destroyedReason:
+          $ref: '#/components/schemas/DestroyedReason'
+    AccountLowBalanceThreshold:
+      type: integer
+      format: int64
+      description: >-
+        Sends a low balance notification webhook when the available balance
+        drops below this amount. Currency is inherited from the managed account.
+    StatementEntryState:
+      type: string
+      description: |
+        The transaction entry state, as follows:
+          - PENDING: The transaction has started and some of the fund movements have completed, however additional fund movements are still pending to finalise the transaction.
+          - COMPLETED: All fund movements for a transaction have completed.
+      enum:
+        - PENDING
+        - COMPLETED
+    ScaledAmount:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int64
+        scale:
+          maximum: 127
+          minimum: -128
+          type: integer
+          format: int32
+      description: >-
+        A floating point number, represented as a value and its scale. Its
+        actual value can be obtained using the equation: value * pow(10,
+        -scale).
+    UserCurrencyTransactionDetails:
+      required:
+        - userTransactionAmount
+        - userExchangeRate
+      type: object
+      properties:
+        userTransactionAmount:
+          $ref: '#/components/schemas/CurrencyAmount'
+        userExchangeRate:
+          type: string
+      description: >-
+        The object representing the user transaction's currency, amount and
+        rate.
+    SensitiveCardNumber:
+      type: object
+      description: >
+        The full card number of the card.
+
+
+        Unless you are PCI-DSS compliant and have opted to switch off Weavr's
+        security model, the card number will be tokenised.
+
+
+        To show the full unredacted card number to your user, you need to embed
+        the Card number UI Component in your application. This accepts the
+        tokenised card number and shows the unredacted card number to the user
+        on screen.
+
+
+        In addition, it is returned only when the current session is stepped-up.
+      properties:
+        value:
+          maxLength: 16
+          type: string
+    SensitiveCvv:
+      type: object
+      description: >
+        The CVV of the card.
+
+
+        Unless you are PCI-DSS compliant and have opted to switch off Weavr's
+        security model, the card's CVV will be tokenised.
+
+
+        To show the card's CVV to your user, you need to embed the CVV UI
+        Component in your application. This accepts the tokenised CVV and shows
+        the plain text CVV number to the user on screen.
+
+
+        In addition, it is returned only when the current session is stepped-up.
+      properties:
+        value:
+          maxLength: 3
+          type: string
+    BillingAddress:
+      required:
+        - addressLine1
+        - city
+        - postCode
+        - country
+      type: object
+      properties:
+        addressLine1:
+          minLength: 1
+          maxLength: 150
+          type: string
+          description: The first line of the address.
+        addressLine2:
+          maxLength: 150
+          type: string
+          description: The second line of the address.
+        city:
+          maxLength: 50
+          type: string
+          description: The city of the address.
+        postCode:
+          maxLength: 10
+          pattern: ^[A-Za-z0-9 -]*$
+          type: string
+          description: The post code associated with the address.
+        state:
+          maxLength: 50
+          type: string
+          description: The state of the address.
+        country:
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]+$
+          type: string
+          description: The country of the address expressed in ISO 3166 alpha-2 format.
+    PhysicalCardDetails:
+      required:
+        - pendingActivation
+      type: object
+      properties:
+        bulkDelivery:
+          $ref: '#/components/schemas/BulkCardDelivery'
+        productReference:
+          type: string
+          description: >-
+            The unique reference indicating the configuration of the physical
+            card. Example the card design.
+        carrierType:
+          type: string
+        pendingActivation:
+          type: boolean
+          description: >-
+            Indicates if the physical card is activated for physical usage such
+            as with physical terminals.
+        pinBlocked:
+          type: boolean
+          description: >-
+            Indicates if the physical card is blocked due to providing incorrect
+            PINs.
+        manufacturingState:
+          $ref: '#/components/schemas/ManufacturingState'
+        replacement:
+          deprecated: true
+          type: object
+          description: Indicates if the physical card is replaced by another card.
+          properties:
+            replacementReason:
+              type: string
+              description: |
+                The reason why the physical card was replaced.
+                  - DAMAGED: The physical card was damaged and cannot be used at a physical terminal.
+                  - LOST_STOLEN: The physical card was either lost or stolen and cannot be used.
+                  - EXPIRED: The physical card expired.
+              enum:
+                - DAMAGED
+                - LOST_STOLEN
+                - EXPIRED
+            replacementId:
+              type: string
+              pattern: ^[0-9]+$
+              description: The unique identifier of the new card that replaces this card.
+        deliveryAddress:
+          $ref: '#/components/schemas/DeliveryAddress'
+        deliveryMethod:
+          $ref: '#/components/schemas/DeliveryMethod'
+        deliveryTrackingCode:
+          $ref: '#/components/schemas/DeliveryTrackingCode'
+        deliveryTrackingMethod:
+          $ref: '#/components/schemas/DeliveryTrackingMethod'
+        deliveryTrackingUrl:
+          $ref: '#/components/schemas/DeliveryTrackingUrl'
+        nameOnCardLine2:
+          deprecated: true
+          maxLength: 27
+          pattern: >-
+            ^[a-zA-Z0-9ßÀÁÂÃÄÅǍÆÇÈÉÊËÌÍÎÏÒÓÔÕÖØŠÙÚÛÜŸÝĄĆČĎĘĹĽŁŃŇÑŐŔŚȘȚŤŰŹŻŽàáâãäåǎæçèéêëìíîïòóôõöøšùúûüÿýąćčďęĺľłńňñőŕśșțťűźżž\-^.
+            '-]*$
+          type: string
+          description: >-
+            Line 2 of the 'name on card' field. For Physical cards, this field
+            will be printed on the card. The maximum characters allowed will
+            depend on the design chosen and will be provided to you by Weavr
+            when setting up your plastic cards. This field is deprecated
+    DigitalWallets:
+      type: object
+      properties:
+        pushProvisioningEnabled:
+          type: boolean
+          description: >-
+            Indicates whether the card is enabled for push provisioning in a
+            digital wallet.
+        walletsEnabled:
+          type: boolean
+          description: >-
+            Indicates whether the card is enabled for tokenisation in a digital
+            wallet.
+        artworkReference:
+          type: string
+          description: >-
+            The artwork reference that will be used if the card is enabled for
+            tokenisation in a digital wallet.
+    ThreeDSecureAuthConfig:
+      deprecated: true
+      type: object
+      required:
+        - linkedUserId
+        - primaryChannel
+      properties:
+        linkedUserId:
+          type: string
+          description: >-
+            The Authorised user whose authentication / billing details will be
+            reflected on the card for verification purposes such as 3ds.
+          pattern: ^[0-9]+$
+          deprecated: true
+        primaryChannel:
+          type: string
+          description: Primary Authentication Method
+          enum:
+            - OTP_SMS
+            - BIOMETRICS
+            - TWILIO_AUTHY
+        fallbackChannel:
+          type: string
+          description: Fallback Authentication Method
+          enum:
+            - OTP_SMS
+    ExternalData:
+      description: >-
+        External data fields, as provided and managed by the caller that are to
+        be stored and associated with a Managed Card instance. This information
+        is not processed or used by Weavr but some of the values could be shown
+        in specific reports and used as filters
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+            minLength: 1
+            maxLength: 100
+          value:
+            type: string
+            minLength: 1
+            maxLength: 100
+      uniqueItems: true
+      maxItems: 10
+    ManagedCardReplacement:
+      description: Indicates if the card is replaced by another card.
+      type: object
+      required:
+        - id
+        - reason
+      properties:
+        id:
+          description: The id of the replacement card
+          pattern: ^[0-9]+$
+          type: string
+        reason:
+          description: |
+            The reason why the card was replaced.
+              - DAMAGED: The physical card was damaged and cannot be used at a physical terminal.
+              - LOST_STOLEN: The physical card was either lost or stolen and cannot be used.
+              - EXPIRED: The card expired.
+              - COMPROMISED: The virtual card was compromised; the virtual card details have been exposed or accessed without authorization.
+          type: string
+          enum:
+            - DAMAGED
+            - LOST_STOLEN
+            - EXPIRED
+            - COMPROMISED
+    PrepaidModeCard:
+      allOf:
+        - $ref: '#/components/schemas/ManagedCard'
+        - type: object
+          properties:
+            balances:
+              $ref: '#/components/schemas/ManagedInstrumentBalance'
+    DebitModeCard:
+      allOf:
+        - $ref: '#/components/schemas/ManagedCard'
+        - type: object
+          required:
+            - parentManagedAccountId
+          properties:
+            parentManagedAccountId:
+              type: string
+              pattern: ^[0-9]+$
+              description: >-
+                Id of the managed account holding funds which the managed card
+                will access, up to a configurable spend limit.
+            userCurrency:
+              $ref: '#/components/schemas/SupportedUserCurrency'
+            availableToSpend:
+              description: >-
+                The amount of funds from the parent managed account that are
+                available to be spent through the card, in a given time
+                interval.
+              type: array
+              items:
+                $ref: '#/components/schemas/AvailableToSpend'
+    SpendLimit:
+      type: object
+      required:
+        - value
+        - interval
+      properties:
+        startTimestamp:
+          description: >-
+            The start timestamp of the spend limit, expressed in Epoch timestamp
+            using millisecond precision.
+          type: integer
+          format: int64
+        value:
+          description: The spend limit, as amount and currency, (for the given interval).
+          $ref: '#/components/schemas/CurrencyAmount'
+        interval:
+          $ref: '#/components/schemas/SpendLimitInterval'
+    ProfileLevelSpendRules:
+      allOf:
+        - $ref: '#/components/schemas/CommonLevelSpendRules'
+        - type: object
+          properties:
+            authForwardingEnabled:
+              type: boolean
+              description: Indicates if auth forwarding is enabled on profile level
+    IdentityLevelSpendRules:
+      allOf:
+        - $ref: '#/components/schemas/CommonLevelSpendRules'
+        - type: object
+          properties:
+            minTransactionAmount:
+              type: integer
+              minimum: 0
+              format: int64
+              description: >-
+                The minimum transaction amount, in card currency, that is
+                allowed. If the transaction amount is less than this value, then
+                the transaction will be declined. Omit this, or set to 0 if no
+                maximum transaction amount is to be set.
+            maxTransactionAmount:
+              type: integer
+              minimum: 0
+              format: int64
+              description: >-
+                The maximum transaction amount, in card currency, that is
+                allowed. If the transaction amount is greater than this value,
+                then the transaction will be declined.
+    ExecutionTimestamp:
+      pattern: ^[0-9]+$
+      type: string
+      description: >-
+        The epoch timestamp at which the transaction was executed, transitioning
+        to a final state such as COMPLETED, REJECTED, or FAILED.
+    TransactionCancellationReason:
+      type: string
+      pattern: ^[ a-zA-Z0-9_-]+$
+      maxLength: 50
+      description: The reason the scheduled transaction was cancelled.
+    CommonLevelSpendRules:
+      type: object
+      properties:
+        allowedMerchantCategories:
+          type: array
+          maxItems: 200
+          items:
+            type: string
+          description: >-
+            Whitelist MCC: A list of allowed merchant category codes (MCCs). If
+            the MCC does not match, then the transaction will be declined. If an
+            MCC is also in the blocked list, the blocked list will take
+            precedence.
+        blockedMerchantCategories:
+          type: array
+          maxItems: 200
+          items:
+            type: string
+          description: >-
+            Blacklist MCC: A list of disallowed merchant category codes (MCCs).
+            If the MCC matches, then the transaction will be declined. If an MCC
+            is also in the allowed list, the blocked list will take precedence.
+        allowedMerchantIds:
+          type: array
+          maxItems: 200
+          items:
+            type: string
+          description: >-
+            Whitelist Merchant Id: A list of allowed merchant IDs. If the
+            Merchant Id does not match, then the transaction will be declined.
+            If a Merchant Id is also provided in the blocked list, the blocked
+            list will take precedence.
+        blockedMerchantIds:
+          type: array
+          maxItems: 200
+          items:
+            type: string
+          description: >-
+            Blacklist Merchant Id: A list of disallowed merchant IDs. If the
+            Merchant Id matches, then the transaction will be declined. If a
+            Merchant Id is also in the allowed list, the blocked list will take
+            precedence.
+        allowedMerchantCountries:
+          type: array
+          maxItems: 50
+          items:
+            maxLength: 2
+            minLength: 2
+            pattern: ^[A-Z]{2}$
+            type: string
+          description: >-
+            Whitelist Merchant Country: A list of allowed merchant countries, in
+            ISO 3166-1 alpha-2 format. If the Merchant country does not match,
+            then the transaction will be declined. If a Merchant Country is also
+            provided in the blocked list, the blocked list will take precedence.
+        blockedMerchantCountries:
+          type: array
+          maxItems: 50
+          items:
+            maxLength: 2
+            minLength: 2
+            pattern: ^[A-Z]{2}$
+            type: string
+          description: >-
+            Blacklist Merchant Country: A list of disallowed merchant countries,
+            in ISO 3166-1 alpha-2 format. If the Merchant country matches, then
+            the transaction will be declined. If a Merchant Country is also in
+            the allowed list, the blocked list will take precedence.
+        allowContactless:
+          type: boolean
+          description: Indicates if a contactless transaction is allowed on the card.
+        allowAtm:
+          type: boolean
+          description: Indicates if an ATM Withdrawal transaction is allowed on the card.
+        allowECommerce:
+          type: boolean
+          description: Indicates if an online transaction is allowed on the card.
+        allowCashback:
+          type: boolean
+          description: >-
+            Indicates if a cashback transaction at a physical terminal is
+            allowed on the card.
+        allowCreditAuthorisations:
+          type: boolean
+          description: Indicates if a the card can receive a credit transaction.
+        rolloverPolicy:
+          $ref: '#/components/schemas/RolloverPolicy'
+    InstrumentState:
+      type: string
+      description: >
+        The state of the instrument indicating what it can and cannot do as
+        follows:
+          - ACTIVE: The instrument is in an active state and can be used in transactions.
+          - BLOCKED: The instrument is temporarily blocked and cannot be used. Any funds on the instrument are also frozen. The `blockedReason` provides more information as to why it was blocked.
+          - DESTROYED: The instrument has been permanently destroyed. The `destroyReason` provides more information as to why it was destroyed.
+          - NOT_ENABLED: The instrument is not enabled for use, since the linked user has not completed all necessary verification steps.
+      enum:
+        - ACTIVE
+        - BLOCKED
+        - DESTROYED
+        - NOT_ENABLED
+    BlockedReason:
+      type: string
+      description: |
+        The reason why the instrument has been blocked:
+          - USER: The root, or an authorised user, of the identity owning the instrument has temporarily blocked the instrument.
+          - SYSTEM: The platform or an administrator of the platform has temporarily blocked the instrument.
+          - LOST: The instrument has been blocked because it was marked as lost.
+          - SINGLE_SPEND: The instrument has been automatically blocked after its first successful transaction (single-spend card).
+      enum:
+        - USER
+        - SYSTEM
+        - LOST
+        - SINGLE_SPEND
+    DestroyedReason:
+      type: string
+      description: |
+        The reason why the instrument has been destroyed:
+          - SYSTEM: The platform or an administrator of the platform has destroyed the instrument.
+          - USER: The root, or an authorised user, of the identity owning the instrument has destroyed the instrument.
+          - LOST: The instrument was automatically destroyed as it was marked as lost.
+          - STOLEN: The instrument was automatically destroyed as it was marked as stolen.
+          - EXPIRED: The instrument was automatically destroyed as it expired.
+          - COMPROMISED: The instrument was automatically destroyed as it was marked as compromised.
+          - SINGLE_SPEND: The instrument was automatically destroyed as it was a single-spend card that was used.
+      enum:
+        - SYSTEM
+        - USER
+        - LOST
+        - STOLEN
+        - EXPIRED
+        - COMPROMISED
+        - SINGLE_SPEND
+    BulkCardDelivery:
+      type: boolean
+      description: >
+        Bulk delivery is available for deliveryMethods REGISTERED_MAIL or
+        COURIER.
+
+        All cards marked as bulk and ordered within the fulfilment centre’s
+        dispatch window will be sent in bulk. Delivery address must be identical
+        for all orders. contactNumber in the deliveryAddress object is mandatory
+        when bulk is selected. Maximum number of cards delivered in a single
+        box/packet is REGISTERED_MAIL = 90, COURIER = 200.
+    ManufacturingState:
+      type: string
+      description: |
+        Information on the manufacturing of the physical card, as follows:
+          - REQUESTED: The upgrade of the card to physical has been requested.
+          - SENT_FOR_FULFILLMENT - The card has been sent for printing.
+          - DISPATCHED: The card has been manufactured and dispatched. You may receive a second DISPATCHED event when the manufacturer provides a tracking code.
+          - DELIVERED: The card has been received and activated by the recipient.
+      enum:
+        - REQUESTED
+        - SENT_FOR_FULFILLMENT
+        - DISPATCHED
+        - DELIVERED
+    DeliveryAddress:
+      required:
+        - name
+        - surname
+        - addressLine1
+        - city
+        - postCode
+        - country
+      type: object
+      description: The delivery address where the physical card is delivered.
+      properties:
+        name:
+          maxLength: 100
+          type: string
+        surname:
+          maxLength: 100
+          type: string
+        addressLine1:
+          maxLength: 50
+          minLength: 1
+          type: string
+        addressLine2:
+          maxLength: 50
+          minLength: 1
+          type: string
+        city:
+          maxLength: 50
+          type: string
+        postCode:
+          maxLength: 10
+          pattern: ^[A-Za-z0-9 -]*$
+          type: string
+        state:
+          maxLength: 50
+          type: string
+        country:
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]+$
+          type: string
+          description: Country of the identity in ISO 3166 alpha-2 format.
+        contactNumber:
+          $ref: '#/components/schemas/PhoneNumber'
+          description: >-
+            Mandatory when bulk delivery is selected. Will be printed on the
+            box/packet to assist delivery.
+    DeliveryMethod:
+      type: string
+      description: >
+        The delivery methods supported for delivering printed physical cards. If
+        not specified, the STANDARD_DELIVERY method will be used.
+      enum:
+        - STANDARD_DELIVERY
+        - REGISTERED_MAIL
+        - COURIER
+        - FIRST_CLASS_MAIL
+    DeliveryTrackingCode:
+      type: string
+      description: >-
+        The delivery tracking code for tracking the physical card's delivery
+        status. This may not always be available on the first dispatched event,
+        and so you will receive an additional dispatched notification with the
+        delivery tracking code populated as soon as it is available.
+    DeliveryTrackingMethod:
+      type: string
+      description: >-
+        The delivery tracking method for tracking the physical card's delivery
+        status.
+    DeliveryTrackingUrl:
+      type: string
+      description: >-
+        The delivery tracking URL for tracking the physical card's delivery
+        status.
+    SupportedUserCurrency:
+      enum:
+        - JPY
+        - BGN
+        - CZK
+        - DKK
+        - HUF
+        - PLN
+        - RON
+        - SEK
+        - CHF
+        - ISK
+        - NOK
+        - TRY
+        - AUD
+        - BRL
+        - CAD
+        - CNY
+        - HKD
+        - IDR
+        - ILS
+        - INR
+        - KRW
+        - MXN
+        - MYR
+        - NZD
+        - PHP
+        - SGD
+        - THB
+        - ZAR
+        - EUR
+        - USD
+        - GBP
+      type: string
+    AvailableToSpend:
+      type: object
+      properties:
+        value:
+          description: >-
+            The amount and currency that is available to spend, (for the given
+            interval).
+          $ref: '#/components/schemas/CurrencyAmount'
+        interval:
+          $ref: '#/components/schemas/SpendLimitInterval'
+    SpendLimitInterval:
+      description: >
+        The time period for which the `spendLimit` is valid.
+         - DAILY: starting from 00:00:00 UTC of current day to 23:59:59 UTC of current day
+         - WEEKLY: 00:00:00 UTC Monday of current week to following Sunday 23:59:59 UTC
+         - MONTHLY: 1st of current calendar month to end of current calendar month
+         - QUARTERLY: starting from beginning of current quarter where quarters are defined as follows:
+          - 1 January 00:00:00 UTC to 31 March 23:59:59 UTC
+          - 1 April 00:00:00 UTC to 30 Jun 23:59:59 UTC
+          - 1 July 00:00:00 UTC to 30 September 23:59:59 UTC
+          - 1 October 00:00:00 UTC to 31 December 23:59:59 UTC
+
+        - YEARLY: 1 January 00:00:00 UTC of current calendar year to 31 December
+        23:59:59 UTC of current calendar year.
+
+        - ALWAYS: This indicates that the `spendLimit` is the total amount that
+        can be spent through the card throughout the whole lifetime of the card.
+      type: string
+      enum:
+        - DAILY
+        - WEEKLY
+        - MONTHLY
+        - QUARTERLY
+        - YEARLY
+        - ALWAYS
+    RolloverPolicy:
+      type: object
+      description: >-
+        The rollover policy will dictate how Weavr handles any eventual
+        overspending. This is possible if a merchant clears more funds than
+        authorised, or when a merchant clears funds without authorising,
+        resulting in the `availableToSpend` value to go into negative. Rollover
+        is relative to a `spendLimit.interval`
+      required:
+        - rolloverNegative
+      properties:
+        rolloverNegative:
+          type: boolean
+          description: >-
+            If set to true any overspend will keep rolling over and get deducted
+            in the upcoming intervals until the `availableToSpend` is back to a
+            positive value. Any overspend will be deducted from the
+            `availableToSpend` at the beginning of the next interval.
+    PhoneNumber:
+      maxLength: 20
+      minLength: 5
+      pattern: ^\+[0-9]+$
+      type: string
+paths:
+  /impersonate_identity_login:
+    post:
+      deprecated: true
+      tags:
+        - User Impersonation
+      description: >
+        Get a token representing the given `identity`. This token can then be
+        used to authorise certain secure
+
+        operations on behalf of the identity.
+      summary: Impersonate login for an identity
+      operationId: impersonateIdentityLogin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImpersonateIdentityLoginRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/ImpersonateIdentityLoginResponse'
+        '400':
+          $ref: '#/components/responses/BackofficeBadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: The authentication credentials are not found or are incorrect.
+        '409':
+          $ref: '#/components/responses/ImpersonateIdentityLoginConflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /bulks:
+    get:
+      description: Filter bulk processes.
+      summary: Get all bulk processes
+      operationId: bulks
+      tags:
+        - Manage
+      parameters:
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/bulkProcessStatus'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkProcessesPaged'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/BulkProcessorConflictResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /bulks/{bulk_id}:
+    get:
+      tags:
+        - Manage
+      description: >-
+        Retrieves details on the bulk process identified by the bulk_id
+        parameter.
+      summary: Get bulk process
+      operationId: bulkId
+      parameters:
+        - $ref: '#/components/parameters/bulkId'
+      responses:
+        '200':
+          $ref: '#/components/responses/BulkProcessDetails'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /bulks/{bulk_id}/operations:
+    get:
+      tags:
+        - Manage
+      description: Retrieves the bulk process operations that match the query parameters.
+      summary: Get all operations in a bulk
+      operationId: bulkIdOperations
+      parameters:
+        - $ref: '#/components/parameters/bulkId'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/sequence'
+        - $ref: '#/components/parameters/bulkProcessOperationStatus'
+      responses:
+        '200':
+          $ref: '#/components/responses/BulkProcessOperations'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /bulks/{bulk_id}/execute:
+    post:
+      tags:
+        - Manage
+      description: >
+        Launches execution of operations of any bulk process identified by the
+        bulk_id  parameter.
+
+
+        The status of the bulk process has to be in a ‘SUBMITTED’ state and
+        after execution initiates, the bulk process state is set to ‘RUNNING’.
+
+
+        The final state of execution can be any of
+
+
+        COMPLETED: the execution of the bulk process is complete and all bulk
+        operations of the bulk process were executed successfully
+
+
+        FAILED:  none of the operations of the bulk process have executed.
+
+
+        PARTIALLY_COMPLETED: the execution of the bulk process is complete and
+        some of the bulk operations of the bulk process failed.
+
+
+        This operation is asynchronous and will return immediately. You can
+        track the status of the execution of the bulk process through Get bulk
+        process. You can also pause execution through _bulkIdPause_
+      summary: Execute bulk process
+      operationId: bulkIdExecute
+      parameters:
+        - $ref: '#/components/parameters/bulkId'
+      requestBody:
+        $ref: '#/components/requestBodies/BulkProcessExecute'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/BulkProcessorConflictResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /bulks/{bulk_id}/pause:
+    post:
+      tags:
+        - Manage
+      description: >
+        Pauses the execution of operations of the bulk process that is in state
+        ‘RUNNING’ as identified by the bulk_id  parameter.
+
+
+        The status of the bulk process after execution of this operation is set
+        to ‘PAUSED’
+
+
+        The execution can be resumed through _bulkIdResume_
+      summary: Pause bulk process
+      operationId: bulkIdPause
+      parameters:
+        - $ref: '#/components/parameters/bulkId'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/BulkProcessorConflictResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /bulks/{bulk_id}/resume:
+    post:
+      tags:
+        - Manage
+      description: >
+        Resumes the execution of operations of the bulk process that is in state
+        ' PAUSED' as identified by the bulk_id parameter.
+
+
+        The status of the bulk process after execution of this operation is set
+        back to ‘RUNNING’
+      summary: Resume bulk process
+      operationId: bulkIdResume
+      parameters:
+        - $ref: '#/components/parameters/bulkId'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/BulkProcessorConflictResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /bulks/{bulk_id}/cancel:
+    post:
+      tags:
+        - Manage
+      description: >
+        Cancels the execution of operations of a bulk process that is in state
+        ‘PAUSED’ or ‘RUNNING’ as identified by the bulk_id parameter.
+
+
+        The status of the bulk process after execution of this operation is set 
+        to ‘CANCELLED’. This is a final state and a cancelled bulk process
+        cannot be resumed.
+      summary: Cancel bulk process
+      operationId: bulkIdCancel
+      parameters:
+        - $ref: '#/components/parameters/bulkId'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/BulkProcessorConflictResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /access_token:
+    post:
+      tags:
+        - Access Token
+      description: >
+        Acquire a `Bearer` token granting you access to securely perform
+        delegated access operations on behalf of the given `identity`.
+
+
+        The token representing the identity should be included in the
+        `Authorization` header of all requests to endpoints representing
+        Delegated Access operations.
+      summary: Acquire a new access token
+      operationId: requestAccessToken
+      security:
+        - api_key: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImpersonateIdentityLoginRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/ImpersonateIdentityLoginResponse'
+        '400':
+          $ref: '#/components/responses/BackofficeBadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: The authentication credentials are not found or are incorrect.
+        '409':
+          $ref: '#/components/responses/ImpersonateIdentityLoginConflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+  /fees/charge:
+    post:
+      tags:
+        - Fees
+      description: >
+        Charge a fee to the identity identified by the auth token, based on a
+        pre-defined custom fee. Custom fees can be configured in the Multi
+        Portal.
+
+
+        The fees collected will be deposited into your Revenue Account. The
+        balance and transaction history of your revenue account can be viewed in
+        the Multi Portal.
+      summary: 'Charge identity a pre-defined custom fee '
+      operationId: chargeFee
+      parameters:
+        - $ref: '#/components/parameters/idempotency-ref'
+      requestBody:
+        $ref: '#/components/requestBodies/ChargeFeeRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/ChargeFeeResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/ChargeFeeConflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /corporates/fees/charge:
+    post:
+      deprecated: true
+      tags:
+        - Corporates
+      description: >
+        Charge a fee to the corporate identified by the auth token, based on a
+        pre-defined custom fee. Custom fees can be configured in the Multi
+        Portal.
+
+
+        The fees collected will be deposited into your Revenue Account. The
+        balance and transaction history of your revenue account can be viewed in
+        the Multi Portal.
+      summary: Charge fee to a corporate
+      operationId: corporateChargeFee
+      parameters:
+        - $ref: '#/components/parameters/idempotency-ref'
+      requestBody:
+        $ref: '#/components/requestBodies/ChargeFeeRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/ChargeFeeResponse'
+        '400':
+          $ref: '#/components/responses/BackofficeBadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/ChargeFeeConflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /consumers/fees/charge:
+    post:
+      deprecated: true
+      tags:
+        - Consumers
+      description: >
+        Charge a fee to the logged-in consumer based on a pre-defined custom
+        fee. Custom fees can be configured in the Multi Portal.
+
+
+        The fees collected will be deposited into your Revenue Account. The
+        balance and transaction history of your revenue account can be viewed in
+        the Multi Portal.
+      summary: Charge fee to a consumer
+      operationId: consumerChargeFee
+      parameters:
+        - $ref: '#/components/parameters/idempotency-ref'
+      requestBody:
+        $ref: '#/components/requestBodies/ChargeFeeRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/ChargeFeeResponse'
+        '400':
+          $ref: '#/components/responses/BackofficeBadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/ChargeFeeConflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /managed_accounts/{id}:
+    get:
+      tags:
+        - Managed Accounts
+      description: Fetch the managed account identified by the `id` in path.
+      summary: Get a managed account
+      operationId: managedAccountGet
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the Managed Account.
+          schema:
+            type: string
+            pattern: ^[0-9]+$
+      responses:
+        '200':
+          $ref: '#/components/responses/ManagedAccountResponse'
+        '400':
+          $ref: '#/components/responses/BackofficeBadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InstrumentForbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /managed_accounts/{id}/statement:
+    get:
+      tags:
+        - Managed Accounts
+      description: >-
+        Returns a list of transactions against the managed account identified by
+        the `id` path parameter, matching the criteria provided in the request.
+      summary: Get a managed account statement
+      operationId: managedAccountStatement
+      parameters:
+        - name: id
+          in: path
+          description: The unique identifier of the managed account.
+          required: true
+          style: simple
+          schema:
+            type: string
+            pattern: ^[0-9]+$
+        - $ref: '#/components/parameters/accept'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/statementLimit'
+        - $ref: '#/components/parameters/orderByTimestamp'
+        - $ref: '#/components/parameters/fromTimestamp'
+        - $ref: '#/components/parameters/toTimestamp'
+        - $ref: '#/components/parameters/showFundMovementsOnly'
+        - $ref: '#/components/parameters/singleEntryPerTransaction'
+        - $ref: '#/components/parameters/statementTransactionType'
+      responses:
+        '200':
+          $ref: '#/components/responses/ManagedAccountStatementResponse'
+        '400':
+          $ref: '#/components/responses/BackofficeBadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InstrumentForbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /managed_cards/{id}:
+    get:
+      tags:
+        - Managed Cards
+      description: >-
+        Returns all details of the managed card identified by the `id` path
+        parameter.
+      summary: Get a managed card
+      operationId: managedCardGet
+      parameters:
+        - name: id
+          in: path
+          description: The unique identifier of a card.
+          required: true
+          schema:
+            type: string
+            pattern: ^[0-9]+$
+      responses:
+        '200':
+          $ref: '#/components/responses/ManagedCardGetResponse'
+        '400':
+          $ref: '#/components/responses/BackofficeBadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /managed_cards/{id}/renewal:
+    patch:
+      tags:
+        - Managed Cards
+      description: >
+        Update the renewal type of the managed card identified by the `id` path
+        parameter.
+
+
+        Please contact our support team or your account manager to request
+        access to this endpoint.
+      summary: Update a managed card's renewal type
+      operationId: managedCardRenewalTypeUpdate
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of a card.
+          schema:
+            type: string
+            pattern: ^[0-9]+$
+        - $ref: '#/components/parameters/idempotency-ref'
+      requestBody:
+        $ref: '#/components/requestBodies/ManagedCardRenewalTypeUpdateRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BackofficeBadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/ManagedCardUpdateConflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /managed_cards/{id}/remove:
+    post:
+      tags:
+        - Managed Cards
+      description: >
+        Destroys the managed card identified by the `id` path parameter. Unlike
+        block, this action is not reversible.
+
+
+        A managed card must be empty before it can be destroyed using this
+        operation.
+      summary: Remove a managed card
+      operationId: managedCardRemove
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of a managed card.
+          schema:
+            type: string
+            pattern: ^[0-9]+$
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BackofficeBadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/ManagedCardRemoveConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /managed_cards/{id}/block:
+    post:
+      tags:
+        - Managed Cards
+      description: >-
+        Blocks the managed card identified by the `id` path parameter. This is a
+        reversible action and the card can be unblocked using the
+        _managedCardUnblock_ operation.
+      summary: Block a managed card
+      operationId: managedCardBlock
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of a managed card.
+          schema:
+            type: string
+            pattern: ^[0-9]+$
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BackofficeBadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/ManagedCardBlockConflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /managed_cards/{id}/unblock:
+    post:
+      tags:
+        - Managed Cards
+      description: >
+        Unblocks the managed card identified by the `id` path parameter.
+
+        The managed card must have `state.blockedReason` as `USER` so that it
+        can be unblocked.
+
+        If the managed card was blocked by `SYSTEM`, users cannot unblock it.
+      summary: Unblock a managed card
+      operationId: managedCardUnblock
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the managed card.
+          schema:
+            type: string
+            pattern: ^[0-9]+$
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BackofficeBadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/ManagedCardUnblockConflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /managed_cards/{id}/spend_rules:
+    get:
+      tags:
+        - Managed Cards
+      summary: Get all spend rules for a managed card
+      operationId: managedCardSpendRulesGet
+      description: >-
+        Fetch the list of spend rules associated with the managed card
+        identified by the `id` path parameter.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: string
+            pattern: ^[0-9]+$
+      responses:
+        '200':
+          $ref: '#/components/responses/ManagedCardSpendRulesGetResponse'
+        '400':
+          $ref: '#/components/responses/BackofficeBadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+    post:
+      tags:
+        - Managed Cards
+      summary: Create spend rules for a managed card
+      operationId: managedCardSpendRulesCreate
+      description: >-
+        Create the spend rules associated with the managed card identified by
+        the `id` path parameter.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: string
+            pattern: ^[0-9]+$
+      requestBody:
+        $ref: '#/components/requestBodies/CardLevelSpendRulesRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BackofficeBadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/ManagedCardSpendRulesCreateConflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+    patch:
+      tags:
+        - Managed Cards
+      summary: Update spend rules for a managed card
+      operationId: managedCardSpendRulesUpdate
+      description: >-
+        Must be user after a POST, to update individual spend rules associated
+        with the managed card identified by the `id` path parameter.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: string
+            pattern: ^[0-9]+$
+        - $ref: '#/components/parameters/idempotency-ref'
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateCardLevelSpendRulesRequest'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BackofficeBadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/ManagedCardSpendRulesUpdateConflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+    delete:
+      tags:
+        - Managed Cards
+      summary: Delete all spend rules for a managed card
+      operationId: managedCardSpendRulesDelete
+      description: >-
+        Remove all spend rules associated with the managed card identified by
+        the `id` path parameter.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: string
+            pattern: ^[0-9]+$
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BackofficeBadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /managed_cards/{id}/statement:
+    get:
+      tags:
+        - Managed Cards
+      description: >-
+        Returns a list of transactions against the managed card identified by
+        the `id` path parameter, matching the criteria provided in the request.
+      summary: Get a managed card statement
+      operationId: managedCardStatement
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of a managed card.
+          schema:
+            type: string
+            pattern: ^[0-9]+$
+        - $ref: '#/components/parameters/accept'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/orderByTimestamp'
+        - $ref: '#/components/parameters/fromTimestamp'
+        - $ref: '#/components/parameters/toTimestamp'
+        - $ref: '#/components/parameters/singleEntryPerTransaction'
+        - $ref: '#/components/parameters/statementTransactionType'
+      responses:
+        '200':
+          $ref: '#/components/responses/ManagedCardStatementResponse'
+        '400':
+          $ref: '#/components/responses/BackofficeBadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InstrumentForbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /transfers:
+    post:
+      tags:
+        - Transfers
+      description: >
+        Transfers funds between managed accounts and managed cards belonging to
+        the same corporate or consumer identity.
+
+
+        The Transfer Profile (configured in the Multi Portal) specified
+        determines the behaviour and restrictions of the transaction (for
+        example, fees).
+      summary: Create a transfer transaction
+      operationId: transferCreate
+      parameters:
+        - $ref: '#/components/parameters/idempotency-ref'
+      requestBody:
+        $ref: '#/components/requestBodies/CreateTransferRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/TransferResponse'
+        '400':
+          $ref: '#/components/responses/BackofficeBadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/TransferConflict'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+    get:
+      tags:
+        - Transfers
+      description: >-
+        Retrieves all the transfer transactions performed by the logged-in
+        identity.
+      summary: Get all transfer transactions
+      operationId: transfersGet
+      parameters:
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/transferProfileId'
+        - $ref: '#/components/parameters/instrumentId'
+        - $ref: '#/components/parameters/transactionState'
+        - $ref: '#/components/parameters/transferCreatedFrom'
+        - $ref: '#/components/parameters/transferCreatedTo'
+        - $ref: '#/components/parameters/transferTag'
+      responses:
+        '200':
+          $ref: '#/components/responses/TransfersGetResponse'
+        '400':
+          $ref: '#/components/responses/BackofficeBadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InstrumentForbidden'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /transfers/{id}:
+    get:
+      tags:
+        - Transfers
+      description: Retrieve the transfer transaction identified by the `id` path parameter.
+      summary: Get a transfer transaction
+      operationId: transferGet
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the Transfer transaction.
+          schema:
+            type: string
+            pattern: ^[0-9]+$
+      responses:
+        '200':
+          $ref: '#/components/responses/TransferResponse'
+        '400':
+          $ref: '#/components/responses/BackofficeBadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/InstrumentForbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /users:
+    post:
+      tags:
+        - Authorised Users
+      description: >
+        Creates a user linked to the identity represented by the `access_token`.
+                
+        Creating authorised users on behalf of an identity is a restricted
+        feature and by default, this functionality is not available for use.
+      summary: Create a user
+      operationId: userCreate
+      parameters:
+        - $ref: '#/components/parameters/idempotency-ref'
+      requestBody:
+        $ref: '#/components/requestBodies/UserCreateRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/UserResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/UserCreateConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /users/{user_id}/deactivate:
+    post:
+      tags:
+        - Authorised Users
+      description: >
+        De-activate the user identified by the `user_id` path parameter.
+
+
+        Deactivated users cannot log in or execute any operations with their
+        credentials.
+
+
+        This operations is not final and a user can be re-activated using the
+        userActivate operation. Note that another active user would need to log
+        in so as to re-activate the de-activated user.
+
+
+        Please contact our support team or your account manager to request
+        access to this endpoint.
+      summary: Deactivate a user
+      operationId: userDeactivate
+      parameters:
+        - $ref: '#/components/parameters/userIdExplode'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/UserDeactivateConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /users/{user_id}/invite:
+    post:
+      tags:
+        - Authorised Users
+      summary: Send a user invite
+      operationId: userInviteSend
+      description: >
+        Once a user is created using the `userCreate` operation, the user needs
+        to setup his/her password.
+
+
+        An invitation needs to be sent to the user in order to be able to set up
+        the password for the first time. The invitation email, which remains
+        valid for 1 month, will contain a URL having all information required to
+        setup the password.
+
+
+        Inviting authorised users on behalf of an identity is a restricted
+        feature and by default, this functionality is not available for use.
+      parameters:
+        - $ref: '#/components/parameters/userIdExplode'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/UserInviteSendConflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+        default:
+          $ref: '#/components/responses/Error'
+      security:
+        - auth_token: []
+          api_key: []
+  /bulks/managed_cards/_id_/spend_rules:
+    patch:
+      tags:
+        - Operations
+      summary: Update spend rules for a managed card
+      operationId: bulksManagedCardSpendRulesUpdate
+      description: >
+        Submit the details to update the spend rules of Managed Cards.
+
+
+        The  bulkId returned in the response can subsequently be used to launch
+        the updating of Managed Card spend rules process through <Execute bulk
+        process>. A submitted bulk process can be managed (executed, accessed,
+        paused, resumed and cancelled) by any other Authorised User of the same
+        identity of the user that submits the details.
+
+
+        The status of the bulk process after execution of this operation is set
+        to ‘SUBMITTED’. The execution of the bulk process is launched through
+        the Execute bulk process operation.
+
+
+        The submission of data for a bulk process does not expire but it can be
+        cancelled through <Cancel bulk process>.
+
+
+        The system is configured to accept bulk requests to process up to a
+        maximum of 10,000 bulk operations.
+
+
+        Each spend rules update operation in this bulk process is processed via
+        <Managed Cards > Update a Managed Card.
+      parameters:
+        - $ref: '#/components/parameters/idempotency-ref'
+      responses:
+        '201':
+          description: Success - returning bulk process
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bulkId:
+                    type: string
+                  operationCount:
+                    type: integer
+                  path:
+                    type: string
+      security:
+        - auth_token: []
+          api_key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  pathParams:
+                    type: object
+                    properties:
+                      _id_:
+                        type: string
+                        pattern: ^[0-9]+$
+                  requestBody:
+                    $ref: '#/components/schemas/UpdateCardLevelSpendRules'
+              maxItems: 10000
+              minItems: 1
+  /bulks/transfers:
+    post:
+      tags:
+        - Operations
+      description: >
+        Submit the details for the creation of a batch of Transfers.
+
+
+        The bulkId returned in the response can subsequently be used to launch
+        the execution of the bulk process through [Execute Bulk
+        Process](#tag/Manage/operation/bulkIdExecute). A submitted bulk process
+        can be managed (executed, accessed, paused, resumed and cancelled) by
+        any Authorised User of the same identity of the user that submits the
+        details.
+
+
+        The status of the bulk process after execution of this operation is set
+        to ‘SUBMITTED’. The execution of the bulk process is launched through
+        the Execute bulk process operation.
+
+
+        The submission of data for a bulk process does not expire but it can be
+        cancelled through [Cancel Bulk
+        Process](#tag/Manage/operation/bulkIdCancel).
+
+
+        The system is configured to accept bulk requests to process up to a
+        maximum of 10,000 bulk operations.
+
+
+        Each individual operation in this bulk will be processed via [Create a
+        Transfer Transaction](#tag/Transfers/operation/transferCreate).
+      summary: Create transfer transactions in bulk
+      operationId: bulksTransferCreate
+      parameters:
+        - $ref: '#/components/parameters/idempotency-ref'
+      responses:
+        '201':
+          description: Success - returning bulk process
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bulkId:
+                    type: string
+                  operationCount:
+                    type: integer
+                  path:
+                    type: string
+      security:
+        - auth_token: []
+          api_key: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  pathParams:
+                    type: object
+                    properties: {}
+                  requestBody:
+                    required:
+                      - profileId
+                      - source
+                      - destination
+                      - destinationAmount
+                    type: object
+                    properties:
+                      profileId:
+                        $ref: '#/components/schemas/ProfileId'
+                      tag:
+                        $ref: '#/components/schemas/Tag'
+                      source:
+                        description: >-
+                          The managed account or managed card from where the
+                          funds will be transferred.
+                        $ref: '#/components/schemas/InstrumentId'
+                      description:
+                        type: string
+                        maxLength: 255
+                        pattern: ^[a-zA-Z0-9\/\-?:().$_,'+\s#=!"%&*<>;\{@\r\n]*$
+                        description: >-
+                          The description details that are included in the
+                          transaction as reference.
+                      destination:
+                        description: >-
+                          The managed account or managed card to where the funds
+                          will be transferred.
+                        $ref: '#/components/schemas/InstrumentId'
+                      destinationAmount:
+                        description: >-
+                          The amount, in same currency as the source and
+                          destination instruments, to be transferred to the
+                          destination (exclusive of any fee amount that may be
+                          specified in the profile).
+                        $ref: '#/components/schemas/CurrencyAmount'
+                      scheduledTimestamp:
+                        $ref: '#/components/schemas/ScheduledTimestamp'
+              maxItems: 10000
+              minItems: 1

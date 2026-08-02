@@ -1,0 +1,55 @@
+generated: '2026-07-21'
+method: searched
+source: https://github.com/weavr-io + https://docs.weavr.io/changelog/
+notes: >-
+  Weavr's client libraries are the "Secure Components" SDKs — client-side UI
+  component libraries that tokenize sensitive data (passwords, card PANs/PINs)
+  so the embedder never handles it. Versions confirmed from the official
+  changelog (docs.weavr.io/changelog/rss.xml). Server-side integration is via
+  the REST API (openapi/), not a published server SDK.
+packages:
+- language: swift
+  platform: ios
+  registry: github
+  name: secure-components-ios
+  url: https://github.com/weavr-io/secure-components-ios
+  install: "Swift Package Manager / CocoaPods"
+  version: 3.7.0
+  official: true
+- language: kotlin
+  platform: android
+  registry: gradle
+  name: Android Secure Components
+  url: https://docs.weavr.io/build/sdks/android/
+  install: "Gradle (implementation dependency)"
+  version: 3.12.0
+  official: true
+- language: javascript
+  platform: web
+  registry: cdn
+  name: Web SDK
+  url: https://docs.weavr.io/build/sdks/web/
+  install: "<script src=\"https://sandbox.weavr.io/app/secure/static/client.1.js\">"
+  official: true
+- language: javascript
+  platform: react-native
+  registry: npm
+  name: React Native Secure Components
+  url: https://docs.weavr.io/build/sdks/react-native/
+  install: "npm / expo"
+  version: 5.5.1
+  official: true
+- language: javascript
+  platform: react-native
+  registry: npm
+  name: React Native Push Provisioning
+  url: https://docs.weavr.io/build/sdks/react-native/
+  version: 4.0.2
+  official: true
+- language: kotlin
+  platform: android
+  registry: gradle
+  name: Android Push Provisioning
+  url: https://docs.weavr.io/build/sdks/android/
+  version: 2.1.1
+  official: true

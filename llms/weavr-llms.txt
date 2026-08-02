@@ -1,0 +1,12 @@
+# llms.txt
+
+## Table of contents
+
+ - [CLAUDE.md](https://api.weavr.io/claude.md)
+ - [Code review: docs-redoc-realm](https://api.weavr.io/code_review.md)
+ - [Weavr Multi Product API](https://api.weavr.io/products/multi/openapi.md)
+ - [Weavr Multi Product BackOffice API](https://api.weavr.io/products/multi-backoffice/openapi.md)
+ - [Weavr Embedded Payment Run API](https://api.weavr.io/products/payment-run/openapi.md)
+ - [Weavr Simulator](https://api.weavr.io/products/simulator/openapi.md)
+ - [Weavr Webhook](https://api.weavr.io/products/webhooks/openapi.md)
+

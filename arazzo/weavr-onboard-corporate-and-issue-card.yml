@@ -1,0 +1,43 @@
+arazzo: 1.0.1
+info:
+  title: Onboard a corporate and issue a virtual card
+  version: 1.0.0
+  summary: >-
+    Create a corporate identity, authenticate, open a managed account and issue
+    a virtual card on the Weavr Multi API. Fork and run against the sandbox
+    (https://sandbox.weavr.io).
+sourceDescriptions:
+- name: multi
+  url: ../openapi/weavr-multi-openapi-original.yml
+  type: openapi
+workflows:
+- workflowId: onboardCorporateAndIssueCard
+  summary: Corporate identity -> login -> KYB -> managed account -> virtual card.
+  inputs:
+    type: object
+    properties:
+      apiKey: { type: string }
+      programmeKey: { type: string }
+      profileId: { type: string }
+      baseCurrency: { type: string, default: GBP }
+  steps:
+  - stepId: createCorporate
+    operationId: corporateCreate
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      corporateId: $response.body#/id
+  - stepId: login
+    operationId: loginWithPassword
+    outputs:
+      authToken: $response.body#/token
+  - stepId: startKyb
+    operationId: corporateKybStart
+  - stepId: createManagedAccount
+    operationId: managedAccountCreate
+    outputs:
+      accountId: $response.body#/id
+  - stepId: issueCard
+    operationId: managedCardCreate
+    outputs:
+      cardId: $response.body#/id

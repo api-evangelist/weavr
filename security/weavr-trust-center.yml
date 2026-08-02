@@ -1,0 +1,15 @@
+generated: '2026-07-21'
+method: searched
+probe: true
+source: https://security.weavr.io/
+url: https://security.weavr.io/
+certifications:
+- ISO 27001
+- PCI DSS
+- CSA STAR
+evidence:
+- source: https://security.weavr.io/
+  keywords:
+  - iso/iec 27001
+  - pci dss
+  - csa star

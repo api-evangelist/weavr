@@ -1,0 +1,25 @@
+generated: '2026-07-21'
+method: searched
+source: live probes of api.weavr.io / www.weavr.io / weavr.io
+hosts:
+- host: https://api.weavr.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+- host: https://www.weavr.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+- host: https://weavr.io
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+notes: >-
+  No /.well-known/ discovery documents are published. Weavr authenticates with
+  an api-key header plus a bearer auth_token (not OpenID Connect / OAuth2
+  authorization-server metadata), so openid-configuration and
+  oauth-authorization-server are expected absent.

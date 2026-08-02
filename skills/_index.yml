@@ -1,0 +1,37 @@
+generated: '2026-07-21'
+method: searched
+source: https://github.com/weavr-io/skills
+description: >-
+  Weavr publishes an official Agent Skills pack (weavr-io/skills) that works with
+  Claude Code, Cursor, GitHub Copilot and other agents via skills.sh
+  (npx skills add weavr-io/skills). Each SKILL.md below is saved verbatim from
+  the provider repo.
+install: npx skills add weavr-io/skills
+skills:
+- file: weavr-api.md
+  name: weavr-api
+  description: Multi API endpoints, authentication, request/response formats
+  api: openapi/weavr-multi-openapi-original.yml
+- file: weavr-simulator.md
+  name: weavr-simulator
+  description: Sandbox testing — simulate deposits, purchases, KYC/KYB, wire transfers, 2FA
+  api: openapi/weavr-simulator-openapi-original.yml
+- file: weavr-components.md
+  name: weavr-components
+  description: Secure UI components, tokenization, integration flows
+  api: openapi/weavr-multi-openapi-original.yml
+- file: weavr-glossary.md
+  name: weavr-glossary
+  description: Platform terminology and concepts
+- file: weavr-sdk-web.md
+  name: weavr-sdk-web
+  description: Web SDK setup, components, styling
+- file: weavr-sdk-android.md
+  name: weavr-sdk-android
+  description: Android SDK, Gradle config, biometrics
+- file: weavr-sdk-ios.md
+  name: weavr-sdk-ios
+  description: iOS SDK, SPM/CocoaPods, biometrics
+- file: weavr-sdk-react-native.md
+  name: weavr-sdk-react-native
+  description: React Native/Expo, push provisioning

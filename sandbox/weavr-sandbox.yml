@@ -1,0 +1,55 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.weavr.io/ + openapi/weavr-simulator-openapi-original.yml + github.com/weavr-io/skills
+summary: >-
+  Weavr provides a full sandbox environment plus a dedicated Simulator API for
+  simulating events that would normally originate from external systems (bank
+  transfers, card networks, identity-verification providers). Sandbox
+  credentials (api-key, programme-key, API Secret Key) are provisioned per
+  programme from the Embedder Portal.
+environments:
+  sandbox:
+    base_url: https://sandbox.weavr.io
+    web_sdk_loader: https://sandbox.weavr.io/app/secure/static/client.1.js
+  production:
+    base_url: https://api.weavr.io
+keys:
+- name: api-key
+  scope: server-side API key (all requests)
+- name: programme-key
+  scope: programme identifier (identity creation)
+- name: API Secret Key
+  header: api-key
+  scope: simulator endpoints only (distinct from the regular API key)
+signup: https://portal.weavr.io/
+simulator:
+  api: openapi/weavr-simulator-openapi-original.yml
+  base_url: https://sandbox.weavr.io/simulate/api
+  note: Simulator endpoints exist only in sandbox, never in production.
+  capabilities:
+  - Simulate incoming deposits (by account id or IBAN)
+  - Simulate card purchases, merchant refunds, expiry, about-to-expire, renewal
+  - Auto-pass consumer KYC and corporate KYB verification
+  - Accept / reject outgoing wire transfers
+  - Pass / fail / expire 2FA challenges
+  - Set / verify linked accounts
+test_values:
+  note: >-
+    Values below are the example test identifiers Weavr publishes in its docs /
+    official skills. Amounts are always in minor units.
+  ibans:
+  - GB29NWBK60161331926819
+  - DE89370400440532013000
+  bic: NWBKGB2L
+  payment_networks: [SEPA, FASTER_PAYMENTS, SWIFT, BACS, CHAPS, RIX]
+  merchant_category_code_example: '5411'
+  deposit_response: '{ "code": "COMPLETED" }'
+  purchase_response: '{ "code": "APPROVED" }'
+  verify_response: 204 No Content
+typical_flow:
+- Create corporate/consumer (POST /multi/corporates)
+- Auto-verify identity (POST /corporates/{id}/verify — simulator)
+- Create managed account (POST /multi/managed_accounts)
+- Simulate deposit (POST /accounts/{id}/deposit — simulator)
+- Issue card (POST /multi/managed_cards)
+- Simulate purchase (POST /cards/{id}/purchase — simulator)

@@ -1,0 +1,38 @@
+arazzo: 1.0.1
+info:
+  title: Fund a managed account and move money
+  version: 1.0.0
+  summary: >-
+    Simulate a deposit into a managed account, then move funds with an internal
+    transfer and an external send. Uses the Simulator API for the deposit so a
+    fork runs end-to-end in the Weavr sandbox.
+sourceDescriptions:
+- name: multi
+  url: ../openapi/weavr-multi-openapi-original.yml
+  type: openapi
+- name: simulator
+  url: ../openapi/weavr-simulator-openapi-original.yml
+  type: openapi
+workflows:
+- workflowId: fundAccountAndTransfer
+  summary: Simulate deposit -> internal transfer -> external send.
+  inputs:
+    type: object
+    properties:
+      apiKey: { type: string }
+      apiSecretKey: { type: string }
+      sourceAccountId: { type: string }
+      destinationAccountId: { type: string }
+  steps:
+  - stepId: simulateDeposit
+    operationId: accounts_account_id_deposit
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: internalTransfer
+    operationId: transferCreate
+    outputs:
+      transferId: $response.body#/id
+  - stepId: externalSend
+    operationId: sendCreate
+    outputs:
+      sendId: $response.body#/id
