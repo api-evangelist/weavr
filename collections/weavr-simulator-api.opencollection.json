@@ -1,0 +1,168 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Simulator API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Simulator",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Simulate Fund a Payment run",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/simulate/v1/payment_runs/:payment_run_id/fund_group/:reference",
+            "params": [
+              {
+                "name": "payment_run_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "reference",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Simulate funding a payment run using a linked account.\n\n*This endpoint will only function in Sandbox and should not be used in the Live environment.*\n"
+        },
+        {
+          "info": {
+            "name": "Simulate Creating a Linked Account via Open Banking",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/simulate/v1/linked_accounts",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The Linked Account Simulator allows you to create a simulated linked account that can be used for funding payment runs.\n\n*This endpoint will only function in Sandbox and should not be used in the Live environment.*\n"
+        },
+        {
+          "info": {
+            "name": "Simulate Control Check via Test Funding Transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/simulate/v1/linked_accounts/:linked_account_id/fund",
+            "params": [
+              {
+                "name": "linked_account_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Simulate Control Check via Test Funding Transaction"
+        },
+        {
+          "info": {
+            "name": "Simulate Buyer KYB Verify",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/simulate/v1/buyers/:buyer_id/verify",
+            "params": [
+              {
+                "name": "buyer_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Simulates due diligence (KYB) for Buyers.\n\n*This endpoint will only function in Sandbox and should not be used in the Live environment.*\n"
+        },
+        {
+          "info": {
+            "name": "Simulate AIS consent status change",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/simulate/v1/consents/:linked_account_id/change_status",
+            "params": [
+              {
+                "name": "linked_account_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Simulate AIS consent status change.\n\n*This endpoint will only function in Sandbox and should not be used in the Live environment.*\n"
+        },
+        {
+          "info": {
+            "name": "Simulate issuing a Payment Run SCA Challenge",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/simulate/v1/payment_run_sca/:payment_run_id/challenges/otp/:channel",
+            "params": [
+              {
+                "name": "channel",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the channel."
+              },
+              {
+                "name": "payment_run_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the payment run."
+              }
+            ]
+          },
+          "docs": "Simulates issuing the SCA challenge for a payment run.\n\n*This endpoint will only function in Sandbox and should not be used in the Live environment.*\n"
+        },
+        {
+          "info": {
+            "name": "Simulate verifying a payment run SCA Challenge",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/simulate/v1/payment_run_sca/:payment_run_id/challenges/otp/:channel/verify",
+            "params": [
+              {
+                "name": "channel",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the channel."
+              },
+              {
+                "name": "payment_run_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the payment run."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Simulates verifying the SCA challenge for a payment run.\n\n*This endpoint will only function in Sandbox and should not be used in the Live environment.*\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

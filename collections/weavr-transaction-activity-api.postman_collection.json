@@ -1,0 +1,960 @@
+{
+  "item": [
+    {
+      "id": "d40ca33a-4daa-41db-9f89-32f6173c8d71",
+      "name": "Transaction Activity",
+      "description": {
+        "content": "Retrieve the consolidated transaction activity across instruments.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e276fd6d-922c-4de4-8b07-c9aae9848833",
+          "name": "Get all transaction activity",
+          "request": {
+            "name": "Get all transaction activity",
+            "description": {
+              "content": "Returns all transactional activity across all managed accounts and managed cards.\n\nThis provides a single view of all transfers, sends, wire transfers, card payments, fees, and other\ntransaction types regardless of which wallet they belong to.\n\n`creationTimestamp` is when the transaction was created in its owning service (the same value the\nnested `transaction` object reports), and is the field the creation-window filter applies to.\nTransactions that are committed but not yet executed (e.g. scheduled wire transfers) appear with\nstatus `SUBMITTED`; such transactions never appear on statements until they execute.\n\nA transfer between two of the caller's own instruments (e.g. between a managed account and a\nmanaged card belonging to the same identity) returns **two** entries — a `DEBIT` on the source\ninstrument and a `CREDIT` on the destination instrument — which share the same `id` and differ by\n`instrument`. Treat `(id, instrument)` as the key when reconciling, and note that such a transfer\ncontributes 2 to the `count`. The per-instrument activity endpoints\n(`/managed_accounts/{id}/transactions`, `/managed_cards/{id}/transactions`) are scoped to one\ninstrument and so still show the single relevant side.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "transactions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<integer>",
+                  "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "<string>",
+                  "description": "Filter by one or more transaction activity types."
+                },
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "<string>",
+                  "description": "Filter by one or more transaction activity types."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter by one or more normalised transaction statuses."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter by one or more normalised transaction statuses."
+                },
+                {
+                  "disabled": false,
+                  "key": "direction",
+                  "value": "<string>",
+                  "description": "Filter by transaction direction (CREDIT or DEBIT)."
+                },
+                {
+                  "disabled": false,
+                  "key": "creationTimestampFrom",
+                  "value": "<long>",
+                  "description": "Filter for transactions created after this timestamp. Epoch timestamp using millisecond precision."
+                },
+                {
+                  "disabled": false,
+                  "key": "creationTimestampTo",
+                  "value": "<long>",
+                  "description": "Filter for transactions created before this timestamp. Epoch timestamp using millisecond precision."
+                },
+                {
+                  "disabled": false,
+                  "key": "lastUpdatedTimestampFrom",
+                  "value": "<long>",
+                  "description": "Filter for transactions last updated after this timestamp. Useful for pulling recently changed transactions. Epoch timestamp using millisecond precision."
+                },
+                {
+                  "disabled": false,
+                  "key": "lastUpdatedTimestampTo",
+                  "value": "<long>",
+                  "description": "Filter for transactions last updated before this timestamp. Epoch timestamp using millisecond precision."
+                },
+                {
+                  "disabled": false,
+                  "key": "sortOrder",
+                  "value": "<string>",
+                  "description": "Sort order for the results:\n  - ASC: Ascending order, oldest first.\n  - DESC: Descending order, most recent first.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "sortBy",
+                  "value": "<string>",
+                  "description": "The field to sort transaction activity results by. Defaults to `creationTimestamp`."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "b3ff424f-13c3-4fea-9f22-b544eaa0a41e",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "card_payments"
+                    },
+                    {
+                      "key": "type",
+                      "value": "transfers"
+                    },
+                    {
+                      "key": "status",
+                      "value": "PROCESSING"
+                    },
+                    {
+                      "key": "status",
+                      "value": "SUBMITTED"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "CREDIT"
+                    },
+                    {
+                      "key": "creationTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "creationTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "creationTimestamp"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"transactions\": [\n    {\n      \"id\": \"789555\",\n      \"type\": \"fees\",\n      \"status\": \"PROCESSING\",\n      \"amount\": {\n        \"currency\": \"LFA\",\n        \"amount\": 6907\n      },\n      \"instrument\": {\n        \"id\": \"151990\",\n        \"type\": \"managed_accounts\"\n      },\n      \"creationTimestamp\": 3243,\n      \"direction\": \"CREDIT\",\n      \"fee\": {\n        \"id\": \"4003767\",\n        \"type\": \"fees\",\n        \"amount\": {\n          \"currency\": \"JQL\",\n          \"amount\": 6333\n        },\n        \"subtype\": \"withdrawal_fees\"\n      },\n      \"lastUpdatedTimestamp\": 4182,\n      \"transaction\": {\n        \"id\": \"24099375224\",\n        \"profileId\": \"5\",\n        \"creationTimestamp\": 9785,\n        \"destination\": {\n          \"id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"destinationAmount\": {\n          \"currency\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"amount\": 4109\n        },\n        \"source\": {\n          \"id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"state\": \"REJECTED\",\n        \"tag\": \"u\",\n        \"description\": \"\",\n        \"scheduledTimestamp\": \"3876\",\n        \"executionTimestamp\": \"1533049244\",\n        \"cancellationReason\": \"WwPBkL2\"\n      }\n    },\n    {\n      \"id\": \"10\",\n      \"type\": \"outgoing_wire_transfers\",\n      \"status\": \"DRAFT\",\n      \"amount\": {\n        \"currency\": \"GQN\",\n        \"amount\": 3714\n      },\n      \"instrument\": {\n        \"id\": \"677181\",\n        \"type\": \"managed_cards\"\n      },\n      \"creationTimestamp\": 4325,\n      \"direction\": \"CREDIT\",\n      \"fee\": {\n        \"id\": \"9658111106\",\n        \"type\": \"fees\",\n        \"amount\": {\n          \"currency\": \"VFY\",\n          \"amount\": 93\n        },\n        \"subtype\": \"refund_fees\"\n      },\n      \"lastUpdatedTimestamp\": 5108,\n      \"transaction\": {\n        \"id\": \"8579178038\",\n        \"profileId\": \"14466\",\n        \"creationTimestamp\": 362,\n        \"destination\": {\n          \"id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"destinationAmount\": {\n          \"currency\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"amount\": 7469\n        },\n        \"source\": {\n          \"id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"state\": \"INITIALISED\",\n        \"tag\": \"yTndmgoy0L\",\n        \"description\": \"V ; se\\n\",\n        \"scheduledTimestamp\": \"91\",\n        \"executionTimestamp\": \"5677\",\n        \"cancellationReason\": \"xoLELgx7\"\n      }\n    }\n  ],\n  \"count\": 6882,\n  \"responseCount\": 1686\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7634c471-352e-43a1-b947-0ae3f32a6cc3",
+              "name": "Bad Request Error - Your request is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "card_payments"
+                    },
+                    {
+                      "key": "type",
+                      "value": "transfers"
+                    },
+                    {
+                      "key": "status",
+                      "value": "PROCESSING"
+                    },
+                    {
+                      "key": "status",
+                      "value": "SUBMITTED"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "CREDIT"
+                    },
+                    {
+                      "key": "creationTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "creationTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "creationTimestamp"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"SIZE\"\n      },\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"EXACTLY\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fdfcc3b4-f5a1-4c59-b7ab-d5bea4f0e459",
+              "name": "Unauthorized - Your credentials or access token are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "card_payments"
+                    },
+                    {
+                      "key": "type",
+                      "value": "transfers"
+                    },
+                    {
+                      "key": "status",
+                      "value": "PROCESSING"
+                    },
+                    {
+                      "key": "status",
+                      "value": "SUBMITTED"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "CREDIT"
+                    },
+                    {
+                      "key": "creationTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "creationTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "creationTimestamp"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "09e4e71f-6daa-49a8-8fb5-c217b5598dd6",
+              "name": "Forbidden - Access to the requested resource or action is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "card_payments"
+                    },
+                    {
+                      "key": "type",
+                      "value": "transfers"
+                    },
+                    {
+                      "key": "status",
+                      "value": "PROCESSING"
+                    },
+                    {
+                      "key": "status",
+                      "value": "SUBMITTED"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "CREDIT"
+                    },
+                    {
+                      "key": "creationTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "creationTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "creationTimestamp"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"INSUFFICIENT_PERMISSIONS\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7691bd6c-d01a-4017-b304-c522214d01e1",
+              "name": "Too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "card_payments"
+                    },
+                    {
+                      "key": "type",
+                      "value": "transfers"
+                    },
+                    {
+                      "key": "status",
+                      "value": "PROCESSING"
+                    },
+                    {
+                      "key": "status",
+                      "value": "SUBMITTED"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "CREDIT"
+                    },
+                    {
+                      "key": "creationTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "creationTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "creationTimestamp"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "disabled": false,
+                  "description": "(Required) Example: `20, 10;w=60, 20;w=3600, 200;w=86400`\nThe first number (20) is the limit that has been exceeded.\nThe remaining numbers are the limits that are in force, with 'w' meaning 'window in seconds'. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)\n",
+                  "key": "x-ratelimit-limit",
+                  "value": "string"
+                },
+                {
+                  "disabled": false,
+                  "description": "(Required) The number of seconds until the window is reset.",
+                  "key": "x-ratelimit-reset",
+                  "value": "5773"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f03c7d26-629f-42d2-9932-8c06397eff50",
+              "name": "Internal Server Error - There is a problem with the server. Please try again later.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "card_payments"
+                    },
+                    {
+                      "key": "type",
+                      "value": "transfers"
+                    },
+                    {
+                      "key": "status",
+                      "value": "PROCESSING"
+                    },
+                    {
+                      "key": "status",
+                      "value": "SUBMITTED"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "CREDIT"
+                    },
+                    {
+                      "key": "creationTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "creationTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "creationTimestamp"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b82827d8-b8b5-40f9-97f5-985d868db652",
+              "name": "Service Unavailable - The requested service is temporarily unavailable. Please try again later.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "card_payments"
+                    },
+                    {
+                      "key": "type",
+                      "value": "transfers"
+                    },
+                    {
+                      "key": "status",
+                      "value": "PROCESSING"
+                    },
+                    {
+                      "key": "status",
+                      "value": "SUBMITTED"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "CREDIT"
+                    },
+                    {
+                      "key": "creationTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "creationTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "creationTimestamp"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "73350556-439a-40ba-ab69-6456c706b3a2",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "transactions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "type",
+                      "value": "card_payments"
+                    },
+                    {
+                      "key": "type",
+                      "value": "transfers"
+                    },
+                    {
+                      "key": "status",
+                      "value": "PROCESSING"
+                    },
+                    {
+                      "key": "status",
+                      "value": "SUBMITTED"
+                    },
+                    {
+                      "key": "direction",
+                      "value": "CREDIT"
+                    },
+                    {
+                      "key": "creationTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "creationTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "creationTimestamp"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://sandbox.weavr.io/multi/backoffice",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "8e28ae63-5e54-4adc-899d-dcf895c2c588",
+    "name": "Weavr Multi Product BackOffice Access Token Transaction Activity API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning\nidentities and their instruments, without requiring the users to be logged in.\n\nA token is to be obtained through the `access_token` method, and this will allow relevant operations\nto be performed on behalf of this same identity.\n\n\nContact Support:\n Name: Weavr",
+      "type": "text/plain"
+    }
+  }
+}

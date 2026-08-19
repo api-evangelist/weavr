@@ -1,0 +1,577 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Managed Accounts API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Managed Accounts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a managed account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_accounts/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Managed Account."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Fetch the managed account identified by the `id` in path."
+        },
+        {
+          "info": {
+            "name": "Update a managed account",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_accounts/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the managed account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update the details for the managed account identified by the `id` in the path."
+        },
+        {
+          "info": {
+            "name": "Get a managed account statement",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_accounts/:id/statement",
+            "headers": [
+              {
+                "name": "accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the managed account."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+              },
+              {
+                "name": "statementLimit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of the results for statements paging, starting at the offset. Limit is capped at 500."
+              },
+              {
+                "name": "orderByTimestamp",
+                "value": "",
+                "type": "query",
+                "description": "Orders the result in ascending or descending order.\n  - ASC: Ascending order, oldest transactions first.\n  - DESC: Descending order, most recent transactions first.\n\nIf not specified, the transactions will be returned in descending order.\n"
+              },
+              {
+                "name": "fromTimestamp",
+                "value": "",
+                "type": "query",
+                "description": "Filter for transactions having transaction timestamp after `fromTimestamp`. Timestamp is expressed in Epoch timestamp using millisecond precision. If omitted, all matching transactions up to the present will be included."
+              },
+              {
+                "name": "toTimestamp",
+                "value": "",
+                "type": "query",
+                "description": "Filter for transactions having transaction timestamp before `toTimestamp`. Timestamp is expressed in Epoch timestamp using millisecond precision. If omitted, all matching transactions up to the present will be included. If both `fromTimestamp` and `toTimestamp` are provided, `toTimestamp` must be greater than `fromTimestamp`."
+              },
+              {
+                "name": "showFundMovementsOnly",
+                "value": "",
+                "type": "query",
+                "description": "Deprecated. Use singleEntryPerTransaction instead.\n\nReturns only the entries which contain fund movements.\n"
+              },
+              {
+                "name": "singleEntryPerTransaction",
+                "value": "",
+                "type": "query",
+                "description": "Returns transactions that span multiple movements as a single entry.\nOnly includes transactions that have been completed.\nDefaults to true for PDF statements, false otherwise.\nNote: due to the fact that only completed transactions are included, some\ntransactions that are in progress and have modified the balance of the instrument\nwill not be shown, which could lead to seemingly inconsistent balance being displayed.\n"
+              },
+              {
+                "name": "transactionType",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the transaction type. Leave out to fetch all entries."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a list of transactions against the managed account identified by the `id` path parameter, matching the criteria provided in the request."
+        },
+        {
+          "info": {
+            "name": "Get all managed accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_accounts",
+            "params": [
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+              },
+              {
+                "name": "profileId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the managed account/card profile. Leave out to fetch all managed accounts/card."
+              },
+              {
+                "name": "friendlyName",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the managed account/card friendly name. Leave out to fetch all managed accounts/card.\n\nThe exact name must be provided, as wildcards are not supported.\n"
+              },
+              {
+                "name": "state",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "state.blockedReason",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "state.destroyedReason",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the managed account/card currency.\n\nCurrencies are expressed as an ISO 4217 code. Leave out to fetch all managed accounts/card.\n"
+              },
+              {
+                "name": "createdFrom",
+                "value": "",
+                "type": "query",
+                "description": "Filter for managed accounts/cards created after `createdFrom` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all managed accounts/cards."
+              },
+              {
+                "name": "createdTo",
+                "value": "",
+                "type": "query",
+                "description": "Filter for managed accounts/cards created before `createdTo` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all managed accounts/cards."
+              },
+              {
+                "name": "tag",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the managed account/card tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all managed accounts/card."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves all managed accounts belonging to the logged-in identity."
+        },
+        {
+          "info": {
+            "name": "Create a managed account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_accounts",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a managed account for the consumer or corporate identity.\nThe Managed Account Profile (configured in the Multi Portal) specified determines the behavior and restrictions that the managed account will have.\"\n"
+        },
+        {
+          "info": {
+            "name": "Get a managed account IBAN",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_accounts/:id/iban",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Fetch the IBAN details associated with the Managed Account identified by the `id` in the path."
+        },
+        {
+          "info": {
+            "name": "Upgrade a managed account with IBAN",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_accounts/:id/iban",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Managed Account."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Assign an IBAN to a Managed Account.\n\nIBANs enable managed accounts to receive and send funds via wire transfers.\n\nAssigning an IBAN to a Managed Account may be done asynchronously, in which case the `ManagedAccountIBAN.state` will be set to `PENDING_ALLOCATION` until bank details are ready to use.\n"
+        },
+        {
+          "info": {
+            "name": "Block a managed account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_accounts/:id/block",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the managed account."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Temporarily blocks a managed account."
+        },
+        {
+          "info": {
+            "name": "Unblock a managed account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_accounts/:id/unblock",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the managed account."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Unblocks the managed account identified by the `id` path parameter.\nThe managed account must have `state.blockedReason` as `USER` so that it can be unblocked.\nIf the managed account was blocked by `SYSTEM`, users cannot unblock it.\n"
+        },
+        {
+          "info": {
+            "name": "Get a managed account statement (deprecated)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/deprecated/managed_accounts/:id/statement",
+            "headers": [
+              {
+                "name": "accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the managed account."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+              },
+              {
+                "name": "statementLimit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of the results for statements paging, starting at the offset. Limit is capped at 500."
+              },
+              {
+                "name": "orderByTimestamp",
+                "value": "",
+                "type": "query",
+                "description": "Orders the result in ascending or descending order.\n  - ASC: Ascending order, oldest transactions first.\n  - DESC: Descending order, most recent transactions first.\n\nIf not specified, the transactions will be returned in descending order.\n"
+              },
+              {
+                "name": "fromTimestamp",
+                "value": "",
+                "type": "query",
+                "description": "Filter for transactions having transaction timestamp after `fromTimestamp`. Timestamp is expressed in Epoch timestamp using millisecond precision. If omitted, all matching transactions up to the present will be included."
+              },
+              {
+                "name": "toTimestamp",
+                "value": "",
+                "type": "query",
+                "description": "Filter for transactions having transaction timestamp before `toTimestamp`. Timestamp is expressed in Epoch timestamp using millisecond precision. If omitted, all matching transactions up to the present will be included. If both `fromTimestamp` and `toTimestamp` are provided, `toTimestamp` must be greater than `fromTimestamp`."
+              },
+              {
+                "name": "showFundMovementsOnly",
+                "value": "",
+                "type": "query",
+                "description": "Deprecated. Use singleEntryPerTransaction instead.\n\nReturns only the entries which contain fund movements.\n"
+              },
+              {
+                "name": "singleEntryPerTransaction",
+                "value": "",
+                "type": "query",
+                "description": "Returns transactions that span multiple movements as a single entry.\nOnly includes transactions that have been completed.\nDefaults to true for PDF statements, false otherwise.\nNote: due to the fact that only completed transactions are included, some\ntransactions that are in progress and have modified the balance of the instrument\nwill not be shown, which could lead to seemingly inconsistent balance being displayed.\n"
+              },
+              {
+                "name": "transactionType",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the transaction type. Leave out to fetch all entries."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deprecated in favour of [GET /managed_accounts/{id}/statements](#tag/Managed-Accounts/operation/managedAccountStatements). Returns a list of transactions against the managed account identified by the `id` path parameter, matching the criteria provided in the request."
+        },
+        {
+          "info": {
+            "name": "Get transaction activity for a managed account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_accounts/:id/transactions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the managed account."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by one or more transaction activity types."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by one or more normalised transaction statuses."
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Filter by transaction direction (CREDIT or DEBIT)."
+              },
+              {
+                "name": "creationTimestampFrom",
+                "value": "",
+                "type": "query",
+                "description": "Filter for transactions created after this timestamp. Epoch timestamp using millisecond precision."
+              },
+              {
+                "name": "creationTimestampTo",
+                "value": "",
+                "type": "query",
+                "description": "Filter for transactions created before this timestamp. Epoch timestamp using millisecond precision."
+              },
+              {
+                "name": "lastUpdatedTimestampFrom",
+                "value": "",
+                "type": "query",
+                "description": "Filter for transactions last updated after this timestamp. Useful for pulling recently changed transactions. Epoch timestamp using millisecond precision."
+              },
+              {
+                "name": "lastUpdatedTimestampTo",
+                "value": "",
+                "type": "query",
+                "description": "Filter for transactions last updated before this timestamp. Epoch timestamp using millisecond precision."
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order for the results:\n  - ASC: Ascending order, oldest first.\n  - DESC: Descending order, most recent first.\n"
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "The field to sort transaction activity results by. Defaults to `creationTimestamp`."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all transactional activity on the managed account identified by the `id` path parameter.\n\nUnlike the statement endpoint, this includes pending, completed, failed, and rejected transactions.\nAll transaction types are returned in a unified schema.\n"
+        },
+        {
+          "info": {
+            "name": "Get a specific transaction for a managed account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_accounts/:id/transactions/:transactionId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the managed account."
+              },
+              {
+                "name": "transactionId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the transaction."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a specific transaction on the managed account."
+        },
+        {
+          "info": {
+            "name": "Remove a managed account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_accounts/:id/remove",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the managed account."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Destroys the managed account identified by the `id` path parameter. Unlike block, this action is not reversible.\n\nA managed account must be emptied from any remaining funds before it can be destroyed.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

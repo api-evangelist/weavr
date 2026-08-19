@@ -1,0 +1,60 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Additional Factors API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Additional Factors",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Enrol a user device for authentication using one-time passwords",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/authentication_factors/otp/:channel",
+            "params": [
+              {
+                "name": "channel",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the channel."
+              }
+            ]
+          },
+          "docs": "This is the first step in enrolling the logged-in user's mobile device, where a one-time password is sent to the device.\n\n_Note that on the Sandbox Environment, text messages are not sent and the one-time-password is always \\\"123456\\\"._\n"
+        },
+        {
+          "info": {
+            "name": "Verify enrolment of a user device for authentication using one-time passwords",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/authentication_factors/otp/:channel/verify",
+            "params": [
+              {
+                "name": "channel",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the channel."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The second step in enrolling the logged-in user (root or authorised user) to use one-time-passwords to enable verification of transactions.\n\n_Note that on the Sandbox Environment, text messages are not sent and the `verificationCode` is always set to \\\"123456\\\"._\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Access Tokens API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Access Tokens",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Acquire a new access token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/access_token",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "This API endpoint accepts a POST request with an auth_token parameter and returns an access_token that grants authorized access to additional resources within the API, with a different expiration time and unique signature.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,291 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Buyer Authorised Users API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Buyer Authorised Users",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/users",
+            "params": [
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+              },
+              {
+                "name": "active",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "email",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Fetches all authorised users associated with the buyer that the logged-in user belongs to.\n\n\nRequired user role: `ADMIN`"
+        },
+        {
+          "info": {
+            "name": "Create a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/users",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a user that belongs to the buyer that the logged-in user belongs to. To Create an Authorised User you would need a stepped-up token. After calling this endpoint you need to step-up ( issue a challenge `/stepup/challenges/otp/{channel}` ). More details on how to step-up a token can be found here [Step-Up](https://docs.weavr.io/payment-run/plugin-api/plugin-api-authentication-stepup/).\n\nOnce on-boarded, users have access and manage the buyer's payment runs.\n\nUsers are assigned `roles` whic"
+        },
+        {
+          "info": {
+            "name": "Get a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/users/:user_id",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the user."
+              }
+            ]
+          },
+          "docs": "Retrieves the user identified by the `user_id` path parameter.\n\n\nRequired user role: `ADMIN`"
+        },
+        {
+          "info": {
+            "name": "Update a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/users/:user_id",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the user."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the details of a user identified by the user_id in the the path parameter. After calling this endpoint you need to step-up ( issue a challenge /stepup/challenges/otp/{channel} ). More details on how to step-up a token can be found here [Step-Up](https://docs.weavr.io/payment-run/plugin-api/plugin-api-authentication-stepup/)..\n\nOnly the fields that are specified in the request body will be updated. All other fields will remain unchanged.\n\nWhen patching a mobile number, the new mobile numbe"
+        },
+        {
+          "info": {
+            "name": "Activate a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/users/:user_id/activate",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the user."
+              }
+            ]
+          },
+          "docs": "Activate the user identified by the `user_id` path parameter.\n\nBy default, any new users created will be automatically activated. This operation needs to be used only if the user was previously de-activated using the _userDeactivate_ operation, or if the user was de-activated automatically after multiple incorrect login attempts.\n\n\nRequired user role: `ADMIN`"
+        },
+        {
+          "info": {
+            "name": "Deactivate a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/users/:user_id/deactivate",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the user."
+              }
+            ]
+          },
+          "docs": "De-activate the user identified by the `user_id` path parameter.\n\nDeactivated users cannot log in or execute any operations with their credentials.\n\nThis operations is not final and a user can be re-activated using the userActivate operation. Note that another active user would need to log in so as to re-activate the de-activated user.\n\n\nRequired user role: `ADMIN`"
+        },
+        {
+          "info": {
+            "name": "Send a user invite",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/users/:user_id/invite",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the user."
+              }
+            ]
+          },
+          "docs": "Once a user is created using the _userCreate_ operation, the user needs to setup his/her password.\n\nAn invitation needs to be sent to the user in order to be able to set up the password for the first time. The invitation email, which remains valid for 1 month, will contain a URL having all information required to setup the password via the _userInviteConsume_.\n\n\nRequired user role: `ADMIN`"
+        },
+        {
+          "info": {
+            "name": "Validate a user invite",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/users/:user_id/invite/validate",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the user."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Check if a user's invite is still valid. This operation is useful\nto avoid having the user fill in a form only to be held by a validation issue\n(eg. expired invite).\n"
+        },
+        {
+          "info": {
+            "name": "Consume a user invite",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/users/:user_id/invite/consume",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the user."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Consumes an invitation previously sent to the user via _userInviteSend_. This is needed so that the invited user sets up the password.\n\n_Note that on the Sandbox Environment, the `inviteCode` is always set to \\\"123456\\\"._\n"
+        },
+        {
+          "info": {
+            "name": "Send an email verification code to the authorised user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/users/verification/email/send",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The first step in verifying an authorised user's email. The authorised user whose email address is to be verified is sent an email containing a randomly generated code.\n\nThis code must then be provided in the _authorisedUserEmailVerify_ operation to verify the authorised user's email address.\n\n_Note that on the Sandbox Environment, the `verificationCode` is always set to \\\"123456\\\"._\n"
+        },
+        {
+          "info": {
+            "name": "Verify email of the authorised user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/users/verification/email/verify",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The second step in verifying the authorised user's email. The randomly generated code sent to the authorised user via\nemail, using the _authorisedUserEmailVerificationCodeSend_ operation, is submitted here to verify the authorised user's email.\n\nThis is needed as part of the verification process for basic due diligence.\n\n_Note that on the Sandbox Environment, the `verificationCode` is always set to \\\"123456\\\"._\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

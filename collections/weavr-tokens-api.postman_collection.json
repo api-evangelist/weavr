@@ -1,0 +1,854 @@
+{
+  "item": [
+    {
+      "id": "9b07d9b1-84f0-4fc6-b12e-d48bc6432aa9",
+      "name": "Tokens",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "97247c0b-9ac9-4b5c-b142-70e1c2a5fff4",
+          "name": "Acquire auth token",
+          "request": {
+            "name": "Acquire auth token",
+            "description": {
+              "content": "Authenticate a user with the `email` and `password` that they provided when registering.\n\nGiven that the user credentials are correct, this returns a `token` that can then be used to authorise\nother secured operations. In case the password is expired, a temporary `token` is returned, which can be used\nsolely for updating the password.\n\nThe token returned is valid for 5 minutes from last activity.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "login_with_password"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"<email>\",\n  \"password\": {\n    \"value\": \"<password>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "76e107b3-ff92-4dc8-8d3c-aef05f0ae4e4",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "login_with_password"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"<email>\",\n  \"password\": {\n    \"value\": \"<password>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"token\": \"string\",\n  \"tokenType\": \"AUTH\",\n  \"identity\": {\n    \"type\": \"BUYER\",\n    \"id\": \"30345123146\"\n  },\n  \"credentials\": {\n    \"type\": \"ADMIN\",\n    \"id\": \"68848219\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b60f332f-959e-4de6-9b19-5f64f0170801",
+              "name": "Bad Request Error - Your request is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "login_with_password"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"<email>\",\n  \"password\": {\n    \"value\": \"<password>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"HAS_TEXT\"\n      },\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"RANGE\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "243a91cd-21ae-49bd-8f6f-4ed81c2f4b07",
+              "name": "Unauthorized - Your credentials or access token are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "login_with_password"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"<email>\",\n  \"password\": {\n    \"value\": \"<password>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "25f24c0a-4c78-4b48-aa74-c22112a82dc0",
+              "name": "Forbidden - Access to the requested resource or action is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "login_with_password"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"<email>\",\n  \"password\": {\n    \"value\": \"<password>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"INSUFFICIENT_PERMISSIONS\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9d262170-ea6f-43be-9b52-564bda89892d",
+              "name": "The user's password has expired. Use the returned temporary token to update their password via the  '_/passwords/update_' endpoint.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "login_with_password"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"<email>\",\n  \"password\": {\n    \"value\": \"<password>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"token\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d8a85447-d952-4614-b079-cdbf592e14ca",
+              "name": "Too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "login_with_password"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"<email>\",\n  \"password\": {\n    \"value\": \"<password>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "disabled": false,
+                  "description": "(Required) Example: `20, 10;w=60, 20;w=3600, 200;w=86400`\nThe first number (20) is the limit that has been exceeded.\nThe remaining numbers are the limits that are in force, with 'w' meaning 'window in seconds'. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)\n",
+                  "key": "x-ratelimit-limit",
+                  "value": "string"
+                },
+                {
+                  "disabled": false,
+                  "description": "(Required) The number of seconds until the window is reset.",
+                  "key": "x-ratelimit-reset",
+                  "value": "8535"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d6035116-2084-48b9-983b-4b35a6eb8ea1",
+              "name": "Internal Server Error - There is a problem with the server. Please try again later.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "login_with_password"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"<email>\",\n  \"password\": {\n    \"value\": \"<password>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "27076d08-789e-4974-98a5-8d20f51a3c4f",
+              "name": "Service Unavailable - We're temporarily offline for maintenance. Please try again later.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "login_with_password"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"<email>\",\n  \"password\": {\n    \"value\": \"<password>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5c2ff2c1-4b04-4969-aa0f-26aac0eeec79",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "login_with_password"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"<email>\",\n  \"password\": {\n    \"value\": \"<password>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e9feae40-b68f-43e2-93a8-9286c6a1e146",
+          "name": "Logout",
+          "request": {
+            "name": "Logout",
+            "description": {
+              "content": "Logs out the user and terminates the session identified by the\n`auth_token` in the Authorization Header.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "logout"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d889a3bb-3d19-4413-b866-b37b3ef3bbb6",
+              "name": "Success - No Content.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "logout"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "98f259c1-2091-46d7-ab0b-9413a9083cbb",
+              "name": "Bad Request Error - Your request is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "logout"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"HAS_TEXT\"\n      },\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"RANGE\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "327f7bf5-6975-41d5-8573-fab9857f904a",
+              "name": "Unauthorized - Your credentials or access token are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "logout"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "406999e6-8e81-4af7-a4b1-a0b5318186b8",
+              "name": "Forbidden - Access to the requested resource or action is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "logout"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"INSUFFICIENT_PERMISSIONS\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "23e8cfc3-1604-4aba-b89d-03b35609b6b4",
+              "name": "Too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "logout"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "disabled": false,
+                  "description": "(Required) Example: `20, 10;w=60, 20;w=3600, 200;w=86400`\nThe first number (20) is the limit that has been exceeded.\nThe remaining numbers are the limits that are in force, with 'w' meaning 'window in seconds'. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)\n",
+                  "key": "x-ratelimit-limit",
+                  "value": "string"
+                },
+                {
+                  "disabled": false,
+                  "description": "(Required) The number of seconds until the window is reset.",
+                  "key": "x-ratelimit-reset",
+                  "value": "8535"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "03ffb32e-1dc8-4782-8b4a-f68059bef313",
+              "name": "Internal Server Error - There is a problem with the server. Please try again later.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "logout"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1cc31cc7-29cd-4cda-8822-e4abffcdb6d7",
+              "name": "Service Unavailable - We're temporarily offline for maintenance. Please try again later.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "logout"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2860cc2a-620d-4ac7-99bd-ddf61698fe71",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "logout"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://sandbox.weavr.io/multi/backoffice",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "7b4da0cc-f855-49f9-a0c8-94d865c92d65",
+    "name": "Weavr Multi Product BackOffice Access Token Tokens API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning\nidentities and their instruments, without requiring the users to be logged in.\n\nA token is to be obtained through the `access_token` method, and this will allow relevant operations\nto be performed on behalf of this same identity.\n\n\nContact Support:\n Name: Weavr",
+      "type": "text/plain"
+    }
+  }
+}

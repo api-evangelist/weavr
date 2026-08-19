@@ -1,0 +1,88 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Consumers API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Consumers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Charge fee to a consumer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/consumers/fees/charge",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Charge a fee to the logged-in consumer based on a pre-defined custom fee. Custom fees can be configured in the Multi Portal.\n\nThe fees collected will be deposited into your Revenue Account. The balance and transaction history of your revenue account can be viewed in the Multi Portal.\n"
+        },
+        {
+          "info": {
+            "name": "Register a consumer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/consumers",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a Consumer Identity to represent an Individual.\n\nThe information provided must be accurate as it will be passed on for KYC verification with our partner.\n\n*Incorrect information may incur a re-processing fee.*\n"
+        },
+        {
+          "info": {
+            "name": "Simulate verification of a consumer identity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/consumers/:consumer_id/verify",
+            "headers": [
+              {
+                "name": "call-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "consumer_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Fully verify a consumer identity. Will set emailVerified, mobileVerified, isPep (as false), isSanctioned (as false) and fullDueDiligence (as APPROVED)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

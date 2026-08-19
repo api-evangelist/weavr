@@ -1,0 +1,272 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Sends API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Sends",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all send transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/sends",
+            "params": [
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+              },
+              {
+                "name": "profileId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the Send profile. Leave out to fetch all entries."
+              },
+              {
+                "name": "instrumentId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the source instrument id."
+              },
+              {
+                "name": "source.id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the source instrument id. Must be specified when `source.type` is provided."
+              },
+              {
+                "name": "source.type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the source instrument type. Must be specified when `source.id` is provided."
+              },
+              {
+                "name": "state",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the Send transaction state. Leave out to fetch all states."
+              },
+              {
+                "name": "createdFrom",
+                "value": "",
+                "type": "query",
+                "description": "Filter for send transactions created after `createdFrom` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all Send transactions."
+              },
+              {
+                "name": "createdTo",
+                "value": "",
+                "type": "query",
+                "description": "Filter for send transactions created before `createdTo` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all Send transactions."
+              },
+              {
+                "name": "executedFrom",
+                "value": "",
+                "type": "query",
+                "description": "Filter for send transactions executed after `executedFrom` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all Send transactions."
+              },
+              {
+                "name": "executedTo",
+                "value": "",
+                "type": "query",
+                "description": "Filter for send transactions executed before `executedTo` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all Send transactions."
+              },
+              {
+                "name": "tag",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the send tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all entries."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves all the send transactions performed by the logged-in identity."
+        },
+        {
+          "info": {
+            "name": "Create a send transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/sends",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Sends funds between managed accounts and managed cards belonging to *different* corporate or consumer identities.\n\nThe Send Profile (configured in the Multi Portal) specified determines the behaviour and restrictions of the transaction (for example, fees).\n"
+        },
+        {
+          "info": {
+            "name": "Get a send transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/sends/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Send transaction."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve the send transaction identified by the `id` path parameter."
+        },
+        {
+          "info": {
+            "name": "Cancel a send transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/sends/:id/cancel",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Send transaction."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Cancel the send transaction identified by the `id` path parameter."
+        },
+        {
+          "info": {
+            "name": "Issue a one-time password that can be used to verify a send",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/sends/:id/challenges/otp/:channel",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the send transaction."
+              },
+              {
+                "name": "channel",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the channel."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deprecated in favour of [Challenges endpoints](#tag/Confirmation-Challenges/operation/multipleSCAChallenge)\n\nStarts the verification process for a send in which a one-time password is sent to a device belonging to the logged-in user that was previously enrolled through the `/authentication_factors/otp/{channel}` endpoint.\n\nYou should only start this process if the send `state` is `PENDING_CHALLENGE`.\n\n_Note that on the Sandbox Environment, text messages are not sent and the one-time-password is "
+        },
+        {
+          "info": {
+            "name": "Verify a send using a one-time password",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/sends/:id/challenges/otp/:channel/verify",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the send transaction."
+              },
+              {
+                "name": "channel",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the channel."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deprecated in favour of [Challenges endpoints](#tag/Confirmation-Challenges/operation/multipleSCAVerify)\n\nCompletes the verification process for a Send.\n\nIf the outcome of the verification is successful, the send is executed.\n\nIf not verified challenge expires after 5 minutes and the number of incorrect OTP attempts is limited to reduce the risk of fraud.\n\n_Note that on the Sandbox Environment, text messages are not sent and the `verificationCode` is always \\\"123456\\\"._\n"
+        },
+        {
+          "info": {
+            "name": "Issue a push notification that can be used to verify Send transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/sends/:id/challenges/push/:channel",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the send transaction."
+              },
+              {
+                "name": "channel",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deprecated in favour of [Challenges endpoints](#tag/Confirmation-Challenges/operation/multipleSCAChallengePush)\n\nStarts the verification process for a Send in which a push notification is sent to a device belonging to the logged-in user that was previously enrolled through the `/authentication_factors/push/{channel}` endpoint.\n\nYou should only start this process if the Send transaction `state` is `PENDING_CHALLENGE`.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

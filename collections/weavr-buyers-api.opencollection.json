@@ -1,0 +1,150 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Buyers API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Buyers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get buyer details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/buyers"
+          },
+          "docs": "Retrieve the details of the buyer that the logged-in user belongs to.\n\n\nRequired user role: `ADMIN`"
+        },
+        {
+          "info": {
+            "name": "Create a buyer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/buyers",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Buyers are identities representing a business. Once on-boarded, Buyers can create and manage their own instruments via your plugin. \n\nThe information provided must be accurate and will be passed on for KYB verification with our partner.\n"
+        },
+        {
+          "info": {
+            "name": "Update a buyer",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/buyers",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the buyer currencies and admin roles.\n\n\nRequired user role: `ADMIN`"
+        },
+        {
+          "info": {
+            "name": "Start admin user email verification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/buyers/verification/email/send",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The first step in verifying a admin user's email. The admin user whose email address is to be verified is sent an email containing a randomly generated code.\n\nThis code must then be provided in the _buyerAdminUserEmailVerify_ operation to verify the admin user's email address.\n\n_Note that on the Sandbox Environment, the `verificationCode` is always set to \\\"123456\\\"._\n"
+        },
+        {
+          "info": {
+            "name": "Verify admin user email",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/buyers/verification/email/verify",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The second step in verifying the admin user's email. The randomly generated code sent to the admin user via\nemail, using the _buyerAdminUserEmailVerificationCodeSend_ operation, is submitted here to verify the admin user's email.\n\nThis is needed as part of the verification process for basic due diligence.\n\n_Note that on the Sandbox Environment, the `verificationCode` is always set to \\\"123456\\\"._\n"
+        },
+        {
+          "info": {
+            "name": "Get buyer KYB status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/buyers/kyb"
+          },
+          "docs": "Returns the KYB status for the buyer that the logged-in user belongs to.\n\n\nRequired user role: `ADMIN`"
+        },
+        {
+          "info": {
+            "name": "Start buyer KYB",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/buyers/kyb",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Buyers need to complete due diligence (KYB) before they can create payment runs and pay their suppliers.\n\nThis operation initiates the due diligence process for the buyer that the logged-in user belongs to.\n\nDue Diligence is handled by a KYB provider - you will need to embed the KYB UI Component in your application so that the buyer will be able to perform the KYB process.\n\nTo initialise the KYB UI Component, you need a `reference` that is given you in the response of this operation.\n\n\nRequired "
+        },
+        {
+          "info": {
+            "name": "Update Buyer's KYB details",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/buyers/kyb",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the details of the buyer that the logged-in user belongs to.\n\nThe following Buyer details are verified during due diligence (KYB) and cannot be updated via the API once the Buyer has been verified:\n- Admin User Name\n- Admin User Surname\n- Admin User Email\n- Admin User Mobile Country Code\n- Admin User Mobile Number\n- Admin Date of Birth\n- Company Business Address\n\n*If these details need to be changed after due diligence is completed, please contact Customer Support to restart the Due Dilig"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

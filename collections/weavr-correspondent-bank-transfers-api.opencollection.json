@@ -1,0 +1,217 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Correspondent Bank Transfers API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Correspondent Bank Transfers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all correspondent bank transfer transactions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/correspondent_bank_transfers",
+            "params": [
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+              },
+              {
+                "name": "profileId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the managed account/card profile. Leave out to fetch all managed accounts/card."
+              },
+              {
+                "name": "sourceInstrument.id",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the source instrument id. Must be specified when `source.type` is provided."
+              },
+              {
+                "name": "sourceInstrument.type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the source instrument type. Must be specified when `source.id` is provided."
+              },
+              {
+                "name": "createdFrom",
+                "value": "",
+                "type": "query",
+                "description": "Filter for correspondent bank transfer transactions created after `createdFrom` timestamp, expressed in Epoch timestamp using millisecond precision."
+              },
+              {
+                "name": "createdTo",
+                "value": "",
+                "type": "query",
+                "description": "Filter for correspondent bank transfer transactions created before `createdTo` timestamp, expressed in Epoch timestamp using millisecond precision."
+              },
+              {
+                "name": "executedFrom",
+                "value": "",
+                "type": "query",
+                "description": "Filter for correspondent bank transfer transactions executed after `executedFrom` timestamp, expressed in Epoch timestamp using millisecond precision."
+              },
+              {
+                "name": "executedTo",
+                "value": "",
+                "type": "query",
+                "description": "Filter for correspondent bank transfer transactions executed before `executedTo` timestamp, expressed in Epoch timestamp using millisecond precision."
+              },
+              {
+                "name": "tag",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the correspondent bank transfer tag. The exact tag must be provided, as wildcards are not supported."
+              },
+              {
+                "name": "state",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the state of the correspondent bank transfer transaction."
+              },
+              {
+                "name": "originator.name",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the originator name. Partial matches are supported."
+              },
+              {
+                "name": "originator.type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the originator type."
+              },
+              {
+                "name": "originator.tag",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the originator tag."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves all correspondent bank transfer transactions."
+        },
+        {
+          "info": {
+            "name": "Create a correspondent bank transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/correspondent_bank_transfers",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates an outgoing wire transfer on behalf of an originator (correspondent banking).\n\nThis endpoint is designed for correspondent banking use cases where a financial institution\ninitiates a wire transfer on behalf of another party (the originator).\n\nThe Outgoing Wire Transfer Profile (configured in the Multi Portal) specified determines the behaviour\nand restrictions of the transaction (for example, fees).\n"
+        },
+        {
+          "info": {
+            "name": "Get a correspondent bank transfer transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/correspondent_bank_transfers/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the correspondent bank transfer transaction."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves the correspondent bank transfer identified by the `id` path parameter."
+        },
+        {
+          "info": {
+            "name": "Cancel a correspondent bank transfer transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/correspondent_bank_transfers/:id/cancel",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the correspondent bank transfer transaction."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Cancel the correspondent bank transfer identified by the `id` path parameter."
+        },
+        {
+          "info": {
+            "name": "Confirm a correspondent bank transfer transaction",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/correspondent_bank_transfers/:id/confirm",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the correspondent bank transfer transaction."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Confirm the correspondent bank transfer identified by the `id` path parameter."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

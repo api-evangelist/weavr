@@ -1,0 +1,101 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Transaction Activity API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Transaction Activity",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all transaction activity",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/transactions",
+            "params": [
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by one or more transaction activity types."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by one or more normalised transaction statuses."
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Filter by transaction direction (CREDIT or DEBIT)."
+              },
+              {
+                "name": "creationTimestampFrom",
+                "value": "",
+                "type": "query",
+                "description": "Filter for transactions created after this timestamp. Epoch timestamp using millisecond precision."
+              },
+              {
+                "name": "creationTimestampTo",
+                "value": "",
+                "type": "query",
+                "description": "Filter for transactions created before this timestamp. Epoch timestamp using millisecond precision."
+              },
+              {
+                "name": "lastUpdatedTimestampFrom",
+                "value": "",
+                "type": "query",
+                "description": "Filter for transactions last updated after this timestamp. Useful for pulling recently changed transactions. Epoch timestamp using millisecond precision."
+              },
+              {
+                "name": "lastUpdatedTimestampTo",
+                "value": "",
+                "type": "query",
+                "description": "Filter for transactions last updated before this timestamp. Epoch timestamp using millisecond precision."
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order for the results:\n  - ASC: Ascending order, oldest first.\n  - DESC: Descending order, most recent first.\n"
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "The field to sort transaction activity results by. Defaults to `creationTimestamp`."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all transactional activity across all managed accounts and managed cards.\n\nThis provides a single view of all transfers, sends, wire transfers, card payments, fees, and other\ntransaction types regardless of which wallet they belong to.\n\n`creationTimestamp` is when the transaction was created in its owning service (the same value the\nnested `transaction` object reports), and is the field the creation-window filter applies to.\nTransactions that are committed but not yet executed (e.g. sche"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

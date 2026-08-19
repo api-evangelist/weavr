@@ -1,0 +1,89 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Authorised Users API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authorised Users",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/users",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a user linked to the identity represented by the `access_token`.\n        \nCreating authorised users on behalf of an identity is a restricted feature and by default, this functionality is not available for use.\n"
+        },
+        {
+          "info": {
+            "name": "Deactivate a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/users/:user_id/deactivate",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the user."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "De-activate the user identified by the `user_id` path parameter.\n\nDeactivated users cannot log in or execute any operations with their credentials.\n\nThis operations is not final and a user can be re-activated using the userActivate operation. Note that another active user would need to log in so as to re-activate the de-activated user.\n\nPlease contact our support team or your account manager to request access to this endpoint.\n"
+        },
+        {
+          "info": {
+            "name": "Send a user invite",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/users/:user_id/invite",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the user."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Once a user is created using the `userCreate` operation, the user needs to setup his/her password.\n\nAn invitation needs to be sent to the user in order to be able to set up the password for the first time. The invitation email, which remains valid for 1 month, will contain a URL having all information required to setup the password.\n\nInviting authorised users on behalf of an identity is a restricted feature and by default, this functionality is not available for use.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

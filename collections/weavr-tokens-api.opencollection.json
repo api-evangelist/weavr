@@ -1,0 +1,44 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Tokens API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tokens",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Acquire auth token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/login_with_password",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Authenticate a user with the `email` and `password` that they provided when registering.\n\nGiven that the user credentials are correct, this returns a `token` that can then be used to authorise\nother secured operations. In case the password is expired, a temporary `token` is returned, which can be used\nsolely for updating the password.\n\nThe token returned is valid for 5 minutes from last activity.\n"
+        },
+        {
+          "info": {
+            "name": "Logout",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/logout"
+          },
+          "docs": "Logs out the user and terminates the session identified by the\n`auth_token` in the Authorization Header.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

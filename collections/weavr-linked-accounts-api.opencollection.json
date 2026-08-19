@@ -1,0 +1,424 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Linked Accounts API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Linked Accounts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all linked accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/linked_accounts",
+            "params": [
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+              },
+              {
+                "name": "profileId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the managed account/card profile. Leave out to fetch all managed accounts/card."
+              },
+              {
+                "name": "friendlyName",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the managed account/card friendly name. Leave out to fetch all managed accounts/card.\n\nThe exact name must be provided, as wildcards are not supported.\n"
+              },
+              {
+                "name": "state",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the managed account/card currency.\n\nCurrencies are expressed as an ISO 4217 code. Leave out to fetch all managed accounts/card.\n"
+              },
+              {
+                "name": "createdFrom",
+                "value": "",
+                "type": "query",
+                "description": "Filter for managed accounts/cards created after `createdFrom` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all managed accounts/cards."
+              },
+              {
+                "name": "createdTo",
+                "value": "",
+                "type": "query",
+                "description": "Filter for managed accounts/cards created before `createdTo` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all managed accounts/cards."
+              },
+              {
+                "name": "tag",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the managed account/card tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all managed accounts/card."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves all the Linked Accounts belonging to the logged-in Identity."
+        },
+        {
+          "info": {
+            "name": "Add a linked account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/linked_accounts",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "A Linked Account is an entity in the Weavr system that represents an external bank account or PSP account which the Identity has verified that they own and control. This feature enables users to perform transactions, such as outgoing and incoming wire transfers, between their Linked Accounts and their Managed Accounts in a way that can be recorded as a self-to-self transfer.\n"
+        },
+        {
+          "info": {
+            "name": "Get a linked account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/linked_accounts/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Linked Account."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Fetch the Linked Account identified by the `id` in path."
+        },
+        {
+          "info": {
+            "name": "Update a linked account",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://sandbox.weavr.io/multi/backoffice/linked_accounts/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the linked account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update the details for the linked account identified by the `id` in the path."
+        },
+        {
+          "info": {
+            "name": "Remove a linked account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/linked_accounts/:id/remove",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the linked account."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Removes the linked account identified by the `id` path parameter. Unlike block, this action is not reversible.\n"
+        },
+        {
+          "info": {
+            "name": "Block a linked account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/linked_accounts/:id/block",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the linked account."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Temporarily blocks a linked account."
+        },
+        {
+          "info": {
+            "name": "Unblock a linked account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/linked_accounts/:id/unblock",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the linked account."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Unblocks the linked account identified by the `id` path parameter.\n"
+        },
+        {
+          "info": {
+            "name": "Get linked account verifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/linked_accounts/:id/verifications",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the linked account."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+              },
+              {
+                "name": "state",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get linked account verifications"
+        },
+        {
+          "info": {
+            "name": "Get Linked accounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/linked_accounts"
+          },
+          "docs": "Retrieves the linked accounts belonging to the buyer that the logged-in user belongs to.\n\n\nRequired user role: `CONTROLLER`"
+        },
+        {
+          "info": {
+            "name": "Get Linked account",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/linked_accounts/:linked_account_id",
+            "params": [
+              {
+                "name": "linked_account_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the linked account."
+              }
+            ]
+          },
+          "docs": "Retrieves a linked account of the buyer that the logged-in user belongs to.\n\n\nRequired user role: `CONTROLLER`"
+        },
+        {
+          "info": {
+            "name": "Update a linked account",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/linked_accounts/:linked_account_id",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "linked_account_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the linked account."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates properties of a linked account such as friendly name.\n\nRequired user role: `CONTROLLER`"
+        },
+        {
+          "info": {
+            "name": "Unlink a linked account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/linked_accounts/:linked_account_id/unlink",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "linked_account_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the linked account."
+              }
+            ]
+          },
+          "docs": "Unlinks a linked account identified by the `linked_account_id`.\n\nThis action is not reversible and if the buyer wants to use this linked account again to fund payment runs, they will have to re-link the account. More information on how to link an account can be found [here](https://docs.weavr.io/payment-run/instruments/link-account/).\n\nDetails of an unlinked account, can still be retrieved via the [Get linked accounts](#operation/getLinkedAccounts) and [Get linked account](#operation/getLinkedAc"
+        },
+        {
+          "info": {
+            "name": "linked_accounts_account_id_set",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/linked_accounts/:account_id/set",
+            "headers": [
+              {
+                "name": "call-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Allows the verification or rejection of a linked account run\nby specifying the account ID. This operation updates the status\nof a linked account to either VERIFIED or REJECTED.\n"
+        },
+        {
+          "info": {
+            "name": "linked_accounts_account_id_verify",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/linked_accounts/:account_id/verify",
+            "headers": [
+              {
+                "name": "call-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This tool is used to simulate internal verification for linked accounts by Account ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,84 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Authorised Signatories API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authorised Signatories",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Send email verification code to Corporate root user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/corporates/verification/email/send",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The first step in verifying a root user's email. The root user whose email address is to be verified is sent an email containing a randomly generated code.\n\nThis code must then be provided in the _corporateRootUserEmailVerify_ operation to verify the root user's email address.\n\n_Note that on the Sandbox Environment, the `verificationCode` is always set to \\\"123456\\\"._\n"
+        },
+        {
+          "info": {
+            "name": "Verify email of Corporate root user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/corporates/verification/email/verify",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The second step in verifying the root user's email. The randomly generated code sent to the root user via\nemail, using the _corporateRootUserEmailVerificationCodeSend_ operation, is submitted here to verify the root user's email.\n\nThis is needed as part of the verification process for basic due diligence.\n\n_Note that on the Sandbox Environment, the `verificationCode` is always set to \\\"123456\\\"._\n"
+        },
+        {
+          "info": {
+            "name": "Send email verification code to Consumer root user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/consumers/verification/email/send",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The first step in verifying a root user's email. The root user whose email address is to be verified is sent an email containing a randomly generated code.\n\nThis code must then be provided in the _consumerRootUserEmailVerify_ operation to verify the root user's email address.\n\nNote that on the Sandbox Environment, the `verificationCode` is always set to \\\"123456\\\".\n"
+        },
+        {
+          "info": {
+            "name": "Verify email of Consumer root user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/consumers/verification/email/verify",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The second step in verifying the root user's email. The randomly generated code sent to the root user via\nemail, using the _consumerRootUserEmailVerificationCodeSend_ operation, is submitted here to verify the root user's email.\n\nThis is needed as part of the verification process for basic due diligence.\n\nNote that on the Sandbox Environment, emails are not sent and the verification code is always set to \\\"123456\\\".\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

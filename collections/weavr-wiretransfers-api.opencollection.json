@@ -1,0 +1,66 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Wiretransfers API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Wiretransfers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Simulate completion of  an Outgoing Wire Transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/wiretransfers/outgoing/:outgoing_wire_transfer_id/accept",
+            "headers": [
+              {
+                "name": "call-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "outgoing_wire_transfer_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This endpoint is used to simulate the completion of an Outgoing Wire Transfer that has been submitted in the system and sent over our payment network."
+        },
+        {
+          "info": {
+            "name": "Simulate rejection of an Outgoing Wire Transfer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/wiretransfers/outgoing/:outgoing_wire_transfer_id/reject",
+            "headers": [
+              {
+                "name": "call-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "outgoing_wire_transfer_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This endpoint is used to simulate the rejection of an Outgoing Wire Transfer that has been submitted in the system and sent over our payment network."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

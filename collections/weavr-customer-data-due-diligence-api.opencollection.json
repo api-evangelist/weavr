@@ -1,0 +1,156 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Customer Data & Due Diligence API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Customer Data & Due Diligence",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a corporate",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/corporates",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve the details of the logged-in corporate."
+        },
+        {
+          "info": {
+            "name": "Update a corporate",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://sandbox.weavr.io/multi/backoffice/corporates",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update the details of the logged-in corporate identity.\n\nThe following Corporate details are verified during due diligence (KYB) and cannot be updated via the API once the Corporate has been verified:\n  - Root User Name\n  - Root User Surname\n  - Root User Email\n  - Root User Mobile Country Code\n  - Root User Mobile Number\n  - Business Address\n  - Date of birth\n\n*If these details need to be changed after due diligence is completed, please contact Customer Support to restart the Due Diligence proc"
+        },
+        {
+          "info": {
+            "name": "Get KYB for a corporate",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/corporates/kyb",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the KYB status for the logged-in corporate."
+        },
+        {
+          "info": {
+            "name": "Start KYB for a corporate",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/corporates/kyb",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Corporates need to complete due diligence (KYB) before they can create instruments and perform transactions.\n\nThis operation initiates the due diligence process for the logged-in corporate.\n\nDue Diligence is handled by a KYB provider - you will need to embed the KYB UI Component in your application so that the Corporate will be able to perform the KYB process.\n\nTo initialise the KYB UI Component, you need a `reference` that is given you in the response of this operation.\n"
+        },
+        {
+          "info": {
+            "name": "Get a consumer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/consumers",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve the details of the logged-in Consumer."
+        },
+        {
+          "info": {
+            "name": "Update a consumer",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://sandbox.weavr.io/multi/backoffice/consumers",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update the details of the logged-in consumer identity.\n\nIf the Consumer root user has already completed KYC, the following details cannot be updated:\n  - name\n  - surname\n  - email\n  - mobile Country Code\n  - mobile Number\n  - date of Birth\n  - address\n"
+        },
+        {
+          "info": {
+            "name": "Get KYC for a consumer",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/consumers/kyc",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the KYC status for the logged-in consumer."
+        },
+        {
+          "info": {
+            "name": "Start KYC for a consumer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/consumers/kyc",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Consumers need to complete due diligence (KYC) before they can create instruments and fund transaction.\n\nThis operation initiates the due diligence process for the logged-in consumer.  \n\nDue Diligence is handled by a KYC provider, you will need to embed the KYC UI Component in your application to show the KYC screens to your users.\n\nTo initialise the KYC UI Component, you need a `reference` that is given to you in the response of this operation.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

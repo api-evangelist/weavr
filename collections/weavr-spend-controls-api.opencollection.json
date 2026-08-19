@@ -1,0 +1,126 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Spend Controls API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Spend Controls",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all spend rules for a managed card",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/spend_rules",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Fetch the list of spend rules associated with the managed card identified by the `id` path parameter."
+        },
+        {
+          "info": {
+            "name": "Create spend rules for a managed card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/spend_rules",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create the spend rules associated with the managed card identified by the `id` path parameter."
+        },
+        {
+          "info": {
+            "name": "Update spend rules for a managed card",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/spend_rules",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Must be user after a POST, to update individual spend rules associated with the managed card identified by the `id` path parameter."
+        },
+        {
+          "info": {
+            "name": "Delete all spend rules for a managed card",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/spend_rules",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Remove all spend rules associated with the managed card identified by the `id` path parameter."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

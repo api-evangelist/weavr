@@ -1,0 +1,105 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Factors API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Factors",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Simulate invalid verification of specified challenge",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/factors/:credentials_id/challenges/:challenge_id/verify_invalid",
+            "headers": [
+              {
+                "name": "call-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "credentials_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "challenge_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Simulate invalid verification of specified challenge"
+        },
+        {
+          "info": {
+            "name": "Simulate expiry of specified challenge",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/factors/:credentials_id/challenges/:challenge_id/verify_expired",
+            "headers": [
+              {
+                "name": "call-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "credentials_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "challenge_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Simulate expiry of specified challenge"
+        },
+        {
+          "info": {
+            "name": "Simulate successful verification of specified challenge",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/factors/:credentials_id/challenges/:challenge_id/verify_success",
+            "headers": [
+              {
+                "name": "call-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "credentials_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "challenge_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Simulate successful verification of specified challenge"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

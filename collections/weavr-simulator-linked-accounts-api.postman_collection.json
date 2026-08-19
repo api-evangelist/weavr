@@ -1,0 +1,990 @@
+{
+  "item": [
+    {
+      "id": "bc8247b2-57be-42a0-8143-c08031b13b35",
+      "name": "Simulator Linked accounts",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b056833a-dcc3-47c8-9899-1eb2160cfccb",
+          "name": "Simulate Extend AIS consent",
+          "request": {
+            "name": "Simulate Extend AIS consent",
+            "description": {
+              "content": "Simulate Extend AIS consent",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "simulate",
+                "v1",
+                "consents",
+                ":consent_id",
+                "extend"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "consent_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST"
+          },
+          "response": [
+            {
+              "id": "aa44703c-3610-45ce-8f93-88682510135c",
+              "name": "No Content",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "simulate",
+                    "v1",
+                    "consents",
+                    ":consent_id",
+                    "extend"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "consent_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "35df7fb9-4cc0-4be6-a961-4d18043f9cdf",
+              "name": "Bad Request Error - Your request is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "simulate",
+                    "v1",
+                    "consents",
+                    ":consent_id",
+                    "extend"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "consent_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"REQUIRES\"\n      },\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"REGEX\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bb99b10a-5b3d-456d-b1d6-df17ac35bc88",
+              "name": "Unauthorized - Your credentials or access token are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "simulate",
+                    "v1",
+                    "consents",
+                    ":consent_id",
+                    "extend"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "consent_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "48d82d74-4a79-4ef8-bfa3-fd709c9a6e6b",
+              "name": "Forbidden - Access to the requested resource or action is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "simulate",
+                    "v1",
+                    "consents",
+                    ":consent_id",
+                    "extend"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "consent_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"INSUFFICIENT_PERMISSIONS\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "70e540ce-4f6d-407a-8ca9-0464821cef68",
+              "name": "Not found - The requested resource couldn't be found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "simulate",
+                    "v1",
+                    "consents",
+                    ":consent_id",
+                    "extend"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "consent_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "31ff5cea-45d2-4919-9d09-41ab8f1de4b0",
+              "name": "Conflict",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "simulate",
+                    "v1",
+                    "consents",
+                    ":consent_id",
+                    "extend"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "consent_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"LINKED_ACCOUNT_NOT_FOUND\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a2336375-47ce-4f9c-a82c-50b32181f616",
+              "name": "Internal Server Error - There is a problem with the server. Please try again later.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "simulate",
+                    "v1",
+                    "consents",
+                    ":consent_id",
+                    "extend"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "consent_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "96cf714a-c9f4-4d0d-861e-52fd9a838748",
+              "name": "Service Unavailable - We're temporarily offline for maintenance. Please try again later.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "simulate",
+                    "v1",
+                    "consents",
+                    ":consent_id",
+                    "extend"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "consent_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8b0cf202-16de-4a6f-9ed7-c6feeaf39d69",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "simulate",
+                    "v1",
+                    "consents",
+                    ":consent_id",
+                    "extend"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "consent_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7ded5da5-b6f2-46cb-bdb5-90b021c77232",
+          "name": "Simulate Delete linked account",
+          "request": {
+            "name": "Simulate Delete linked account",
+            "description": {
+              "content": "Simulate deletion of a linked account",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "simulate",
+                "v1",
+                "linked_accounts",
+                ":linked_account_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "linked_account_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE"
+          },
+          "response": [
+            {
+              "id": "142d03ed-2777-416c-a245-99dfb5072a62",
+              "name": "Success - No Content.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "simulate",
+                    "v1",
+                    "linked_accounts",
+                    ":linked_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "linked_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c587758b-a5b3-433c-aedb-5c78ecce6c9e",
+              "name": "Bad Request Error - Your request is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "simulate",
+                    "v1",
+                    "linked_accounts",
+                    ":linked_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "linked_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"REQUIRES\"\n      },\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"REGEX\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3185f990-1aba-4806-9bc1-258abb35e057",
+              "name": "Unauthorized - Your credentials or access token are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "simulate",
+                    "v1",
+                    "linked_accounts",
+                    ":linked_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "linked_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a9b41cc4-a095-41d3-a97a-2e9b1a371bdb",
+              "name": "Forbidden - Access to the requested resource or action is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "simulate",
+                    "v1",
+                    "linked_accounts",
+                    ":linked_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "linked_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"INSUFFICIENT_PERMISSIONS\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bafc601c-d841-4c42-a2a3-edc22986af3a",
+              "name": "Not found - The requested resource couldn't be found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "simulate",
+                    "v1",
+                    "linked_accounts",
+                    ":linked_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "linked_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "61d50c5e-5bc6-4ec0-8d17-1ede384f6fc1",
+              "name": "Conflict",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "simulate",
+                    "v1",
+                    "linked_accounts",
+                    ":linked_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "linked_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"STATE_INVALID\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "940247d3-2b15-423c-9cff-dd5a7aeacb79",
+              "name": "Internal Server Error - There is a problem with the server. Please try again later.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "simulate",
+                    "v1",
+                    "linked_accounts",
+                    ":linked_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "linked_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "80d41d96-cac1-408a-b984-a1940daf59f3",
+              "name": "Service Unavailable - We're temporarily offline for maintenance. Please try again later.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "simulate",
+                    "v1",
+                    "linked_accounts",
+                    ":linked_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "linked_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2a790a49-35c6-43f1-9f24-68175f566ba5",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "simulate",
+                    "v1",
+                    "linked_accounts",
+                    ":linked_account_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "linked_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://sandbox.weavr.io/multi/backoffice",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "4da66484-1349-4c90-849c-2166875b0eca",
+    "name": "Weavr Multi Product BackOffice Access Token Simulator Linked accounts API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning\nidentities and their instruments, without requiring the users to be logged in.\n\nA token is to be obtained through the `access_token` method, and this will allow relevant operations\nto be performed on behalf of this same identity.\n\n\nContact Support:\n Name: Weavr",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,948 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Managed Cards API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Managed Cards",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a managed card",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of a card."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all details of the managed card identified by the `id` path parameter."
+        },
+        {
+          "info": {
+            "name": "Update a managed card",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of a card."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update the details of the managed card identified by the `id` path parameter."
+        },
+        {
+          "info": {
+            "name": "Update a managed card's renewal type",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/renewal",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of a card."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update the renewal type of the managed card identified by the `id` path parameter.\n\nPlease contact our support team or your account manager to request access to this endpoint.\n"
+        },
+        {
+          "info": {
+            "name": "Remove a managed card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/remove",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of a managed card."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Destroys the managed card identified by the `id` path parameter. Unlike block, this action is not reversible.\n\nA managed card must be empty before it can be destroyed using this operation.\n"
+        },
+        {
+          "info": {
+            "name": "Block a managed card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/block",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of a managed card."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Blocks the managed card identified by the `id` path parameter. This is a reversible action and the card can be unblocked using the _managedCardUnblock_ operation."
+        },
+        {
+          "info": {
+            "name": "Unblock a managed card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/unblock",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the managed card."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Unblocks the managed card identified by the `id` path parameter.\nThe managed card must have `state.blockedReason` as `USER` so that it can be unblocked.\nIf the managed card was blocked by `SYSTEM`, users cannot unblock it.\n"
+        },
+        {
+          "info": {
+            "name": "Get all spend rules for a managed card",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/spend_rules",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Fetch the list of spend rules associated with the managed card identified by the `id` path parameter."
+        },
+        {
+          "info": {
+            "name": "Create spend rules for a managed card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/spend_rules",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create the spend rules associated with the managed card identified by the `id` path parameter."
+        },
+        {
+          "info": {
+            "name": "Update spend rules for a managed card",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/spend_rules",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Must be user after a POST, to update individual spend rules associated with the managed card identified by the `id` path parameter."
+        },
+        {
+          "info": {
+            "name": "Delete all spend rules for a managed card",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/spend_rules",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Remove all spend rules associated with the managed card identified by the `id` path parameter."
+        },
+        {
+          "info": {
+            "name": "Get a managed card statement",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/statement",
+            "headers": [
+              {
+                "name": "accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of a managed card."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+              },
+              {
+                "name": "orderByTimestamp",
+                "value": "",
+                "type": "query",
+                "description": "Orders the result in ascending or descending order.\n  - ASC: Ascending order, oldest transactions first.\n  - DESC: Descending order, most recent transactions first.\n\nIf not specified, the transactions will be returned in descending order.\n"
+              },
+              {
+                "name": "fromTimestamp",
+                "value": "",
+                "type": "query",
+                "description": "Filter for transactions having transaction timestamp after `fromTimestamp`. Timestamp is expressed in Epoch timestamp using millisecond precision. If omitted, all matching transactions up to the present will be included."
+              },
+              {
+                "name": "toTimestamp",
+                "value": "",
+                "type": "query",
+                "description": "Filter for transactions having transaction timestamp before `toTimestamp`. Timestamp is expressed in Epoch timestamp using millisecond precision. If omitted, all matching transactions up to the present will be included. If both `fromTimestamp` and `toTimestamp` are provided, `toTimestamp` must be greater than `fromTimestamp`."
+              },
+              {
+                "name": "singleEntryPerTransaction",
+                "value": "",
+                "type": "query",
+                "description": "Returns transactions that span multiple movements as a single entry.\nOnly includes transactions that have been completed.\nDefaults to true for PDF statements, false otherwise.\nNote: due to the fact that only completed transactions are included, some\ntransactions that are in progress and have modified the balance of the instrument\nwill not be shown, which could lead to seemingly inconsistent balance being displayed.\n"
+              },
+              {
+                "name": "transactionType",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the transaction type. Leave out to fetch all entries."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a list of transactions against the managed card identified by the `id` path parameter, matching the criteria provided in the request."
+        },
+        {
+          "info": {
+            "name": "Get all managed cards",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards",
+            "params": [
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+              },
+              {
+                "name": "profileId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the managed account/card profile. Leave out to fetch all managed accounts/card."
+              },
+              {
+                "name": "friendlyName",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the managed account/card friendly name. Leave out to fetch all managed accounts/card.\n\nThe exact name must be provided, as wildcards are not supported.\n"
+              },
+              {
+                "name": "state",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "state.blockedReason",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "state.destroyedReason",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "currency",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the managed account/card currency.\n\nCurrencies are expressed as an ISO 4217 code. Leave out to fetch all managed accounts/card.\n"
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the type of the card."
+              },
+              {
+                "name": "renewalType",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the renewal type of the card."
+              },
+              {
+                "name": "externalHandle",
+                "value": "",
+                "type": "query",
+                "description": "Search by the card's `externalHandle`."
+              },
+              {
+                "name": "cardNumberFirstSix",
+                "value": "",
+                "type": "query",
+                "description": "Filter by first six digits of the card."
+              },
+              {
+                "name": "cardNumberLastFour",
+                "value": "",
+                "type": "query",
+                "description": "Filter by last four digits of the card."
+              },
+              {
+                "name": "createdFrom",
+                "value": "",
+                "type": "query",
+                "description": "Filter for managed accounts/cards created after `createdFrom` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all managed accounts/cards."
+              },
+              {
+                "name": "createdTo",
+                "value": "",
+                "type": "query",
+                "description": "Filter for managed accounts/cards created before `createdTo` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all managed accounts/cards."
+              },
+              {
+                "name": "mode",
+                "value": "",
+                "type": "query",
+                "description": "Filter by card mode (prepaid mode or debit mode)."
+              },
+              {
+                "name": "tag",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the managed account/card tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all managed accounts/card."
+              },
+              {
+                "name": "parentManagedAccountId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the Id of the parent managed account associated with the card. This is applicable only for debit mode cards."
+              },
+              {
+                "name": "manufacturingState",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "query",
+                "description": "The unique identifier for the user."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Fetch cards matching the search criteria provided."
+        },
+        {
+          "info": {
+            "name": "Create a managed card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a managed card for the consumer or corporate identity.\nThe Managed Card Profile (configured in the Multi Portal) specified determines the behaviour and restrictions that the managed card will have.\n"
+        },
+        {
+          "info": {
+            "name": "Get a managed card statement (deprecated)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/deprecated/managed_cards/:id/statement",
+            "headers": [
+              {
+                "name": "accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of a managed card."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+              },
+              {
+                "name": "statementLimit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of the results for statements paging, starting at the offset. Limit is capped at 500."
+              },
+              {
+                "name": "orderByTimestamp",
+                "value": "",
+                "type": "query",
+                "description": "Orders the result in ascending or descending order.\n  - ASC: Ascending order, oldest transactions first.\n  - DESC: Descending order, most recent transactions first.\n\nIf not specified, the transactions will be returned in descending order.\n"
+              },
+              {
+                "name": "fromTimestamp",
+                "value": "",
+                "type": "query",
+                "description": "Filter for transactions having transaction timestamp after `fromTimestamp`. Timestamp is expressed in Epoch timestamp using millisecond precision. If omitted, all matching transactions up to the present will be included."
+              },
+              {
+                "name": "toTimestamp",
+                "value": "",
+                "type": "query",
+                "description": "Filter for transactions having transaction timestamp before `toTimestamp`. Timestamp is expressed in Epoch timestamp using millisecond precision. If omitted, all matching transactions up to the present will be included. If both `fromTimestamp` and `toTimestamp` are provided, `toTimestamp` must be greater than `fromTimestamp`."
+              },
+              {
+                "name": "singleEntryPerTransaction",
+                "value": "",
+                "type": "query",
+                "description": "Returns transactions that span multiple movements as a single entry.\nOnly includes transactions that have been completed.\nDefaults to true for PDF statements, false otherwise.\nNote: due to the fact that only completed transactions are included, some\ntransactions that are in progress and have modified the balance of the instrument\nwill not be shown, which could lead to seemingly inconsistent balance being displayed.\n"
+              },
+              {
+                "name": "transactionType",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the transaction type. Leave out to fetch all entries."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deprecated in favour of [GET /managed_cards/{id}/statements](#tag/Managed-Cards/operation/managedCardStatements). Returns a list of transactions against the managed card identified by the `id` path parameter, matching the criteria provided in the request."
+        },
+        {
+          "info": {
+            "name": "Get transaction activity for a managed card",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/transactions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the managed card."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by one or more transaction activity types."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by one or more normalised transaction statuses."
+              },
+              {
+                "name": "direction",
+                "value": "",
+                "type": "query",
+                "description": "Filter by transaction direction (CREDIT or DEBIT)."
+              },
+              {
+                "name": "creationTimestampFrom",
+                "value": "",
+                "type": "query",
+                "description": "Filter for transactions created after this timestamp. Epoch timestamp using millisecond precision."
+              },
+              {
+                "name": "creationTimestampTo",
+                "value": "",
+                "type": "query",
+                "description": "Filter for transactions created before this timestamp. Epoch timestamp using millisecond precision."
+              },
+              {
+                "name": "lastUpdatedTimestampFrom",
+                "value": "",
+                "type": "query",
+                "description": "Filter for transactions last updated after this timestamp. Useful for pulling recently changed transactions. Epoch timestamp using millisecond precision."
+              },
+              {
+                "name": "lastUpdatedTimestampTo",
+                "value": "",
+                "type": "query",
+                "description": "Filter for transactions last updated before this timestamp. Epoch timestamp using millisecond precision."
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order for the results:\n  - ASC: Ascending order, oldest first.\n  - DESC: Descending order, most recent first.\n"
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "The field to sort transaction activity results by. Defaults to `creationTimestamp`."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all transactional activity on the managed card identified by the `id` path parameter.\n\nThis includes pending authorisations, completed settlements, refunds, and all other card transaction types\nin a unified schema.\n"
+        },
+        {
+          "info": {
+            "name": "Get a specific transaction for a managed card",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/transactions/:transactionId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the managed card."
+              },
+              {
+                "name": "transactionId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the transaction."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a specific transaction on the managed card."
+        },
+        {
+          "info": {
+            "name": "Upgrade a card to physical",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/physical",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Upgrades the virtual card identified by the `id` path parameter to physical.\n\nBefore cards can be upgraded, a physical card programme must be set up and the card profile configuration updated accordingly.\n"
+        },
+        {
+          "info": {
+            "name": "Activate a physical card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/physical/activate",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Activates the physical card identified by the `id` path paramter."
+        },
+        {
+          "info": {
+            "name": "Get PIN for a physical card",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/physical/pin",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves the PIN of the physical card identified by the `id` path parameter."
+        },
+        {
+          "info": {
+            "name": "Unblock PIN for a physical card",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/physical/pin/unblock",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Physical cards can be marked as `pinBlocked` if there are too many failed PIN attempts.\n\nUse this operation to unblock a PIN so that the card can be used again.\n"
+        },
+        {
+          "info": {
+            "name": "Replace a damaged physical card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/physical/replace_damaged",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Report as damaged, and replace the physical card identified by the `id` path parameter."
+        },
+        {
+          "info": {
+            "name": "Report a physical card as lost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/physical/report_lost",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Report the physical card identified by the `id` path parameter as lost. This will deactivate the instrument and a new card will need to be requested."
+        },
+        {
+          "info": {
+            "name": "Report a physical card as stolen",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/physical/report_stolen",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Report the physical card identified by the `id` path parameter as stolen. This will destroy the instrument and a new replacement card will need to be requested.\n\nOnce a replacement is requested, any funds remaining on this destroyed card will be transferred to the replacement card.\"\n"
+        },
+        {
+          "info": {
+            "name": "Replace a lost or stolen physical card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/physical/replace_lost_stolen",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Issue a replacement for the physical card, identified by the `id` path parameter, that has already been reported as lost or stolen.\n\nAny funds (that are not blocked pending a purchase for a previous authorisation) remaining on the card will be automatically transferred to the new replacement card.\n"
+        },
+        {
+          "info": {
+            "name": "Reset contactless limit for a physical card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/managed_cards/:id/physical/contactless_limit/reset",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "For security purposes, the cardholder needs to provide the PIN after a number of contactless purchases. Use this operation to reset the physical card's contactless limit.\nThe contactless limit can only be reset for physical cards having the wearable form factor.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

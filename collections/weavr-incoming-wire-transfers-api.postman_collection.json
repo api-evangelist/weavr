@@ -1,0 +1,1372 @@
+{
+  "item": [
+    {
+      "id": "fb8278b3-9bef-4298-b214-7e7ab3dfeab8",
+      "name": "Incoming Wire Transfers",
+      "description": {
+        "content": "Incoming wire transfers received from external bank accounts to managed accounts with IBANs.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "791a86e1-9714-40ef-89de-66cc5dbdb934",
+          "name": "Get all incoming wire transfers",
+          "request": {
+            "name": "Get all incoming wire transfers",
+            "description": {
+              "content": "Returns all incoming wire transfers for the authenticated identity.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "incoming_wire_transfers"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<integer>",
+                  "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "state",
+                  "value": "<string>",
+                  "description": "Filter incoming wire transfers by state."
+                },
+                {
+                  "disabled": false,
+                  "key": "state",
+                  "value": "<string>",
+                  "description": "Filter incoming wire transfers by state."
+                },
+                {
+                  "disabled": false,
+                  "key": "creationTimestampFrom",
+                  "value": "<long>",
+                  "description": "Filter for transactions created after this timestamp. Epoch timestamp using millisecond precision."
+                },
+                {
+                  "disabled": false,
+                  "key": "creationTimestampTo",
+                  "value": "<long>",
+                  "description": "Filter for transactions created before this timestamp. Epoch timestamp using millisecond precision."
+                },
+                {
+                  "disabled": false,
+                  "key": "lastUpdatedTimestampFrom",
+                  "value": "<long>",
+                  "description": "Filter for transactions last updated after this timestamp. Useful for pulling recently changed transactions. Epoch timestamp using millisecond precision."
+                },
+                {
+                  "disabled": false,
+                  "key": "lastUpdatedTimestampTo",
+                  "value": "<long>",
+                  "description": "Filter for transactions last updated before this timestamp. Epoch timestamp using millisecond precision."
+                },
+                {
+                  "disabled": false,
+                  "key": "sortOrder",
+                  "value": "<string>",
+                  "description": "Sort order for the results:\n  - ASC: Ascending order, oldest first.\n  - DESC: Descending order, most recent first.\n"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "2172b070-904c-48f3-a3be-a22c5513b63a",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "incoming_wire_transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "state",
+                      "value": "PENDING"
+                    },
+                    {
+                      "key": "state",
+                      "value": "COMPLETED"
+                    },
+                    {
+                      "key": "creationTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "creationTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"incomingWireTransfers\": [\n    {\n      \"id\": \"1\",\n      \"state\": \"REJECTED\",\n      \"amount\": {\n        \"currency\": \"MKQ\",\n        \"amount\": 3222\n      },\n      \"destinationInstrument\": {\n        \"id\": \"18\",\n        \"type\": \"managed_accounts\"\n      },\n      \"createdAt\": 8469,\n      \"profileId\": \"613710\",\n      \"fee\": {\n        \"currency\": \"PSJ\",\n        \"amount\": 112\n      },\n      \"paymentNetwork\": \"TARGET\",\n      \"senderName\": \"string\",\n      \"senderIban\": \"string\",\n      \"senderReference\": \"string\",\n      \"forex\": {\n        \"originalAmount\": {\n          \"currency\": \"UQA\",\n          \"amount\": 6479\n        },\n        \"exchangeRate\": {\n          \"value\": 4565,\n          \"scale\": 1\n        },\n        \"paddingAmount\": {\n          \"currency\": \"QBQ\",\n          \"amount\": 7015\n        },\n        \"feeAmount\": {\n          \"currency\": \"YLQ\",\n          \"amount\": 253\n        }\n      },\n      \"isInstant\": true,\n      \"executedAt\": 6838\n    },\n    {\n      \"id\": \"21\",\n      \"state\": \"COMPLETED\",\n      \"amount\": {\n        \"currency\": \"FNL\",\n        \"amount\": 4854\n      },\n      \"destinationInstrument\": {\n        \"id\": \"125\",\n        \"type\": \"managed_accounts\"\n      },\n      \"createdAt\": 913,\n      \"profileId\": \"210880835\",\n      \"fee\": {\n        \"currency\": \"QJS\",\n        \"amount\": 4672\n      },\n      \"paymentNetwork\": \"BACS\",\n      \"senderName\": \"string\",\n      \"senderIban\": \"string\",\n      \"senderReference\": \"string\",\n      \"forex\": {\n        \"originalAmount\": {\n          \"currency\": \"MLL\",\n          \"amount\": 7081\n        },\n        \"exchangeRate\": {\n          \"value\": 1255,\n          \"scale\": -60\n        },\n        \"paddingAmount\": {\n          \"currency\": \"YVS\",\n          \"amount\": 1198\n        },\n        \"feeAmount\": {\n          \"currency\": \"LFU\",\n          \"amount\": 7237\n        }\n      },\n      \"isInstant\": false,\n      \"executedAt\": 890\n    }\n  ],\n  \"count\": 3256,\n  \"responseCount\": 5135\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d669252f-8f1f-4596-9332-71ad38e3c192",
+              "name": "Bad Request Error - Your request is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "incoming_wire_transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "state",
+                      "value": "PENDING"
+                    },
+                    {
+                      "key": "state",
+                      "value": "COMPLETED"
+                    },
+                    {
+                      "key": "creationTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "creationTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"AT_MOST\"\n      },\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"IN\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f838457c-0ae6-4470-8852-fa4c28f27efc",
+              "name": "Unauthorized - Your credentials or access token are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "incoming_wire_transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "state",
+                      "value": "PENDING"
+                    },
+                    {
+                      "key": "state",
+                      "value": "COMPLETED"
+                    },
+                    {
+                      "key": "creationTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "creationTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "896f8771-2ead-4035-a48a-19ed05bd6f7a",
+              "name": "Forbidden - Access to the requested resource or action is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "incoming_wire_transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "state",
+                      "value": "PENDING"
+                    },
+                    {
+                      "key": "state",
+                      "value": "COMPLETED"
+                    },
+                    {
+                      "key": "creationTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "creationTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"INSUFFICIENT_PERMISSIONS\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ab802691-56c2-42a2-84b2-98750d180e3b",
+              "name": "Too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "incoming_wire_transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "state",
+                      "value": "PENDING"
+                    },
+                    {
+                      "key": "state",
+                      "value": "COMPLETED"
+                    },
+                    {
+                      "key": "creationTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "creationTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "disabled": false,
+                  "description": "(Required) Example: `20, 10;w=60, 20;w=3600, 200;w=86400`\nThe first number (20) is the limit that has been exceeded.\nThe remaining numbers are the limits that are in force, with 'w' meaning 'window in seconds'. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)\n",
+                  "key": "x-ratelimit-limit",
+                  "value": "string"
+                },
+                {
+                  "disabled": false,
+                  "description": "(Required) The number of seconds until the window is reset.",
+                  "key": "x-ratelimit-reset",
+                  "value": "7507"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "eaa5ecbd-aff2-43dc-af37-98ee30db77f8",
+              "name": "Internal Server Error - There is a problem with the server. Please try again later.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "incoming_wire_transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "state",
+                      "value": "PENDING"
+                    },
+                    {
+                      "key": "state",
+                      "value": "COMPLETED"
+                    },
+                    {
+                      "key": "creationTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "creationTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "164b6d0b-dcef-48a6-8d0d-c1c57efda6ba",
+              "name": "Service Unavailable - The requested service is temporarily unavailable. Please try again later.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "incoming_wire_transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "state",
+                      "value": "PENDING"
+                    },
+                    {
+                      "key": "state",
+                      "value": "COMPLETED"
+                    },
+                    {
+                      "key": "creationTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "creationTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e537bff3-9484-4bea-bbc4-8afbe49e39a5",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "incoming_wire_transfers"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "state",
+                      "value": "PENDING"
+                    },
+                    {
+                      "key": "state",
+                      "value": "COMPLETED"
+                    },
+                    {
+                      "key": "creationTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "creationTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d3d16f29-76b2-4b74-b2de-8fbf3c8a548b",
+          "name": "Get an incoming wire transfer",
+          "request": {
+            "name": "Get an incoming wire transfer",
+            "description": {
+              "content": "Returns a specific incoming wire transfer.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "incoming_wire_transfers",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The unique identifier of the incoming wire transfer."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "4c826e39-422a-4e02-b743-e53a89e25194",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "incoming_wire_transfers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the incoming wire transfer."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"72072420132\",\n  \"state\": \"COMPLETED\",\n  \"amount\": {\n    \"currency\": \"   \",\n    \"amount\": 2586\n  },\n  \"destinationInstrument\": {\n    \"id\": \"664\",\n    \"type\": \"managed_accounts\"\n  },\n  \"createdAt\": 2292,\n  \"profileId\": \"657786\",\n  \"fee\": {\n    \"currency\": \"OLK\",\n    \"amount\": 140\n  },\n  \"paymentNetwork\": \"RIX\",\n  \"senderName\": \"string\",\n  \"senderIban\": \"string\",\n  \"senderReference\": \"string\",\n  \"forex\": {\n    \"originalAmount\": {\n      \"currency\": \"EZE\",\n      \"amount\": 7236\n    },\n    \"exchangeRate\": {\n      \"value\": 1346,\n      \"scale\": -65\n    },\n    \"paddingAmount\": {\n      \"currency\": \"TCA\",\n      \"amount\": 5402\n    },\n    \"feeAmount\": {\n      \"currency\": \"EWL\",\n      \"amount\": 4358\n    }\n  },\n  \"isInstant\": false,\n  \"executedAt\": 3592\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "29ac91c2-8104-47c7-93d4-417f42779aad",
+              "name": "Bad Request Error - Your request is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "incoming_wire_transfers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the incoming wire transfer."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"AT_MOST\"\n      },\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"IN\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "435fe6fd-7e53-4c02-9df4-ec8c8e12ac69",
+              "name": "Unauthorized - Your credentials or access token are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "incoming_wire_transfers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the incoming wire transfer."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4436876a-4d9c-4386-a379-0f4c1266dc35",
+              "name": "Forbidden - Access to the requested resource or action is forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "incoming_wire_transfers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the incoming wire transfer."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"INSUFFICIENT_PERMISSIONS\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a45b2111-4075-40e3-b36e-b1de902180a9",
+              "name": "Not found - The requested resource couldn't be found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "incoming_wire_transfers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the incoming wire transfer."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c31cddff-94cd-47b5-a665-467236324bf9",
+              "name": "Too many requests.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "incoming_wire_transfers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the incoming wire transfer."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "disabled": false,
+                  "description": "(Required) Example: `20, 10;w=60, 20;w=3600, 200;w=86400`\nThe first number (20) is the limit that has been exceeded.\nThe remaining numbers are the limits that are in force, with 'w' meaning 'window in seconds'. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)\n",
+                  "key": "x-ratelimit-limit",
+                  "value": "string"
+                },
+                {
+                  "disabled": false,
+                  "description": "(Required) The number of seconds until the window is reset.",
+                  "key": "x-ratelimit-reset",
+                  "value": "7507"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "002cb1ad-4e1b-4c6a-bfa4-bb8645ae62d6",
+              "name": "Internal Server Error - There is a problem with the server. Please try again later.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "incoming_wire_transfers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the incoming wire transfer."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "01d57530-bce6-4c63-97c5-7cc1acfd3b75",
+              "name": "Service Unavailable - The requested service is temporarily unavailable. Please try again later.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "incoming_wire_transfers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the incoming wire transfer."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "disabled": false,
+                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "key": "request-ref",
+                  "value": "string"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9291c3ac-2f3e-4e33-8aeb-c5c59fad452c",
+              "name": "Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "incoming_wire_transfers",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the incoming wire transfer."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://sandbox.weavr.io/multi/backoffice",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "88c64cb1-409f-472c-9dcc-692bf1460d9a",
+    "name": "Weavr Multi Product BackOffice Access Token Incoming Wire Transfers API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning\nidentities and their instruments, without requiring the users to be logged in.\n\nA token is to be obtained through the `access_token` method, and this will allow relevant operations\nto be performed on behalf of this same identity.\n\n\nContact Support:\n Name: Weavr",
+      "type": "text/plain"
+    }
+  }
+}

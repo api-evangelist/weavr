@@ -1,0 +1,231 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Card Payments API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Card Payments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all card payments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/card_payments",
+            "headers": [
+              {
+                "name": "accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+              },
+              {
+                "name": "cardId",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the managed card the payment belongs to."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter by one or more card payment statuses."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by one or more card payment types."
+              },
+              {
+                "name": "subtype",
+                "value": "",
+                "type": "query",
+                "description": "Filter by one or more event subtypes (joined against the events timeline)."
+              },
+              {
+                "name": "merchantName",
+                "value": "",
+                "type": "query",
+                "description": "Partial, case-insensitive match against merchant name."
+              },
+              {
+                "name": "amountFrom",
+                "value": "",
+                "type": "query",
+                "description": "Filter for `displayAmount.amount >= amountFrom`."
+              },
+              {
+                "name": "amountTo",
+                "value": "",
+                "type": "query",
+                "description": "Filter for `displayAmount.amount <= amountTo`."
+              },
+              {
+                "name": "relatedCardPaymentId",
+                "value": "",
+                "type": "query",
+                "description": "Filter for card payments related to the given parent id."
+              },
+              {
+                "name": "creationTimestampFrom",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "creationTimestampTo",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "lastUpdatedTimestampFrom",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "lastUpdatedTimestampTo",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order on `creationTimestamp`. ASC = oldest first."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the aggregated card payments for the logged-in identity. A CardPayment represents the full lifecycle of a card payment (authorisation + settlements + optional reversal/expiry/refund/original credit) as a single business-level entity."
+        },
+        {
+          "info": {
+            "name": "Get a single card payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/card_payments/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of a card payment."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a single card payment by id."
+        },
+        {
+          "info": {
+            "name": "Get all card payment events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/card_payment_events",
+            "headers": [
+              {
+                "name": "accept",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+              },
+              {
+                "name": "cardPaymentId",
+                "value": "",
+                "type": "query",
+                "description": "Filter events to a single card payment."
+              },
+              {
+                "name": "cardId",
+                "value": "",
+                "type": "query",
+                "description": "Filter events to those on a single managed card."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by one or more event types."
+              },
+              {
+                "name": "subtype",
+                "value": "",
+                "type": "query",
+                "description": "Filter events by one or more network subtypes."
+              },
+              {
+                "name": "reversal",
+                "value": "",
+                "type": "query",
+                "description": "Filter events by reversal flag."
+              },
+              {
+                "name": "timestampFrom",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "timestampTo",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order on event timestamp. ASC = oldest first (default DESC)."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a flat, chronological list of card payment events across one or more card payments. Each entry carries the event plus the parent CardPayment context (card, merchant, group)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,222 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Authentication Factors API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authentication Factors",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a password",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/passwords/:user_id/create",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the user."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new password for the user identified by the `user_id` path parameter."
+        },
+        {
+          "info": {
+            "name": "Update a password",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/passwords/update",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update the password for the logged-in user."
+        },
+        {
+          "info": {
+            "name": "Validate a password",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/passwords/validate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Check that a password adheres to all complexity checks."
+        },
+        {
+          "info": {
+            "name": "Initiate lost password process",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/passwords/lost_password/start",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiate the lost password process.\n\nIf the email address provided is associated with an active user, an email will be sent, containing a URL that redirects the user to change their password.\nThe URL contains request parameters for all of the parameters required to change the password for the user via the `/passwords/lost_password/resume` POST endpoint.\n"
+        },
+        {
+          "info": {
+            "name": "Resume lost password process",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/passwords/lost_password/resume",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This is the second and final step in updating the password of a user who forgot their password."
+        },
+        {
+          "info": {
+            "name": "Get user authentication factors",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/authentication_factors",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves the list of authentication factors that can be used to verify the logged-in user."
+        },
+        {
+          "info": {
+            "name": "Enrol a user device for authentication using one-time passwords",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/authentication_factors/otp/:channel",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "channel",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the channel."
+              }
+            ]
+          },
+          "docs": "This is the first step in enrolling the logged-in user's mobile device, where a one-time password is sent to the device.\n\n_Note that on the Sandbox Environment, text messages are not sent and the one-time-password is always \\\"123456\\\"._\n"
+        },
+        {
+          "info": {
+            "name": "Verify enrolment of a user device for authentication using one-time passwords",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/authentication_factors/otp/:channel/verify",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "channel",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the channel."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The second step in enrolling the logged-in user (root or authorised user) to use one-time-passwords to enable verification of transactions.\nThe challenge expires after 5 minutes and the number of incorrect OTP attempts is limited to reduce the risk of fraud, in that case challenge has to be issued again.\n\n_Note that on the Sandbox Environment, text messages are not sent and the `verificationCode` is always set to \\\"123456\\\"._\n"
+        },
+        {
+          "info": {
+            "name": "Enrol a user device for authentication using push notifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/authentication_factors/push/:channel",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "channel",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "This is the first step in enrolling the logged-in user's mobile device, where a push notification is sent to the device.\n"
+        },
+        {
+          "info": {
+            "name": "Unlink a user device for authentication using push notifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://sandbox.weavr.io/multi/backoffice/authentication_factors/push/:channel",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "channel",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Unlink a user device for authentication using push notifications"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

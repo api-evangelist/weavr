@@ -1,0 +1,122 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Confirmation Challenges API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Confirmation Challenges",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Issue a one-time password that can be used to verify a list of resources",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/challenges/otp/:channel",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "channel",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the channel."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Starts the verification process for a list of resources in which a one-time password is sent to a device belonging to the logged-in user that was previously enrolled through the `/authentication_factors/otp/{channel}` endpoint. \n\nThis endpoint can be used to challenge _Outgoing Wire Transfers_, _Sends_, and _Linked Account Declarations_.\n\nYou should only start this process if the operation `state` is `PENDING_CHALLENGE`.\n\n_Note that on the Sandbox Environment, text messages are not sent and the "
+        },
+        {
+          "info": {
+            "name": "Verify a list of resources using a one-time password",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/challenges/:scaChallengeId/otp/:channel/verify",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "scaChallengeId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the SCA challenge."
+              },
+              {
+                "name": "channel",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the channel."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Completes the verification process for a list of resources.\n\nThis endpoint can be used to challenge _Outgoing Wire Transfers_ & _Sends_.\n\nIf the outcome of the verification is successful, the resource is executed.\n\nIf not verified challenge expires after 5 minutes and the number of incorrect OTP attempts is limited to reduce the risk of fraud.\n\n_Note that on the Sandbox Environment, text messages are not sent and the `verificationCode` is always \\\"123456\\\"._\n"
+        },
+        {
+          "info": {
+            "name": "Issue a push notification that can be used to verify a list of resources",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/challenges/push/:channel",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "channel",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Starts the verification process for a list of resources in which a push notification is sent to a device belonging to the logged-in user that was previously enrolled through the `/authentication_factors/push/{channel}` endpoint.\n\nThis endpoint can be used to challenge _Outgoing Wire Transfers_ & _Sends_.\n\nYou should only start this process if the resource `state` is `PENDING_CHALLENGE`.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,88 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Corporates API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Corporates",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Charge fee to a corporate",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/corporates/fees/charge",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Charge a fee to the corporate identified by the auth token, based on a pre-defined custom fee. Custom fees can be configured in the Multi Portal.\n\nThe fees collected will be deposited into your Revenue Account. The balance and transaction history of your revenue account can be viewed in the Multi Portal.\n"
+        },
+        {
+          "info": {
+            "name": "Register a corporate",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/corporates",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a corporate identity for a business customer.  The information provided must be accurate and will be passed on for KYB verification with our partner."
+        },
+        {
+          "info": {
+            "name": "Simulate verification of corporate identity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/corporates/:corporate_id/verify",
+            "headers": [
+              {
+                "name": "call-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "corporate_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Fully verify a corporate identity. Will set rootEmailVerified, rootMobileVerified, directorsVerified, UBOsVerified, basicCompanyChecksVerified and fullCompanyChecksVerified, while also setting dummy KYB Company Details"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

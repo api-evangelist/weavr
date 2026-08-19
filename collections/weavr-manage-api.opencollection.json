@@ -1,0 +1,216 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Manage API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Manage",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all bulk processes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/bulks",
+            "params": [
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Filter bulk processes."
+        },
+        {
+          "info": {
+            "name": "Get bulk process",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/bulks/:bulk_id",
+            "params": [
+              {
+                "name": "bulk_id",
+                "value": "",
+                "type": "path",
+                "description": "The bulk id of the bulk process."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves details on the bulk process identified by the bulk_id parameter."
+        },
+        {
+          "info": {
+            "name": "Get all operations in a bulk",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/bulks/:bulk_id/operations",
+            "params": [
+              {
+                "name": "bulk_id",
+                "value": "",
+                "type": "path",
+                "description": "The bulk id of the bulk process."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+              },
+              {
+                "name": "sequence",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves the bulk process operations that match the query parameters."
+        },
+        {
+          "info": {
+            "name": "Execute bulk process",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/bulks/:bulk_id/execute",
+            "params": [
+              {
+                "name": "bulk_id",
+                "value": "",
+                "type": "path",
+                "description": "The bulk id of the bulk process."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Launches execution of operations of any bulk process identified by the bulk_id  parameter.\n\nThe status of the bulk process has to be in a ‘SUBMITTED’ state and after execution initiates, the bulk process state is set to ‘RUNNING’.\n\nThe final state of execution can be any of\n\nCOMPLETED: the execution of the bulk process is complete and all bulk operations of the bulk process were executed successfully\n\nFAILED:  none of the operations of the bulk process have executed.\n\nPARTIALLY_COMPLETED: the ex"
+        },
+        {
+          "info": {
+            "name": "Pause bulk process",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/bulks/:bulk_id/pause",
+            "params": [
+              {
+                "name": "bulk_id",
+                "value": "",
+                "type": "path",
+                "description": "The bulk id of the bulk process."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Pauses the execution of operations of the bulk process that is in state ‘RUNNING’ as identified by the bulk_id  parameter.\n\nThe status of the bulk process after execution of this operation is set to ‘PAUSED’\n\nThe execution can be resumed through _bulkIdResume_\n"
+        },
+        {
+          "info": {
+            "name": "Resume bulk process",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/bulks/:bulk_id/resume",
+            "params": [
+              {
+                "name": "bulk_id",
+                "value": "",
+                "type": "path",
+                "description": "The bulk id of the bulk process."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Resumes the execution of operations of the bulk process that is in state ' PAUSED' as identified by the bulk_id parameter.\n\nThe status of the bulk process after execution of this operation is set back to ‘RUNNING’\n"
+        },
+        {
+          "info": {
+            "name": "Cancel bulk process",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/bulks/:bulk_id/cancel",
+            "params": [
+              {
+                "name": "bulk_id",
+                "value": "",
+                "type": "path",
+                "description": "The bulk id of the bulk process."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Cancels the execution of operations of a bulk process that is in state ‘PAUSED’ or ‘RUNNING’ as identified by the bulk_id parameter.\n\nThe status of the bulk process after execution of this operation is set  to ‘CANCELLED’. This is a final state and a cancelled bulk process cannot be resumed.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,63 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Sign-in API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Sign-in",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Sign in with password",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/login_with_password",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Authenticate a user with the `email` and `password` that they provided when registering.\n\nGiven that the user credentials are correct, this returns a `token` that can then be used to authorise\nother secured operations. In case the password is expired, a temporary `token` is returned, which can be used\nsolely for updating the password.\n\nThe token returned is valid for 5 minutes from last activity.\n"
+        },
+        {
+          "info": {
+            "name": "Sign in via biometrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/login_via_biometrics",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Trigger a push notification and subsequent biometric authentication of a user, by providing the email that was \nused in the enrolment process of biometrics.\n\nThis endpoint can be used in conjunction with your application to authenticate a user and receive a stepped-up \ntoken in a single action, for use in-session for any endpoints or UI components that require step-up \nauthentication.\n\nGiven that the user credentials are correct, a push notification is sent to the user requesting them to complet"
+        },
+        {
+          "info": {
+            "name": "Logout",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/logout",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Logs out the user and terminates the session identified by the `auth_token` in the Authorization Header."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

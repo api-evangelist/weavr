@@ -1,0 +1,290 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Trusted Payees API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Trusted Payees",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all payees",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/beneficiaries",
+            "params": [
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+              },
+              {
+                "name": "batchId",
+                "value": "",
+                "type": "query",
+                "description": "Search by the payee batch id."
+              },
+              {
+                "name": "group",
+                "value": "",
+                "type": "query",
+                "description": "Search by the payee group."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Payees (previously \"beneficiaries\"). Retrieves the payees that match the query parameters."
+        },
+        {
+          "info": {
+            "name": "Add payees",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/beneficiaries",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Payees (previously \"beneficiaries\"). Create one or more payees for the logged-in corporate or consumer identity."
+        },
+        {
+          "info": {
+            "name": "Remove payees",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/beneficiaries/remove",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Payees (previously \"beneficiaries\"). Removes one or more payees from the payees list identified by the id path parameter used in the array."
+        },
+        {
+          "info": {
+            "name": "Get a payee",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/beneficiaries/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of a payee."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Payees (previously \"beneficiaries\"). Retrieves a payee identified by the id path parameter."
+        },
+        {
+          "info": {
+            "name": "Get all payee batches",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/beneficiaries/batch",
+            "params": [
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+              },
+              {
+                "name": "state",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "operation",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "tag",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the payee batch tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all entries."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Payees (previously \"beneficiaries\"). Retrieves all payee batches matching the query parameters and that belong to the logged-in identity."
+        },
+        {
+          "info": {
+            "name": "Get a batch of payees",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/beneficiaries/batch/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of a payee batch."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Payees (previously \"beneficiaries\"). Retrieves the details of a payee batch identified by the batchId path parameter."
+        },
+        {
+          "info": {
+            "name": "Issue OTP to verify batch",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/beneficiaries/batch/:id/challenges/otp/:channel",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Payee Batch Operation."
+              },
+              {
+                "name": "channel",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the channel."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Payees (previously \"beneficiaries\"). Starts the verification process for updating the payees batch in which a one-time password is sent to a device belonging to the logged-in user that was previously enrolled through the `/authentication_factors/otp/{channel}` endpoint.\n\nYou should only start this process if the payee update `state` is `PENDING_CHALLENGE`.\n\n_Note that on the Sandbox Environment, text messages are not sent and the one-time-password is always \\\"123456\\\"._\n"
+        },
+        {
+          "info": {
+            "name": "Verify batch using OTP",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/beneficiaries/batch/:id/challenges/otp/:channel/verify",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Payee Batch Operation."
+              },
+              {
+                "name": "channel",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the channel."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Payees (previously \"beneficiaries\"). Completes the verification process for updating the payee batch.\n\nIf the outcome of the verification is successful, the payee update batch is executed.\n\n_Note that on the Sandbox Environment, text messages are not sent and the verificationCode is always \\\"123456\\\"._\n"
+        },
+        {
+          "info": {
+            "name": "Issue push to verify batch",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/beneficiaries/batch/:id/challenges/push/:channel",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Payee Batch Operation."
+              },
+              {
+                "name": "channel",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Payees (previously \"beneficiaries\"). Starts the verification process for updating a payee batch in which a push notification is sent to a device belonging to the logged-in user that was previously enrolled through the `/authentication_factors/push/{channel}` endpoint.\n\nYou should only start this process if the payee update operation `state` is `PENDING_CHALLENGE`.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

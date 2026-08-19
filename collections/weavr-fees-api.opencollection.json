@@ -1,0 +1,140 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Fees API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Fees",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Charge identity a pre-defined custom fee ",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/fees/charge",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Charge a fee to the identity identified by the auth token, based on a pre-defined custom fee. Custom fees can be configured in the Multi Portal.\n\nThe fees collected will be deposited into your Revenue Account. The balance and transaction history of your revenue account can be viewed in the Multi Portal.\n"
+        },
+        {
+          "info": {
+            "name": "Charge fee to a corporate",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/corporates/fees/charge",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Charge a fee to the corporate identified by the auth token, based on a pre-defined custom fee. Custom fees can be configured in the Multi Portal.\n\nThe fees collected will be deposited into your Revenue Account. The balance and transaction history of your revenue account can be viewed in the Multi Portal.\n"
+        },
+        {
+          "info": {
+            "name": "(NEW) Get all fees",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/fees",
+            "params": [
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+              },
+              {
+                "name": "creationTimestampFrom",
+                "value": "",
+                "type": "query",
+                "description": "Filter for transactions created after this timestamp. Epoch timestamp using millisecond precision."
+              },
+              {
+                "name": "creationTimestampTo",
+                "value": "",
+                "type": "query",
+                "description": "Filter for transactions created before this timestamp. Epoch timestamp using millisecond precision."
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort order for the results:\n  - ASC: Ascending order, oldest first.\n  - DESC: Descending order, most recent first.\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the fee transactions accrued by the logged-in identity — every `FeeTransaction` posted against any of the identity's instruments, filterable by time window.\n\nFor surfaces that need fees inline with their parent activity, the same `FeeTransaction` records are also exposed via the Transaction Activity API and on Statements V2.\n"
+        },
+        {
+          "info": {
+            "name": "Charge fee to a consumer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/consumers/fees/charge",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Charge a fee to the logged-in consumer based on a pre-defined custom fee. Custom fees can be configured in the Multi Portal.\n\nThe fees collected will be deposited into your Revenue Account. The balance and transaction history of your revenue account can be viewed in the Multi Portal.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

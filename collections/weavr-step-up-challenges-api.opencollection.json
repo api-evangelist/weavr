@@ -1,0 +1,108 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Step-up Challenges API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Step-up Challenges",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Issue a one-time password that can be used to step-up a token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/stepup/challenges/otp/:channel",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "channel",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the channel."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Initiates the step-up token process by sending an SMS with an one-time-password to a device belonging to the logged-in user that was previously enrolled through `/authentication_factors/otp/{channel}` endpoint.\n\nThis process is required for endpoints that require a step-up token to complete the call.\n\n_Note that on the Sandbox Environment, text messages are not sent and the one-time-password is always \\\"123456\\\"._\n"
+        },
+        {
+          "info": {
+            "name": "Verify a step-up token using a one-time password",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/stepup/challenges/otp/:channel/verify",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "channel",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the channel."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Completes the verification process for a step up token.\nThe challenge expires after 5 minutes and the number of incorrect OTP attempts is limited to reduce the risk of fraud, in that case challenge has to be issued again.\n\n_Note that on the Sandbox Environment, text messages are not sent and the `verificationCode` is always \\\"123456\\\"._\n"
+        },
+        {
+          "info": {
+            "name": "Issue a push notification that can be used to step-up a token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/stepup/challenges/push/:channel",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "channel",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Initiates the step-up token process by submitting a push notification to a device belonging to the logged-in user that was previously enrolled through the `/authentication_factors/push/{channel}` endpoint.\n\nYou should only start this process if the token step-up isn't already in flight.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,188 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Cards API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cards",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Simulate expiry of card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/cards/:card_id/expire",
+            "headers": [
+              {
+                "name": "call-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "card_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Expire a managed card by Card ID. Provide card id and the card will be expired."
+        },
+        {
+          "info": {
+            "name": "Simulate card about to expire",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/cards/:card_id/about_to_expire",
+            "headers": [
+              {
+                "name": "call-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "card_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Simulate a card about to expire by Card ID. Provide card id and the card will be set to about to expire."
+        },
+        {
+          "info": {
+            "name": "Simulate card purchase using card id",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/cards/:card_id/purchase",
+            "headers": [
+              {
+                "name": "call-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "card_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Simulate card purchases by Card ID. Provide card id and transaction amount and the transaction will be processed through the system."
+        },
+        {
+          "info": {
+            "name": "Simulate renewal of card",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/cards/:card_id/renew",
+            "headers": [
+              {
+                "name": "call-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "card_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Renew a managed card by Card ID. Provide card id and the card will be renewed."
+        },
+        {
+          "info": {
+            "name": "Simulate card merchant refund using card id",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/cards/:card_id/merchant_refund",
+            "headers": [
+              {
+                "name": "call-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "card_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Simulate card merchant refunds by Card ID. Provide card id and transaction amount and the transaction will be processed through the system."
+        },
+        {
+          "info": {
+            "name": "Simulate card purchase using card number",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/cards/purchase",
+            "headers": [
+              {
+                "name": "call-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Simulate card purchases. Provide card details and transaction amount and the transaction will be processed through the system."
+        },
+        {
+          "info": {
+            "name": "Simulate card merchant refund using card number",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/cards/merchant_refund",
+            "headers": [
+              {
+                "name": "call-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Simulate card merchant refunds. Provide card details and transaction amount and the transaction will be processed through the system."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Access Token",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Acquire a new access token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/access_token",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api-key",
+              "value": "{{api-key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Acquire a `Bearer` token granting you access to securely perform delegated access operations on behalf of the given `identity`.\n\nThe token representing the identity should be included in the `Authorization` header of all requests to endpoints representing Delegated Access operations.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

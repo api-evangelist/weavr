@@ -1,0 +1,67 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Accounts API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Accounts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Simulate incoming wire transfer using account id",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/accounts/:account_id/deposit",
+            "headers": [
+              {
+                "name": "call-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This tool is a quick and easy way to put funds on a Managed Account (previously called ‘deposit’), that you may need for testing elsewhere. Provide account id and transaction amount and the transaction will be processed through the system. This method skips some of the steps when processing IWTs. To test this fully, please use the accounts_deposit endpoint."
+        },
+        {
+          "info": {
+            "name": "Simulate an incoming wire transfer using IBAN",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/accounts/deposit",
+            "headers": [
+              {
+                "name": "call-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This tool is used to simulate incoming wire transfers (IWT) into managed accounts. IWTs are processed in line with the configuration of your application. For EUR and USD IWTs provide the destinationIbanDetails of your Managed Account, for GBP IWTs provide destinationFasterPaymentDetails or destinationIbanDetails of your Managed Account. Sender Details can also be added that is used to identify whether the IWT originated from a Linked Account (if configured) or a third party."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,291 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Payment runs API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Payment runs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get payment runs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/payment_runs",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+              },
+              {
+                "name": "tag",
+                "value": "",
+                "type": "query",
+                "description": "Filter by tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all entries."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "reference",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "min_amount",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "max_amount",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieve the list of payment runs belonging to the buyer that the logged-in user belongs to.\n\nRequired user roles: `CONTROLLER` OR `CREATOR`"
+        },
+        {
+          "info": {
+            "name": "Create a payment run",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/payment_runs",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new payment run containing a list of outstanding supplier payments.\n\nNote that all the supplier payments in a payment run is limited to one currency. The currency of the payment run are enabled upon the Buyer’s registration.\n\n\nRequired user role: `CREATOR`"
+        },
+        {
+          "info": {
+            "name": "Get a payment run",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/payment_runs/:payment_run_id",
+            "params": [
+              {
+                "name": "payment_run_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the payment run."
+              }
+            ]
+          },
+          "docs": "Retrieve a payment run belonging to the buyer that the logged-in user belongs to.\n\n\nRequired user roles: `CONTROLLER` OR `CREATOR`"
+        },
+        {
+          "info": {
+            "name": "Update a payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/payment_runs/:payment_run_id",
+            "params": [
+              {
+                "name": "payment_run_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the payment run."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the details of a payment identified by the paymentId that is in the `PENDING_CONFIRMATION` state.\n\n\nRequired user role: `CREATOR`"
+        },
+        {
+          "info": {
+            "name": "Confirm a payment run",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/payment_runs/:payment_run_id/confirm",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "payment_run_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the payment run."
+              }
+            ]
+          },
+          "docs": "Confirm that a payment run can be executed.\n\n\nRequired user role: `CONTROLLER`"
+        },
+        {
+          "info": {
+            "name": "Get a payment run funding instructions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/payment_runs/:payment_run_id/fund",
+            "params": [
+              {
+                "name": "payment_run_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the payment run."
+              },
+              {
+                "name": "linkedAccountIds",
+                "value": "",
+                "type": "query",
+                "description": "The unique identifier of the linked account, that is to be used as the funding source for the payment run. \n\n*Note that only one linked account per currency is supported.*\n"
+              }
+            ]
+          },
+          "docs": "Start the the funding process of a payment run.\n\nSpecify the funding source of the payment run by providing an id to an already linked account.\n\nDepending on the maximum payment amount constraints imposed by the bank that is providing the account, the payment run may be split in 2 or more groups. Note that you'll need to complete a funding process for each instruction returned.\n\n\nRequired user role: `CONTROLLER`"
+        },
+        {
+          "info": {
+            "name": "Cancel a payment run",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/payment_runs/:payment_run_id/cancel",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "payment_run_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the payment run."
+              }
+            ]
+          },
+          "docs": "Cancel a payment run. \n\nNote that a payment run can be cancelled when it is in the states `QUEUED`, `PENDING_CONFIRMATION`, `PENDING_CHALLENGE`, OR `PENDING_FUNDING`\n\n\nRequired user roles: `CONTROLLER` OR `CREATOR`"
+        },
+        {
+          "info": {
+            "name": "Cancel a payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/payment_runs/:payment_run_id/cancel/payments",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "payment_run_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the payment run."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Cancel a payment within a payment run. \n\nNote that a payment can be cancelled when it is in the state `PENDING_CONFIRMATION`.\n\n\nRequired user roles: `CONTROLLER` OR `CREATOR`"
+        },
+        {
+          "info": {
+            "name": "Restart a payment run",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/payment_runs/:payment_run_id/restart",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "payment_run_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the payment run."
+              }
+            ]
+          },
+          "docs": "Restart a payment run after it has entered status `SCA_FAILED`.\n\n\nRequired user role: `CONTROLLER`"
+        },
+        {
+          "info": {
+            "name": "Cancel a payment run group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/payment_runs/:payment_run_id/group/:group_reference/cancel",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "payment_run_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the payment run."
+              },
+              {
+                "name": "group_reference",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Cancel a payment run group\nNote that a payment run group can only be cancelled when it is in the state `AWAITING_FUNDS`.\n\n\nRequired user role: `CONTROLLER`"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

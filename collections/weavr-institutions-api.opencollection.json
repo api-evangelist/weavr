@@ -1,0 +1,65 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Institutions API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Institutions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Institutions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://sandbox.weavr.io/multi/backoffice/v1/institutions",
+            "params": [
+              {
+                "name": "country",
+                "value": "",
+                "type": "query",
+                "description": "Filter by country"
+              },
+              {
+                "name": "institutionIds",
+                "value": "",
+                "type": "query",
+                "description": "Filter by institution ID"
+              },
+              {
+                "name": "institutionName",
+                "value": "",
+                "type": "query",
+                "description": "Filter by institution name"
+              },
+              {
+                "name": "market",
+                "value": "",
+                "type": "query",
+                "description": "Filter by market"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieves the `Institutions` supported by Embedded Payment Run. The response payload should list all the institutions.\n\nPayment runs are funded from linked bank accounts provided by one of the supported institutions.\n\nWe recommend that you enable Buyers to check if their banks are supported before they start the registration and onboarding process.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

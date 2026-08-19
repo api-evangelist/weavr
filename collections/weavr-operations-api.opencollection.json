@@ -1,0 +1,237 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Weavr Multi Product BackOffice Access Token Operations API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Operations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Update spend rules for a managed card",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://sandbox.weavr.io/multi/backoffice/bulks/managed_cards/_id_/spend_rules",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Submit the details to update the spend rules of Managed Cards.\n\nThe  bulkId returned in the response can subsequently be used to launch the updating of Managed Card spend rules process through <Execute bulk process>. A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any other Authorised User of the same identity of the user that submits the details.\n\nThe status of the bulk process after execution of this operation is set to ‘SUBMITTED’. The execution "
+        },
+        {
+          "info": {
+            "name": "Create transfer transactions in bulk",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/bulks/transfers",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Submit the details for the creation of a batch of Transfers.\n\nThe bulkId returned in the response can subsequently be used to launch the execution of the bulk process through [Execute Bulk Process](#tag/Manage/operation/bulkIdExecute). A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.\n\nThe status of the bulk process after execution of this operation is set to ‘SUBMITTED’. T"
+        },
+        {
+          "info": {
+            "name": "Create users in bulk",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/bulks/users",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Submit the details for the creation of a batch of Authorised Users \n\nThe bulkId returned in the response can subsequently be used to launch the execution of the bulk process through [Execute Bulk Process](#tag/Manage/operation/bulkIdExecute). A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.\n\nThe status of the bulk process after execution of this operation is set to ‘SUBMIT"
+        },
+        {
+          "info": {
+            "name": "Send user invites in bulk",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/bulks/users/_user_id_/invite",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Submit the details for the creation of a batch of Authorised User invites\n\nThe bulkId returned in the response can subsequently be used to launch the execution of the bulk process through [Execute Bulk Process](#tag/Manage/operation/bulkIdExecute). A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.\n\nThe status of the bulk process after execution of this operation is set to ‘"
+        },
+        {
+          "info": {
+            "name": "Block cards in bulk",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/bulks/managed_cards/_id_/block",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Submit the details to block Managed Cards.\n\nThe bulkId returned in the response can subsequently be used to launch the execution of the bulk process through [Execute Bulk Process](#tag/Manage/operation/bulkIdExecute). A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.\n\nThe status of the bulk process after execution of this operation is set to ‘SUBMITTED’. The execution of th"
+        },
+        {
+          "info": {
+            "name": "Unblock cards in bulk",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/bulks/managed_cards/_id_/unblock",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Submit the details to unblock Managed Cards.\n\nThe bulkId returned in the response can subsequently be used to launch the execution of the bulk process through [Execute Bulk Process](#tag/Manage/operation/bulkIdExecute). A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.\n\nThe status of the bulk process after execution of this operation is set to ‘SUBMITTED’. The execution of "
+        },
+        {
+          "info": {
+            "name": "Remove cards in bulk",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/bulks/managed_cards/_id_/remove",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Submit the details to remove Managed Cards.\n\nThe bulkId returned in the response can subsequently be used to launch the execution of the bulk process through [Execute Bulk Process](#tag/Manage/operation/bulkIdExecute). A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.\n\nThe status of the bulk process after execution of this operation is set to ‘SUBMITTED’. The execution of t"
+        },
+        {
+          "info": {
+            "name": "Create send transactions in bulk",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/bulks/sends",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Submit the details for the creation of a batch of Sends.\n\nThe bulkId returned in the response can subsequently be used to launch the execution of the bulk process through [Execute Bulk Process](#tag/Manage/operation/bulkIdExecute). A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.\n\nThe status of the bulk process after execution of this operation is set to ‘SUBMITTED’. The e"
+        },
+        {
+          "info": {
+            "name": "Create an outgoing wire transfer in bulk",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://sandbox.weavr.io/multi/backoffice/bulks/outgoing_wire_transfers",
+            "headers": [
+              {
+                "name": "idempotency-ref",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Submit the details for the creation of a batch of Outgoing Wire Transfers.\n\nThe bulkId returned in the response can subsequently be used to launch the execution of the bulk process through [Execute Bulk Process](#tag/Manage/operation/bulkIdExecute). A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.\n\nThe status of the bulk process after execution of this operation is set to "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
