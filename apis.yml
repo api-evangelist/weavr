@@ -44,6 +44,15 @@ tags:
 - Payments
 - Cards
 - Fintech
+- Account
+- KYC
+- Company
+tags_raw:
+- Embedded Finance
+- Banking as a Service
+- Payments
+- Cards
+- Fintech
 - Accounts
 - KYC
 - Company
@@ -80,6 +89,8 @@ apis:
   humanURL: https://api.weavr.io/products/multi/openapi
   baseURL: https://api.weavr.io/multi
   tags:
+  - Account
+  tags_raw:
   - Accounts
   properties:
   - type: OpenAPI
@@ -277,6 +288,8 @@ apis:
   humanURL: https://api.weavr.io/products/multi/openapi
   baseURL: https://api.weavr.io/multi
   tags:
+  - institutions
+  tags_raw:
   - Institutions
   properties:
   - type: OpenAPI
@@ -342,7 +355,8 @@ apis:
   description: The Operations API from Weavr — 9 operation(s) for operations.
   humanURL: https://api.weavr.io/products/multi/openapi
   baseURL: https://api.weavr.io/multi
-  tags:
+  tags: []
+  tags_raw:
   - Operations
   properties:
   - type: OpenAPI
@@ -384,6 +398,8 @@ apis:
   humanURL: https://api.weavr.io/products/multi/openapi
   baseURL: https://api.weavr.io/multi
   tags:
+  - Payment Runs
+  tags_raw:
   - Payment runs
   properties:
   - type: OpenAPI
@@ -428,6 +444,8 @@ apis:
   humanURL: https://api.weavr.io/products/multi/openapi
   baseURL: https://api.weavr.io/multi
   tags:
+  - Sign In
+  tags_raw:
   - Sign-in
   properties:
   - type: OpenAPI
@@ -476,6 +494,8 @@ apis:
   humanURL: https://api.weavr.io/products/multi/openapi
   baseURL: https://api.weavr.io/multi
   tags:
+  - Step-Up
+  tags_raw:
   - Step up
   properties:
   - type: OpenAPI
@@ -556,6 +576,8 @@ apis:
   humanURL: https://api.weavr.io/products/multi/openapi
   baseURL: https://api.weavr.io/multi
   tags:
+  - Wire Transfers
+  tags_raw:
   - Wiretransfers
   properties:
   - type: OpenAPI
