@@ -6,6 +6,32 @@ info:
     Create a corporate identity, authenticate, open a managed account and issue
     a virtual card on the Weavr Multi API. Fork and run against the sandbox
     (https://sandbox.weavr.io).
+  x-realizes-capability-ids:
+  - BC-1300.10
+  - BC-1300.20
+  - BC-1330.10
+  - BC-1340.60
+  x-capability-derivation:
+    method: 'deterministic join: sourceDescriptions -> per-tag OpenAPI -> tag/capability edge. No classification at this step.'
+    min_confidence: 0.7
+    sources:
+    - capability_id: BC-1300.10
+      capability_name: Customer Onboarding Management
+      spec: weavr-corporates-api-openapi.yml
+      confidence: 0.7
+    - capability_id: BC-1300.20
+      capability_name: KYC & Customer Due Diligence Management
+      spec: weavr-customer-data-due-diligence-api-openapi.yml
+      confidence: 0.85
+    - capability_id: BC-1330.10
+      capability_name: Deposit Account Management
+      spec: weavr-managed-accounts-api-openapi.yml
+      confidence: 0.8
+    - capability_id: BC-1340.60
+      capability_name: Card Issuance Management
+      spec: weavr-managed-cards-api-openapi.yml
+      confidence: 0.8
+    model: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities, CC BY 4.0
 sourceDescriptions:
 - name: corporatesApi
   url: ../openapi/weavr-corporates-api-openapi.yml
