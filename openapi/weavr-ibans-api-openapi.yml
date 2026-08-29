@@ -1,0 +1,313 @@
+openapi: 3.2.0
+info:
+  title: Weavr Webhook Ibans API
+  description: For Verification, create a base64 hash using HmacSHA256 using Published-Timestamp header as message and your API key as secret. The result should match the Signature header.
+  contact:
+    name: Weavr
+    url: https://weavr.io
+  version: v2
+  x-logo:
+    url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
+    backgroundColor: '#FFFFFF'
+    altText: Weavr
+servers:
+- url: '""'
+tags:
+- name: Ibans
+paths: {}
+webhooks:
+  /ibans/watch:
+    post:
+      tags:
+      - Ibans
+      summary: Iban update
+      description: Notification that the status of a iban has been updated.
+      operationId: ibans_watch
+      parameters:
+      - $ref: '#/components/parameters/call-ref'
+      - $ref: '#/components/parameters/published-timestamp'
+      - $ref: '#/components/parameters/signature'
+      - $ref: '#/components/parameters/signature-v2'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IbanEvent'
+        required: true
+      responses:
+        '204':
+          description: Success - No Content
+components:
+  schemas:
+    Currency:
+      type: string
+      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
+      maxLength: 3
+      minLength: 3
+      pattern: ^[A-Z]*$
+    IbanEventType:
+      type: string
+      enum:
+      - CREATED
+      - UPDATED
+      - REQUESTED
+      - REJECTED
+      - BLOCKED
+      - UNBLOCKED
+      - DESTROYED
+    IBANDetails:
+      required:
+      - iban
+      type: object
+      description: Bank details used in case the wire transfer is executed over SEPA or RIX
+      properties:
+        iban:
+          type: string
+          minLength: 15
+          maxLength: 34
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
+          description: International Bank Account Number, required for wire transfer over SEPA or RIX
+        bankIdentifierCode:
+          type: string
+          minLength: 8
+          maxLength: 11
+          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
+          description: BIC, for wire transfer over SEPA or RIX
+    IbanEvent:
+      required:
+      - iban
+      - publishedTimestamp
+      - type
+      type: object
+      properties:
+        iban:
+          $ref: '#/components/schemas/IbanInstrument'
+        publishedTimestamp:
+          type: string
+          pattern: ^[0-9]+$
+          description: Epoch timestamp using millisecond precision.
+        type:
+          $ref: '#/components/schemas/IbanEventType'
+    DestroyedReason:
+      type: string
+      description: "The reason why the instrument has been destroyed:\n  - SYSTEM: The platform or an administrator of the platform has destroyed the instrument.\n  - USER: The root, or an authorised user, of the identity owning the instrument has destroyed the instrument.\n  - LOST: The instrument was automatically destroyed as it was marked as lost.\n  - STOLEN: The instrument was automatically destroyed as it was marked as stolen.\n  - EXPIRED: The instrument was automatically destroyed as it expired.\n  - COMPROMISED: The instrument was automatically destroyed as it was marked as compromised.\n  - SINGLE_SPEND: The instrument was automatically destroyed as it was a single-spend card that was used.\n"
+      enum:
+      - SYSTEM
+      - USER
+      - LOST
+      - STOLEN
+      - EXPIRED
+      - COMPROMISED
+      - SINGLE_SPEND
+    IbanInstrument:
+      required:
+      - id
+      - managedAccountId
+      - profileId
+      - incomingWireTransferProfileId
+      - friendlyName
+      - currency
+      - creationTimestamp
+      - state
+      type: object
+      properties:
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The unique identifier of an Iban
+        managedAccountId:
+          type: string
+          pattern: ^[0-9]+$
+          description: The unique identifier of the linked managed account
+        profileId:
+          $ref: '#/components/schemas/ProfileId'
+        incomingWireTransferProfileId:
+          $ref: '#/components/schemas/ProfileId'
+        tag:
+          $ref: '#/components/schemas/Tag'
+        friendlyName:
+          minLength: 1
+          maxLength: 50
+          type: string
+          description: The friendly name given to the iban.
+        currency:
+          $ref: '#/components/schemas/Currency'
+        state:
+          $ref: '#/components/schemas/IbanInstrumentState'
+        creationTimestamp:
+          type: integer
+          format: int64
+          description: The time when the iban was created, expressed in Epoch timestamp using millisecond precision.
+        bankAccountDetails:
+          description: 'A list of bank account details associated with the IBAN.
+
+            Multiple details can be provided if multiple IBAN providers are supported by your payment model.'
+          type: array
+          items:
+            required:
+            - beneficiaryNameAndSurname
+            - beneficiaryBank
+            - beneficiaryBankAddress
+            - type
+            - details
+            type: object
+            properties:
+              beneficiaryNameAndSurname:
+                type: string
+                description: The beneficiary name and surname details to be used when initiating a deposit onto the IBAN.
+              beneficiaryBank:
+                type: string
+                description: The beneficiary bank name to be used when initiating a deposit onto the IBAN.
+              beneficiaryBankAddress:
+                type: string
+                description: The beneficiary bank address to be used when initiating a deposit onto the IBAN.
+              paymentReference:
+                type: string
+                description: 'A reference required by the partner bank to execute a deposit on the iban.
+
+
+
+                  If provided, make sure that this is included as part of the wire transfer details when initiating a deposit.
+
+                  '
+              details:
+                description: 'The bank details required to initiate a deposit on the managed account.
+
+
+                  The details required to deposit on the IBAN vary depending on the wire transfer channel that will be used.
+
+                  '
+                anyOf:
+                - $ref: '#/components/schemas/IBANDetails'
+                - $ref: '#/components/schemas/FasterPaymentsBankDetailsOrBACSBankDetails'
+                - $ref: '#/components/schemas/SwiftBankDetails'
+    Tag:
+      type: string
+      description: The tag field is a custom field that can be used to search and filter.
+      maxLength: 50
+      pattern: ^[a-zA-Z0-9_-]+$
+    FasterPaymentsBankDetailsOrBACSBankDetails:
+      required:
+      - accountNumber
+      - sortCode
+      type: object
+      description: Bank details used in case the wire transfer is executed over Faster Payments.
+      properties:
+        accountNumber:
+          type: string
+          pattern: ^[0-9]{8}$
+          description: Account number, required for wire transfer over Faster Payments.
+        sortCode:
+          type: string
+          pattern: ^[0-9]{6}$
+          description: Sort code, required for wire transfer over Faster Payments.
+        secondaryReference:
+          type: string
+    IbanInstrumentState:
+      required:
+      - state
+      type: object
+      properties:
+        state:
+          $ref: '#/components/schemas/IbanState'
+        destroyedReason:
+          $ref: '#/components/schemas/DestroyedReason'
+    ProfileId:
+      type: string
+      description: 'The profile Id which a specific identity, instrument or transaction type is linked to.
+
+
+        Profiles contain configuration and determine behavioral aspects of the newly created transaction, for example, fees that may apply.
+
+
+        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s needs.
+
+
+        Profile Ids can be found in the Multi Portal, in the API Credentials page.
+
+        '
+      pattern: ^[0-9]+$
+    IbanState:
+      type: string
+      description: "The state of the instrument indicating what it can and cannot do as follows:\n  - PENDING: The instrument is pending creation.\n  - ACTIVE: The instrument is in an active state and can be used in transactions.\n  - BLOCKED: The instrument is temporarily blocked and cannot be used. Any funds on the instrument are also frozen. The `blockedReason` provides more information as to why it was blocked.\n  - REJECTED: The instrument was rejected from being created.\n  - DESTROYED: The instrument has been permanently destroyed. The `destroyReason` provides more information as to why it was destroyed.\n"
+      enum:
+      - PENDING
+      - ACTIVE
+      - BLOCKED
+      - REJECTED
+      - DESTROYED
+    SwiftBankDetails:
+      required:
+      - iban
+      - code
+      type: object
+      description: Bank details used in case the wire transfer is executed over SWIFT.
+      properties:
+        iban:
+          type: string
+          minLength: 15
+          maxLength: 34
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
+          description: International Bank Account Number, required for wire transfer over SWIFT.
+        code:
+          type: string
+          minLength: 8
+          maxLength: 11
+          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
+          description: SWIFT code, identifying a particular bank or branch, required for wire transfer over SWIFT.
+  parameters:
+    signature:
+      name: signature
+      in: header
+      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `published-timestamp` using your API key.
+      required: true
+      style: simple
+      explode: false
+      deprecated: true
+      schema:
+        type: string
+    signature-v2:
+      name: signature-v2
+      in: header
+      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `call-ref + payload + published-timestamp` using your API key.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    call-ref:
+      description: A call reference generated by the caller and unique to the caller to provide correlation between the caller and system with a maximum length of 255
+      in: header
+      name: call-ref
+      required: false
+      schema:
+        type: string
+    published-timestamp:
+      name: published-timestamp
+      in: header
+      description: The timestamp, expressed in Epoch timestamp using millisecond precision, when this event was published.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        format: int64
+x-tagGroups:
+- name: Webhooks
+  tags:
+  - Corporates
+  - Consumers
+  - Managed Cards
+  - Managed Accounts
+  - Transfers
+  - Sends
+  - Outgoing Wire Transfers
+  - Correspondent Bank Transfers
+  - Manual Transactions
+  - Fees
+  - Login
+  - Stepup
+  - Authentication Factors
+  - Trusted Payees
+  - Bulk Operations
+  - Authorised Users

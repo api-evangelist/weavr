@@ -1,19 +1,24 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   version: v3
-  title: Weavr Multi Product BackOffice Access Token Sign-in API
+  title: Weavr Multi Product Sign In API
   x-logo:
     url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
     backgroundColor: '#FFFFFF'
     altText: Weavr
-  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
-
-    identities and their instruments, without requiring the users to be logged in.
+  description: 'Weavr Multi API provides a simple and flexible way to issue cards and accounts to your customers.
 
 
-    A token is to be obtained through the `access_token` method, and this will allow relevant operations
+    By integrating Weavr Multi API in your application you can embed banking capabilities within your app and provide a seamless experience for your customers.
 
-    to be performed on behalf of this same identity.
+
+    # Authentication
+
+
+    Each request to the Multi API must include an `api-key` that represents your account. You can obtain an API Key by registering for a Multi account [here](https://portal.weavr.io).
+
+
+    Almost all endpoints require a secondary authentication token `auth_token` that represents the user for whom the request is being executed.
 
     '
   contact:
@@ -21,7 +26,7 @@ info:
     url: https://weavr.io
 servers:
 - description: Weavr Sandbox Environment
-  url: https://sandbox.weavr.io/multi/backoffice
+  url: https://sandbox.weavr.io/multi
 tags:
 - name: Sign-in
   description: Sign users in using passwords, biometrics, or third-party auth providers.
@@ -136,6 +141,91 @@ paths:
         api-key: []
 components:
   responses:
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    LogoutResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              url:
+                type: string
+                description: The logout url for third party auth providers.
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    LoginWithPasswordConflict:
+      description: The user's password has expired. Use the returned temporary token to update their password via the  '_/passwords/update_' endpoint.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                description: Temporary authorisation token required to initiate the _passwordUpdate_ operation.
+    NotFoundToken:
+      description: Not found - The requested token couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TokenError'
+    LoginViaBiometricsResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              challengeId:
+                type: string
+                description: The unique identifier of a Biometric challenge.
+    TokenExpired:
+      description: Gone - The requested token is expired.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TokenError'
+    LoginViaBiometricsConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - CHANNEL_NOT_REGISTERED
+                - CHANNEL_NOT_SUPPORTED
     LoginWithPasswordResponse:
       description: Success
       headers:
@@ -157,8 +247,8 @@ components:
               credentials:
                 description: The unique identifier for the logged-in user.
                 $ref: '#/components/schemas/CredentialId'
-    InternalServerError:
-      description: Internal Server Error - There is a problem with the server. Please try again later.
+    NoContent:
+      description: Success - No Content.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
@@ -178,132 +268,51 @@ components:
                 description: When present helps to identify and fix the problem.
               syntaxErrors:
                 $ref: '#/components/schemas/SyntaxError'
-    LogoutResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              url:
-                type: string
-                description: The logout url for third party auth providers.
-    TokenExpired:
-      description: Gone - The requested token is expired.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/TokenError'
     Error:
       description: Error
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Too many requests.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-        x-ratelimit-limit:
-          $ref: '#/components/headers/x-ratelimit-limit'
-        x-ratelimit-reset:
-          $ref: '#/components/headers/x-ratelimit-reset'
     ServiceUnavailable:
       description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
-    LoginWithPasswordConflict:
-      description: The user's password has expired. Use the returned temporary token to update their password via the  '_/passwords/update_' endpoint.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              token:
-                type: string
-                description: Temporary authorisation token required to initiate the _passwordUpdate_ operation.
-    LoginViaBiometricsResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              challengeId:
-                type: string
-                description: The unique identifier of a Biometric challenge.
     Locked:
       description: Locked - Account is temporarily locked due to failed consecutive login attempts. Try again in 30 minutes.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
-    NotFoundToken:
-      description: Not found - The requested token couldn't be found.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/TokenError'
-    LoginViaBiometricsConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - CHANNEL_NOT_REGISTERED
-                - CHANNEL_NOT_SUPPORTED
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    NoContent:
-      description: Success - No Content.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-  headers:
-    request-ref:
-      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
-      required: true
-      schema:
-        type: string
-    x-ratelimit-reset:
-      description: The number of seconds until the window is reset.
-      required: true
-      schema:
-        minimum: 0
-        type: integer
-        format: int32
-    x-ratelimit-limit:
-      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
-
-        The first number (20) is the limit that has been exceeded.
-
-        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
-
-        '
-      required: true
-      schema:
-        type: string
   schemas:
+    CredentialId:
+      required:
+      - type
+      - id
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9_-]+$
+          type: string
+          enum:
+          - ROOT
+          - USER
+          - API_CLIENT
+          description: The type of user.
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The identifier of the user.
+    TokenError:
+      description: The used token is expired or not found
+      type: object
+      properties:
+        errorCode:
+          type: string
+          enum:
+          - TOKEN_EXPIRED
+          - TOKEN_NOT_FOUND
     SyntaxError:
       type: object
       description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
@@ -334,29 +343,20 @@ components:
                 - AT_LEAST
                 - AT_MOST
                 - ALL_OR_NONE
-    TokenError:
-      description: The used token is expired or not found
-      type: object
-      properties:
-        errorCode:
-          type: string
-          enum:
-          - TOKEN_EXPIRED
-          - TOKEN_NOT_FOUND
-    SensitivePassword:
-      type: object
-      description: "The user's password or passcode used to log in a user.\nPasswords must be:\n  - minimum 8 characters for end-users (Consumers and Corporates); 12 characters for others\n  - maximum 30 characters\n  - include a lowercase character\n  - include an uppercase character\n  - include a digit and a special character\n  - different from any of the 5 last such passwords used.\n\nFor non-PCI compliant integrations, the password submitted must be **tokenised**.\n"
-      required:
-      - value
-      properties:
-        value:
-          maxLength: 100
-          type: string
-          format: password
-    Email:
+    TokenType:
       type: string
-      description: E-mail Address of the user
-      format: email
+      description: "The auth token received can only be used to access the following endpoints:\n  - `/identities`\n  - `/access_token`\n"
+      enum:
+      - NO_TYPE
+      - AUTH
+      - ACCESS
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
     IdentityId:
       required:
       - type
@@ -373,40 +373,58 @@ components:
           type: string
           pattern: ^[0-9]+$
           description: The identifier for the identity.
-    TokenType:
+    Email:
       type: string
-      description: "The auth token received can only be used to access the following endpoints:\n  - `/identities`\n  - `/access_token`\n"
-      enum:
-      - NO_TYPE
-      - AUTH
-      - ACCESS
-    Error:
+      description: E-mail Address of the user
+      format: email
+    SensitivePassword:
       type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-    CredentialId:
+      description: "The user's password or passcode used to log in a user.\nPasswords must be:\n  - minimum 8 characters for end-users (Consumers and Corporates); 12 characters for others\n  - maximum 30 characters\n  - include a lowercase character\n  - include an uppercase character\n  - include a digit and a special character\n  - different from any of the 5 last such passwords used.\n\nFor non-PCI compliant integrations, the password submitted must be **tokenised**.\n"
       required:
-      - type
-      - id
-      type: object
+      - value
       properties:
-        type:
-          maxLength: 50
-          pattern: ^[a-zA-Z0-9_-]+$
+        value:
+          maxLength: 100
           type: string
-          enum:
-          - ROOT
-          - USER
-          - API_CLIENT
-          description: The type of user.
-        id:
-          type: string
-          pattern: ^[0-9]+$
-          description: The identifier of the user.
+          format: password
+  headers:
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    x-ratelimit-limit:
+      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+        The first number (20) is the limit that has been exceeded.
+
+        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+        '
+      required: true
+      schema:
+        type: string
   requestBodies:
+    LoginViaBiometricsRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - email
+            type: object
+            properties:
+              email:
+                $ref: '#/components/schemas/Email'
+              identity:
+                $ref: '#/components/schemas/IdentityId'
     LoginWithPasswordRequest:
       required: true
       content:
@@ -421,23 +439,10 @@ components:
                 $ref: '#/components/schemas/Email'
               password:
                 $ref: '#/components/schemas/SensitivePassword'
-    LoginViaBiometricsRequest:
-      required: true
-      content:
-        application/json:
-          schema:
-            required:
-            - email
-            type: object
-            properties:
-              email:
-                $ref: '#/components/schemas/Email'
-              identity:
-                $ref: '#/components/schemas/IdentityId'
   securitySchemes:
-    api_key:
+    api-key:
       type: apiKey
-      description: The API Key representing your Multi account.
+      description: An API key defined in your User API Client  (or Delegate API Client - this feature is available only to customers enabled with delegation functionality).  API Clients are as managed in the Embedder Portal
       name: api-key
       in: header
     auth_token:
@@ -445,30 +450,53 @@ components:
       description: The authentication token representing the user. This will be included in the login response object.
       scheme: bearer
       bearerFormat: JWT
+    webhooks_key:
+      type: apiKey
+      description: The Webhooks key can be found in the API Credentials tab in your Portal Page.
+      name: webhooks-key
+      in: header
 x-tagGroups:
-- name: Access
-  tags:
-  - Access Token
-  - User Impersonation
-  - Consent Request
-- name: Identities
+- name: Customer Registration
   tags:
   - Corporates
   - Consumers
-- name: User Management
+- name: Users & User Authentication
   tags:
-  - Authorised Users
+  - Setup
+  - Sign-in
+  - Step-up Challenges
+  - Confirmation Challenges
+  - Authentication Factors
+- name: Access
+  tags:
+  - Access Tokens
+- name: Customer Settings
+  tags:
+  - Customer Data & Due Diligence
+  - Authorised Signatories
+  - Trusted Payees
 - name: Instruments
   tags:
   - Managed Accounts
   - Managed Cards
-- name: Transactions
+- name: Funds Management
   tags:
   - Transfers
-- name: Fees
+  - Transaction Activity
+- name: External Payments
   tags:
+  - Incoming Wire Transfers
+  - Outgoing Wire Transfers
+  - Correspondent Bank Transfers
+- name: Card Payments
+  tags:
+  - Card Payments
+  - Spend Controls
+- name: In-Platform Payments
+  tags:
+  - Sends
   - Fees
-- name: Bulk Operations [Beta]
+- name: Bulk Operations
   tags:
   - Operations
   - Manage

@@ -594,6 +594,128 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/weavr-wiretransfers-api-openapi.yml
+- aid: weavr:weavr-authentication-factors-webhooks-api
+  name: Weavr Authentication Factors Webhooks API
+  description: Notification of the Authentication Factors that are used for the `Identity`.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Authentication Factors Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-authentication-factors-webhooks-api-openapi.yml
+- aid: weavr:weavr-bulk-operations-api
+  name: Weavr Bulk Operations API
+  description: The Bulk Operations API from Weavr — 0 operation(s) for bulk operations.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Bulk Operations
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-bulk-operations-api-openapi.yml
+- aid: weavr:weavr-buyers-webhooks-api
+  name: Weavr Buyers Webhooks API
+  description: >-
+    Buyers are identities representing companies. Once on-boarded, Buyers can create and manage their
+    own instruments via your application.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Buyers Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-buyers-webhooks-api-openapi.yml
+- aid: weavr:weavr-ibans-api
+  name: Weavr Ibans API
+  description: The Ibans API from Weavr — 0 operation(s) for ibans.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Ibans
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-ibans-api-openapi.yml
+- aid: weavr:weavr-linked-accounts-webhooks-api
+  name: Weavr Linked Accounts Webhooks API
+  description: Notification that the status of a Linked Account has been updated.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Linked Accounts Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-linked-accounts-webhooks-api-openapi.yml
+- aid: weavr:weavr-login-api
+  name: Weavr Login API
+  description: The Login API from Weavr — 0 operation(s) for login.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Login
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-login-api-openapi.yml
+- aid: weavr:weavr-manual-transactions-api
+  name: Weavr Manual Transactions API
+  description: The Manual Transactions API from Weavr — 0 operation(s) for manual transactions.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Manual Transactions
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-manual-transactions-api-openapi.yml
+- aid: weavr:weavr-payment-runs-webhooks-api
+  name: Weavr Payment runs Webhooks API
+  description: Notification that the Payment Run and payment statuses have been updated.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Payment runs Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-payment-runs-webhooks-api-openapi.yml
+- aid: weavr:weavr-stepup-api
+  name: Weavr Stepup API
+  description: The Stepup API from Weavr — 0 operation(s) for stepup.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Stepup
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-stepup-api-openapi.yml
+- aid: weavr:weavr-stepup-webhooks-api
+  name: Weavr Stepup Webhooks API
+  description: Notification that a step-up has been completed or declined.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Stepup Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-stepup-webhooks-api-openapi.yml
+- aid: weavr:weavr-tokens-webhooks-api
+  name: Weavr Tokens Webhooks API
+  description: Tokens webhooks
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Tokens Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-tokens-webhooks-api-openapi.yml
+- aid: weavr:weavr-transactions-webhooks-api
+  name: Weavr Transactions Webhooks API
+  description: Notification that the status of a transaction has been updated.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Transactions Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-transactions-webhooks-api-openapi.yml
 common:
 - type: Overlay
   url: overlays/weavr-multi-backoffice-overlay.yaml

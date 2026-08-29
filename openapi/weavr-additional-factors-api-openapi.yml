@@ -1,27 +1,21 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  version: v3
-  title: Weavr Multi Product BackOffice Access Token Additional Factors API
+  version: v1
+  title: Weavr Embedded Payment Run Additional Factors API
+  license:
+    name: private
+    url: https://weavr.io
   x-logo:
-    url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
+    url: https://weavr-cdn.s3.eu-central-1.amazonaws.com/weavr-payment-run-logo.png
     backgroundColor: '#FFFFFF'
     altText: Weavr
-  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
-
-    identities and their instruments, without requiring the users to be logged in.
-
-
-    A token is to be obtained through the `access_token` method, and this will allow relevant operations
-
-    to be performed on behalf of this same identity.
-
-    '
-  contact:
-    name: Weavr
-    url: https://weavr.io
+  description: "Weavr Payment Run Plug-in API provides a simple and flexible way for Embedders to add payment execution capabilities in their application.\n\nBy integrating Weavr Payment Run plug-in API in your application, you can embed banking and payment capabilities within your app to boost productivity for your users in a seamless experience.\n\n# Authentication\nEach request to the API must include an `api_key` that represents your account. You can obtain an API Key by registering for a Embedder account [here](https://portal.weavr.io/register/?plugin=payment-run).\n\nAlmost all endpoints require a secondary authentication token `auth_token` that represents the user for whom the request is being executed.\n\n# Postman Collection\nTo help you get started with your integration, you can download the [Postman](https://postman.com) collection [here](https://sandbox.weavr.io/payment-run/v1/postman). The collection includes the steps you’ll need to follow to integrate Embedded Payment Run within your app. \n\nThe collection makes use of environment variables to pre-fill details associated with your Sandbox account, such as your account’s API Key. You can download your Sandbox Account environment file from the [Sandbox Portal](https://portal.weavr.io/register/?plugin=payment-run).\n"
 servers:
-- description: Weavr Sandbox Environment
-  url: https://sandbox.weavr.io/multi/backoffice
+- url: https://sandbox.weavr.io/payment-run
+  description: Sandbox
+security:
+- apiKey: []
+  authToken: []
 tags:
 - name: Additional Factors
 paths:
@@ -421,40 +415,47 @@ paths:
                     type: string
 components:
   securitySchemes:
-    api_key:
-      type: apiKey
-      description: The API Key representing your Multi account.
+    apiKey:
       name: api-key
+      type: apiKey
       in: header
-    auth_token:
+      description: The API Key representing your Weavr account. You can find your API Key in your Weavr Portal in the API Credentials page.
+    authToken:
       type: http
       description: The authentication token representing the user. This will be included in the login response object.
       scheme: bearer
       bearerFormat: JWT
 x-tagGroups:
-- name: Access
+- name: Authentication
   tags:
-  - Access Token
-  - User Impersonation
-  - Consent Request
+  - Tokens
+  - Passwords
+- name: Authorisation
+  tags:
+  - Additional Factors
+  - Step up
 - name: Identities
   tags:
-  - Corporates
-  - Consumers
-- name: User Management
+  - Buyers
+  - Buyer Authorised Users
+- name: Payment runs
   tags:
-  - Authorised Users
+  - Payment runs
 - name: Instruments
   tags:
-  - Managed Accounts
-  - Managed Cards
-- name: Transactions
+  - Linked Accounts
+- name: Institutions
   tags:
-  - Transfers
-- name: Fees
+  - Institutions
+- name: Simulators
   tags:
-  - Fees
-- name: Bulk Operations [Beta]
+  - Simulator
+- name: Events
   tags:
-  - Operations
-  - Manage
+  - Buyers Webhooks
+  - Payment runs Webhooks
+  - Linked Accounts Webhooks
+  - Tokens Webhooks
+  - Stepup Webhooks
+  - Authentication Factors Webhooks
+  - Transactions Webhooks

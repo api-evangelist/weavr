@@ -1,27 +1,20 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
+  title: Weavr Manage API
   version: v3
-  title: Weavr Multi Product BackOffice Access Token Manage API
+  contact:
+    name: Weavr
+    url: https://weavr.io
   x-logo:
     url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
     backgroundColor: '#FFFFFF'
     altText: Weavr
-  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
-
-    identities and their instruments, without requiring the users to be logged in.
-
-
-    A token is to be obtained through the `access_token` method, and this will allow relevant operations
-
-    to be performed on behalf of this same identity.
-
-    '
-  contact:
-    name: Weavr
-    url: https://weavr.io
+  description: 'Operations tagged Manage across 2 of this provider''s published API definitions: weavr-multi-backoffice-openapi-original.yml, weavr-multi-openapi-original.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - description: Weavr Sandbox Environment
   url: https://sandbox.weavr.io/multi/backoffice
+- description: Weavr Sandbox Environment
+  url: https://sandbox.weavr.io/multi
 tags:
 - name: Manage
 paths:
@@ -62,6 +55,9 @@ paths:
       security:
       - auth_token: []
         api_key: []
+    servers:
+    - description: Weavr Sandbox Environment
+      url: https://sandbox.weavr.io/multi/backoffice
   /bulks/{bulk_id}:
     get:
       tags:
@@ -91,6 +87,9 @@ paths:
       security:
       - auth_token: []
         api_key: []
+    servers:
+    - description: Weavr Sandbox Environment
+      url: https://sandbox.weavr.io/multi/backoffice
   /bulks/{bulk_id}/operations:
     get:
       tags:
@@ -124,6 +123,9 @@ paths:
       security:
       - auth_token: []
         api_key: []
+    servers:
+    - description: Weavr Sandbox Environment
+      url: https://sandbox.weavr.io/multi/backoffice
   /bulks/{bulk_id}/execute:
     post:
       tags:
@@ -177,6 +179,9 @@ paths:
       security:
       - auth_token: []
         api_key: []
+    servers:
+    - description: Weavr Sandbox Environment
+      url: https://sandbox.weavr.io/multi/backoffice
   /bulks/{bulk_id}/pause:
     post:
       tags:
@@ -216,6 +221,9 @@ paths:
       security:
       - auth_token: []
         api_key: []
+    servers:
+    - description: Weavr Sandbox Environment
+      url: https://sandbox.weavr.io/multi/backoffice
   /bulks/{bulk_id}/resume:
     post:
       tags:
@@ -252,6 +260,9 @@ paths:
       security:
       - auth_token: []
         api_key: []
+    servers:
+    - description: Weavr Sandbox Environment
+      url: https://sandbox.weavr.io/multi/backoffice
   /bulks/{bulk_id}/cancel:
     post:
       tags:
@@ -288,59 +299,67 @@ paths:
       security:
       - auth_token: []
         api_key: []
+    servers:
+    - description: Weavr Sandbox Environment
+      url: https://sandbox.weavr.io/multi/backoffice
 components:
-  parameters:
-    sequence:
-      name: sequence
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-    bulkId:
-      name: bulk_id
-      in: path
-      required: true
-      description: The bulk id of the bulk process.
-      schema:
-        $ref: '#/components/schemas/BulkId'
-    limit:
-      name: limit
-      in: query
-      required: false
-      description: The limit of the results for paging, starting at the offset. Limit is always capped at 100.
-      schema:
-        maximum: 100
-        minimum: 1
-        type: integer
-        format: int32
-    bulkProcessOperationStatus:
-      name: status
-      in: query
-      required: false
-      schema:
-        $ref: '#/components/schemas/BulkProcessOperationStatus'
-    bulkProcessStatus:
-      name: status
-      in: query
-      required: false
-      schema:
-        $ref: '#/components/schemas/BulkProcessStatus'
-    offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.
-      schema:
-        minimum: 0
-        type: integer
-        format: int32
   responses:
     InternalServerError:
       description: Internal Server Error - There is a problem with the server. Please try again later.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    NoContent:
+      description: Success - No Content.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    BulkProcessDetails:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BulkProcessDetails'
+    BulkProcessorConflictResponse:
+      description: BulkProcessorConflict - bulk processor conflict.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BulkProcessConflict'
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     BadRequestError:
       description: Bad Request Error - Your request is invalid.
       headers:
@@ -363,43 +382,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    BulkProcessorConflictResponse:
-      description: BulkProcessorConflict - bulk processor conflict.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/BulkProcessConflict'
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    NotFound:
-      description: Not found - The requested resource couldn't be found.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Forbidden:
-      description: Forbidden - Access to the requested resource or action is forbidden.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INSUFFICIENT_PERMISSIONS
     BulkProcessOperations:
       description: Success
       headers:
@@ -409,32 +391,85 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/BulkProcessOperationsPaged'
-    BulkProcessDetails:
-      description: Success
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/BulkProcessDetails'
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    NoContent:
-      description: Success - No Content.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-  headers:
-    request-ref:
-      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
-      required: true
-      schema:
-        type: string
   schemas:
+    BulkProcessOperationStatus:
+      type: string
+      enum:
+      - SUBMITTED
+      - RUNNING
+      - COMPLETED
+      - FAILED
+      - CANCELLED
+    BulkProcessMode:
+      description: 'ON_FAILURE_STOP : the execution of the bulk process stops after the first bulk operation that fails (operation returns a 4xx or 5xx response code).
+
+        ON_FAILURE_CONTINUE: the execution of the bulk process resumes as normal even when any of the bulk operations fail.
+
+        '
+      type: string
+      enum:
+      - ON_FAILURE_STOP
+      - ON_FAILURE_CONTINUE
+    BulkProcessOperation:
+      type: object
+      properties:
+        operationId:
+          description: Id of a specific bulk operation. Useful only if you need to refer to a specific operation when reporting an issue
+          type: string
+        sequence:
+          description: The operations submitted in a Bulk Processes are executed in sequence. This field indicates the position of this specific operation in the context of such sequence
+          format: int32
+          type: integer
+        method:
+          description: HTTP request method used for the executed operation within the Bulk process
+          type: string
+        path:
+          description: The endpoint path for the Operation
+          type: string
+        status:
+          description: 'The execution status of the operation within the Bulk Process. This can be one of: "SUBMITTED" "RUNNING" "COMPLETED" "FAILED" "CANCELLED"
+
+            '
+          $ref: '#/components/schemas/BulkProcessOperationStatus'
+        requestPayload:
+          description: This is the payload for the execution of an operation within the context of a Bulk Process
+          type: string
+        responsePayload:
+          description: The response for the execution of the operation
+          type: string
+    BulkId:
+      type: string
+      pattern: ^[0-9]+$
+    BulkProcessStatus:
+      type: string
+      enum:
+      - SUBMITTED
+      - RUNNING
+      - PARTIALLY_COMPLETED
+      - COMPLETED
+      - FAILED
+      - PAUSED
+      - CANCELLED
+    BulkProcessOperationsPaged:
+      properties:
+        count:
+          description: Total number of records (excluding limit)
+          format: int32
+          type: integer
+        operations:
+          items:
+            $ref: '#/components/schemas/BulkProcessOperation'
+          type: array
+        responseCount:
+          description: Total number of records returned in this response
+          format: int32
+          type: integer
+      type: object
     BulkProcessConflict:
       properties:
         errorCode:
@@ -470,17 +505,13 @@ components:
                 - AT_LEAST
                 - AT_MOST
                 - ALL_OR_NONE
-    BulkId:
-      type: string
-      pattern: ^[0-9]+$
-    BulkProcessOperationStatus:
-      type: string
-      enum:
-      - SUBMITTED
-      - RUNNING
-      - COMPLETED
-      - FAILED
-      - CANCELLED
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
     BulkProcessOperationStatusCounts:
       type: object
       properties:
@@ -503,33 +534,15 @@ components:
           format: int32
           type: integer
       type: object
-    BulkProcessOperation:
+    BulkProcessExecute:
       type: object
       properties:
-        operationId:
-          description: Id of a specific bulk operation. Useful only if you need to refer to a specific operation when reporting an issue
-          type: string
-        sequence:
-          description: The operations submitted in a Bulk Processes are executed in sequence. This field indicates the position of this specific operation in the context of such sequence
+        mode:
+          $ref: '#/components/schemas/BulkProcessMode'
+        webhookInterval:
+          description: The count of operations after which a Bulk Process Progress will be sent. For example, if set to 10, a webhook will be sent after every 10th operation is attempted. The minimum value fo count is 25% of all operations. If a value below this is entered, a webhook will only be sent for each 25% of operations attempted (i.e. 4 webhooks per Bulk Process).
           format: int32
           type: integer
-        method:
-          description: HTTP request method used for the executed operation within the Bulk process
-          type: string
-        path:
-          description: The endpoint path for the Operation
-          type: string
-        status:
-          description: 'The execution status of the operation within the Bulk Process. This can be one of: "SUBMITTED" "RUNNING" "COMPLETED" "FAILED" "CANCELLED"
-
-            '
-          $ref: '#/components/schemas/BulkProcessOperationStatus'
-        requestPayload:
-          description: This is the payload for the execution of an operation within the context of a Bulk Process
-          type: string
-        responsePayload:
-          description: The response for the execution of the operation
-          type: string
     BulkProcess:
       type: object
       properties:
@@ -565,57 +578,6 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/BulkProcessOperationStatusCounts'
-    BulkProcessMode:
-      description: 'ON_FAILURE_STOP : the execution of the bulk process stops after the first bulk operation that fails (operation returns a 4xx or 5xx response code).
-
-        ON_FAILURE_CONTINUE: the execution of the bulk process resumes as normal even when any of the bulk operations fail.
-
-        '
-      type: string
-      enum:
-      - ON_FAILURE_STOP
-      - ON_FAILURE_CONTINUE
-    BulkProcessExecute:
-      type: object
-      properties:
-        mode:
-          $ref: '#/components/schemas/BulkProcessMode'
-        webhookInterval:
-          description: The count of operations after which a Bulk Process Progress will be sent. For example, if set to 10, a webhook will be sent after every 10th operation is attempted. The minimum value fo count is 25% of all operations. If a value below this is entered, a webhook will only be sent for each 25% of operations attempted (i.e. 4 webhooks per Bulk Process).
-          format: int32
-          type: integer
-    BulkProcessOperationsPaged:
-      properties:
-        count:
-          description: Total number of records (excluding limit)
-          format: int32
-          type: integer
-        operations:
-          items:
-            $ref: '#/components/schemas/BulkProcessOperation'
-          type: array
-        responseCount:
-          description: Total number of records returned in this response
-          format: int32
-          type: integer
-      type: object
-    BulkProcessStatus:
-      type: string
-      enum:
-      - SUBMITTED
-      - RUNNING
-      - PARTIALLY_COMPLETED
-      - COMPLETED
-      - FAILED
-      - PAUSED
-      - CANCELLED
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
     BulkProcessConflictErrorCode:
       enum:
       - VALIDATION_FAILED
@@ -626,6 +588,52 @@ components:
       - INVALID_STATE
       - TOO_MANY_REQUESTS
       type: string
+  parameters:
+    bulkProcessOperationStatus:
+      name: status
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/BulkProcessOperationStatus'
+    offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    sequence:
+      name: sequence
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: The limit of the results for paging, starting at the offset. Limit is always capped at 100.
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+    bulkId:
+      name: bulk_id
+      in: path
+      required: true
+      description: The bulk id of the bulk process.
+      schema:
+        $ref: '#/components/schemas/BulkId'
+    bulkProcessStatus:
+      name: status
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/BulkProcessStatus'
   requestBodies:
     BulkProcessExecute:
       required: true
@@ -633,6 +641,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/BulkProcessExecute'
+  headers:
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
   securitySchemes:
     api_key:
       type: apiKey
@@ -644,6 +658,19 @@ components:
       description: The authentication token representing the user. This will be included in the login response object.
       scheme: bearer
       bearerFormat: JWT
+    api-key:
+      type: apiKey
+      description: An API key defined in your User API Client  (or Delegate API Client - this feature is available only to customers enabled with delegation functionality).  API Clients are as managed in the Embedder Portal
+      name: api-key
+      in: header
+    webhooks_key:
+      type: apiKey
+      description: The Webhooks key can be found in the API Credentials tab in your Portal Page.
+      name: webhooks-key
+      in: header
+x-refined-from:
+- weavr-multi-backoffice-openapi-original.yml
+- weavr-multi-openapi-original.yml
 x-tagGroups:
 - name: Access
   tags:

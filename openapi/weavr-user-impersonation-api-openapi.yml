@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   version: v3
-  title: Weavr Multi Product BackOffice Access Token User Impersonation API
+  title: Weavr Multi Product BackOffice User Impersonation API
   x-logo:
     url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
     backgroundColor: '#FFFFFF'
@@ -65,12 +65,15 @@ paths:
         api_key: []
 components:
   schemas:
-    TokenResponse:
+    ImpersonateIdentityLoginRequest:
+      required:
+      - identity
       type: object
       properties:
-        token:
-          type: string
-          description: An authorisation token to be used in the Authorization header for secured operations.
+        identity:
+          $ref: '#/components/schemas/IdentityId'
+        temp:
+          $ref: '#/components/schemas/IdentityId'
     ValidationError:
       type: array
       description: Is returned as part of an HTTP error response whenever a validation error is detected. A list of the fields together with their syntax error will be provided.
@@ -118,22 +121,22 @@ components:
             type: array
             items:
               type: string
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-    ImpersonateIdentityLoginRequest:
+    IdentityId:
       required:
-      - identity
+      - type
+      - id
       type: object
       properties:
-        identity:
-          $ref: '#/components/schemas/IdentityId'
-        temp:
-          $ref: '#/components/schemas/IdentityId'
+        type:
+          enum:
+          - CONSUMER
+          - CORPORATE
+          type: string
+          description: Indicates the identity type.
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The identifier for the identity.
     CredentialId:
       required:
       - type
@@ -153,40 +156,31 @@ components:
           type: string
           pattern: ^[0-9]+$
           description: The identifier of the user.
-    IdentityId:
-      required:
-      - type
-      - id
+    TokenResponse:
       type: object
       properties:
-        type:
-          enum:
-          - CONSUMER
-          - CORPORATE
+        token:
           type: string
-          description: Indicates the identity type.
-        id:
+          description: An authorisation token to be used in the Authorization header for secured operations.
+    Error:
+      type: object
+      properties:
+        code:
           type: string
-          pattern: ^[0-9]+$
-          description: The identifier for the identity.
+        message:
+          type: string
   responses:
-    ImpersonateIdentityLoginConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - UNRESOLVED_IDENTITY
-                - ALREADY_IMPERSONATED
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     BackofficeBadRequestError:
       description: Bad Request Error - Your request is invalid.
       headers:
@@ -203,13 +197,13 @@ components:
                 description: When present helps to identify and fix the problem.
               validationErrors:
                 $ref: '#/components/schemas/ValidationError'
-    InternalServerError:
-      description: Internal Server Error - There is a problem with the server. Please try again later.
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
@@ -230,12 +224,18 @@ components:
                 $ref: '#/components/schemas/IdentityId'
               credentials:
                 $ref: '#/components/schemas/CredentialId'
-    Error:
-      description: Error
+    ImpersonateIdentityLoginConflict:
+      description: Conflict
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - UNRESOLVED_IDENTITY
+                - ALREADY_IMPERSONATED
   headers:
     request-ref:
       description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.

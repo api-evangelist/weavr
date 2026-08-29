@@ -1,27 +1,19 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  version: v3
-  title: Weavr Multi Product BackOffice Access Token Authorised Users API
+  title: Weavr Authorised Users API
+  contact:
+    name: Weavr
+    url: https://weavr.io
   x-logo:
     url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
     backgroundColor: '#FFFFFF'
     altText: Weavr
-  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
-
-    identities and their instruments, without requiring the users to be logged in.
-
-
-    A token is to be obtained through the `access_token` method, and this will allow relevant operations
-
-    to be performed on behalf of this same identity.
-
-    '
-  contact:
-    name: Weavr
-    url: https://weavr.io
+  version: '1.0'
+  description: 'Operations tagged Authorised Users across 2 of this provider''s published API definitions: weavr-multi-backoffice-openapi-original.yml, weavr-webhooks-openapi-original.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - description: Weavr Sandbox Environment
   url: https://sandbox.weavr.io/multi/backoffice
+- url: '""'
 tags:
 - name: Authorised Users
   description: "Corporate and Consumer identities can invite authorised users to access their account. Once on-boarded, authorised users can create and manage instruments and transactions on behalf of the identity they are on-boarded with.      \nWith the `access_token` representing the identity and the consent of the identity, you will be able to create and invite authorised users for the Identity.\n\nCreating and inviting users on behalf of identities are restricted features; by default these endpoints are not available for use.\n"
@@ -61,6 +53,9 @@ paths:
       security:
       - auth_token: []
         api_key: []
+    servers:
+    - description: Weavr Sandbox Environment
+      url: https://sandbox.weavr.io/multi/backoffice
   /users/{user_id}/deactivate:
     post:
       tags:
@@ -105,6 +100,9 @@ paths:
       security:
       - auth_token: []
         api_key: []
+    servers:
+    - description: Weavr Sandbox Environment
+      url: https://sandbox.weavr.io/multi/backoffice
   /users/{user_id}/invite:
     post:
       tags:
@@ -146,61 +144,54 @@ paths:
       security:
       - auth_token: []
         api_key: []
+    servers:
+    - description: Weavr Sandbox Environment
+      url: https://sandbox.weavr.io/multi/backoffice
+webhooks:
+  /auth/users/user_deactivated/watch:
+    post:
+      tags:
+      - Authorised Users
+      summary: Auth user deactivation
+      description: Notification that an auth user has been deactivated.
+      operationId: auth_users_user_deactivated_watch
+      parameters:
+      - $ref: '#/components/parameters/call-ref'
+      - $ref: '#/components/parameters/published-timestamp'
+      - $ref: '#/components/parameters/signature'
+      - $ref: '#/components/parameters/signature-v2'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdentityDeactivatedEvent'
+        required: true
+      responses:
+        '204':
+          description: Success - No Content
+    servers:
+    - url: '""'
 components:
   responses:
-    UserCreateConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - EMAIL_NOT_UNIQUE
-                - MOBILE_OR_COUNTRY_CODE_INVALID
-                - EMAIL_DOMAIN_NOT_ALLOWED
-                - COUNTRY_OF_RESIDENCE_INVALID
-                - ROLE_NOT_FOUND
-                - CANNOT_MODIFY_OWN_ROLES
-                - ADMIN_ROLE_REMOVAL_NOT_ALLOWED
     InternalServerError:
       description: Internal Server Error - There is a problem with the server. Please try again later.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
-    BadRequestError:
-      description: Bad Request Error - Your request is invalid.
+    TooManyRequests:
+      description: Too many requests.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                maxLength: 255
-                type: string
-                description: When present helps to identify and fix the problem.
-              syntaxErrors:
-                $ref: '#/components/schemas/SyntaxError'
-    Error:
-      description: Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UserResponse:
-      description: Success
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/User'
     UserDeactivateConflict:
       description: Conflict
       content:
@@ -212,17 +203,31 @@ components:
                 type: string
                 enum:
                 - CARD_HAS_REMAINING_BALANCE
-    TooManyRequests:
-      description: Too many requests.
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
-        x-ratelimit-limit:
-          $ref: '#/components/headers/x-ratelimit-limit'
-        x-ratelimit-reset:
-          $ref: '#/components/headers/x-ratelimit-reset'
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    UserResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+    NoContent:
+      description: Success - No Content.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
@@ -246,11 +251,30 @@ components:
                 type: string
                 enum:
                 - INVITE_ALREADY_CONSUMED
-    Forbidden:
-      description: Forbidden - Access to the requested resource or action is forbidden.
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UserCreateConflict:
+      description: Conflict
       content:
         application/json:
           schema:
@@ -259,63 +283,27 @@ components:
               errorCode:
                 type: string
                 enum:
-                - INSUFFICIENT_PERMISSIONS
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
+                - EMAIL_NOT_UNIQUE
+                - MOBILE_OR_COUNTRY_CODE_INVALID
+                - EMAIL_DOMAIN_NOT_ALLOWED
+                - COUNTRY_OF_RESIDENCE_INVALID
+                - ROLE_NOT_FOUND
+                - CANNOT_MODIFY_OWN_ROLES
+                - ADMIN_ROLE_REMOVAL_NOT_ALLOWED
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
-    NoContent:
-      description: Success - No Content.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-  requestBodies:
-    UserCreateRequest:
-      required: true
-      content:
-        application/json:
-          schema:
-            required:
-            - email
-            - name
-            - surname
-            type: object
-            properties:
-              name:
-                minLength: 1
-                maxLength: 50
-                type: string
-                description: The first name of the user.
-              surname:
-                minLength: 1
-                maxLength: 50
-                type: string
-                description: The last name of the user.
-              email:
-                $ref: '#/components/schemas/Email'
-              mobile:
-                $ref: '#/components/schemas/Mobile'
-              dateOfBirth:
-                description: Date of birth of the authorised user.
-                $ref: '#/components/schemas/Date'
-              tag:
-                $ref: '#/components/schemas/Tag'
-              countryOfResidence:
-                type: string
-                maxLength: 2
-                minLength: 2
-                pattern: ^[A-Z]+$
-              locale:
-                $ref: '#/components/schemas/UserLocale'
-              brand:
-                $ref: '#/components/schemas/Brand'
-              roles:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserPredefinedRole'
-                description: Optional roles to assign to the user. For a full description of the permissions associated with each role, see our product documentation.
   schemas:
+    UserPredefinedRole:
+      type: string
+      enum:
+      - CARD_ASSIGNEE
+      - CARDS_MANAGEMENT_ROLE
+      - FUNDS_MANAGEMENT_ROLE
+      - ACCESS_MANAGEMENT_ROLE
+      - ADMIN
     Brand:
       type: string
       pattern: ^[a-zA-Z0-9]+$
@@ -323,31 +311,30 @@ components:
 
         '
       maxLength: 25
-    UserId:
-      type: string
-      pattern: ^[0-9]+$
-    Date:
+    Mobile:
       required:
-      - year
-      - month
-      - day
+      - number
+      - countryCode
       type: object
       properties:
-        year:
-          type: integer
-          format: int32
-          maximum: 2100
-          minimum: 1900
-        month:
-          type: integer
-          format: int32
-          maximum: 12
-          minimum: 1
-        day:
-          type: integer
-          format: int32
-          maximum: 31
-          minimum: 1
+        countryCode:
+          maxLength: 4
+          minLength: 1
+          type: string
+          pattern: ^\+[0-9]+$
+          description: The country code of the user mobile number (e.g. +44).
+        number:
+          pattern: ^[0-9]{1,12}$
+          type: string
+          description: The mobile number of the user - excluding country code.
+    UserLocale:
+      type: string
+      pattern: ^[a-z]{2}(-[A-Z]{2})?$
+      description: 'BCP47 locale code (e.g. en, en-US). The locale determines which email and SMS user notification templates are used.
+
+        '
+      maxLength: 5
+      example: en-GB
     SyntaxError:
       type: object
       description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
@@ -378,18 +365,38 @@ components:
                 - AT_LEAST
                 - AT_MOST
                 - ALL_OR_NONE
-    UserLocale:
+    UserId:
       type: string
-      pattern: ^[a-z]{2}(-[A-Z]{2})?$
-      description: 'BCP47 locale code (e.g. en, en-US). The locale determines which email and SMS user notification templates are used.
-
-        '
-      maxLength: 5
-      example: en-GB
-    Email:
-      type: string
-      description: E-mail Address of the user
-      format: email
+      pattern: ^[0-9]+$
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    Date:
+      required:
+      - year
+      - month
+      - day
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int32
+          maximum: 2100
+          minimum: 1900
+        month:
+          type: integer
+          format: int32
+          maximum: 12
+          minimum: 1
+        day:
+          type: integer
+          format: int32
+          maximum: 31
+          minimum: 1
     IdentityId:
       required:
       - type
@@ -406,6 +413,11 @@ components:
           type: string
           pattern: ^[0-9]+$
           description: The identifier for the identity.
+    Tag:
+      type: string
+      description: The tag field is a custom field that can be used to search and filter.
+      maxLength: 50
+      pattern: ^[a-zA-Z0-9_-]+$
     User:
       required:
       - id
@@ -456,42 +468,91 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UserPredefinedRole'
-    Mobile:
+    Email:
+      type: string
+      description: E-mail Address of the user
+      format: email
+    IdentityDeactivatedEvent:
       required:
-      - number
-      - countryCode
+      - actionDoneBy
+      - emailAddress
+      - reasonCode
       type: object
       properties:
-        countryCode:
-          maxLength: 4
-          minLength: 1
+        actionDoneBy:
+          $ref: '#/components/schemas/ActionDoneBy'
+        emailAddress:
           type: string
-          pattern: ^\+[0-9]+$
-          description: The country code of the user mobile number (e.g. +44).
-        number:
-          pattern: ^[0-9]{1,12}$
-          type: string
-          description: The mobile number of the user - excluding country code.
-    UserPredefinedRole:
+        reasonCode:
+          $ref: '#/components/schemas/IdentityDeactivatedReasonCode'
+    IdentityDeactivatedReasonCode:
       type: string
       enum:
-      - CARD_ASSIGNEE
-      - CARDS_MANAGEMENT_ROLE
-      - FUNDS_MANAGEMENT_ROLE
-      - ACCESS_MANAGEMENT_ROLE
-      - ADMIN
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-    Tag:
+      - UNDEFINED_REASON
+      - ACCOUNT_REVIEW
+      - ACCOUNT_SECURITY
+      - TEMPORARY
+      - ACCOUNT_CLOSURE
+      - ACCOUNT_ABANDONED
+    ActionDoneBy:
       type: string
-      description: The tag field is a custom field that can be used to search and filter.
-      maxLength: 50
-      pattern: ^[a-zA-Z0-9_-]+$
+      enum:
+      - UNDEFINED
+      - ADMIN
+      - INNOVATOR
+  parameters:
+    userIdExplode:
+      name: user_id
+      in: path
+      required: true
+      description: The unique identifier for the user.
+      style: simple
+      explode: false
+      schema:
+        $ref: '#/components/schemas/UserId'
+    idempotency-ref:
+      name: idempotency-ref
+      in: header
+      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
+      required: false
+      schema:
+        type: string
+    signature:
+      name: signature
+      in: header
+      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `published-timestamp` using your API key.
+      required: true
+      style: simple
+      explode: false
+      deprecated: true
+      schema:
+        type: string
+    signature-v2:
+      name: signature-v2
+      in: header
+      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `call-ref + payload + published-timestamp` using your API key.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    call-ref:
+      description: A call reference generated by the caller and unique to the caller to provide correlation between the caller and system with a maximum length of 255
+      in: header
+      name: call-ref
+      required: false
+      schema:
+        type: string
+    published-timestamp:
+      name: published-timestamp
+      in: header
+      description: The timestamp, expressed in Epoch timestamp using millisecond precision, when this event was published.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        format: int64
   headers:
     request-ref:
       description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
@@ -516,23 +577,51 @@ components:
       required: true
       schema:
         type: string
-  parameters:
-    idempotency-ref:
-      name: idempotency-ref
-      in: header
-      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
-      required: false
-      schema:
-        type: string
-    userIdExplode:
-      name: user_id
-      in: path
+  requestBodies:
+    UserCreateRequest:
       required: true
-      description: The unique identifier for the user.
-      style: simple
-      explode: false
-      schema:
-        $ref: '#/components/schemas/UserId'
+      content:
+        application/json:
+          schema:
+            required:
+            - email
+            - name
+            - surname
+            type: object
+            properties:
+              name:
+                minLength: 1
+                maxLength: 50
+                type: string
+                description: The first name of the user.
+              surname:
+                minLength: 1
+                maxLength: 50
+                type: string
+                description: The last name of the user.
+              email:
+                $ref: '#/components/schemas/Email'
+              mobile:
+                $ref: '#/components/schemas/Mobile'
+              dateOfBirth:
+                description: Date of birth of the authorised user.
+                $ref: '#/components/schemas/Date'
+              tag:
+                $ref: '#/components/schemas/Tag'
+              countryOfResidence:
+                type: string
+                maxLength: 2
+                minLength: 2
+                pattern: ^[A-Z]+$
+              locale:
+                $ref: '#/components/schemas/UserLocale'
+              brand:
+                $ref: '#/components/schemas/Brand'
+              roles:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserPredefinedRole'
+                description: Optional roles to assign to the user. For a full description of the permissions associated with each role, see our product documentation.
   securitySchemes:
     api_key:
       type: apiKey
@@ -544,6 +633,9 @@ components:
       description: The authentication token representing the user. This will be included in the login response object.
       scheme: bearer
       bearerFormat: JWT
+x-refined-from:
+- weavr-multi-backoffice-openapi-original.yml
+- weavr-webhooks-openapi-original.yml
 x-tagGroups:
 - name: Access
   tags:

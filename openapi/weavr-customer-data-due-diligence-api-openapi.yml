@@ -1,19 +1,24 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   version: v3
-  title: Weavr Multi Product BackOffice Access Token Customer Data & Due Diligence API
+  title: Weavr Multi Product Customer Data & Due Diligence API
   x-logo:
     url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
     backgroundColor: '#FFFFFF'
     altText: Weavr
-  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
-
-    identities and their instruments, without requiring the users to be logged in.
+  description: 'Weavr Multi API provides a simple and flexible way to issue cards and accounts to your customers.
 
 
-    A token is to be obtained through the `access_token` method, and this will allow relevant operations
+    By integrating Weavr Multi API in your application you can embed banking capabilities within your app and provide a seamless experience for your customers.
 
-    to be performed on behalf of this same identity.
+
+    # Authentication
+
+
+    Each request to the Multi API must include an `api-key` that represents your account. You can obtain an API Key by registering for a Multi account [here](https://portal.weavr.io).
+
+
+    Almost all endpoints require a secondary authentication token `auth_token` that represents the user for whom the request is being executed.
 
     '
   contact:
@@ -21,7 +26,7 @@ info:
     url: https://weavr.io
 servers:
 - description: Weavr Sandbox Environment
-  url: https://sandbox.weavr.io/multi/backoffice
+  url: https://sandbox.weavr.io/multi
 tags:
 - name: Customer Data & Due Diligence
   description: Manage customer profile data and KYC/KYB due diligence flows for corporates and consumers.
@@ -311,134 +316,85 @@ paths:
       - auth_token: []
         api-key: []
 components:
-  requestBodies:
-    ConsumerKycLevelRequest:
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              kycLevel:
-                $ref: '#/components/schemas/KycLevel'
-                description: The KYC level that the consumer will be assigned to, which determines the due diligence details that the user will need to provide.
-              prefillDetails:
-                description: List of KYC details to be prefilled for the consumer.
-                type: array
-                items:
-                  type: object
-                  properties:
-                    name:
-                      type: string
-                    value:
-                      type: string
-    ConsumerUpdateRequest:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              tag:
-                $ref: '#/components/schemas/Tag'
-              name:
-                maxLength: 20
-                pattern: ^[^0-9~!@#$%^*()_+={}\|:;,<>/?]*$
-                type: string
-                description: The first name of the Consumer root user.
-              surname:
-                maxLength: 20
-                pattern: ^[^0-9~!@#$%^*()_+={}\|:;,<>/?]*$
-                type: string
-                description: The last name of the Consumer root user.
-              email:
-                $ref: '#/components/schemas/Email'
-              mobile:
-                $ref: '#/components/schemas/Mobile'
-              dateOfBirth:
-                description: Date of birth of the consumer root user.
-                $ref: '#/components/schemas/Date'
-              address:
-                description: Address of the consumer root user.
-                $ref: '#/components/schemas/AddressWithCountryRequired'
-              feeGroup:
-                type: string
-                description: The fee group which the consumer will be bound to. Do not specify this if you are not using fee groups.
-              baseCurrency:
-                $ref: '#/components/schemas/Currency'
-              occupation:
-                $ref: '#/components/schemas/Occupation'
-              sourceOfFunds:
-                $ref: '#/components/schemas/ConsumerSourceOfFunds'
-              sourceOfFundsOther:
-                deprecated: true
-                type: string
-                description: Description of source of funds in case `OTHER` was chosen.
-              placeOfBirth:
-                type: string
-                description: The place of birth of the consumer root user.
-              nationality:
-                description: Nationality of the consumer root user, in ISO 3166 alpha-2 format.
-                $ref: '#/components/schemas/Nationality'
-              resetMobileCounter:
-                type: boolean
-              userTag:
-                description: The tag to be assigned to the root user.
-                $ref: '#/components/schemas/Tag'
-              locale:
-                $ref: '#/components/schemas/UserLocale'
-              brand:
-                $ref: '#/components/schemas/Brand'
-    CorporateUpdateRequest:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              tag:
-                $ref: '#/components/schemas/Tag'
-              industry:
-                $ref: '#/components/schemas/Industry'
-              sourceOfFunds:
-                $ref: '#/components/schemas/CorporateSourceOfFunds'
-              sourceOfFundsOther:
-                type: string
-                deprecated: true
-                description: Description of source of funds in case `OTHER` was chosen.
-              companyBusinessAddress:
-                $ref: '#/components/schemas/Address'
-              feeGroup:
-                type: string
-                description: The fee group which the Corporate will be bound to. Do not specify this if you are not using fee groups.
-              baseCurrency:
-                $ref: '#/components/schemas/Currency'
-              name:
-                maxLength: 20
-                pattern: ^[^0-9~!@#$%^*()_+={}\|:;,<>/?]*$
-                type: string
-                description: The first name of the Corporate root user.
-              surname:
-                maxLength: 20
-                pattern: ^[^0-9~!@#$%^*()_+={}\|:;,<>/?]*$
-                type: string
-                description: The last name of the Corporate root user.
-              email:
-                $ref: '#/components/schemas/Email'
-              mobile:
-                $ref: '#/components/schemas/Mobile'
-              dateOfBirth:
-                description: Date of birth of the authorised user.
-                $ref: '#/components/schemas/Date'
-              resetMobileCounter:
-                type: boolean
-              userTag:
-                description: The tag to be assigned to the root user.
-                $ref: '#/components/schemas/Tag'
-              locale:
-                $ref: '#/components/schemas/UserLocale'
-              brand:
-                $ref: '#/components/schemas/Brand'
   responses:
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    CorporateResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Corporate'
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    ConsumerKycStartConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - KYC_ALREADY_APPROVED
+                - KYC_PENDING_REVIEW
+                - KYC_REJECTED
+                - EMAIL_UNVERIFIED
+    CorporateUpdateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - FEE_GROUP_INVALID
+                - COUNTRY_INVALID
+                - EMAIL_NOT_UNIQUE
+                - ROOT_USER_ALREADY_VERIFIED
+                - COUNTRY_UNSUPPORTED
+                - MOBILE_OR_COUNTRY_CODE_INVALID
+                - MOBILE_NO_CHANGE_LIMIT_EXCEEDED
+                - TOO_FREQUENT_EMAIL_CHANGES
+                - EMAIL_DOMAIN_NOT_ALLOWED
+                - MOBILE_CHANGE_NOT_ALLOWED
+                - UNSUPPORTED_CURRENCY
+                - TERMINATION_DATE_IN_PAST
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
     ConsumerUpdateConflict:
       description: Conflict
       content:
@@ -460,29 +416,11 @@ components:
                 - EMAIL_DOMAIN_NOT_ALLOWED
                 - MOBILE_CHANGE_NOT_ALLOWED
                 - TERMINATION_DATE_IN_PAST
-    InternalServerError:
-      description: Internal Server Error - There is a problem with the server. Please try again later.
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
-    BadRequestError:
-      description: Bad Request Error - Your request is invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                maxLength: 255
-                type: string
-                description: When present helps to identify and fix the problem.
-              syntaxErrors:
-                $ref: '#/components/schemas/SyntaxError'
-    Error:
-      description: Error
       content:
         application/json:
           schema:
@@ -507,58 +445,7 @@ components:
               kycLevel:
                 $ref: '#/components/schemas/KycLevel'
                 description: The KYC level assigned to the consumer.
-    TooManyRequests:
-      description: Too many requests.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-        x-ratelimit-limit:
-          $ref: '#/components/headers/x-ratelimit-limit'
-        x-ratelimit-reset:
-          $ref: '#/components/headers/x-ratelimit-reset'
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    NotFound:
-      description: Not found - The requested resource couldn't be found.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    ConsumerKycStartConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - KYC_ALREADY_APPROVED
-                - KYC_PENDING_REVIEW
-                - KYC_REJECTED
-                - EMAIL_UNVERIFIED
-    Forbidden:
-      description: Forbidden - Access to the requested resource or action is forbidden.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INSUFFICIENT_PERMISSIONS
-    CorporateResponse:
+    CorporateKybGetResponse:
       description: Success
       headers:
         request-ref:
@@ -566,7 +453,14 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Corporate'
+            type: object
+            properties:
+              kybStatus:
+                description: The effective due diligence status of the logged-in corporate user.
+                $ref: '#/components/schemas/KyiStatus'
+              ongoingKybStatus:
+                description: The ongoing due diligence status of the logged-in corporate user.
+                $ref: '#/components/schemas/KyiStatus'
     ConsumerResponse:
       description: Success
       headers:
@@ -601,57 +495,34 @@ components:
               ongoingKycLevel:
                 description: The level of due diligence of the ongoing KYC process.
                 $ref: '#/components/schemas/KycLevel'
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
-    CorporateUpdateConflict:
-      description: Conflict
       content:
         application/json:
           schema:
             type: object
             properties:
-              errorCode:
+              message:
+                maxLength: 255
                 type: string
-                enum:
-                - FEE_GROUP_INVALID
-                - COUNTRY_INVALID
-                - EMAIL_NOT_UNIQUE
-                - ROOT_USER_ALREADY_VERIFIED
-                - COUNTRY_UNSUPPORTED
-                - MOBILE_OR_COUNTRY_CODE_INVALID
-                - MOBILE_NO_CHANGE_LIMIT_EXCEEDED
-                - TOO_FREQUENT_EMAIL_CHANGES
-                - EMAIL_DOMAIN_NOT_ALLOWED
-                - MOBILE_CHANGE_NOT_ALLOWED
-                - UNSUPPORTED_CURRENCY
-                - TERMINATION_DATE_IN_PAST
-    CorporateKybGetResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    Error:
+      description: Error
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              kybStatus:
-                description: The effective due diligence status of the logged-in corporate user.
-                $ref: '#/components/schemas/KyiStatus'
-              ongoingKybStatus:
-                description: The ongoing due diligence status of the logged-in corporate user.
-                $ref: '#/components/schemas/KyiStatus'
+            $ref: '#/components/schemas/Error'
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
   schemas:
-    Brand:
-      type: string
-      pattern: ^[a-zA-Z0-9]+$
-      description: 'Brand identifier used to determine the set of email and SMS user notification templates. Must be alphanumeric, up to 25 characters, and contain no spaces.
-
-        '
-      maxLength: 25
     CorporateRootUser:
       required:
       - id
@@ -699,6 +570,245 @@ components:
           $ref: '#/components/schemas/UserLocale'
         brand:
           $ref: '#/components/schemas/Brand'
+    AddressWithCountryRequired:
+      required:
+      - country
+      type: object
+      description: The address, with none of the separate fields being set as required.
+      properties:
+        addressLine1:
+          type: string
+          description: The first line of the address.
+        addressLine2:
+          type: string
+          description: The second line of the address.
+        city:
+          type: string
+          description: The city of the address.
+        postCode:
+          maxLength: 10
+          pattern: ^[A-Za-z0-9 -]*$
+          type: string
+          description: The post code associated with the address.
+        state:
+          maxLength: 50
+          type: string
+          description: The state of the address.
+        country:
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]+$
+          type: string
+          description: The country of the address expressed in ISO 3166 alpha-2 format.
+    Brand:
+      type: string
+      pattern: ^[a-zA-Z0-9]+$
+      description: 'Brand identifier used to determine the set of email and SMS user notification templates. Must be alphanumeric, up to 25 characters, and contain no spaces.
+
+        '
+      maxLength: 25
+    Industry:
+      type: string
+      description: The industry of the identity.
+      deprecated: true
+      enum:
+      - ACCOUNTING
+      - AUDIT
+      - FINANCE
+      - PUBLIC_SECTOR_ADMINISTRATION
+      - ART_ENTERTAINMENT
+      - AUTO_AVIATION
+      - BANKING_LENDING
+      - BUSINESS_CONSULTANCY_LEGAL
+      - CONSTRUCTION_REPAIR
+      - EDUCATION_PROFESSIONAL_SERVICES
+      - INFORMATIONAL_TECHNOLOGIES
+      - TOBACCO_ALCOHOL
+      - GAMING_GAMBLING
+      - MEDICAL_SERVICES
+      - MANUFACTURING
+      - PR_MARKETING
+      - PRECIOUS_GOODS_JEWELRY
+      - NON_GOVERNMENTAL_ORGANIZATION
+      - INSURANCE_SECURITY
+      - RETAIL_WHOLESALE
+      - TRAVEL_TOURISM
+      - FREELANCER
+    AddressWithNoRequiredFields:
+      type: object
+      description: The address, with none of the separate fields being set as required.
+      properties:
+        addressLine1:
+          type: string
+          description: The first line of the address.
+        addressLine2:
+          type: string
+          description: The second line of the address.
+        city:
+          type: string
+          description: The city of the address.
+        postCode:
+          maxLength: 10
+          pattern: ^[A-Za-z0-9 -]*$
+          type: string
+          description: The post code associated with the address.
+        state:
+          maxLength: 50
+          type: string
+          description: The state of the address.
+        country:
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]+$
+          type: string
+          description: The country of the address expressed in ISO 3166 alpha-2 format.
+    Mobile:
+      required:
+      - number
+      - countryCode
+      type: object
+      properties:
+        countryCode:
+          maxLength: 4
+          minLength: 1
+          type: string
+          pattern: ^\+[0-9]+$
+          description: The country code of the user mobile number (e.g. +44).
+        number:
+          pattern: ^[0-9]{1,12}$
+          type: string
+          description: The mobile number of the user - excluding country code.
+    KycLevel:
+      deprecated: true
+      type: string
+      description: "The KYC level, which determines what KYC information will be requested from the consumer:\n  - KYC_LEVEL_1: The most basic level of KYC required. \n  - KYC_LEVEL_2: Full due diligence level 2\n"
+      enum:
+      - KYC_LEVEL_1
+      - KYC_LEVEL_2
+    UserLocale:
+      type: string
+      pattern: ^[a-z]{2}(-[A-Z]{2})?$
+      description: 'BCP47 locale code (e.g. en, en-US). The locale determines which email and SMS user notification templates are used.
+
+        '
+      maxLength: 5
+      example: en-GB
+    CompanyType:
+      type: string
+      description: Supported company types - if company type is not listed, please contact our support team to check if the company type can be supported.
+      enum:
+      - SOLE_TRADER
+      - LLC
+      - PUBLIC_LIMITED_COMPANY
+      - LIMITED_LIABILITY_PARTNERSHIP
+      - NON_PROFIT_ORGANISATION
+    CorporateSourceOfFunds:
+      type: string
+      description: The corporate's source of funds.
+      deprecated: true
+      enum:
+      - LABOUR_CONTRACT
+      - CIVIL_CONTRACT
+      - RENT
+      - FUNDS_FROM_OTHER_AUXILIARY_SOURCES
+      - SALE_OF_MOVABLE_ASSETS
+      - SALE_OF_REAL_ESTATE
+      - ORDINARY_BUSINESS_ACTIVITY
+      - DIVIDENDS
+      - LOAN_FROM_FINANCIAL_INSTITUTIONS_CREDIT_UNIONS
+      - LOAN_FROM_THIRD_PARTIES
+      - SALE_OF_COMPANY_SHARES_BUSINESS
+      - OTHER
+      - DONATION
+      - INHERITANCE
+      - ORIGIN_OF_FUNDS_UNKNOWN
+    SyntaxError:
+      type: object
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      properties:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
+    Consumer:
+      required:
+      - id
+      - profileId
+      - rootUser
+      - ipAddress
+      - creationTimestamp
+      type: object
+      properties:
+        id:
+          description: The unique identifier of the Consumer Identity.
+          $ref: '#/components/schemas/IdentityId'
+        profileId:
+          $ref: '#/components/schemas/ProfileId'
+        tag:
+          $ref: '#/components/schemas/Tag'
+        rootUser:
+          description: The root user of the Consumer Identity.
+          $ref: '#/components/schemas/ConsumerRootUser'
+        creationTimestamp:
+          type: integer
+          format: int64
+          description: The time when this consumer was created, expressed in Epoch timestamp using millisecond precision.
+        ipAddress:
+          maxLength: 45
+          minLength: 5
+          type: string
+          description: The IP address of the consumer user doing the registration.
+        acceptedTerms:
+          type: boolean
+          description: Must be set to *true* to indicate that the consumer root user has accepted the terms and conditions.
+        baseCurrency:
+          $ref: '#/components/schemas/Currency'
+        feeGroup:
+          type: string
+          description: The fee group which the consumer is bound to.
+        sourceOfFunds:
+          $ref: '#/components/schemas/ConsumerSourceOfFunds'
+        sourceOfFundsOther:
+          type: string
+          description: Description of source of funds in case `OTHER` was chosen.
+          deprecated: true
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    KyiStatus:
+      type: string
+      enum:
+      - NOT_STARTED
+      - INITIATED
+      - PENDING_REVIEW
+      - APPROVED
+      - REJECTED
     Date:
       required:
       - year
@@ -721,42 +831,6 @@ components:
           format: int32
           maximum: 31
           minimum: 1
-    Address:
-      required:
-      - addressLine1
-      - city
-      - postCode
-      - country
-      type: object
-      properties:
-        addressLine1:
-          minLength: 1
-          maxLength: 150
-          type: string
-          description: The first line of the address.
-        addressLine2:
-          maxLength: 150
-          type: string
-          description: The second line of the address.
-        city:
-          maxLength: 50
-          type: string
-          description: The city of the address.
-        postCode:
-          maxLength: 10
-          pattern: ^[A-Za-z0-9 -]*$
-          type: string
-          description: The post code associated with the address.
-        state:
-          maxLength: 50
-          type: string
-          description: The state of the address.
-        country:
-          maxLength: 2
-          minLength: 2
-          pattern: ^[A-Z]+$
-          type: string
-          description: The country of the address expressed in ISO 3166 alpha-2 format.
     Corporate:
       required:
       - id
@@ -842,57 +916,41 @@ components:
           - RETAIL
           - NON_RETAIL
           - UNKNOWN
-    SyntaxError:
-      type: object
-      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
-      properties:
-        invalidFields:
-          type: array
-          items:
-            type: object
-            properties:
-              params:
-                type: array
-                items:
-                  type: string
-              fieldName:
-                type: string
-              error:
-                type: string
-                enum:
-                - REQUIRED
-                - HAS_TEXT
-                - REQUIRES
-                - SIZE
-                - RANGE
-                - IN
-                - NOT_IN
-                - REGEX
-                - EXACTLY
-                - AT_LEAST
-                - AT_MOST
-                - ALL_OR_NONE
-    UserLocale:
-      type: string
-      pattern: ^[a-z]{2}(-[A-Z]{2})?$
-      description: 'BCP47 locale code (e.g. en, en-US). The locale determines which email and SMS user notification templates are used.
-
-        '
-      maxLength: 5
-      example: en-GB
-    AddressWithCountryRequired:
+    IdentityId:
       required:
+      - type
+      - id
+      type: object
+      properties:
+        type:
+          enum:
+          - CONSUMER
+          - CORPORATE
+          type: string
+          description: Indicates the identity type.
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The identifier for the identity.
+    Address:
+      required:
+      - addressLine1
+      - city
+      - postCode
       - country
       type: object
-      description: The address, with none of the separate fields being set as required.
       properties:
         addressLine1:
+          minLength: 1
+          maxLength: 150
           type: string
           description: The first line of the address.
         addressLine2:
+          maxLength: 150
           type: string
           description: The second line of the address.
         city:
+          maxLength: 50
           type: string
           description: The city of the address.
         postCode:
@@ -910,61 +968,11 @@ components:
           pattern: ^[A-Z]+$
           type: string
           description: The country of the address expressed in ISO 3166 alpha-2 format.
-    KycLevel:
-      deprecated: true
+    Tag:
       type: string
-      description: "The KYC level, which determines what KYC information will be requested from the consumer:\n  - KYC_LEVEL_1: The most basic level of KYC required. \n  - KYC_LEVEL_2: Full due diligence level 2\n"
-      enum:
-      - KYC_LEVEL_1
-      - KYC_LEVEL_2
-    CorporateSourceOfFunds:
-      type: string
-      description: The corporate's source of funds.
-      deprecated: true
-      enum:
-      - LABOUR_CONTRACT
-      - CIVIL_CONTRACT
-      - RENT
-      - FUNDS_FROM_OTHER_AUXILIARY_SOURCES
-      - SALE_OF_MOVABLE_ASSETS
-      - SALE_OF_REAL_ESTATE
-      - ORDINARY_BUSINESS_ACTIVITY
-      - DIVIDENDS
-      - LOAN_FROM_FINANCIAL_INSTITUTIONS_CREDIT_UNIONS
-      - LOAN_FROM_THIRD_PARTIES
-      - SALE_OF_COMPANY_SHARES_BUSINESS
-      - OTHER
-      - DONATION
-      - INHERITANCE
-      - ORIGIN_OF_FUNDS_UNKNOWN
-    KyiStatus:
-      type: string
-      enum:
-      - NOT_STARTED
-      - INITIATED
-      - PENDING_REVIEW
-      - APPROVED
-      - REJECTED
-    ConsumerSourceOfFunds:
-      deprecated: true
-      type: string
-      description: The consumer's source of funds.
-      enum:
-      - PERSONAL_SAVINGS
-      - FAMILY_SAVINGS
-      - LABOUR_CONTRACT
-      - CIVIL_CONTRACT
-      - RENT
-      - FUNDS_FROM_OTHER_AUXILIARY_SOURCES
-      - SALE_OF_MOVABLE_ASSETS
-      - SALE_OF_REAL_ESTATE
-      - ORDINARY_BUSINESS_ACTIVITY
-      - DIVIDENDS
-      - LOAN_FROM_FINANCIAL_INSTITUTIONS_CREDIT_UNIONS
-      - LOAN_FROM_THIRD_PARTIES
-      - INHERITANCE
-      - SALE_OF_COMPANY_SHARES_BUSINESS
-      - OTHER
+      description: The tag field is a custom field that can be used to search and filter.
+      maxLength: 50
+      pattern: ^[a-zA-Z0-9_-]+$
     LegalAddress:
       required:
       - addressLine1
@@ -992,19 +1000,94 @@ components:
           pattern: ^[A-Z]+$
           type: string
           description: Country of the identity in ISO 3166 alpha-2 format.
-    CompanyType:
+    ProfileId:
       type: string
-      description: Supported company types - if company type is not listed, please contact our support team to check if the company type can be supported.
-      enum:
-      - SOLE_TRADER
-      - LLC
-      - PUBLIC_LIMITED_COMPANY
-      - LIMITED_LIABILITY_PARTNERSHIP
-      - NON_PROFIT_ORGANISATION
+      description: 'The profile Id which a specific identity, instrument or transaction type is linked to.
+
+
+        Profiles contain configuration and determine behavioral aspects of the newly created transaction, for example, fees that may apply.
+
+
+        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s needs.
+
+
+        Profile Ids can be found in the Multi Portal, in the API Credentials page.
+
+        '
+      pattern: ^[0-9]+$
     Email:
       type: string
       description: E-mail Address of the user
       format: email
+    Occupation:
+      type: string
+      description: The industry of the identity.
+      deprecated: true
+      enum:
+      - ACCOUNTING
+      - AUDIT
+      - FINANCE
+      - PUBLIC_SECTOR_ADMINISTRATION
+      - ART_ENTERTAINMENT
+      - AUTO_AVIATION
+      - BANKING_LENDING
+      - BUSINESS_CONSULTANCY_LEGAL
+      - CONSTRUCTION_REPAIR
+      - EDUCATION_PROFESSIONAL_SERVICES
+      - INFORMATIONAL_TECHNOLOGIES
+      - TOBACCO_ALCOHOL
+      - GAMING_GAMBLING
+      - MEDICAL_SERVICES
+      - MANUFACTURING
+      - PR_MARKETING
+      - PRECIOUS_GOODS_JEWELRY
+      - NON_GOVERNMENTAL_ORGANIZATION
+      - INSURANCE_SECURITY
+      - RETAIL_WHOLESALE
+      - TRAVEL_TOURISM
+      - FREELANCER
+      - STUDENT
+      - UNEMPLOYED
+      - RETIRED
+      - OTHER
+    Currency:
+      type: string
+      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
+      maxLength: 3
+      minLength: 3
+      pattern: ^[A-Z]*$
+    ConsumerSourceOfFunds:
+      deprecated: true
+      type: string
+      description: The consumer's source of funds.
+      enum:
+      - PERSONAL_SAVINGS
+      - FAMILY_SAVINGS
+      - LABOUR_CONTRACT
+      - CIVIL_CONTRACT
+      - RENT
+      - FUNDS_FROM_OTHER_AUXILIARY_SOURCES
+      - SALE_OF_MOVABLE_ASSETS
+      - SALE_OF_REAL_ESTATE
+      - ORDINARY_BUSINESS_ACTIVITY
+      - DIVIDENDS
+      - LOAN_FROM_FINANCIAL_INSTITUTIONS_CREDIT_UNIONS
+      - LOAN_FROM_THIRD_PARTIES
+      - INHERITANCE
+      - SALE_OF_COMPANY_SHARES_BUSINESS
+      - OTHER
+    Nationality:
+      maxLength: 2
+      minLength: 2
+      pattern: ^[A-Z]+$
+      type: string
+      description: Nationality of the user - using ISO 3166 alpha-2.
+    CompanyPosition:
+      type: string
+      description: The company position of the Corporate Root User.
+      enum:
+      - DIRECTOR
+      - AUTHORISED_REPRESENTATIVE
     ConsumerRootUser:
       required:
       - id
@@ -1060,211 +1143,141 @@ components:
           $ref: '#/components/schemas/UserLocale'
         brand:
           $ref: '#/components/schemas/Brand'
-    Consumer:
-      required:
-      - id
-      - profileId
-      - rootUser
-      - ipAddress
-      - creationTimestamp
-      type: object
-      properties:
-        id:
-          description: The unique identifier of the Consumer Identity.
-          $ref: '#/components/schemas/IdentityId'
-        profileId:
-          $ref: '#/components/schemas/ProfileId'
-        tag:
-          $ref: '#/components/schemas/Tag'
-        rootUser:
-          description: The root user of the Consumer Identity.
-          $ref: '#/components/schemas/ConsumerRootUser'
-        creationTimestamp:
-          type: integer
-          format: int64
-          description: The time when this consumer was created, expressed in Epoch timestamp using millisecond precision.
-        ipAddress:
-          maxLength: 45
-          minLength: 5
-          type: string
-          description: The IP address of the consumer user doing the registration.
-        acceptedTerms:
-          type: boolean
-          description: Must be set to *true* to indicate that the consumer root user has accepted the terms and conditions.
-        baseCurrency:
-          $ref: '#/components/schemas/Currency'
-        feeGroup:
-          type: string
-          description: The fee group which the consumer is bound to.
-        sourceOfFunds:
-          $ref: '#/components/schemas/ConsumerSourceOfFunds'
-        sourceOfFundsOther:
-          type: string
-          description: Description of source of funds in case `OTHER` was chosen.
-          deprecated: true
-    ProfileId:
-      type: string
-      description: 'The profile Id which a specific identity, instrument or transaction type is linked to.
-
-
-        Profiles contain configuration and determine behavioral aspects of the newly created transaction, for example, fees that may apply.
-
-
-        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s needs.
-
-
-        Profile Ids can be found in the Multi Portal, in the API Credentials page.
-
-        '
-      pattern: ^[0-9]+$
-    Occupation:
-      type: string
-      description: The industry of the identity.
-      deprecated: true
-      enum:
-      - ACCOUNTING
-      - AUDIT
-      - FINANCE
-      - PUBLIC_SECTOR_ADMINISTRATION
-      - ART_ENTERTAINMENT
-      - AUTO_AVIATION
-      - BANKING_LENDING
-      - BUSINESS_CONSULTANCY_LEGAL
-      - CONSTRUCTION_REPAIR
-      - EDUCATION_PROFESSIONAL_SERVICES
-      - INFORMATIONAL_TECHNOLOGIES
-      - TOBACCO_ALCOHOL
-      - GAMING_GAMBLING
-      - MEDICAL_SERVICES
-      - MANUFACTURING
-      - PR_MARKETING
-      - PRECIOUS_GOODS_JEWELRY
-      - NON_GOVERNMENTAL_ORGANIZATION
-      - INSURANCE_SECURITY
-      - RETAIL_WHOLESALE
-      - TRAVEL_TOURISM
-      - FREELANCER
-      - STUDENT
-      - UNEMPLOYED
-      - RETIRED
-      - OTHER
-    Currency:
-      type: string
-      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
-      maxLength: 3
-      minLength: 3
-      pattern: ^[A-Z]*$
-    IdentityId:
-      required:
-      - type
-      - id
-      type: object
-      properties:
-        type:
-          enum:
-          - CONSUMER
-          - CORPORATE
-          type: string
-          description: Indicates the identity type.
-        id:
-          type: string
-          pattern: ^[0-9]+$
-          description: The identifier for the identity.
-    Mobile:
-      required:
-      - number
-      - countryCode
-      type: object
-      properties:
-        countryCode:
-          maxLength: 4
-          minLength: 1
-          type: string
-          pattern: ^\+[0-9]+$
-          description: The country code of the user mobile number (e.g. +44).
-        number:
-          pattern: ^[0-9]{1,12}$
-          type: string
-          description: The mobile number of the user - excluding country code.
-    Industry:
-      type: string
-      description: The industry of the identity.
-      deprecated: true
-      enum:
-      - ACCOUNTING
-      - AUDIT
-      - FINANCE
-      - PUBLIC_SECTOR_ADMINISTRATION
-      - ART_ENTERTAINMENT
-      - AUTO_AVIATION
-      - BANKING_LENDING
-      - BUSINESS_CONSULTANCY_LEGAL
-      - CONSTRUCTION_REPAIR
-      - EDUCATION_PROFESSIONAL_SERVICES
-      - INFORMATIONAL_TECHNOLOGIES
-      - TOBACCO_ALCOHOL
-      - GAMING_GAMBLING
-      - MEDICAL_SERVICES
-      - MANUFACTURING
-      - PR_MARKETING
-      - PRECIOUS_GOODS_JEWELRY
-      - NON_GOVERNMENTAL_ORGANIZATION
-      - INSURANCE_SECURITY
-      - RETAIL_WHOLESALE
-      - TRAVEL_TOURISM
-      - FREELANCER
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-    Nationality:
-      maxLength: 2
-      minLength: 2
-      pattern: ^[A-Z]+$
-      type: string
-      description: Nationality of the user - using ISO 3166 alpha-2.
-    AddressWithNoRequiredFields:
-      type: object
-      description: The address, with none of the separate fields being set as required.
-      properties:
-        addressLine1:
-          type: string
-          description: The first line of the address.
-        addressLine2:
-          type: string
-          description: The second line of the address.
-        city:
-          type: string
-          description: The city of the address.
-        postCode:
-          maxLength: 10
-          pattern: ^[A-Za-z0-9 -]*$
-          type: string
-          description: The post code associated with the address.
-        state:
-          maxLength: 50
-          type: string
-          description: The state of the address.
-        country:
-          maxLength: 2
-          minLength: 2
-          pattern: ^[A-Z]+$
-          type: string
-          description: The country of the address expressed in ISO 3166 alpha-2 format.
-    Tag:
-      type: string
-      description: The tag field is a custom field that can be used to search and filter.
-      maxLength: 50
-      pattern: ^[a-zA-Z0-9_-]+$
-    CompanyPosition:
-      type: string
-      description: The company position of the Corporate Root User.
-      enum:
-      - DIRECTOR
-      - AUTHORISED_REPRESENTATIVE
+  requestBodies:
+    ConsumerKycLevelRequest:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              kycLevel:
+                $ref: '#/components/schemas/KycLevel'
+                description: The KYC level that the consumer will be assigned to, which determines the due diligence details that the user will need to provide.
+              prefillDetails:
+                description: List of KYC details to be prefilled for the consumer.
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    value:
+                      type: string
+    CorporateUpdateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              tag:
+                $ref: '#/components/schemas/Tag'
+              industry:
+                $ref: '#/components/schemas/Industry'
+              sourceOfFunds:
+                $ref: '#/components/schemas/CorporateSourceOfFunds'
+              sourceOfFundsOther:
+                type: string
+                deprecated: true
+                description: Description of source of funds in case `OTHER` was chosen.
+              companyBusinessAddress:
+                $ref: '#/components/schemas/Address'
+              feeGroup:
+                type: string
+                description: The fee group which the Corporate will be bound to. Do not specify this if you are not using fee groups.
+              baseCurrency:
+                $ref: '#/components/schemas/Currency'
+              name:
+                maxLength: 20
+                pattern: ^[^0-9~!@#$%^*()_+={}\|:;,<>/?]*$
+                type: string
+                description: The first name of the Corporate root user.
+              surname:
+                maxLength: 20
+                pattern: ^[^0-9~!@#$%^*()_+={}\|:;,<>/?]*$
+                type: string
+                description: The last name of the Corporate root user.
+              email:
+                $ref: '#/components/schemas/Email'
+              mobile:
+                $ref: '#/components/schemas/Mobile'
+              dateOfBirth:
+                description: Date of birth of the authorised user.
+                $ref: '#/components/schemas/Date'
+              resetMobileCounter:
+                type: boolean
+              userTag:
+                description: The tag to be assigned to the root user.
+                $ref: '#/components/schemas/Tag'
+              locale:
+                $ref: '#/components/schemas/UserLocale'
+              brand:
+                $ref: '#/components/schemas/Brand'
+    ConsumerUpdateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              tag:
+                $ref: '#/components/schemas/Tag'
+              name:
+                maxLength: 20
+                pattern: ^[^0-9~!@#$%^*()_+={}\|:;,<>/?]*$
+                type: string
+                description: The first name of the Consumer root user.
+              surname:
+                maxLength: 20
+                pattern: ^[^0-9~!@#$%^*()_+={}\|:;,<>/?]*$
+                type: string
+                description: The last name of the Consumer root user.
+              email:
+                $ref: '#/components/schemas/Email'
+              mobile:
+                $ref: '#/components/schemas/Mobile'
+              dateOfBirth:
+                description: Date of birth of the consumer root user.
+                $ref: '#/components/schemas/Date'
+              address:
+                description: Address of the consumer root user.
+                $ref: '#/components/schemas/AddressWithCountryRequired'
+              feeGroup:
+                type: string
+                description: The fee group which the consumer will be bound to. Do not specify this if you are not using fee groups.
+              baseCurrency:
+                $ref: '#/components/schemas/Currency'
+              occupation:
+                $ref: '#/components/schemas/Occupation'
+              sourceOfFunds:
+                $ref: '#/components/schemas/ConsumerSourceOfFunds'
+              sourceOfFundsOther:
+                deprecated: true
+                type: string
+                description: Description of source of funds in case `OTHER` was chosen.
+              placeOfBirth:
+                type: string
+                description: The place of birth of the consumer root user.
+              nationality:
+                description: Nationality of the consumer root user, in ISO 3166 alpha-2 format.
+                $ref: '#/components/schemas/Nationality'
+              resetMobileCounter:
+                type: boolean
+              userTag:
+                description: The tag to be assigned to the root user.
+                $ref: '#/components/schemas/Tag'
+              locale:
+                $ref: '#/components/schemas/UserLocale'
+              brand:
+                $ref: '#/components/schemas/Brand'
+  parameters:
+    idempotency-ref:
+      name: idempotency-ref
+      in: header
+      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
+      required: false
+      schema:
+        type: string
   headers:
     request-ref:
       description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
@@ -1289,18 +1302,10 @@ components:
       required: true
       schema:
         type: string
-  parameters:
-    idempotency-ref:
-      name: idempotency-ref
-      in: header
-      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
-      required: false
-      schema:
-        type: string
   securitySchemes:
-    api_key:
+    api-key:
       type: apiKey
-      description: The API Key representing your Multi account.
+      description: An API key defined in your User API Client  (or Delegate API Client - this feature is available only to customers enabled with delegation functionality).  API Clients are as managed in the Embedder Portal
       name: api-key
       in: header
     auth_token:
@@ -1308,30 +1313,53 @@ components:
       description: The authentication token representing the user. This will be included in the login response object.
       scheme: bearer
       bearerFormat: JWT
+    webhooks_key:
+      type: apiKey
+      description: The Webhooks key can be found in the API Credentials tab in your Portal Page.
+      name: webhooks-key
+      in: header
 x-tagGroups:
-- name: Access
-  tags:
-  - Access Token
-  - User Impersonation
-  - Consent Request
-- name: Identities
+- name: Customer Registration
   tags:
   - Corporates
   - Consumers
-- name: User Management
+- name: Users & User Authentication
   tags:
-  - Authorised Users
+  - Setup
+  - Sign-in
+  - Step-up Challenges
+  - Confirmation Challenges
+  - Authentication Factors
+- name: Access
+  tags:
+  - Access Tokens
+- name: Customer Settings
+  tags:
+  - Customer Data & Due Diligence
+  - Authorised Signatories
+  - Trusted Payees
 - name: Instruments
   tags:
   - Managed Accounts
   - Managed Cards
-- name: Transactions
+- name: Funds Management
   tags:
   - Transfers
-- name: Fees
+  - Transaction Activity
+- name: External Payments
   tags:
+  - Incoming Wire Transfers
+  - Outgoing Wire Transfers
+  - Correspondent Bank Transfers
+- name: Card Payments
+  tags:
+  - Card Payments
+  - Spend Controls
+- name: In-Platform Payments
+  tags:
+  - Sends
   - Fees
-- name: Bulk Operations [Beta]
+- name: Bulk Operations
   tags:
   - Operations
   - Manage

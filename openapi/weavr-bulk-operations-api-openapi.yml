@@ -1,0 +1,118 @@
+openapi: 3.2.0
+info:
+  title: Weavr Webhook Bulk Operations API
+  description: For Verification, create a base64 hash using HmacSHA256 using Published-Timestamp header as message and your API key as secret. The result should match the Signature header.
+  contact:
+    name: Weavr
+    url: https://weavr.io
+  version: v2
+  x-logo:
+    url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
+    backgroundColor: '#FFFFFF'
+    altText: Weavr
+servers:
+- url: '""'
+tags:
+- name: Bulk Operations
+paths: {}
+webhooks:
+  /bulk_process_end/watch:
+    post:
+      tags:
+      - Bulk Operations
+      summary: Bulk Process End
+      description: "Reports on the final state of execution of a bulk process the moment it ends:\n  - COMPLETED: the execution of the bulk process is complete and all bulk operations of the bulk process were executed successfully.\n  - FAILED: none of the operations of the bulk process have executed.\n  - PARTIALLY_COMPLETED: the execution of the bulk process is complete and some of the bulk operations of the bulk process failed.\n"
+      operationId: bulk_process_end
+      parameters:
+      - $ref: '#/components/parameters/request-ref'
+      - $ref: '#/components/parameters/published-timestamp'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkProcessProgressEvent'
+        required: true
+      responses:
+        '204':
+          description: Success - No Content
+      security:
+      - webhooks_key: []
+components:
+  schemas:
+    BulkProcessOperationStatusCounts:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/BulkProcessOperationStatus'
+        count:
+          type: integer
+    BulkProcessOperationStatus:
+      type: string
+      enum:
+      - SUBMITTED
+      - RUNNING
+      - COMPLETED
+      - FAILED
+      - CANCELLED
+    BulkProcessProgressEvent:
+      type: object
+      properties:
+        bulkId:
+          description: The bulk id of the bulk process
+          type: string
+        status:
+          description: "\"RUNNING\"  : the execution of the bulk process is in progress. \n\n\"COMPLETED\"  : the execution of the bulk process is complete and all bulk operations of the bulk process were executed successfully. This is a final state for the bulk process \n\n\"PARTIALLY_COMPLETED\" : the execution of the bulk process is complete and some of the bulk operations of the bulk process failed. This is a final state for the bulk process\n\n\"FAILED\" : none of the operations of the bulk process have executed. This is a final state for the bulk process\n"
+          $ref: '#/components/schemas/BulkProcessProgressStatus'
+        submittedItemsCount:
+          description: The number of bulk operations in the bulk process
+          type: integer
+        operationStatusCounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkProcessOperationStatusCounts'
+    BulkProcessProgressStatus:
+      type: string
+      enum:
+      - RUNNING
+      - PARTIALLY_COMPLETED
+      - COMPLETED
+      - FAILED
+      - PAUSED
+      - CANCELLED
+  parameters:
+    request-ref:
+      name: request-ref
+      in: header
+      description: A unique call reference included in every call, that enables the receiver to avoid duplicate handling of a webhook request (e.g. webhook was resent).
+      required: false
+      schema:
+        type: string
+    published-timestamp:
+      name: published-timestamp
+      in: header
+      description: The timestamp, expressed in Epoch timestamp using millisecond precision, when this event was published.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        format: int64
+x-tagGroups:
+- name: Webhooks
+  tags:
+  - Corporates
+  - Consumers
+  - Managed Cards
+  - Managed Accounts
+  - Transfers
+  - Sends
+  - Outgoing Wire Transfers
+  - Correspondent Bank Transfers
+  - Manual Transactions
+  - Fees
+  - Login
+  - Stepup
+  - Authentication Factors
+  - Trusted Payees
+  - Bulk Operations
+  - Authorised Users

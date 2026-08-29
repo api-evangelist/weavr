@@ -1,27 +1,21 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  version: v3
-  title: Weavr Multi Product BackOffice Access Token Fees API
+  title: Weavr Fees API
+  contact:
+    name: Weavr
+    url: https://weavr.io
   x-logo:
     url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
     backgroundColor: '#FFFFFF'
     altText: Weavr
-  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
-
-    identities and their instruments, without requiring the users to be logged in.
-
-
-    A token is to be obtained through the `access_token` method, and this will allow relevant operations
-
-    to be performed on behalf of this same identity.
-
-    '
-  contact:
-    name: Weavr
-    url: https://weavr.io
+  version: '1.0'
+  description: 'Operations tagged Fees across 3 of this provider''s published API definitions: weavr-multi-backoffice-openapi-original.yml, weavr-multi-openapi-original.yml, weavr-webhooks-openapi-original.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - description: Weavr Sandbox Environment
   url: https://sandbox.weavr.io/multi/backoffice
+- description: Weavr Sandbox Environment
+  url: https://sandbox.weavr.io/multi
+- url: '""'
 tags:
 - name: Fees
 paths:
@@ -63,6 +57,9 @@ paths:
       security:
       - auth_token: []
         api_key: []
+    servers:
+    - description: Weavr Sandbox Environment
+      url: https://sandbox.weavr.io/multi/backoffice
   /corporates/fees/charge:
     post:
       tags:
@@ -105,6 +102,9 @@ paths:
       security:
       - auth_token: []
         api-key: []
+    servers:
+    - description: Weavr Sandbox Environment
+      url: https://sandbox.weavr.io/multi
   /fees:
     get:
       tags:
@@ -145,6 +145,9 @@ paths:
       security:
       - auth_token: []
         api-key: []
+    servers:
+    - description: Weavr Sandbox Environment
+      url: https://sandbox.weavr.io/multi
   /consumers/fees/charge:
     post:
       tags:
@@ -185,8 +188,154 @@ paths:
       security:
       - auth_token: []
         api-key: []
+    servers:
+    - description: Weavr Sandbox Environment
+      url: https://sandbox.weavr.io/multi
+webhooks:
+  /fees/watch:
+    post:
+      tags:
+      - Fees
+      summary: FeeWatch
+      description: Notification that a fee has been charged.
+      operationId: fees_watch
+      parameters:
+      - $ref: '#/components/parameters/call-ref'
+      - $ref: '#/components/parameters/published-timestamp'
+      - $ref: '#/components/parameters/signature'
+      - $ref: '#/components/parameters/signature-v2'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChargeFeeEvent'
+        required: true
+      responses:
+        '204':
+          description: Success - No Content
+    servers:
+    - url: '""'
 components:
+  responses:
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ChargeFeeResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ChargeFee'
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ChargeFeeConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - UNRESOLVED_FEE_TYPE
+                - UNRESOLVED_CURRENCY
+                - UNRESOLVED_INSTRUMENT
+                - FUNDS_INSUFFICIENT
+                - IDENTITY_NOT_OWNER_OF_INSTRUMENT
+                - FEE_AMOUNT_NOT_SET
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    FeeTransactionListResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FeeTransactionList'
   schemas:
+    Id:
+      type: string
+      pattern: ^[0-9]+$
+    Fee:
+      required:
+      - feeType
+      - source
+      type: object
+      properties:
+        feeType:
+          type: string
+          description: The fee type as defined in the Multi Portal.
+        source:
+          description: The instrument from where the fee should be deducted.
+          $ref: '#/components/schemas/InstrumentId'
     CurrencyAmount:
       required:
       - currency
@@ -205,101 +354,6 @@ components:
 
             '
       description: The object representing a monetary amount in a particular currency.
-    FeeSubtype:
-      type: string
-      description: The category of fee — indicates the activity or instrument-lifecycle event the fee relates to.
-      enum:
-      - fee_reversals
-      - incoming_wire_fees
-      - withdrawal_fees
-      - purchase_fees
-      - refund_fees
-      - atm_withdrawal_fees
-      - chargeback_fees
-      - transfer_fees
-      - send_fees
-      - outgoing_wire_transfer_fees
-      - custom_fees
-      - other_fees
-      - instrument_delete_fees
-      - funds_redemption_fees
-      - system_transaction_fees
-    Fee:
-      required:
-      - feeType
-      - source
-      type: object
-      properties:
-        feeType:
-          type: string
-          description: The fee type as defined in the Multi Portal.
-        source:
-          description: The instrument from where the fee should be deducted.
-          $ref: '#/components/schemas/InstrumentId'
-    SyntaxError:
-      type: object
-      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
-      properties:
-        invalidFields:
-          type: array
-          items:
-            type: object
-            properties:
-              params:
-                type: array
-                items:
-                  type: string
-              fieldName:
-                type: string
-              error:
-                type: string
-                enum:
-                - REQUIRED
-                - HAS_TEXT
-                - REQUIRES
-                - SIZE
-                - RANGE
-                - IN
-                - NOT_IN
-                - REGEX
-                - EXACTLY
-                - AT_LEAST
-                - AT_MOST
-                - ALL_OR_NONE
-    TransactionState:
-      type: string
-      description: Status of the transaction.
-      enum:
-      - INITIALISED
-      - COMPLETED
-      - REJECTED
-      - FAILED
-      - PENDING
-      - SCHEDULED
-      - CANCELLED
-    FeeTransactionList:
-      type: object
-      description: A paginated list of fee transactions.
-      properties:
-        fees:
-          type: array
-          items:
-            $ref: '#/components/schemas/FeeTransaction'
-        count:
-          type: integer
-          format: int64
-          description: The total number of records matching the filter criteria.
-        responseCount:
-          type: integer
-          format: int64
-    FeeTransactionStatus:
-      type: string
-      description: "Lifecycle status of a fee transaction:\n  - PENDING: Fee accompanies a transaction that is still processing; it may still be cancelled.\n  - COMPLETED: Fee was charged and posted to the instrument balance.\n  - CANCELLED: Fee was cancelled before being charged.\n  - REVERSED: Fee was previously charged and has been reversed.\n"
-      enum:
-      - PENDING
-      - COMPLETED
-      - CANCELLED
-      - REVERSED
     TransactionId:
       required:
       - type
@@ -411,6 +465,107 @@ components:
         id:
           type: string
           pattern: ^[0-9]+$
+    SyntaxError:
+      type: object
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      properties:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    ChargeFee:
+      required:
+      - transactionId
+      - profileId
+      - feeType
+      - source
+      - destination
+      - availableBalanceAdjustment
+      - state
+      - creationTimestamp
+      type: object
+      properties:
+        transactionId:
+          $ref: '#/components/schemas/TransactionId'
+          description: The unique identifier of the transaction.
+        profileId:
+          type: string
+          description: The profile Id which a specific identity, instrument or transaction type is linked to.
+        feeType:
+          type: string
+          description: The fee type as defined in the Multi Portal, and as sent in the request.
+        source:
+          $ref: '#/components/schemas/InstrumentId'
+        availableBalanceAdjustment:
+          $ref: '#/components/schemas/CurrencyAmount'
+          description: The object representing a monetary amount in a particular currency.
+        state:
+          $ref: '#/components/schemas/TransactionState'
+          description: The transaction entry state.
+        creationTimestamp:
+          type: integer
+          format: int64
+    InstrumentType:
+      type: string
+      enum:
+      - managed_cards
+      - managed_accounts
+    TransactionState:
+      type: string
+      description: Status of the transaction.
+      enum:
+      - INITIALISED
+      - COMPLETED
+      - REJECTED
+      - FAILED
+      - PENDING
+      - SCHEDULED
+      - CANCELLED
+    Currency:
+      type: string
+      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
+      maxLength: 3
+      minLength: 3
+      pattern: ^[A-Z]*$
+    InstrumentId:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        type:
+          $ref: '#/components/schemas/InstrumentType'
     FeeTransaction:
       type: object
       required:
@@ -453,173 +608,638 @@ components:
         lastUpdatedTimestamp:
           type: integer
           format: int64
-    ChargeFee:
-      required:
-      - transactionId
-      - profileId
-      - feeType
-      - source
-      - destination
-      - availableBalanceAdjustment
-      - state
-      - creationTimestamp
+    FeeSubtype:
+      type: string
+      description: The category of fee — indicates the activity or instrument-lifecycle event the fee relates to.
+      enum:
+      - fee_reversals
+      - incoming_wire_fees
+      - withdrawal_fees
+      - purchase_fees
+      - refund_fees
+      - atm_withdrawal_fees
+      - chargeback_fees
+      - transfer_fees
+      - send_fees
+      - outgoing_wire_transfer_fees
+      - custom_fees
+      - other_fees
+      - instrument_delete_fees
+      - funds_redemption_fees
+      - system_transaction_fees
+    FeeTransactionStatus:
+      type: string
+      description: "Lifecycle status of a fee transaction:\n  - PENDING: Fee accompanies a transaction that is still processing; it may still be cancelled.\n  - COMPLETED: Fee was charged and posted to the instrument balance.\n  - CANCELLED: Fee was cancelled before being charged.\n  - REVERSED: Fee was previously charged and has been reversed.\n"
+      enum:
+      - PENDING
+      - COMPLETED
+      - CANCELLED
+      - REVERSED
+    FeeTransactionList:
       type: object
+      description: A paginated list of fee transactions.
       properties:
-        transactionId:
-          $ref: '#/components/schemas/TransactionId'
-          description: The unique identifier of the transaction.
-        profileId:
-          type: string
-          description: The profile Id which a specific identity, instrument or transaction type is linked to.
-        feeType:
-          type: string
-          description: The fee type as defined in the Multi Portal, and as sent in the request.
-        source:
-          $ref: '#/components/schemas/InstrumentId'
-        availableBalanceAdjustment:
-          $ref: '#/components/schemas/CurrencyAmount'
-          description: The object representing a monetary amount in a particular currency.
-        state:
-          $ref: '#/components/schemas/TransactionState'
-          description: The transaction entry state.
-        creationTimestamp:
+        fees:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeeTransaction'
+        count:
           type: integer
           format: int64
-    InstrumentType:
+          description: The total number of records matching the filter criteria.
+        responseCount:
+          type: integer
+          format: int64
+    StringWrappedTypeId:
+      required:
+      - type
+      - id
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9_-]+$
+          type: string
+        id:
+          type: string
+          pattern: ^[0-9]+$
+    ChargeFeeEventType:
       type: string
       enum:
-      - managed_cards
-      - managed_accounts
-    InstrumentId:
+      - UNDEFINED
+      - COMPLETED
+    ReplacementType:
+      type: string
+      enum:
+      - DAMAGED
+      - LOST_STOLEN
+      - RENEW
+      - COMPROMISED
+    LegacyTransactionBatchInstrumentRemaining:
+      type: object
+      properties:
+        availableRemaining:
+          type: string
+          pattern: ^[0-9]+$
+        reservedRemaining:
+          type: string
+          pattern: ^[0-9]+$
+        pendingRemaining:
+          type: string
+          pattern: ^[0-9]+$
+        feeRemaining:
+          type: object
+          additionalProperties:
+            type: string
+            pattern: ^[0-9]+$
+    TransactionBatchErrorType:
+      type: string
+      enum:
+      - REVERSAL_EXCEEDS_REMAINING
+      - DENIED_BY_INTERCEPTOR
+      - DENIED_BY_INSTRUMENT
+      - DENIED_BY_FOREX_TRADE
+      - FI_PROVIDER_TREASURY_UNSUPPORTED
+      - DENIED_BY_SUSPENSE
+      - DENIED_BY_STATE_CHANGE
+    BlockedDetailsSubType:
+      type: string
+      enum:
+      - FREEZE
+      - LOST
+      - SINGLE_SPEND
+      - PENDING_APPROVAL
+    InstrumentParticipantErrorType:
+      type: string
+      enum:
+      - NO_INSTRUMENT_ERROR
+      - BALANCE_LIMIT_EXCEEDED
+      - INSTRUMENT_ALREADY_EXISTS
+      - INSTRUMENT_ALREADY_DESTROYED
+      - STATE_DOES_NOT_PERMIT_ACTION
+      - UNSUPPORTED_CURRENCY
+      - INSTRUMENT_ALREADY_RESTRICTED
+      - INSTRUMENT_ALREADY_ACTIVE
+      - INSTRUMENT_EXPIRED
+      - PROVIDER_REJECTED
+      - INSTRUMENT_ALREADY_BLOCKED
+      - INSTRUMENT_NOT_BLOCKED
+    LegacyInstrumentBalances:
+      type: object
+      properties:
+        availableBalance:
+          type: string
+          pattern: ^[0-9]+$
+        reservedBalance:
+          type: string
+          pattern: ^[0-9]+$
+        deltaBalance:
+          type: string
+          pattern: ^[0-9]+$
+        pendingBalance:
+          type: string
+          pattern: ^[0-9]+$
+        limitBalance:
+          type: string
+          pattern: ^[0-9]+$
+    BlockedDetailsType:
+      type: string
+      enum:
+      - VELOCITY
+      - USER
+      - ACCOUNT
+      - ADMIN
+    LegacyTransactionBatchInstrument:
       required:
       - id
-      - type
+      - instrument
+      - instrumentId
+      - state
       type: object
       properties:
         id:
-          $ref: '#/components/schemas/Id'
-        type:
-          $ref: '#/components/schemas/InstrumentType'
-    Currency:
-      type: string
-      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
-      maxLength: 3
-      minLength: 3
-      pattern: ^[A-Z]*$
-    Id:
-      type: string
-      pattern: ^[0-9]+$
-    Error:
+          type: string
+          pattern: ^[0-9]+$
+        instrumentId:
+          $ref: '#/components/schemas/InstrumentId'
+        instrument:
+          $ref: '#/components/schemas/LegacyInstrumentParticipant'
+        state:
+          $ref: '#/components/schemas/TransactionBatchParticipantState'
+        conflict:
+          $ref: '#/components/schemas/InstrumentParticipantErrorType'
+        after:
+          $ref: '#/components/schemas/LegacyInstrumentBalances'
+        executedTimestamp:
+          type: string
+          pattern: ^[0-9]+$
+          description: Epoch timestamp using millisecond precision.
+        remaining:
+          $ref: '#/components/schemas/LegacyTransactionBatchInstrumentRemaining'
+        afterCompensation:
+          $ref: '#/components/schemas/LegacyInstrumentBalances'
+        compensatedTimestamp:
+          type: string
+          pattern: ^[0-9]+$
+          description: Epoch timestamp using millisecond precision.
+        treasuryPending:
+          type: boolean
+    LegacyScaledAmount:
       type: object
       properties:
-        code:
+        value:
           type: string
-        message:
+          pattern: ^[0-9]+$
+        scale:
+          maximum: 127
+          minimum: -128
+          type: integer
+          format: int32
+      description: 'A floating point number, represented as a value and its scale. Its actual value can be obtained using the equation: value * pow(10, -scale).'
+    LegacyInstrumentParticipant:
+      required:
+      - channelProvider
+      - currency
+      - fiProvider
+      - owner
+      type: object
+      properties:
+        owner:
+          $ref: '#/components/schemas/StringWrappedTypeId'
+        fiProvider:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9_-]+$
           type: string
-  responses:
-    InternalServerError:
-      description: Internal Server Error - There is a problem with the server. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    BadRequestError:
-      description: Bad Request Error - Your request is invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
+        channelProvider:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9_-]+$
+          type: string
+        originalAmount:
+          $ref: '#/components/schemas/LegacyCurrencyAmount'
+        currency:
+          maxLength: 3
+          minLength: 3
+          pattern: ^[A-Z]*$
+          type: string
+        availableAdjustment:
+          type: string
+          pattern: ^[0-9]+$
+        reservedAdjustment:
+          type: string
+          pattern: ^[0-9]+$
+        pendingAdjustment:
+          type: string
+          pattern: ^[0-9]+$
+        availableSync:
+          type: string
+          pattern: ^[0-9]+$
+        deltaAdjustment:
+          type: string
+          pattern: ^[0-9]+$
+        limitAdjustment:
+          type: string
+          pattern: ^[0-9]+$
+        fee:
+          type: object
+          additionalProperties:
             type: object
             properties:
-              message:
-                maxLength: 255
+              amount:
                 type: string
-                description: When present helps to identify and fix the problem.
-              syntaxErrors:
-                $ref: '#/components/schemas/SyntaxError'
-    ChargeFeeResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ChargeFee'
-    Error:
-      description: Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    FeeTransactionListResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/FeeTransactionList'
-    TooManyRequests:
-      description: Too many requests.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-        x-ratelimit-limit:
-          $ref: '#/components/headers/x-ratelimit-limit'
-        x-ratelimit-reset:
-          $ref: '#/components/headers/x-ratelimit-reset'
-    NotFound:
-      description: Not found - The requested resource couldn't be found.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    ChargeFeeConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
+                pattern: ^[0-9]+$
+              feeSpecificType:
                 type: string
-                enum:
-                - UNRESOLVED_FEE_TYPE
-                - UNRESOLVED_CURRENCY
-                - UNRESOLVED_INSTRUMENT
-                - FUNDS_INSUFFICIENT
-                - IDENTITY_NOT_OWNER_OF_INSTRUMENT
-                - FEE_AMOUNT_NOT_SET
-    Forbidden:
-      description: Forbidden - Access to the requested resource or action is forbidden.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INSUFFICIENT_PERMISSIONS
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
+        system:
+          type: object
+          additionalProperties:
+            type: string
+            pattern: ^[0-9]+$
+        create:
+          type: boolean
+          description: If set, expects runtime_info to contain creation payload
+        upgrade:
+          type: boolean
+        activate:
+          type: boolean
+        blockType:
+          $ref: '#/components/schemas/BlockedDetailsType'
+        blockSubType:
+          $ref: '#/components/schemas/BlockedDetailsSubType'
+        unblockType:
+          $ref: '#/components/schemas/BlockedDetailsType'
+        unblockSubType:
+          $ref: '#/components/schemas/BlockedDetailsSubType'
+        destroyType:
+          $ref: '#/components/schemas/DestroyType'
+        replacementType:
+          $ref: '#/components/schemas/ReplacementType'
+        related:
+          type: boolean
+        forceState:
+          type: boolean
+          description: If set, force the action bypassing system blocks
+        forceBalance:
+          type: boolean
+          description: If set, force the action bypassing balance limits
+    DestroyType:
+      type: string
+      enum:
+      - USER
+      - ADMIN
+      - SYSTEM
+      - LOST
+      - STOLEN
+      - SINGLE_SPEND
+      - ACCOUNT_REJECTED
+      - EXPIRED
+      - COMPROMISED
+    LegacyCurrencyAmount:
+      required:
+      - currency
+      - amount
+      type: object
+      properties:
+        currency:
+          $ref: '#/components/schemas/Currency'
+        amount:
+          type: string
+          pattern: ^[0-9]+$
+          description: The monetary amount, scaled to the lowest denomination of the currency.
+      description: The object representing a monetary amount in a particular currency.
+    TransactionBatchParticipantState:
+      type: string
+      enum:
+      - EXECUTION_PENDING
+      - EXECUTED
+      - COMMITTED
+      - REJECTED
+      - FAILED
+      - COMPENSATION_PENDING
+      - COMPENSATED
+      - OBSOLETE
+      - EXECUTION_SUSPENDED
+      - COMPENSATION_SUSPENDED
+    ForexTradeParticipantErrorType:
+      type: string
+      enum:
+      - NO_FOREX_TRADE_ERROR
+      - RATE_EXPIRED
+    LegacyForexTradeParticipant:
+      required:
+      - provider
+      - rate
+      - rateId
+      - sourceCurrency
+      - targetCurrency
+      type: object
+      properties:
+        rateId:
+          type: string
+          pattern: ^[0-9]+$
+        provider:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9_-]+$
+          type: string
+        sourceCurrency:
+          maxLength: 3
+          minLength: 3
+          pattern: ^[A-Z]*$
+          type: string
+        sourceAmount:
+          type: string
+          pattern: ^[0-9]+$
+        sourceSystem:
+          type: string
+          pattern: ^[0-9]+$
+          description: The rounding error when aggregating multiple conversions. Always positive
+        targetCurrency:
+          maxLength: 3
+          minLength: 3
+          pattern: ^[A-Z]*$
+          type: string
+        targetAmount:
+          type: string
+          pattern: ^[0-9]+$
+        rate:
+          $ref: '#/components/schemas/LegacyScaledAmount'
+          description: The forex rate between unscaled amount of given currencies
+    FeeSpecType:
+      type: string
+      enum:
+      - FLAT
+      - PERCENTAGE
+      - PLUS
+      - MAX
+      - MIN
+    TransactionBatchInterceptState:
+      type: string
+      enum:
+      - PENDING
+      - ALLOWED
+      - DENIED
+      - FAILED
+      - SUSPENDED
+    LegacyTransactionBatchForexTrade:
+      required:
+      - forexTrade
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          pattern: ^[0-9]+$
+        forexTrade:
+          $ref: '#/components/schemas/LegacyForexTradeParticipant'
+        state:
+          $ref: '#/components/schemas/TransactionBatchParticipantState'
+        conflict:
+          $ref: '#/components/schemas/ForexTradeParticipantErrorType'
+        executedTimestamp:
+          type: string
+          pattern: ^[0-9]+$
+          description: Epoch timestamp using millisecond precision.
+        compensatedRateId:
+          type: string
+          pattern: ^[0-9]+$
+        sourceSystemCompensation:
+          type: string
+          pattern: ^[0-9]+$
+          description: The difference between the source and the actual compensation amount, may be positive (profit) or negative (loss)
+        compensatedRate:
+          $ref: '#/components/schemas/LegacyScaledAmount'
+          description: The compensation forex rate between unscaled amount of given currencies
+        compensatedTimestamp:
+          type: string
+          pattern: ^[0-9]+$
+          description: Epoch timestamp using millisecond precision.
+    FeeType:
+      type: string
+      enum:
+      - DEPOSIT
+      - WITHDRAWAL
+      - PURCHASE
+      - REFUND
+      - ATM_WITHDRAWAL
+      - CHARGEBACK
+      - TRANSFER
+      - SEND
+      - OWT
+      - CUSTOM
+      - OTHER
+    TransactionBatchIntercept:
+      required:
+      - provider
+      type: object
+      properties:
+        provider:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9_-]+$
+          type: string
+        state:
+          $ref: '#/components/schemas/TransactionBatchInterceptState'
+        denialReason:
+          maxLength: 50
+          type: string
+        suspendedReason:
+          maxLength: 255
+          type: string
+    LegacyTransactionBatch:
+      required:
+      - id
+      - instrument
+      - state
+      - transaction
+      type: object
+      properties:
+        id:
+          type: string
+          pattern: ^[0-9]+$
+        transaction:
+          $ref: '#/components/schemas/StringWrappedTypeId'
+        relatedBatchId:
+          type: string
+          pattern: ^[0-9]+$
+        intercept:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionBatchIntercept'
+        instrument:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/LegacyTransactionBatchInstrument'
+          description: The id of the map should be the instrument id
+        forexTrade:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegacyTransactionBatchForexTrade'
+        completedTimestamp:
+          type: string
+          pattern: ^[0-9]+$
+          description: Epoch timestamp using millisecond precision.
+        state:
+          $ref: '#/components/schemas/TransactionBatchState'
+        conflict:
+          $ref: '#/components/schemas/TransactionBatchErrorType'
+        authSessionId:
+          type: string
+          pattern: ^[0-9]+$
+        note:
+          type: string
+    ChargeFeeEvent:
+      required:
+      - chargeFee
+      - publishedTimestamp
+      - type
+      type: object
+      properties:
+        chargeFee:
+          type: object
+          required:
+          - feeSpec
+          - feeType
+          - id
+          - source
+          properties:
+            id:
+              type: string
+              pattern: ^[0-9]+$
+            feeType:
+              $ref: '#/components/schemas/FeeType'
+            feeSubType:
+              maxLength: 50
+              type: string
+              description: Optional sub fee type value (e.g. PRINTED_STATEMENT)
+            note:
+              type: string
+              description: Note added to the transaction and visible in the statements as an additional field
+            source:
+              $ref: '#/components/schemas/InstrumentId'
+            feeSpec:
+              $ref: '#/components/schemas/LegacyFeeSpec'
+            batch:
+              $ref: '#/components/schemas/LegacyTransactionBatch'
+              description: The transaction batch if a transaction was executed for the charge
+            profileId:
+              type: string
+        publishedTimestamp:
+          type: string
+          pattern: ^[0-9]+$
+          description: Epoch timestamp using millisecond precision.
+        type:
+          $ref: '#/components/schemas/ChargeFeeEventType'
+    LegacyFeeSpec:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/FeeSpecType'
+        flatAmount:
+          type: array
+          description: The flat fee amounts to be taken per currency. Required for FLAT, MAX, MIN and PLUS fee types.
+          items:
+            $ref: '#/components/schemas/LegacyCurrencyAmount'
+        percentage:
+          $ref: '#/components/schemas/LegacyScaledAmount'
+          description: The percentage amount to be taken as a fee. Required for PERCENTAGE, MAX, MIN and PLUS fee types.
+    TransactionBatchState:
+      type: string
+      enum:
+      - EXECUTION_PENDING
+      - EXECUTED
+      - COMPLETED
+      - COMPENSATION_PENDING
+      - REJECTED
+      - FAILED
+      - EXECUTION_SUSPENDED
+      - COMPENSATION_SUSPENDED
+  parameters:
+    idempotency-ref:
+      name: idempotency-ref
+      in: header
+      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
+      required: false
+      schema:
+        type: string
+    creationTimestampFrom:
+      name: creationTimestampFrom
+      in: query
+      required: false
+      description: Filter for transactions created after this timestamp. Epoch timestamp using millisecond precision.
+      schema:
+        type: integer
+        format: int64
+    offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    creationTimestampTo:
+      name: creationTimestampTo
+      in: query
+      required: false
+      description: Filter for transactions created before this timestamp. Epoch timestamp using millisecond precision.
+      schema:
+        type: integer
+        format: int64
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: The limit of the results for paging, starting at the offset. Limit is always capped at 100.
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+    sortOrder:
+      name: sortOrder
+      in: query
+      required: false
+      description: "Sort order for the results:\n  - ASC: Ascending order, oldest first.\n  - DESC: Descending order, most recent first.\n"
+      schema:
+        type: string
+        enum:
+        - ASC
+        - DESC
+    signature:
+      name: signature
+      in: header
+      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `published-timestamp` using your API key.
+      required: true
+      style: simple
+      explode: false
+      deprecated: true
+      schema:
+        type: string
+    published-timestamp:
+      name: published-timestamp
+      in: header
+      description: The timestamp, expressed in Epoch timestamp using millisecond precision, when this event was published.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        format: int64
+    signature-v2:
+      name: signature-v2
+      in: header
+      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `call-ref + payload + published-timestamp` using your API key.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    call-ref:
+      description: A call reference generated by the caller and unique to the caller to provide correlation between the caller and system with a maximum length of 255
+      in: header
+      name: call-ref
+      required: false
+      schema:
+        type: string
   headers:
     request-ref:
       description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
@@ -644,59 +1264,6 @@ components:
       required: true
       schema:
         type: string
-  parameters:
-    creationTimestampTo:
-      name: creationTimestampTo
-      in: query
-      required: false
-      description: Filter for transactions created before this timestamp. Epoch timestamp using millisecond precision.
-      schema:
-        type: integer
-        format: int64
-    idempotency-ref:
-      name: idempotency-ref
-      in: header
-      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
-      required: false
-      schema:
-        type: string
-    limit:
-      name: limit
-      in: query
-      required: false
-      description: The limit of the results for paging, starting at the offset. Limit is always capped at 100.
-      schema:
-        maximum: 100
-        minimum: 1
-        type: integer
-        format: int32
-    creationTimestampFrom:
-      name: creationTimestampFrom
-      in: query
-      required: false
-      description: Filter for transactions created after this timestamp. Epoch timestamp using millisecond precision.
-      schema:
-        type: integer
-        format: int64
-    sortOrder:
-      name: sortOrder
-      in: query
-      required: false
-      description: "Sort order for the results:\n  - ASC: Ascending order, oldest first.\n  - DESC: Descending order, most recent first.\n"
-      schema:
-        type: string
-        enum:
-        - ASC
-        - DESC
-    offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.
-      schema:
-        minimum: 0
-        type: integer
-        format: int32
   requestBodies:
     ChargeFeeRequest:
       required: true
@@ -716,6 +1283,20 @@ components:
       description: The authentication token representing the user. This will be included in the login response object.
       scheme: bearer
       bearerFormat: JWT
+    api-key:
+      type: apiKey
+      description: An API key defined in your User API Client  (or Delegate API Client - this feature is available only to customers enabled with delegation functionality).  API Clients are as managed in the Embedder Portal
+      name: api-key
+      in: header
+    webhooks_key:
+      type: apiKey
+      description: The Webhooks key can be found in the API Credentials tab in your Portal Page.
+      name: webhooks-key
+      in: header
+x-refined-from:
+- weavr-multi-backoffice-openapi-original.yml
+- weavr-multi-openapi-original.yml
+- weavr-webhooks-openapi-original.yml
 x-tagGroups:
 - name: Access
   tags:

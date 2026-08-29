@@ -1,27 +1,19 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  version: v3
-  title: Weavr Multi Product BackOffice Access Token Corporates API
+  title: Weavr Corporates API
   x-logo:
     url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
     backgroundColor: '#FFFFFF'
     altText: Weavr
-  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
-
-    identities and their instruments, without requiring the users to be logged in.
-
-
-    A token is to be obtained through the `access_token` method, and this will allow relevant operations
-
-    to be performed on behalf of this same identity.
-
-    '
-  contact:
-    name: Weavr
-    url: https://weavr.io
+  version: '1.0'
+  description: 'Operations tagged Corporates across 4 of this provider''s published API definitions: weavr-multi-backoffice-openapi-original.yml, weavr-multi-openapi-original.yml, weavr-simulator-openapi-original.yml, weavr-webhooks-openapi-original.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - description: Weavr Sandbox Environment
   url: https://sandbox.weavr.io/multi/backoffice
+- description: Weavr Sandbox Environment
+  url: https://sandbox.weavr.io/multi
+- url: https://sandbox.weavr.io/simulate/api"
+- url: '""'
 tags:
 - name: Corporates
 paths:
@@ -64,6 +56,9 @@ paths:
       security:
       - auth_token: []
         api_key: []
+    servers:
+    - description: Weavr Sandbox Environment
+      url: https://sandbox.weavr.io/multi/backoffice
   /corporates:
     post:
       tags:
@@ -96,6 +91,9 @@ paths:
           $ref: '#/components/responses/Error'
       security:
       - api-key: []
+    servers:
+    - description: Weavr Sandbox Environment
+      url: https://sandbox.weavr.io/multi
   /corporates/{corporate_id}/verify:
     post:
       tags:
@@ -130,8 +128,265 @@ paths:
                 $ref: '#/components/schemas/DefaultError'
       security:
       - API_Secret_Key: []
+    servers:
+    - url: https://sandbox.weavr.io/simulate/api"
+webhooks:
+  /corporates/kyb/watch:
+    post:
+      tags:
+      - Corporates
+      summary: Corporate KYB status update
+      description: Notification that the KYB status of a corporate identity has been updated.
+      operationId: corporates_kyb_watch
+      parameters:
+      - $ref: '#/components/parameters/call-ref_2'
+      - $ref: '#/components/parameters/published-timestamp'
+      - $ref: '#/components/parameters/signature'
+      - $ref: '#/components/parameters/signature-v2'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KybEvent'
+        required: true
+      responses:
+        '204':
+          description: Success - No Content
+    servers:
+    - url: '""'
+  /corporates/kyb/beneficiaries/watch:
+    post:
+      tags:
+      - Corporates
+      summary: Corporate beneficiary status update
+      description: Notification that the verification status of a corporate beneficiary has been updated.
+      operationId: corporates_kyb_beneficiaries_watch
+      parameters:
+      - $ref: '#/components/parameters/call-ref_2'
+      - $ref: '#/components/parameters/published-timestamp'
+      - $ref: '#/components/parameters/signature'
+      - $ref: '#/components/parameters/signature-v2'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BeneficiaryVerifiedEvent'
+        required: true
+      responses:
+        '204':
+          description: Success - No Content
+    servers:
+    - url: '""'
+  /corporates/corporate_activated/watch:
+    post:
+      tags:
+      - Corporates
+      summary: Corporate activation
+      description: Notification that a corporate identity has been activated.
+      operationId: corporates_corporate_activated_watch
+      parameters:
+      - $ref: '#/components/parameters/call-ref_2'
+      - $ref: '#/components/parameters/published-timestamp'
+      - $ref: '#/components/parameters/signature'
+      - $ref: '#/components/parameters/signature-v2'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdentityActivatedEvent'
+        required: true
+      responses:
+        '204':
+          description: Success - No Content
+    servers:
+    - url: '""'
+  /corporates/corporate_deactivated/watch:
+    post:
+      tags:
+      - Corporates
+      summary: Corporate deactivation
+      description: Notification that a corporate identity has been deactivated.
+      operationId: corporates_corporate_deactivated_watch
+      parameters:
+      - $ref: '#/components/parameters/call-ref_2'
+      - $ref: '#/components/parameters/published-timestamp'
+      - $ref: '#/components/parameters/signature'
+      - $ref: '#/components/parameters/signature-v2'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdentityDeactivatedEvent'
+        required: true
+      responses:
+        '204':
+          description: Success - No Content
+    servers:
+    - url: '""'
 components:
+  responses:
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    BackofficeBadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              validationErrors:
+                $ref: '#/components/schemas/ValidationError'
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ChargeFeeResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ChargeFee'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ChargeFeeConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - UNRESOLVED_FEE_TYPE
+                - UNRESOLVED_CURRENCY
+                - UNRESOLVED_INSTRUMENT
+                - FUNDS_INSUFFICIENT
+                - IDENTITY_NOT_OWNER_OF_INSTRUMENT
+                - FEE_AMOUNT_NOT_SET
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    CreateCorporateResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreatedCorporate'
+    CorporateCreateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - PAYMENT_MODEL_CONSTRAINTS_VIOLATED
+                - PROFILE_NOT_FOUND
+                - PROFILE_INACTIVE
+                - ROOT_EMAIL_NOT_UNIQUE
+                - COMPANY_NOT_FOUND
+                - COMPANY_LOOKUP_FAILED
+                - CURRENCY_UNSUPPORTED
+                - FEE_GROUP_INVALID
+                - COUNTRY_INVALID
+                - MOBILE_OR_COUNTRY_CODE_INVALID
+                - COUNTRY_UNSUPPORTED
+                - ROOT_USER_INACTIVE
+                - ROOT_EMAIL_NOT_VERIFIED
+                - KYC_APPROVAL_MISSING
+                - PROFILE_MISMATCH
+                - COMPANY_TYPE_UNSUPPORTED
+                - EMAIL_DOMAIN_NOT_ALLOWED
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
   schemas:
+    Id:
+      type: string
+      pattern: ^[0-9]+$
+    Fee:
+      required:
+      - feeType
+      - source
+      type: object
+      properties:
+        feeType:
+          type: string
+          description: The fee type as defined in the Multi Portal.
+        source:
+          description: The instrument from where the fee should be deducted.
+          $ref: '#/components/schemas/InstrumentId'
     CurrencyAmount:
       required:
       - currency
@@ -150,353 +405,6 @@ components:
 
             '
       description: The object representing a monetary amount in a particular currency.
-    ValidationError:
-      type: array
-      description: Is returned as part of an HTTP error response whenever a validation error is detected. A list of the fields together with their syntax error will be provided.
-      items:
-        type: object
-        properties:
-          fieldName:
-            type: string
-          message:
-            maxLength: 255
-            type: string
-            description: When present helps to identify and fix the problem.
-          error:
-            type: string
-            enum:
-            - MUST_BE_FALSE
-            - MUST_BE_TRUE
-            - AT_MOST
-            - AT_LEAST
-            - FUTURE
-            - FUTURE_OR_PRESENT
-            - PAST
-            - PAST_OR_PRESENT
-            - LESS_THAN_ZERO
-            - LESS_THAN_OR_EQUAL_TO_ZERO
-            - GREATER_THAN_ZERO
-            - GREATER_THAN_OR_EQUAL_TO_ZERO
-            - HAS_TEXT
-            - REQUIRED
-            - REGEX
-            - RANGE
-            - IN
-            - NOT_IN
-            - NOT_EMPTY
-            - ALL_OR_NONE
-            - MUST_BE_EMPTY
-            - DEPENDS_ON
-            - INVALID_TYPE_OR_VALUE
-            - INVALID_REQUEST
-          params:
-            type: array
-            items:
-              type: string
-          invalidValue:
-            type: array
-            items:
-              type: string
-    Fee:
-      required:
-      - feeType
-      - source
-      type: object
-      properties:
-        feeType:
-          type: string
-          description: The fee type as defined in the Multi Portal.
-        source:
-          description: The instrument from where the fee should be deducted.
-          $ref: '#/components/schemas/InstrumentId'
-    CreatedCorporate:
-      allOf:
-      - $ref: '#/components/schemas/Corporate'
-      - type: object
-        required:
-        - rootUser
-        properties:
-          rootUser:
-            description: The root user of the Corporate Identity.
-            $ref: '#/components/schemas/CreatedCorporateRootUser'
-    Brand:
-      type: string
-      pattern: ^[a-zA-Z0-9]+$
-      description: 'Brand identifier used to determine the set of email and SMS user notification templates. Must be alphanumeric, up to 25 characters, and contain no spaces.
-
-        '
-      maxLength: 25
-    CorporateRootUser:
-      required:
-      - id
-      - email
-      - name
-      - surname
-      - mobile
-      - active
-      - emailVerified
-      - mobileNumberVerified
-      - companyPosition
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/IdentityId'
-        name:
-          maxLength: 100
-          type: string
-          description: First name of the root user.
-        surname:
-          maxLength: 100
-          type: string
-          description: Last name of the root user.
-        email:
-          $ref: '#/components/schemas/Email'
-        mobile:
-          $ref: '#/components/schemas/Mobile'
-        companyPosition:
-          $ref: '#/components/schemas/CompanyPosition'
-        active:
-          type: boolean
-          description: The state of the root user. If false, then the user will not be able to log in.
-        emailVerified:
-          type: boolean
-          description: Indicates if the root user's email has been verified.
-        mobileNumberVerified:
-          type: boolean
-          description: Indicates if the root user's mobile number has been verified.
-        dateOfBirth:
-          description: Date of birth of the authorised user.
-          $ref: '#/components/schemas/Date'
-        tag:
-          $ref: '#/components/schemas/Tag'
-        locale:
-          $ref: '#/components/schemas/UserLocale'
-        brand:
-          $ref: '#/components/schemas/Brand'
-    ClientInvalidRequest:
-      type: object
-      properties:
-        message:
-          maxLength: 255
-          type: string
-          description: When present helps to identify and fix the problem.
-          x-fieldValidation: size(_,255)
-        validation:
-          allOf:
-          - $ref: '#/components/schemas/MessageValidation'
-          - description: Description of fields which were invalid.
-    Date:
-      required:
-      - year
-      - month
-      - day
-      type: object
-      properties:
-        year:
-          type: integer
-          format: int32
-          maximum: 2100
-          minimum: 1900
-        month:
-          type: integer
-          format: int32
-          maximum: 12
-          minimum: 1
-        day:
-          type: integer
-          format: int32
-          maximum: 31
-          minimum: 1
-    Address:
-      required:
-      - addressLine1
-      - city
-      - postCode
-      - country
-      type: object
-      properties:
-        addressLine1:
-          minLength: 1
-          maxLength: 150
-          type: string
-          description: The first line of the address.
-        addressLine2:
-          maxLength: 150
-          type: string
-          description: The second line of the address.
-        city:
-          maxLength: 50
-          type: string
-          description: The city of the address.
-        postCode:
-          maxLength: 10
-          pattern: ^[A-Za-z0-9 -]*$
-          type: string
-          description: The post code associated with the address.
-        state:
-          maxLength: 50
-          type: string
-          description: The state of the address.
-        country:
-          maxLength: 2
-          minLength: 2
-          pattern: ^[A-Z]+$
-          type: string
-          description: The country of the address expressed in ISO 3166 alpha-2 format.
-    Corporate:
-      required:
-      - id
-      - profileId
-      - rootUser
-      - company
-      - ipAddress
-      - baseCurrency
-      - creationTimestamp
-      type: object
-      properties:
-        id:
-          description: The unique identifier of the Corporate Identity.
-          $ref: '#/components/schemas/IdentityId'
-        profileId:
-          $ref: '#/components/schemas/ProfileId'
-        tag:
-          $ref: '#/components/schemas/Tag'
-        rootUser:
-          description: The root user of the Corporate Identity.
-          $ref: '#/components/schemas/CorporateRootUser'
-        company:
-          required:
-          - name
-          - type
-          - countryOfRegistration
-          type: object
-          properties:
-            name:
-              maxLength: 100
-              type: string
-              description: The registered name of the company.
-            type:
-              $ref: '#/components/schemas/CompanyType'
-            registrationNumber:
-              maxLength: 20
-              minLength: 1
-              type: string
-              description: The company registration number.
-            registeredAddress:
-              $ref: '#/components/schemas/LegalAddress'
-            businessAddress:
-              description: The address where the business is based.
-              $ref: '#/components/schemas/Address'
-            countryOfRegistration:
-              maxLength: 2
-              minLength: 2
-              pattern: ^[A-Z]+$
-              type: string
-              description: The country of company registration in ISO 3166 alpha-2.
-            incorporatedOn:
-              description: The company's date of incorporation
-              $ref: '#/components/schemas/Date'
-        industry:
-          $ref: '#/components/schemas/Industry'
-        sourceOfFunds:
-          $ref: '#/components/schemas/CorporateSourceOfFunds'
-        sourceOfFundsOther:
-          type: string
-          description: Description of source of funds in case `OTHER` was chosen.
-          deprecated: true
-        acceptedTerms:
-          type: boolean
-          description: Must be set to *true* to indicate that the root user has accepted the terms and conditions.
-        ipAddress:
-          maxLength: 45
-          minLength: 5
-          type: string
-          description: The IP address of the user doing the registration.
-        baseCurrency:
-          $ref: '#/components/schemas/Currency'
-        feeGroup:
-          type: string
-          description: Fee groups allow the possibility to charge different fees to users under the same profile. If fee groups are not required, ignore this field.
-        creationTimestamp:
-          type: integer
-          format: int64
-          description: The time when the Corporate was created, expressed in Epoch timestamp using millisecond precision.
-        retailQualifier:
-          type: string
-          description: Indicates the type of corporate entity based on its retail status.
-          enum:
-          - RETAIL
-          - NON_RETAIL
-          - UNKNOWN
-    SyntaxError:
-      type: object
-      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
-      properties:
-        invalidFields:
-          type: array
-          items:
-            type: object
-            properties:
-              params:
-                type: array
-                items:
-                  type: string
-              fieldName:
-                type: string
-              error:
-                type: string
-                enum:
-                - REQUIRED
-                - HAS_TEXT
-                - REQUIRES
-                - SIZE
-                - RANGE
-                - IN
-                - NOT_IN
-                - REGEX
-                - EXACTLY
-                - AT_LEAST
-                - AT_MOST
-                - ALL_OR_NONE
-    UserLocale:
-      type: string
-      pattern: ^[a-z]{2}(-[A-Z]{2})?$
-      description: 'BCP47 locale code (e.g. en, en-US). The locale determines which email and SMS user notification templates are used.
-
-        '
-      maxLength: 5
-      example: en-GB
-    TransactionState:
-      type: string
-      description: Status of the transaction.
-      enum:
-      - INITIALISED
-      - COMPLETED
-      - REJECTED
-      - FAILED
-      - PENDING
-      - SCHEDULED
-      - CANCELLED
-    CorporateSourceOfFunds:
-      type: string
-      description: The corporate's source of funds.
-      deprecated: true
-      enum:
-      - LABOUR_CONTRACT
-      - CIVIL_CONTRACT
-      - RENT
-      - FUNDS_FROM_OTHER_AUXILIARY_SOURCES
-      - SALE_OF_MOVABLE_ASSETS
-      - SALE_OF_REAL_ESTATE
-      - ORDINARY_BUSINESS_ACTIVITY
-      - DIVIDENDS
-      - LOAN_FROM_FINANCIAL_INSTITUTIONS_CREDIT_UNIONS
-      - LOAN_FROM_THIRD_PARTIES
-      - SALE_OF_COMPANY_SHARES_BUSINESS
-      - OTHER
-      - DONATION
-      - INHERITANCE
-      - ORIGIN_OF_FUNDS_UNKNOWN
     TransactionId:
       required:
       - type
@@ -608,187 +516,6 @@ components:
         id:
           type: string
           pattern: ^[0-9]+$
-    CreatedCorporateRootUser:
-      allOf:
-      - $ref: '#/components/schemas/CorporateRootUser'
-      - type: object
-        required:
-        - passwordAlreadySet
-        properties:
-          passwordAlreadySet:
-            type: boolean
-            description: When the corporate root user is a single email multiple identities user, this field returns true, indicating that there is no need to call the `passwordCreate` operation for this user.
-    LegalAddress:
-      required:
-      - addressLine1
-      - city
-      - country
-      type: object
-      description: The legal address of the company. This information is captured via the Due Diligence (KYB) process.
-      properties:
-        addressLine1:
-          type: string
-        addressLine2:
-          type: string
-        city:
-          type: string
-        postCode:
-          maxLength: 10
-          pattern: ^[A-Za-z0-9 -]*$
-          type: string
-        state:
-          maxLength: 50
-          type: string
-        country:
-          maxLength: 2
-          minLength: 2
-          pattern: ^[A-Z]+$
-          type: string
-          description: Country of the identity in ISO 3166 alpha-2 format.
-    CompanyType:
-      type: string
-      description: Supported company types - if company type is not listed, please contact our support team to check if the company type can be supported.
-      enum:
-      - SOLE_TRADER
-      - LLC
-      - PUBLIC_LIMITED_COMPANY
-      - LIMITED_LIABILITY_PARTNERSHIP
-      - NON_PROFIT_ORGANISATION
-    Email:
-      type: string
-      description: E-mail Address of the user
-      format: email
-    InstrumentType:
-      type: string
-      enum:
-      - managed_cards
-      - managed_accounts
-    InstrumentId:
-      required:
-      - id
-      - type
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        type:
-          $ref: '#/components/schemas/InstrumentType'
-    ProfileId:
-      type: string
-      description: 'The profile Id which a specific identity, instrument or transaction type is linked to.
-
-
-        Profiles contain configuration and determine behavioral aspects of the newly created transaction, for example, fees that may apply.
-
-
-        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s needs.
-
-
-        Profile Ids can be found in the Multi Portal, in the API Credentials page.
-
-        '
-      pattern: ^[0-9]+$
-    FieldValidationErrors:
-      type: object
-      properties:
-        name:
-          type: string
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldValidation'
-    Currency:
-      type: string
-      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
-      maxLength: 3
-      minLength: 3
-      pattern: ^[A-Z]*$
-    MessageValidation:
-      type: object
-      properties:
-        invalid:
-          type: boolean
-        fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldValidationErrors'
-    Id:
-      type: string
-      pattern: ^[0-9]+$
-    IdentityId:
-      required:
-      - type
-      - id
-      type: object
-      properties:
-        type:
-          enum:
-          - CONSUMER
-          - CORPORATE
-          type: string
-          description: Indicates the identity type.
-        id:
-          type: string
-          pattern: ^[0-9]+$
-          description: The identifier for the identity.
-    FieldValidationType:
-      type: string
-      enum:
-      - REQUIRED
-      - HAS_TEXT
-      - REQUIRES
-      - SIZE
-      - RANGE
-      - IN
-      - NOT_IN
-      - REGEX
-      - EXACTLY
-      - AT_LEAST
-      - AT_MOST
-      - ALL_OR_NONE
-    Mobile:
-      required:
-      - number
-      - countryCode
-      type: object
-      properties:
-        countryCode:
-          maxLength: 4
-          minLength: 1
-          type: string
-          pattern: ^\+[0-9]+$
-          description: The country code of the user mobile number (e.g. +44).
-        number:
-          pattern: ^[0-9]{1,12}$
-          type: string
-          description: The mobile number of the user - excluding country code.
-    Industry:
-      type: string
-      description: The industry of the identity.
-      deprecated: true
-      enum:
-      - ACCOUNTING
-      - AUDIT
-      - FINANCE
-      - PUBLIC_SECTOR_ADMINISTRATION
-      - ART_ENTERTAINMENT
-      - AUTO_AVIATION
-      - BANKING_LENDING
-      - BUSINESS_CONSULTANCY_LEGAL
-      - CONSTRUCTION_REPAIR
-      - EDUCATION_PROFESSIONAL_SERVICES
-      - INFORMATIONAL_TECHNOLOGIES
-      - TOBACCO_ALCOHOL
-      - GAMING_GAMBLING
-      - MEDICAL_SERVICES
-      - MANUFACTURING
-      - PR_MARKETING
-      - PRECIOUS_GOODS_JEWELRY
-      - NON_GOVERNMENTAL_ORGANIZATION
-      - INSURANCE_SECURITY
-      - RETAIL_WHOLESALE
-      - TRAVEL_TOURISM
-      - FREELANCER
     Error:
       type: object
       properties:
@@ -796,15 +523,6 @@ components:
           type: string
         message:
           type: string
-    DefaultError:
-      type: object
-      properties:
-        message:
-          maxLength: 255
-          type: string
-          description: When present helps to identify and fix the problem.
-          x-fieldValidation: size(_,255)
-      description: A default error model in case of errors other than 400, 409 or 504.
     ChargeFee:
       required:
       - transactionId
@@ -837,6 +555,500 @@ components:
         creationTimestamp:
           type: integer
           format: int64
+    InstrumentType:
+      type: string
+      enum:
+      - managed_cards
+      - managed_accounts
+    ValidationError:
+      type: array
+      description: Is returned as part of an HTTP error response whenever a validation error is detected. A list of the fields together with their syntax error will be provided.
+      items:
+        type: object
+        properties:
+          fieldName:
+            type: string
+          message:
+            maxLength: 255
+            type: string
+            description: When present helps to identify and fix the problem.
+          error:
+            type: string
+            enum:
+            - MUST_BE_FALSE
+            - MUST_BE_TRUE
+            - AT_MOST
+            - AT_LEAST
+            - FUTURE
+            - FUTURE_OR_PRESENT
+            - PAST
+            - PAST_OR_PRESENT
+            - LESS_THAN_ZERO
+            - LESS_THAN_OR_EQUAL_TO_ZERO
+            - GREATER_THAN_ZERO
+            - GREATER_THAN_OR_EQUAL_TO_ZERO
+            - HAS_TEXT
+            - REQUIRED
+            - REGEX
+            - RANGE
+            - IN
+            - NOT_IN
+            - NOT_EMPTY
+            - ALL_OR_NONE
+            - MUST_BE_EMPTY
+            - DEPENDS_ON
+            - INVALID_TYPE_OR_VALUE
+            - INVALID_REQUEST
+          params:
+            type: array
+            items:
+              type: string
+          invalidValue:
+            type: array
+            items:
+              type: string
+    TransactionState:
+      type: string
+      description: Status of the transaction.
+      enum:
+      - INITIALISED
+      - COMPLETED
+      - REJECTED
+      - FAILED
+      - PENDING
+      - SCHEDULED
+      - CANCELLED
+    Currency:
+      type: string
+      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
+      maxLength: 3
+      minLength: 3
+      pattern: ^[A-Z]*$
+    InstrumentId:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        type:
+          $ref: '#/components/schemas/InstrumentType'
+    CorporateRootUser:
+      required:
+      - id
+      - email
+      - name
+      - surname
+      - mobile
+      - active
+      - emailVerified
+      - mobileNumberVerified
+      - companyPosition
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/IdentityId'
+        name:
+          maxLength: 100
+          type: string
+          description: First name of the root user.
+        surname:
+          maxLength: 100
+          type: string
+          description: Last name of the root user.
+        email:
+          $ref: '#/components/schemas/Email'
+        mobile:
+          $ref: '#/components/schemas/Mobile'
+        companyPosition:
+          $ref: '#/components/schemas/CompanyPosition'
+        active:
+          type: boolean
+          description: The state of the root user. If false, then the user will not be able to log in.
+        emailVerified:
+          type: boolean
+          description: Indicates if the root user's email has been verified.
+        mobileNumberVerified:
+          type: boolean
+          description: Indicates if the root user's mobile number has been verified.
+        dateOfBirth:
+          description: Date of birth of the authorised user.
+          $ref: '#/components/schemas/Date'
+        tag:
+          $ref: '#/components/schemas/Tag'
+        locale:
+          $ref: '#/components/schemas/UserLocale'
+        brand:
+          $ref: '#/components/schemas/Brand'
+    Brand:
+      type: string
+      pattern: ^[a-zA-Z0-9]+$
+      description: 'Brand identifier used to determine the set of email and SMS user notification templates. Must be alphanumeric, up to 25 characters, and contain no spaces.
+
+        '
+      maxLength: 25
+    Industry:
+      type: string
+      description: The industry of the identity.
+      deprecated: true
+      enum:
+      - ACCOUNTING
+      - AUDIT
+      - FINANCE
+      - PUBLIC_SECTOR_ADMINISTRATION
+      - ART_ENTERTAINMENT
+      - AUTO_AVIATION
+      - BANKING_LENDING
+      - BUSINESS_CONSULTANCY_LEGAL
+      - CONSTRUCTION_REPAIR
+      - EDUCATION_PROFESSIONAL_SERVICES
+      - INFORMATIONAL_TECHNOLOGIES
+      - TOBACCO_ALCOHOL
+      - GAMING_GAMBLING
+      - MEDICAL_SERVICES
+      - MANUFACTURING
+      - PR_MARKETING
+      - PRECIOUS_GOODS_JEWELRY
+      - NON_GOVERNMENTAL_ORGANIZATION
+      - INSURANCE_SECURITY
+      - RETAIL_WHOLESALE
+      - TRAVEL_TOURISM
+      - FREELANCER
+    Mobile:
+      required:
+      - number
+      - countryCode
+      type: object
+      properties:
+        countryCode:
+          maxLength: 4
+          minLength: 1
+          type: string
+          pattern: ^\+[0-9]+$
+          description: The country code of the user mobile number (e.g. +44).
+        number:
+          pattern: ^[0-9]{1,12}$
+          type: string
+          description: The mobile number of the user - excluding country code.
+    CreatedCorporate:
+      allOf:
+      - $ref: '#/components/schemas/Corporate'
+      - type: object
+        required:
+        - rootUser
+        properties:
+          rootUser:
+            description: The root user of the Corporate Identity.
+            $ref: '#/components/schemas/CreatedCorporateRootUser'
+    UserLocale:
+      type: string
+      pattern: ^[a-z]{2}(-[A-Z]{2})?$
+      description: 'BCP47 locale code (e.g. en, en-US). The locale determines which email and SMS user notification templates are used.
+
+        '
+      maxLength: 5
+      example: en-GB
+    CompanyType:
+      type: string
+      description: Supported company types - if company type is not listed, please contact our support team to check if the company type can be supported.
+      enum:
+      - SOLE_TRADER
+      - LLC
+      - PUBLIC_LIMITED_COMPANY
+      - LIMITED_LIABILITY_PARTNERSHIP
+      - NON_PROFIT_ORGANISATION
+    CorporateSourceOfFunds:
+      type: string
+      description: The corporate's source of funds.
+      deprecated: true
+      enum:
+      - LABOUR_CONTRACT
+      - CIVIL_CONTRACT
+      - RENT
+      - FUNDS_FROM_OTHER_AUXILIARY_SOURCES
+      - SALE_OF_MOVABLE_ASSETS
+      - SALE_OF_REAL_ESTATE
+      - ORDINARY_BUSINESS_ACTIVITY
+      - DIVIDENDS
+      - LOAN_FROM_FINANCIAL_INSTITUTIONS_CREDIT_UNIONS
+      - LOAN_FROM_THIRD_PARTIES
+      - SALE_OF_COMPANY_SHARES_BUSINESS
+      - OTHER
+      - DONATION
+      - INHERITANCE
+      - ORIGIN_OF_FUNDS_UNKNOWN
+    SyntaxError:
+      type: object
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      properties:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
+    Corporate:
+      required:
+      - id
+      - profileId
+      - rootUser
+      - company
+      - ipAddress
+      - baseCurrency
+      - creationTimestamp
+      type: object
+      properties:
+        id:
+          description: The unique identifier of the Corporate Identity.
+          $ref: '#/components/schemas/IdentityId'
+        profileId:
+          $ref: '#/components/schemas/ProfileId'
+        tag:
+          $ref: '#/components/schemas/Tag'
+        rootUser:
+          description: The root user of the Corporate Identity.
+          $ref: '#/components/schemas/CorporateRootUser'
+        company:
+          required:
+          - name
+          - type
+          - countryOfRegistration
+          type: object
+          properties:
+            name:
+              maxLength: 100
+              type: string
+              description: The registered name of the company.
+            type:
+              $ref: '#/components/schemas/CompanyType'
+            registrationNumber:
+              maxLength: 20
+              minLength: 1
+              type: string
+              description: The company registration number.
+            registeredAddress:
+              $ref: '#/components/schemas/LegalAddress'
+            businessAddress:
+              description: The address where the business is based.
+              $ref: '#/components/schemas/Address'
+            countryOfRegistration:
+              maxLength: 2
+              minLength: 2
+              pattern: ^[A-Z]+$
+              type: string
+              description: The country of company registration in ISO 3166 alpha-2.
+            incorporatedOn:
+              description: The company's date of incorporation
+              $ref: '#/components/schemas/Date'
+        industry:
+          $ref: '#/components/schemas/Industry'
+        sourceOfFunds:
+          $ref: '#/components/schemas/CorporateSourceOfFunds'
+        sourceOfFundsOther:
+          type: string
+          description: Description of source of funds in case `OTHER` was chosen.
+          deprecated: true
+        acceptedTerms:
+          type: boolean
+          description: Must be set to *true* to indicate that the root user has accepted the terms and conditions.
+        ipAddress:
+          maxLength: 45
+          minLength: 5
+          type: string
+          description: The IP address of the user doing the registration.
+        baseCurrency:
+          $ref: '#/components/schemas/Currency'
+        feeGroup:
+          type: string
+          description: Fee groups allow the possibility to charge different fees to users under the same profile. If fee groups are not required, ignore this field.
+        creationTimestamp:
+          type: integer
+          format: int64
+          description: The time when the Corporate was created, expressed in Epoch timestamp using millisecond precision.
+        retailQualifier:
+          type: string
+          description: Indicates the type of corporate entity based on its retail status.
+          enum:
+          - RETAIL
+          - NON_RETAIL
+          - UNKNOWN
+    Date:
+      required:
+      - year
+      - month
+      - day
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int32
+          maximum: 2100
+          minimum: 1900
+        month:
+          type: integer
+          format: int32
+          maximum: 12
+          minimum: 1
+        day:
+          type: integer
+          format: int32
+          maximum: 31
+          minimum: 1
+    IdentityId:
+      required:
+      - type
+      - id
+      type: object
+      properties:
+        type:
+          enum:
+          - CONSUMER
+          - CORPORATE
+          type: string
+          description: Indicates the identity type.
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The identifier for the identity.
+    Address:
+      required:
+      - addressLine1
+      - city
+      - postCode
+      - country
+      type: object
+      properties:
+        addressLine1:
+          minLength: 1
+          maxLength: 150
+          type: string
+          description: The first line of the address.
+        addressLine2:
+          maxLength: 150
+          type: string
+          description: The second line of the address.
+        city:
+          maxLength: 50
+          type: string
+          description: The city of the address.
+        postCode:
+          maxLength: 10
+          pattern: ^[A-Za-z0-9 -]*$
+          type: string
+          description: The post code associated with the address.
+        state:
+          maxLength: 50
+          type: string
+          description: The state of the address.
+        country:
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]+$
+          type: string
+          description: The country of the address expressed in ISO 3166 alpha-2 format.
+    Tag:
+      type: string
+      description: The tag field is a custom field that can be used to search and filter.
+      maxLength: 50
+      pattern: ^[a-zA-Z0-9_-]+$
+    LegalAddress:
+      required:
+      - addressLine1
+      - city
+      - country
+      type: object
+      description: The legal address of the company. This information is captured via the Due Diligence (KYB) process.
+      properties:
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        city:
+          type: string
+        postCode:
+          maxLength: 10
+          pattern: ^[A-Za-z0-9 -]*$
+          type: string
+        state:
+          maxLength: 50
+          type: string
+        country:
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]+$
+          type: string
+          description: Country of the identity in ISO 3166 alpha-2 format.
+    CreatedCorporateRootUser:
+      allOf:
+      - $ref: '#/components/schemas/CorporateRootUser'
+      - type: object
+        required:
+        - passwordAlreadySet
+        properties:
+          passwordAlreadySet:
+            type: boolean
+            description: When the corporate root user is a single email multiple identities user, this field returns true, indicating that there is no need to call the `passwordCreate` operation for this user.
+    ProfileId:
+      type: string
+      description: 'The profile Id which a specific identity, instrument or transaction type is linked to.
+
+
+        Profiles contain configuration and determine behavioral aspects of the newly created transaction, for example, fees that may apply.
+
+
+        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s needs.
+
+
+        Profile Ids can be found in the Multi Portal, in the API Credentials page.
+
+        '
+      pattern: ^[0-9]+$
+    Email:
+      type: string
+      description: E-mail Address of the user
+      format: email
+    CompanyPosition:
+      type: string
+      description: The company position of the Corporate Root User.
+      enum:
+      - DIRECTOR
+      - AUTHORISED_REPRESENTATIVE
+    FieldValidationType:
+      type: string
+      enum:
+      - REQUIRED
+      - HAS_TEXT
+      - REQUIRES
+      - SIZE
+      - RANGE
+      - IN
+      - NOT_IN
+      - REGEX
+      - EXACTLY
+      - AT_LEAST
+      - AT_MOST
+      - ALL_OR_NONE
     FieldValidation:
       type: object
       properties:
@@ -846,164 +1058,279 @@ components:
           type: array
           items:
             type: string
-    Tag:
+    FieldValidationErrors:
+      type: object
+      properties:
+        name:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidation'
+    MessageValidation:
+      type: object
+      properties:
+        invalid:
+          type: boolean
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidationErrors'
+    DefaultError:
+      type: object
+      properties:
+        message:
+          maxLength: 255
+          type: string
+          description: When present helps to identify and fix the problem.
+          x-fieldValidation: size(_,255)
+      description: A default error model in case of errors other than 400, 409 or 504.
+    ClientInvalidRequest:
+      type: object
+      properties:
+        message:
+          maxLength: 255
+          type: string
+          description: When present helps to identify and fix the problem.
+          x-fieldValidation: size(_,255)
+        validation:
+          allOf:
+          - $ref: '#/components/schemas/MessageValidation'
+          - description: Description of fields which were invalid.
+    BeneficiaryEventType:
       type: string
-      description: The tag field is a custom field that can be used to search and filter.
-      maxLength: 50
-      pattern: ^[a-zA-Z0-9_-]+$
-    CompanyPosition:
-      type: string
-      description: The company position of the Corporate Root User.
       enum:
+      - STATUS_UPDATED
+      - BENEFICIARY_TYPE_UPDATED
+      - FIRST_NAME_UPDATED
+      - MIDDLE_NAME_UPDATED
+      - LAST_NAME_UPDATED
+      - EMAIL_UPDATED
+    IdentityDeactivatedEvent:
+      required:
+      - actionDoneBy
+      - emailAddress
+      - reasonCode
+      type: object
+      properties:
+        actionDoneBy:
+          $ref: '#/components/schemas/ActionDoneBy'
+        emailAddress:
+          type: string
+        reasonCode:
+          $ref: '#/components/schemas/IdentityDeactivatedReasonCode'
+    KyiStatus:
+      type: string
+      enum:
+      - UNDEFINED
+      - NOT_STARTED
+      - INITIATED
+      - PENDING_REVIEW
+      - APPROVED
+      - REJECTED
+    CorporateKybFailureReason:
+      type: string
+      enum:
+      - UNDEFINED_REQUIRED_INTERVENTION
+      - DOCUMENTS_UNSATISFACTORY
+      - SUPPLIED_DATA_AND_DOCUMENTS_MISMATCH
+      - LANGUAGE_IN_DOCUMENTS_UNSUPPORTED
+      - SELFIE_UNSATISFACTORY
+      - SELFIE_AND_DOCUMENTS_MISMATCH
+      - CORPORATE_DETAILS_UNSATISFACTORY
+      - BENEFICIARY_DETAILS_UNSATISFACTORY
+      - REPRESENTATIVE_DETAILS_UNSATISFACTORY
+      - OTHER
+      - ROOT_USER_UNMATCHED_TO_DIRECTOR_OR_REPRESENTATIVE
+      - UNSUPPORTED_COUNTRY
+      - EXPIRED_KYC_DOCUMENTS
+    IdentityActivatedEvent:
+      required:
+      - actionDoneBy
+      - emailAddress
+      type: object
+      properties:
+        actionDoneBy:
+          $ref: '#/components/schemas/ActionDoneBy'
+        emailAddress:
+          type: string
+    IdentityDeactivatedReasonCode:
+      type: string
+      enum:
+      - UNDEFINED_REASON
+      - ACCOUNT_REVIEW
+      - ACCOUNT_SECURITY
+      - TEMPORARY
+      - ACCOUNT_CLOSURE
+      - ACCOUNT_ABANDONED
+    BeneficiaryVerifiedEvent:
+      type: object
+      properties:
+        event:
+          type: array
+          description: 'The event that triggered this webhook notification. The event
+
+            is structured to describe the parameter that has triggered the event followed
+
+            by the action that occurred.
+
+            '
+          items:
+            $ref: '#/components/schemas/BeneficiaryEventType'
+        eventDetails:
+          type: array
+          description: A reason, if any, describing why this event has occurred.
+          items:
+            $ref: '#/components/schemas/CorporateKybFailureReason'
+        additionalInformation:
+          $ref: '#/components/schemas/BeneficiaryVerifiedEventAdditionalInformation'
+          description: Additional information related to the event triggering this notification.
+        rejectionComment:
+          type: string
+          description: Reason shown to the user in case of temporary rejection.
+    BeneficiaryInfo:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/BeneficiaryType'
+          description: Type of the beneficiary.
+        firstName:
+          type: string
+          description: First name of the beneficiary.
+        middleName:
+          type: string
+          description: Middle name of the beneficiary.
+        lastName:
+          type: string
+          description: Last name of the beneficiary.
+        email:
+          type: string
+          description: Email of the beneficiary.
+        status:
+          $ref: '#/components/schemas/KyiStatus'
+          description: Effective KYB Status of the beneficiary.
+        ongoingKybStatus:
+          $ref: '#/components/schemas/KyiStatus'
+          description: Ongoing KYB Status of the beneficiary.
+    BeneficiaryType:
+      type: string
+      enum:
+      - UNDEFINED_BENEFICIARY_TYPE
+      - UBO
       - DIRECTOR
-      - AUTHORISED_REPRESENTATIVE
-  responses:
-    InternalServerError:
-      description: Internal Server Error - There is a problem with the server. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    BadRequestError:
-      description: Bad Request Error - Your request is invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                maxLength: 255
-                type: string
-                description: When present helps to identify and fix the problem.
-              syntaxErrors:
-                $ref: '#/components/schemas/SyntaxError'
-    Error:
-      description: Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    ChargeFeeResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ChargeFee'
-    TooManyRequests:
-      description: Too many requests.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-        x-ratelimit-limit:
-          $ref: '#/components/headers/x-ratelimit-limit'
-        x-ratelimit-reset:
-          $ref: '#/components/headers/x-ratelimit-reset'
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    NotFound:
-      description: Not found - The requested resource couldn't be found.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    ChargeFeeConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - UNRESOLVED_FEE_TYPE
-                - UNRESOLVED_CURRENCY
-                - UNRESOLVED_INSTRUMENT
-                - FUNDS_INSUFFICIENT
-                - IDENTITY_NOT_OWNER_OF_INSTRUMENT
-                - FEE_AMOUNT_NOT_SET
-    CorporateCreateConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - PAYMENT_MODEL_CONSTRAINTS_VIOLATED
-                - PROFILE_NOT_FOUND
-                - PROFILE_INACTIVE
-                - ROOT_EMAIL_NOT_UNIQUE
-                - COMPANY_NOT_FOUND
-                - COMPANY_LOOKUP_FAILED
-                - CURRENCY_UNSUPPORTED
-                - FEE_GROUP_INVALID
-                - COUNTRY_INVALID
-                - MOBILE_OR_COUNTRY_CODE_INVALID
-                - COUNTRY_UNSUPPORTED
-                - ROOT_USER_INACTIVE
-                - ROOT_EMAIL_NOT_VERIFIED
-                - KYC_APPROVAL_MISSING
-                - PROFILE_MISMATCH
-                - COMPANY_TYPE_UNSUPPORTED
-                - EMAIL_DOMAIN_NOT_ALLOWED
-    Forbidden:
-      description: Forbidden - Access to the requested resource or action is forbidden.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INSUFFICIENT_PERMISSIONS
-    BackofficeBadRequestError:
-      description: Bad Request Error - Your request is invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                maxLength: 255
-                type: string
-                description: When present helps to identify and fix the problem.
-              validationErrors:
-                $ref: '#/components/schemas/ValidationError'
-    CreateCorporateResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CreatedCorporate'
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
+      - UNKNOWN
+      - SHAREHOLDER
+      - PARTNER
+      - OTHER_DIRECTOR
+    BeneficiaryVerifiedEventAdditionalInformation:
+      type: object
+      properties:
+        corporateId:
+          type: string
+          pattern: ^[0-9]+$
+          description: The corporate id whose beneficiary has triggered this event.
+        corporateName:
+          type: string
+          description: The corporate name whose beneficiary has triggered this event.
+        rootUserEmail:
+          type: string
+          description: The corporate's root user email.
+        kybStatus:
+          $ref: '#/components/schemas/KyiStatus'
+          description: The status of the Full Company Verification Checks for the corporate entity.
+        beneficiary:
+          $ref: '#/components/schemas/BeneficiaryInfo'
+        documentExpiryDate:
+          type: string
+          pattern: ^[0-9]+$
+          description: Epoch timestamp using millisecond precision.
+        identityRestrictionDate:
+          type: string
+          pattern: ^[0-9]+$
+          description: Epoch timestamp using millisecond precision.
+    ActionDoneBy:
+      type: string
+      enum:
+      - UNDEFINED
+      - ADMIN
+      - INNOVATOR
+    KybEvent:
+      type: object
+      properties:
+        corporateId:
+          type: string
+          pattern: ^[0-9]+$
+          description: Id of the corporate.
+        corporateEmail:
+          type: string
+          description: Email of the corporate.
+        status:
+          $ref: '#/components/schemas/KyiStatus'
+          description: Effective KYB status of the corporate.
+        details:
+          type: array
+          description: Action which my be required to re-process kyb in case of temporary rejections.
+          items:
+            $ref: '#/components/schemas/CorporateKybFailureReason'
+        rejectionComment:
+          type: string
+          description: Reason shown to the user in case of temporary rejection.
+        ongoingStatus:
+          $ref: '#/components/schemas/KyiStatus'
+          description: Ongoing KYB Status of the corporate.
+  parameters:
+    idempotency-ref:
+      name: idempotency-ref
+      in: header
+      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
+      required: false
+      schema:
+        type: string
+    call-ref:
+      name: call-ref
+      in: header
+      description: A call reference generated by the caller and unique to the caller to provide correlation between the caller and system with a maximum length of 255
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+    signature:
+      name: signature
+      in: header
+      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `published-timestamp` using your API key.
+      required: true
+      style: simple
+      explode: false
+      deprecated: true
+      schema:
+        type: string
+    signature-v2:
+      name: signature-v2
+      in: header
+      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `call-ref + payload + published-timestamp` using your API key.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    call-ref_2:
+      description: A call reference generated by the caller and unique to the caller to provide correlation between the caller and system with a maximum length of 255
+      in: header
+      name: call-ref
+      required: false
+      schema:
+        type: string
+    published-timestamp:
+      name: published-timestamp
+      in: header
+      description: The timestamp, expressed in Epoch timestamp using millisecond precision, when this event was published.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        format: int64
   headers:
     request-ref:
       description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
@@ -1028,24 +1355,14 @@ components:
       required: true
       schema:
         type: string
-  parameters:
-    call-ref:
-      name: call-ref
-      in: header
-      description: A call reference generated by the caller and unique to the caller to provide correlation between the caller and system with a maximum length of 255
-      required: false
-      style: simple
-      explode: false
-      schema:
-        type: string
-    idempotency-ref:
-      name: idempotency-ref
-      in: header
-      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
-      required: false
-      schema:
-        type: string
   requestBodies:
+    ChargeFeeRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            description: The custom fee to be charged to the consumer/corporate.
+            $ref: '#/components/schemas/Fee'
     CorporateCreateRequest:
       required: true
       content:
@@ -1150,13 +1467,6 @@ components:
               feeGroup:
                 type: string
                 description: Fee groups allow the possibility to charge different fees to users under the same profile. If fee groups are not required, ignore this field.
-    ChargeFeeRequest:
-      required: true
-      content:
-        application/json:
-          schema:
-            description: The custom fee to be charged to the consumer/corporate.
-            $ref: '#/components/schemas/Fee'
   securitySchemes:
     api_key:
       type: apiKey
@@ -1168,6 +1478,31 @@ components:
       description: The authentication token representing the user. This will be included in the login response object.
       scheme: bearer
       bearerFormat: JWT
+    api-key:
+      type: apiKey
+      description: An API key defined in your User API Client  (or Delegate API Client - this feature is available only to customers enabled with delegation functionality).  API Clients are as managed in the Embedder Portal
+      name: api-key
+      in: header
+    webhooks_key:
+      type: apiKey
+      description: The Webhooks key can be found in the API Credentials tab in your Portal Page.
+      name: webhooks-key
+      in: header
+    API_Secret_Key:
+      type: apiKey
+      description: The API Secret Key - available from the Configuration area of the Innovator Portal
+      name: programme-key
+      in: header
+    Auth_Token:
+      type: http
+      description: 'Authorization Token returned by login - example format: e6YrWi53lW0Bb6TbBL4ADA=='
+      scheme: bearer
+      bearerFormat: JWT
+x-refined-from:
+- weavr-multi-backoffice-openapi-original.yml
+- weavr-multi-openapi-original.yml
+- weavr-simulator-openapi-original.yml
+- weavr-webhooks-openapi-original.yml
 x-tagGroups:
 - name: Access
   tags:

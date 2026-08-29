@@ -1,27 +1,21 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  version: v3
-  title: Weavr Multi Product BackOffice Access Token Transfers API
+  title: Weavr Transfers API
+  contact:
+    name: Weavr
+    url: https://weavr.io
   x-logo:
     url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
     backgroundColor: '#FFFFFF'
     altText: Weavr
-  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
-
-    identities and their instruments, without requiring the users to be logged in.
-
-
-    A token is to be obtained through the `access_token` method, and this will allow relevant operations
-
-    to be performed on behalf of this same identity.
-
-    '
-  contact:
-    name: Weavr
-    url: https://weavr.io
+  version: '1.0'
+  description: 'Operations tagged Transfers across 3 of this provider''s published API definitions: weavr-multi-backoffice-openapi-original.yml, weavr-multi-openapi-original.yml, weavr-webhooks-openapi-original.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - description: Weavr Sandbox Environment
   url: https://sandbox.weavr.io/multi/backoffice
+- description: Weavr Sandbox Environment
+  url: https://sandbox.weavr.io/multi
+- url: '""'
 tags:
 - name: Transfers
 paths:
@@ -94,6 +88,9 @@ paths:
       security:
       - auth_token: []
         api_key: []
+    servers:
+    - description: Weavr Sandbox Environment
+      url: https://sandbox.weavr.io/multi/backoffice
   /transfers/{id}:
     get:
       tags:
@@ -129,6 +126,9 @@ paths:
       security:
       - auth_token: []
         api_key: []
+    servers:
+    - description: Weavr Sandbox Environment
+      url: https://sandbox.weavr.io/multi/backoffice
   /transfers/bulk/cancel:
     post:
       tags:
@@ -158,15 +158,205 @@ paths:
       security:
       - auth_token: []
         api-key: []
+    servers:
+    - description: Weavr Sandbox Environment
+      url: https://sandbox.weavr.io/multi
+webhooks:
+  /transfers/watch:
+    post:
+      tags:
+      - Transfers
+      summary: Transfer transaction
+      description: Notification that a Transfer transaction has been processed.
+      operationId: transfers_watch
+      parameters:
+      - $ref: '#/components/parameters/call-ref'
+      - $ref: '#/components/parameters/published-timestamp'
+      - $ref: '#/components/parameters/signature'
+      - $ref: '#/components/parameters/signature-v2'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferEvent'
+        required: true
+      responses:
+        '204':
+          description: Success - No Content
+    servers:
+    - url: '""'
 components:
+  responses:
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    BackofficeBadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              validationErrors:
+                $ref: '#/components/schemas/ValidationError'
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InstrumentForbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - STEP_UP_REQUIRED
+                - ACCESS_TOKEN_REQUIRED
+                - INSUFFICIENT_PERMISSIONS
+    TransferResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Transfer'
+    TransfersGetResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              transfer:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transfer'
+              count:
+                type: integer
+                description: Total number of records (excluding the paging limit).
+                format: int32
+              responseCount:
+                type: integer
+                description: Total number of records returned in this response.
+                format: int32
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TransferConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - PROFILE_INACTIVE
+                - MODEL_CONSTRAINTS_VIOLATED
+                - INTERCEPTOR_DENIED_TRANSACTION
+                - INSTRUMENT_DENIED_TRANSACTION
+                - SOURCE_INSTRUMENT_DESTROYED
+                - DESTINATION_INSTRUMENT_DESTROYED
+                - FOREX_TRADE_DENIED_TRANSACTION
+                - CURRENCY_MISMATCH
+                - SOURCE_INSTRUMENT_BLOCKED
+                - DESTINATION_INSTRUMENT_BLOCKED
+                - FUNDS_INSUFFICIENT
+                - AMOUNT_INVALID
+                - SOURCE_NOT_FOUND
+                - DESTINATION_NOT_FOUND
+                - FEE_NOT_CONFIGURED_FOR_CURRENCY
+                - DESTINATION_LIMIT_EXCEEDED
+                - SOURCE_CANNOT_BE_DEBIT_MODE_CARD
+                - DESTINATION_CANNOT_BE_DEBIT_MODE_CARD
+                - TRANSFER_BETWEEN_INSTRUMENTS_UNSUPPORTED
+                - SOURCE_AND_DESTINATION_MUST_BE_DIFFERENT
+                - SCHEDULED_TIMESTAMP_INVALID
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    TransactionBulkCancelResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TransactionBulkCancelResponse'
   parameters:
-    instrumentId:
-      name: instrumentId
-      in: query
-      required: false
-      description: Filter by the source instrument id.
-      schema:
-        $ref: '#/components/schemas/InstrumentId'
     transferTag:
       name: tag
       in: query
@@ -174,46 +364,6 @@ components:
       description: Filter by the transfer tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all entries.
       schema:
         type: string
-    transferCreatedTo:
-      name: createdTo
-      in: query
-      required: false
-      description: Filter for transfer transactions created before `createdTo` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers.
-      schema:
-        type: integer
-        format: int64
-    transferCreatedFrom:
-      name: createdFrom
-      in: query
-      required: false
-      description: Filter for transfer transactions created after `createdFrom` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers.
-      schema:
-        type: integer
-        format: int64
-    idempotency-ref:
-      name: idempotency-ref
-      in: header
-      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
-      required: false
-      schema:
-        type: string
-    limit:
-      name: limit
-      in: query
-      required: false
-      description: The limit of the results for paging, starting at the offset. Limit is always capped at 100.
-      schema:
-        maximum: 100
-        minimum: 1
-        type: integer
-        format: int32
-    transferProfileId:
-      name: profileId
-      in: query
-      required: false
-      description: Filter by the transfer profile. Leave out to fetch all transfer transactions.
-      schema:
-        $ref: '#/components/schemas/ProfileId'
     transactionState:
       name: state
       in: query
@@ -224,6 +374,36 @@ components:
         uniqueItems: true
         items:
           $ref: '#/components/schemas/TransactionState'
+    transferCreatedTo:
+      name: createdTo
+      in: query
+      required: false
+      description: Filter for transfer transactions created before `createdTo` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers.
+      schema:
+        type: integer
+        format: int64
+    idempotency-ref:
+      name: idempotency-ref
+      in: header
+      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
+      required: false
+      schema:
+        type: string
+    instrumentId:
+      name: instrumentId
+      in: query
+      required: false
+      description: Filter by the source instrument id.
+      schema:
+        $ref: '#/components/schemas/InstrumentId'
+    transferCreatedFrom:
+      name: createdFrom
+      in: query
+      required: false
+      description: Filter for transfer transactions created after `createdFrom` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers.
+      schema:
+        type: integer
+        format: int64
     offset:
       name: offset
       in: query
@@ -233,7 +413,79 @@ components:
         minimum: 0
         type: integer
         format: int32
+    transferProfileId:
+      name: profileId
+      in: query
+      required: false
+      description: Filter by the transfer profile. Leave out to fetch all transfer transactions.
+      schema:
+        $ref: '#/components/schemas/ProfileId'
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: The limit of the results for paging, starting at the offset. Limit is always capped at 100.
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+    transferExecutedFrom:
+      name: executedFrom
+      in: query
+      required: false
+      description: Filter for transfer transactions executed after `executedFrom` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers.
+      schema:
+        type: integer
+        format: int64
+    transferExecutedTo:
+      name: executedTo
+      in: query
+      required: false
+      description: Filter for transfer transactions executed before `executedTo` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers.
+      schema:
+        type: integer
+        format: int64
+    signature:
+      name: signature
+      in: header
+      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `published-timestamp` using your API key.
+      required: true
+      style: simple
+      explode: false
+      deprecated: true
+      schema:
+        type: string
+    signature-v2:
+      name: signature-v2
+      in: header
+      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `call-ref + payload + published-timestamp` using your API key.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    call-ref:
+      description: A call reference generated by the caller and unique to the caller to provide correlation between the caller and system with a maximum length of 255
+      in: header
+      name: call-ref
+      required: false
+      schema:
+        type: string
+    published-timestamp:
+      name: published-timestamp
+      in: header
+      description: The timestamp, expressed in Epoch timestamp using millisecond precision, when this event was published.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        format: int64
   schemas:
+    Id:
+      type: string
+      pattern: ^[0-9]+$
     CurrencyAmount:
       required:
       - currency
@@ -252,6 +504,42 @@ components:
 
             '
       description: The object representing a monetary amount in a particular currency.
+    ExecutionTimestamp:
+      pattern: ^[0-9]+$
+      type: string
+      description: The epoch timestamp at which the transaction was executed, transitioning to a final state such as COMPLETED, REJECTED, or FAILED.
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    Tag:
+      type: string
+      description: The tag field is a custom field that can be used to search and filter.
+      maxLength: 50
+      pattern: ^[a-zA-Z0-9_-]+$
+    InstrumentType:
+      type: string
+      enum:
+      - managed_cards
+      - managed_accounts
+    ProfileId:
+      type: string
+      description: 'The profile Id which a specific identity, instrument or transaction type is linked to.
+
+
+        Profiles contain configuration and determine behavioral aspects of the newly created transaction, for example, fees that may apply.
+
+
+        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s needs.
+
+
+        Profile Ids can be found in the Multi Portal, in the API Credentials page.
+
+        '
+      pattern: ^[0-9]+$
     ValidationError:
       type: array
       description: Is returned as part of an HTTP error response whenever a validation error is detected. A list of the fields together with their syntax error will be provided.
@@ -299,56 +587,6 @@ components:
             type: array
             items:
               type: string
-    TransactionCancellationReason:
-      type: string
-      pattern: ^[ a-zA-Z0-9_-]+$
-      maxLength: 50
-      description: The reason the scheduled transaction was cancelled.
-    SyntaxError:
-      type: object
-      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
-      properties:
-        invalidFields:
-          type: array
-          items:
-            type: object
-            properties:
-              params:
-                type: array
-                items:
-                  type: string
-              fieldName:
-                type: string
-              error:
-                type: string
-                enum:
-                - REQUIRED
-                - HAS_TEXT
-                - REQUIRES
-                - SIZE
-                - RANGE
-                - IN
-                - NOT_IN
-                - REGEX
-                - EXACTLY
-                - AT_LEAST
-                - AT_MOST
-                - ALL_OR_NONE
-    TransactionState:
-      type: string
-      description: Status of the transaction.
-      enum:
-      - INITIALISED
-      - COMPLETED
-      - REJECTED
-      - FAILED
-      - PENDING
-      - SCHEDULED
-      - CANCELLED
-    ScheduledTimestamp:
-      pattern: ^[0-9]+$
-      type: string
-      description: The epoch timestamp at which the transaction is scheduled to be executed.
     Transfer:
       required:
       - id
@@ -394,6 +632,103 @@ components:
           $ref: '#/components/schemas/ExecutionTimestamp'
         cancellationReason:
           $ref: '#/components/schemas/TransactionCancellationReason'
+    TransactionState:
+      type: string
+      description: Status of the transaction.
+      enum:
+      - INITIALISED
+      - COMPLETED
+      - REJECTED
+      - FAILED
+      - PENDING
+      - SCHEDULED
+      - CANCELLED
+    TransactionCancellationReason:
+      type: string
+      pattern: ^[ a-zA-Z0-9_-]+$
+      maxLength: 50
+      description: The reason the scheduled transaction was cancelled.
+    Currency:
+      type: string
+      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
+      maxLength: 3
+      minLength: 3
+      pattern: ^[A-Z]*$
+    ScheduledTimestamp:
+      pattern: ^[0-9]+$
+      type: string
+      description: The epoch timestamp at which the transaction is scheduled to be executed.
+    InstrumentId:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        type:
+          $ref: '#/components/schemas/InstrumentType'
+    TransactionCancelRequest:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The id of the transaction.
+        cancellationReason:
+          $ref: '#/components/schemas/TransactionCancellationReason'
+    TransactionBulkCancelResponse:
+      required:
+      - cancellations
+      type: object
+      properties:
+        cancellations:
+          type: array
+          description: Contains the cancellation details for each of the transactions.
+          items:
+            $ref: '#/components/schemas/TransactionCancelResponse'
+    SyntaxError:
+      type: object
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      properties:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
+    TransactionBulkCancelRequest:
+      required:
+      - cancellations
+      type: object
+      properties:
+        cancellations:
+          type: array
+          description: Contains the details of the transactions to be cancelled.
+          items:
+            $ref: '#/components/schemas/TransactionCancelRequest'
     TransactionCancelResponse:
       required:
       - id
@@ -430,293 +765,128 @@ components:
           - TRANSACTION_NOT_SCHEDULED
           - FORBIDDEN
           - NOT_FOUND
-    TransactionBulkCancelRequest:
-      required:
-      - cancellations
-      type: object
-      properties:
-        cancellations:
-          type: array
-          description: Contains the details of the transactions to be cancelled.
-          items:
-            $ref: '#/components/schemas/TransactionCancelRequest'
-    InstrumentType:
+    CreateTransferConflictErrorCode:
       type: string
       enum:
-      - managed_cards
-      - managed_accounts
-    InstrumentId:
+      - UNDEFINED
+      - NO_ERROR
+      - PROFILE_INACTIVE
+      - MODEL_CONSTRAINTS_VIOLATED
+      - DENIED_BY_INTERCEPTOR
+      - DENIED_BY_INSTRUMENT
+      - DENIED_BY_FOREX_TRADE
+      - CURRENCY_MISMATCH
+      - INSUFFICIENT_FUNDS
+      - SYSTEM_ERROR
+      - SOURCE_NOT_FOUND
+      - DESTINATION_NOT_FOUND
+      - FEE_NOT_CONFIGURED_FOR_CURRENCY
+      - DESTINATION_LIMIT_EXCEEDED
+      - TRANSFER_BETWEEN_INSTRUMENTS_UNSUPPORTED
+      - SOURCE_INSTRUMENT_BLOCKED
+      - DESTINATION_INSTRUMENT_BLOCKED
+      - INVALID_AMOUNT
+      - SCHEDULED_TIMESTAMP_INVALID
+    StringWrappedTypeId:
       required:
-      - id
       - type
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        type:
-          $ref: '#/components/schemas/InstrumentType'
-    ProfileId:
-      type: string
-      description: 'The profile Id which a specific identity, instrument or transaction type is linked to.
-
-
-        Profiles contain configuration and determine behavioral aspects of the newly created transaction, for example, fees that may apply.
-
-
-        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s needs.
-
-
-        Profile Ids can be found in the Multi Portal, in the API Credentials page.
-
-        '
-      pattern: ^[0-9]+$
-    Currency:
-      type: string
-      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
-      maxLength: 3
-      minLength: 3
-      pattern: ^[A-Z]*$
-    Id:
-      type: string
-      pattern: ^[0-9]+$
-    TransactionBulkCancelResponse:
-      required:
-      - cancellations
-      type: object
-      properties:
-        cancellations:
-          type: array
-          description: Contains the cancellation details for each of the transactions.
-          items:
-            $ref: '#/components/schemas/TransactionCancelResponse'
-    TransactionCancelRequest:
-      required:
       - id
       type: object
       properties:
+        type:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9_-]+$
+          type: string
         id:
           type: string
           pattern: ^[0-9]+$
-          description: The id of the transaction.
-        cancellationReason:
-          $ref: '#/components/schemas/TransactionCancellationReason'
-    Error:
+    TransferEvent:
+      required:
+      - eventType
+      - publishedTimestamp
+      - transfer
       type: object
       properties:
-        code:
+        eventType:
+          $ref: '#/components/schemas/TransferEventTransferEventType'
+        transfer:
+          $ref: '#/components/schemas/LegacyTransfer'
+        publishedTimestamp:
           type: string
-        message:
+          pattern: ^[0-9]+$
+          description: Epoch timestamp using millisecond precision.
+    TransferEventTransferEventType:
+      type: string
+      enum:
+      - PENDING
+      - COMPLETED
+      - FAILED
+      - SCHEDULED
+      - CANCELLED
+    LegacyCurrencyAmount:
+      required:
+      - currency
+      - amount
+      type: object
+      properties:
+        currency:
+          $ref: '#/components/schemas/Currency'
+        amount:
           type: string
-    ExecutionTimestamp:
-      pattern: ^[0-9]+$
+          pattern: ^[0-9]+$
+          description: The monetary amount, scaled to the lowest denomination of the currency.
+      description: The object representing a monetary amount in a particular currency.
+    TransferState:
       type: string
-      description: The epoch timestamp at which the transaction was executed, transitioning to a final state such as COMPLETED, REJECTED, or FAILED.
-    Tag:
-      type: string
-      description: The tag field is a custom field that can be used to search and filter.
-      maxLength: 50
-      pattern: ^[a-zA-Z0-9_-]+$
-  responses:
-    TransferResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Transfer'
-    InternalServerError:
-      description: Internal Server Error - There is a problem with the server. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    BadRequestError:
-      description: Bad Request Error - Your request is invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                maxLength: 255
-                type: string
-                description: When present helps to identify and fix the problem.
-              syntaxErrors:
-                $ref: '#/components/schemas/SyntaxError'
-    Error:
-      description: Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Too many requests.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-        x-ratelimit-limit:
-          $ref: '#/components/headers/x-ratelimit-limit'
-        x-ratelimit-reset:
-          $ref: '#/components/headers/x-ratelimit-reset'
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    NotFound:
-      description: Not found - The requested resource couldn't be found.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    TransferConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - PROFILE_INACTIVE
-                - MODEL_CONSTRAINTS_VIOLATED
-                - INTERCEPTOR_DENIED_TRANSACTION
-                - INSTRUMENT_DENIED_TRANSACTION
-                - SOURCE_INSTRUMENT_DESTROYED
-                - DESTINATION_INSTRUMENT_DESTROYED
-                - FOREX_TRADE_DENIED_TRANSACTION
-                - CURRENCY_MISMATCH
-                - SOURCE_INSTRUMENT_BLOCKED
-                - DESTINATION_INSTRUMENT_BLOCKED
-                - FUNDS_INSUFFICIENT
-                - AMOUNT_INVALID
-                - SOURCE_NOT_FOUND
-                - DESTINATION_NOT_FOUND
-                - FEE_NOT_CONFIGURED_FOR_CURRENCY
-                - DESTINATION_LIMIT_EXCEEDED
-                - SOURCE_CANNOT_BE_DEBIT_MODE_CARD
-                - DESTINATION_CANNOT_BE_DEBIT_MODE_CARD
-                - TRANSFER_BETWEEN_INSTRUMENTS_UNSUPPORTED
-                - SOURCE_AND_DESTINATION_MUST_BE_DIFFERENT
-                - SCHEDULED_TIMESTAMP_INVALID
-    InstrumentForbidden:
-      description: Forbidden - Access to the requested resource or action is forbidden.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - STEP_UP_REQUIRED
-                - ACCESS_TOKEN_REQUIRED
-                - INSUFFICIENT_PERMISSIONS
-    TransfersGetResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              transfer:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Transfer'
-              count:
-                type: integer
-                description: Total number of records (excluding the paging limit).
-                format: int32
-              responseCount:
-                type: integer
-                description: Total number of records returned in this response.
-                format: int32
-    Forbidden:
-      description: Forbidden - Access to the requested resource or action is forbidden.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INSUFFICIENT_PERMISSIONS
-    BackofficeBadRequestError:
-      description: Bad Request Error - Your request is invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                maxLength: 255
-                type: string
-                description: When present helps to identify and fix the problem.
-              validationErrors:
-                $ref: '#/components/schemas/ValidationError'
-    TransactionBulkCancelResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/TransactionBulkCancelResponse'
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-  headers:
-    request-ref:
-      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
-      required: true
-      schema:
-        type: string
-    x-ratelimit-reset:
-      description: The number of seconds until the window is reset.
-      required: true
-      schema:
-        minimum: 0
-        type: integer
-        format: int32
-    x-ratelimit-limit:
-      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
-
-        The first number (20) is the limit that has been exceeded.
-
-        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
-
-        '
-      required: true
-      schema:
-        type: string
+      enum:
+      - INITIALISED
+      - COMPLETED
+      - REJECTED
+      - FAILED
+      - PENDING
+      - SCHEDULED
+      - CANCELLED
+    LegacyTransfer:
+      required:
+      - creationTimestamp
+      - destination
+      - destinationAmount
+      - id
+      - profileId
+      - source
+      - state
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/StringWrappedTypeId'
+        profileId:
+          type: string
+          pattern: ^[0-9]+$
+        tag:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9_-]+$
+          type: string
+        source:
+          $ref: '#/components/schemas/InstrumentId'
+        destination:
+          $ref: '#/components/schemas/InstrumentId'
+        destinationAmount:
+          $ref: '#/components/schemas/LegacyCurrencyAmount'
+        state:
+          $ref: '#/components/schemas/TransferState'
+        creationTimestamp:
+          type: string
+          pattern: ^[0-9]+$
+          description: Epoch timestamp using millisecond precision.
+        conflict:
+          $ref: '#/components/schemas/CreateTransferConflictErrorCode'
+        scheduledTimestamp:
+          $ref: '#/components/schemas/ScheduledTimestamp'
+        cancellationReason:
+          $ref: '#/components/schemas/TransactionCancellationReason'
+        executionTimestamp:
+          $ref: '#/components/schemas/ExecutionTimestamp'
   requestBodies:
-    TransactionBulkCancelRequest:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/TransactionBulkCancelRequest'
     CreateTransferRequest:
       required: true
       content:
@@ -749,6 +919,36 @@ components:
                 $ref: '#/components/schemas/CurrencyAmount'
               scheduledTimestamp:
                 $ref: '#/components/schemas/ScheduledTimestamp'
+    TransactionBulkCancelRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TransactionBulkCancelRequest'
+  headers:
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    x-ratelimit-limit:
+      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+        The first number (20) is the limit that has been exceeded.
+
+        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+        '
+      required: true
+      schema:
+        type: string
   securitySchemes:
     api_key:
       type: apiKey
@@ -760,6 +960,20 @@ components:
       description: The authentication token representing the user. This will be included in the login response object.
       scheme: bearer
       bearerFormat: JWT
+    api-key:
+      type: apiKey
+      description: An API key defined in your User API Client  (or Delegate API Client - this feature is available only to customers enabled with delegation functionality).  API Clients are as managed in the Embedder Portal
+      name: api-key
+      in: header
+    webhooks_key:
+      type: apiKey
+      description: The Webhooks key can be found in the API Credentials tab in your Portal Page.
+      name: webhooks-key
+      in: header
+x-refined-from:
+- weavr-multi-backoffice-openapi-original.yml
+- weavr-multi-openapi-original.yml
+- weavr-webhooks-openapi-original.yml
 x-tagGroups:
 - name: Access
   tags:

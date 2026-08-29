@@ -1,27 +1,17 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  version: v3
-  title: Weavr Multi Product BackOffice Access Token Wiretransfers API
+  title: Weavr Simulator Wiretransfers API
   x-logo:
     url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
     backgroundColor: '#FFFFFF'
     altText: Weavr
-  description: 'Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning
-
-    identities and their instruments, without requiring the users to be logged in.
-
-
-    A token is to be obtained through the `access_token` method, and this will allow relevant operations
-
-    to be performed on behalf of this same identity.
-
-    '
+  description: This is a Simulator API which is only available on the Weavr Sandbox Environment
   contact:
     name: Weavr
-    url: https://weavr.io
+    url: http://weavr.io
+  version: v2
 servers:
-- description: Weavr Sandbox Environment
-  url: https://sandbox.weavr.io/multi/backoffice
+- url: https://sandbox.weavr.io/simulate/api"
 tags:
 - name: Wiretransfers
 paths:
@@ -118,6 +108,15 @@ components:
       - AT_LEAST
       - AT_MOST
       - ALL_OR_NONE
+    FieldValidation:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/FieldValidationType'
+        params:
+          type: array
+          items:
+            type: string
     ResponseResponseCode:
       type: string
       enum:
@@ -125,6 +124,29 @@ components:
       - DENIED
       - DENIED_WIRE_TRANSFER_NOT_FOUND
       - DENIED_WIRE_TRANSFER_ALREADY_COMPLETED
+    Response:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/ResponseResponseCode'
+    FieldValidationErrors:
+      type: object
+      properties:
+        name:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidation'
+    MessageValidation:
+      type: object
+      properties:
+        invalid:
+          type: boolean
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidationErrors'
     DefaultError:
       type: object
       properties:
@@ -146,38 +168,6 @@ components:
           allOf:
           - $ref: '#/components/schemas/MessageValidation'
           - description: Description of fields which were invalid.
-    Response:
-      type: object
-      properties:
-        code:
-          $ref: '#/components/schemas/ResponseResponseCode'
-    FieldValidation:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/FieldValidationType'
-        params:
-          type: array
-          items:
-            type: string
-    MessageValidation:
-      type: object
-      properties:
-        invalid:
-          type: boolean
-        fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldValidationErrors'
-    FieldValidationErrors:
-      type: object
-      properties:
-        name:
-          type: string
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldValidation'
   parameters:
     call-ref:
       name: call-ref
@@ -189,40 +179,13 @@ components:
       schema:
         type: string
   securitySchemes:
-    api_key:
+    API_Secret_Key:
       type: apiKey
-      description: The API Key representing your Multi account.
-      name: api-key
+      description: The API Secret Key - available from the Configuration area of the Innovator Portal
+      name: programme-key
       in: header
-    auth_token:
+    Auth_Token:
       type: http
-      description: The authentication token representing the user. This will be included in the login response object.
+      description: 'Authorization Token returned by login - example format: e6YrWi53lW0Bb6TbBL4ADA=='
       scheme: bearer
       bearerFormat: JWT
-x-tagGroups:
-- name: Access
-  tags:
-  - Access Token
-  - User Impersonation
-  - Consent Request
-- name: Identities
-  tags:
-  - Corporates
-  - Consumers
-- name: User Management
-  tags:
-  - Authorised Users
-- name: Instruments
-  tags:
-  - Managed Accounts
-  - Managed Cards
-- name: Transactions
-  tags:
-  - Transfers
-- name: Fees
-  tags:
-  - Fees
-- name: Bulk Operations [Beta]
-  tags:
-  - Operations
-  - Manage
