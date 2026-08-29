@@ -1,6 +1,6 @@
-generated: '2026-07-21'
-method: derived
-source: arazzo/*.yml grounded in openapi/ operationIds
+x-generated: '2026-07-21'
+x-method: derived
+x-source: arazzo/*.yml grounded in openapi/ operationIds
 workflows:
 - file: weavr-onboard-corporate-and-issue-card.yml
   workflowId: onboardCorporateAndIssueCard

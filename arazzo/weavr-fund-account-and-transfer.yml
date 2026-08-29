@@ -7,11 +7,14 @@ info:
     transfer and an external send. Uses the Simulator API for the deposit so a
     fork runs end-to-end in the Weavr sandbox.
 sourceDescriptions:
-- name: multi
-  url: ../openapi/weavr-multi-openapi-original.yml
+- name: accountsApi
+  url: ../openapi/weavr-accounts-api-openapi.yml
   type: openapi
-- name: simulator
-  url: ../openapi/weavr-simulator-openapi-original.yml
+- name: sendsApi
+  url: ../openapi/weavr-sends-api-openapi.yml
+  type: openapi
+- name: transfersApi
+  url: ../openapi/weavr-transfers-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: fundAccountAndTransfer
@@ -19,10 +22,10 @@ workflows:
   inputs:
     type: object
     properties:
-      apiKey: { type: string }
-      apiSecretKey: { type: string }
-      sourceAccountId: { type: string }
-      destinationAccountId: { type: string }
+      apiKey: {type: string}
+      apiSecretKey: {type: string}
+      sourceAccountId: {type: string}
+      destinationAccountId: {type: string}
   steps:
   - stepId: simulateDeposit
     operationId: accounts_account_id_deposit

@@ -7,8 +7,20 @@ info:
     a virtual card on the Weavr Multi API. Fork and run against the sandbox
     (https://sandbox.weavr.io).
 sourceDescriptions:
-- name: multi
-  url: ../openapi/weavr-multi-openapi-original.yml
+- name: corporatesApi
+  url: ../openapi/weavr-corporates-api-openapi.yml
+  type: openapi
+- name: customerDataDueDiligenceApi
+  url: ../openapi/weavr-customer-data-due-diligence-api-openapi.yml
+  type: openapi
+- name: managedAccountsApi
+  url: ../openapi/weavr-managed-accounts-api-openapi.yml
+  type: openapi
+- name: managedCardsApi
+  url: ../openapi/weavr-managed-cards-api-openapi.yml
+  type: openapi
+- name: signInApi
+  url: ../openapi/weavr-sign-in-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: onboardCorporateAndIssueCard
@@ -16,10 +28,10 @@ workflows:
   inputs:
     type: object
     properties:
-      apiKey: { type: string }
-      programmeKey: { type: string }
-      profileId: { type: string }
-      baseCurrency: { type: string, default: GBP }
+      apiKey: {type: string}
+      programmeKey: {type: string}
+      profileId: {type: string}
+      baseCurrency: {type: string, default: GBP}
   steps:
   - stepId: createCorporate
     operationId: corporateCreate
