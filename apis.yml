@@ -717,6 +717,9 @@ apis:
   - type: OpenAPI
     url: openapi/weavr-transactions-webhooks-api-openapi.yml
 common:
+- type: CapabilityMap
+  url: capabilities/weavr-capability-edges.yml
+  name: Weavr Business Capability Map
 - type: Overlay
   url: overlays/weavr-multi-backoffice-overlay.yaml
 - type: Website

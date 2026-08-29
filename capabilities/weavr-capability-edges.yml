@@ -1,0 +1,179 @@
+slug: weavr
+provider: Weavr
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Banking & Capital Markets
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 16
+edges:
+- tag: Correspondent Bank Transfers
+  spec_file: weavr-correspondent-bank-transfers-api-openapi.yml
+  capability_id: BC-1340.40
+  capability_id_l1: BC-1340
+  capability_name: Cross-Border Payment Management
+  confidence: 0.85
+  evidence: 'POST /correspondent_bank_transfers  Create a correspondent bank transfer; schemas: CorrespondentBankingSEPABeneficiary,
+    CorrespondentBankingOwtCreateRequest'
+  reason: Creates, confirms and cancels outgoing wire transfers through correspondent banking with SEPA/RIX
+    beneficiary details — cross-border/correspondent payment management.
+- tag: Customer Data & Due Diligence
+  spec_file: weavr-customer-data-due-diligence-api-openapi.yml
+  capability_id: BC-1300.20
+  capability_id_l1: BC-1300
+  capability_name: KYC & Customer Due Diligence Management
+  confidence: 0.85
+  evidence: 'POST /corporates/kyb  Start KYB for a corporate; POST /consumers/kyc  Start KYC for a consumer;
+    schemas: KycLevel, KyiStatus'
+  reason: Explicit KYB/KYC initiation and status retrieval plus maintenance of corporate/consumer customer
+    records — customer due diligence within banking customer management.
+- tag: Outgoing Wire Transfers
+  spec_file: weavr-outgoing-wire-transfers-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.85
+  evidence: POST /outgoing_wire_transfers 'Create an outgoing wire transfer'; POST /outgoing_wire_transfers/{id}/challenges/otp/{channel}/verify
+    'Verify an outgoing wire transfer using a one-time password'; POST .../confirm
+  reason: Capture of a payment instruction to a beneficiary, validation (Confirmation of Payee), SCA authorisation
+    and confirmation/cancellation — textbook payment initiation, capture, validation and authorisation.
+- tag: Sends
+  spec_file: weavr-sends-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.85
+  evidence: POST /sends sendCreate 'Create a send transaction'; 'Verify a send using a one-time password';
+    schemas SendCreateRequest, BeneficiaryId, CurrencyAmount
+  reason: Operations capture, authorise (SCA) and cancel outbound payment instructions to beneficiaries
+    — payment instruction capture, validation and authorisation.
+- tag: Buyers
+  spec_file: weavr-buyers-api-openapi.yml
+  capability_id: BC-1300.20
+  capability_id_l1: BC-1300
+  capability_name: KYC & Customer Due Diligence Management
+  confidence: 0.8
+  evidence: POST /v1/buyers/kyb  Start buyer KYB; GET /v1/buyers/kyb  Get buyer KYB status; POST /v1/buyers  Create
+    a buyer
+  reason: Registers the buyer (corporate customer) and runs Know-Your-Business due diligence with status
+    tracking — squarely KYC/CDD within banking customer management; some overlap with onboarding sub-capability.
+- tag: Card Payments
+  spec_file: weavr-card-payments-api-openapi.yml
+  capability_id: BC-1340.70
+  capability_id_l1: BC-1340
+  capability_name: Card Transaction Processing Management
+  confidence: 0.8
+  evidence: 'GET /card_payments  Get all card payments; GET /card_payment_events  Get all card payment
+    events; schemas: Merchant, CardPaymentStatus, CardPaymentEventType'
+  reason: Read surface over card payment transactions, merchants and authorisation/settlement events —
+    card transaction processing for an issuer platform.
+- tag: Managed Accounts
+  spec_file: weavr-managed-accounts-api-openapi.yml
+  capability_id: BC-1330.10
+  capability_id_l1: BC-1330
+  capability_name: Deposit Account Management
+  confidence: 0.8
+  evidence: POST /managed_accounts 'Create a managed account'; POST /managed_accounts/{id}/iban 'Upgrade
+    a managed account with IBAN'; GET /managed_accounts/{id}/statement
+  reason: Full lifecycle of account-holding instruments — creation, IBAN assignment, balance/statement
+    retrieval, transaction history, block/unblock — which is demand-deposit style account management for
+    end customers.
+- tag: Managed Cards
+  spec_file: weavr-managed-cards-api-openapi.yml
+  capability_id: BC-1340.60
+  capability_id_l1: BC-1340
+  capability_name: Card Issuance Management
+  confidence: 0.8
+  evidence: POST /managed_cards 'Create a managed card'; POST /managed_cards/{id}/spend_rules; schemas
+    ManufacturingState, BulkCardDelivery, DeliveryTrackingUrl, SensitiveCardNumber
+  reason: 'Card issuance and in-life card control: creation, manufacturing/delivery state, renewal type,
+    block/remove and spend rules — card issuance management for virtual and physical cards.'
+- tag: Transfers
+  spec_file: weavr-transfers-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.8
+  evidence: POST /transfers transferCreate 'Create a transfer transaction'; POST /transfers/bulk/cancel
+    'Cancel transfer transactions'; schemas Transfer, TransactionState, CurrencyAmount
+  reason: Creation, retrieval and cancellation of transfer instructions between managed instruments —
+    payment instruction capture and authorisation; could also touch processing, hence 0.8.
+- tag: Trusted Payees
+  spec_file: weavr-trusted-payees-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.8
+  evidence: POST /beneficiaries 'Add payees'; schemas BankAccountDetailsBeneficiary, IBANDetails, FasterPaymentsBankDetailsOrBACSBankDetails;
+    'Verify batch using OTP'
+  reason: Managing trusted beneficiaries/payees with bank details and SCA verification is part of payment
+    instruction setup and authorisation in an embedded banking platform.
+- tag: Incoming Wire Transfers
+  spec_file: weavr-incoming-wire-transfers-api-openapi.yml
+  capability_id: BC-1340
+  capability_id_l1: BC-1340
+  capability_name: Payments & Card Management
+  confidence: 0.75
+  evidence: GET /incoming_wire_transfers 'Get all incoming wire transfers'; schemas IncomingWireTransfer,
+    Iban, CurrencyAmount
+  reason: Retrieval of inbound wire/credit transfers received into managed accounts is payment processing
+    on the banking side. The exact rail (domestic clearing vs cross-border) is not stated, so no L2 is
+    chosen.
+- tag: Passwords
+  spec_file: weavr-passwords-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.75
+  evidence: POST /v1/password/{user_id} 'Create a password'; POST /v1/passwords/lost_password/start 'Initiate
+    lost password process'
+  reason: Credential lifecycle for end-user accounts — password creation, update, validation and lost-password
+    recovery — which is identity and access management rather than any banking product capability.
+- tag: Consumers
+  spec_file: weavr-consumers-api-openapi.yml
+  capability_id: BC-1300.10
+  capability_id_l1: BC-1300
+  capability_name: Customer Onboarding Management
+  confidence: 0.7
+  evidence: POST /consumers  Register a consumer; POST /consumers/{consumer_id}/verify  Simulate verification
+    of a consumer identity
+  reason: Registration and identity verification of consumer end-users of the embedded banking product
+    = customer onboarding; a fee-charging operation is also tagged here, diluting the fit slightly.
+- tag: Corporates
+  spec_file: weavr-corporates-api-openapi.yml
+  capability_id: BC-1300.10
+  capability_id_l1: BC-1300
+  capability_name: Customer Onboarding Management
+  confidence: 0.7
+  evidence: 'POST /corporates  Register a corporate; POST /corporates/{corporate_id}/verify  Simulate
+    verification of corporate identity; schemas: CorporateRootUser, CorporateSourceOfFunds'
+  reason: Registers corporate identities (with source-of-funds and root user data) and verifies them —
+    onboarding of banking customers; the tag also carries a fee-charge operation, hence not full confidence.
+- tag: Payment runs
+  spec_file: weavr-payment-runs-api-openapi.yml
+  capability_id: BC-1340.10
+  capability_id_l1: BC-1340
+  capability_name: Payment Initiation Management
+  confidence: 0.7
+  evidence: POST /v1/payment_runs 'Create a payment run'; POST /v1/payment_runs/{payment_run_id}/confirm
+    'Confirm a payment run'; GET /v1/payment_runs/{payment_run_id}/fund 'Get a payment run funding instructions'
+  reason: A payment run is a batch of outbound payment instructions that is created, funded, confirmed,
+    cancelled or restarted — instruction capture and authorisation of payments. Some overlap with processing/execution,
+    so confidence is held below 0.8.
+- tag: Spend Controls
+  spec_file: weavr-spend-controls-api-openapi.yml
+  capability_id: BC-1340.70
+  capability_id_l1: BC-1340
+  capability_name: Card Transaction Processing Management
+  confidence: 0.7
+  evidence: POST /managed_cards/{id}/spend_rules 'Create spend rules for a managed card'; schemas SpendLimit,
+    MerchantData, CardAuthorisationEvent, CardHolderPresent
+  reason: Spend rules govern which card authorisations are permitted (limits, merchant data, cardholder-present,
+    transaction type) — card authorisation control within card transaction processing. Some ambiguity
+    with product parameter/limit configuration.
