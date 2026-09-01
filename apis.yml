@@ -300,7 +300,7 @@ apis:
   humanURL: https://api.weavr.io/products/multi/openapi
   baseURL: https://api.weavr.io/multi
   tags:
-  - institutions
+  - Institutions
   tags_raw:
   - Institutions
   properties:
@@ -410,7 +410,7 @@ apis:
   humanURL: https://api.weavr.io/products/multi/openapi
   baseURL: https://api.weavr.io/multi
   tags:
-  - Payment runs
+  - Payment Runs
   tags_raw:
   - Payment runs
   properties:
@@ -456,7 +456,7 @@ apis:
   humanURL: https://api.weavr.io/products/multi/openapi
   baseURL: https://api.weavr.io/multi
   tags:
-  - Sign-in
+  - Sign In
   tags_raw:
   - Sign-in
   properties:
@@ -506,7 +506,7 @@ apis:
   humanURL: https://api.weavr.io/products/multi/openapi
   baseURL: https://api.weavr.io/multi
   tags:
-  - Step up
+  - Step-Up
   tags_raw:
   - Step up
   properties:
@@ -588,7 +588,7 @@ apis:
   humanURL: https://api.weavr.io/products/multi/openapi
   baseURL: https://api.weavr.io/multi
   tags:
-  - Wiretransfers
+  - Wire Transfers
   tags_raw:
   - Wiretransfers
   properties:
