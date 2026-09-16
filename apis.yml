@@ -584,18 +584,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/weavr-user-impersonation-api-openapi.yml
-- aid: weavr:weavr-wiretransfers-api
-  name: Weavr Wiretransfers API
-  description: The Wiretransfers API from Weavr — 2 operation(s) for wiretransfers.
-  humanURL: https://api.weavr.io/products/multi/openapi
-  baseURL: https://api.weavr.io/multi
-  tags:
-  - Wire Transfers
-  tags_raw:
-  - Wiretransfers
-  properties:
-  - type: OpenAPI
-    url: openapi/weavr-wiretransfers-api-openapi.yml
 - aid: weavr:weavr-authentication-factors-webhooks-api
   name: Weavr Authentication Factors Webhooks API
   description: Notification of the Authentication Factors that are used for the `Identity`.
@@ -628,18 +616,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/weavr-buyers-webhooks-api-openapi.yml
-- aid: weavr:weavr-ibans-api
-  name: Weavr Ibans API
-  description: The Ibans API from Weavr — 0 operation(s) for ibans.
-  humanURL: https://api.weavr.io/products/multi/openapi
-  baseURL: https://api.weavr.io/multi
-  tags:
-  - IBANs
-  tags_raw:
-  - Ibans
-  properties:
-  - type: OpenAPI
-    url: openapi/weavr-ibans-api-openapi.yml
 - aid: weavr:weavr-linked-accounts-webhooks-api
   name: Weavr Linked Accounts Webhooks API
   description: Notification that the status of a Linked Account has been updated.
@@ -680,18 +656,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/weavr-payment-runs-webhooks-api-openapi.yml
-- aid: weavr:weavr-stepup-api
-  name: Weavr Stepup API
-  description: The Stepup API from Weavr — 0 operation(s) for stepup.
-  humanURL: https://api.weavr.io/products/multi/openapi
-  baseURL: https://api.weavr.io/multi
-  tags:
-  - Step-Up
-  tags_raw:
-  - Stepup
-  properties:
-  - type: OpenAPI
-    url: openapi/weavr-stepup-api-openapi.yml
 - aid: weavr:weavr-stepup-webhooks-api
   name: Weavr Stepup Webhooks API
   description: Notification that a step-up has been completed or declined.
@@ -722,6 +686,26 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/weavr-transactions-webhooks-api-openapi.yml
+- aid: weavr:weavr-iba-ns-api
+  name: Weavr IBA Ns API
+  description: The IBA Ns API from Weavr — 0 operation(s) for iba ns.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - IBA Ns
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-iba-ns-api-openapi.yml
+- aid: weavr:weavr-wire-transfers-api
+  name: Weavr Wire Transfers API
+  description: The Wire Transfers API from Weavr — 2 operation(s) for wire transfers.
+  humanURL: https://api.weavr.io/products/multi/openapi
+  baseURL: https://api.weavr.io/multi
+  tags:
+  - Wire Transfers
+  properties:
+  - type: OpenAPI
+    url: openapi/weavr-wire-transfers-api-openapi.yml
 common:
 - type: CapabilityMap
   url: capabilities/weavr-capability-edges.yml
