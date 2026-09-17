@@ -686,16 +686,16 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/weavr-transactions-webhooks-api-openapi.yml
-- aid: weavr:weavr-iba-ns-api
-  name: Weavr IBA Ns API
-  description: The IBA Ns API from Weavr — 0 operation(s) for iba ns.
+- aid: weavr:weavr-ibans-api
+  name: Weavr Ibans API
+  description: The Ibans API from Weavr — 0 operation(s) for ibans.
   humanURL: https://api.weavr.io/products/multi/openapi
   baseURL: https://api.weavr.io/multi
   tags:
-  - IBA Ns
+  - Ibans
   properties:
   - type: OpenAPI
-    url: openapi/weavr-iba-ns-api-openapi.yml
+    url: openapi/weavr-ibans-api-openapi.yml
 - aid: weavr:weavr-wire-transfers-api
   name: Weavr Wire Transfers API
   description: The Wire Transfers API from Weavr — 2 operation(s) for wire transfers.
