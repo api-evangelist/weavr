@@ -692,6 +692,8 @@ apis:
   humanURL: https://api.weavr.io/products/multi/openapi
   baseURL: https://api.weavr.io/multi
   tags:
+  - IBANs
+  tags_raw:
   - Ibans
   properties:
   - type: OpenAPI
