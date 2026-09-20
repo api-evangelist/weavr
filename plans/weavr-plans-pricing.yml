@@ -1,0 +1,31 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-09-20'
+method: searched
+source: https://www.weavr.io/pricing/
+sources:
+- https://www.weavr.io/pricing/
+provenance:
+  tool: planning/api-economics/harvest_pricing.py
+  run: 20260920T120546
+  grounding: every price_text was found verbatim in the fetched page text
+audience: business-product
+pricing_basis: tiered-subscription
+published: true
+note: Two licensing options; Launch shows dual-currency monthly price (£1,947 / €2,370), Scale is contact-sales.
+plan_count: 2
+plans:
+- name: Launch
+  price_text: £ 1,947 / € 2,370 per month*
+  period: month
+  unit: platform licence subscription
+  included_quota: Everything you need to launch and run your first embedded finance use case; Accounts
+    and payments charges included within usage thresholds; Available for approved B2B payments use cases
+    in EU and UK
+  overage: does not include initial setup project, financial product usage charges, and compliance service
+    charges. Certain optional features are licensed separately and some categories of platform usage may
+    be metered.
+- name: Scale
+  price_text: Let’s talk
+  period: none
+  included_quota: Lower costs as programme grows, wider range of use cases including consumer payments,
+    custom plug-in development
