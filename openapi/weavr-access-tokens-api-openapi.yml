@@ -6,21 +6,7 @@ info:
     url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
     backgroundColor: '#FFFFFF'
     altText: Weavr
-  description: 'Weavr Multi API provides a simple and flexible way to issue cards and accounts to your customers.
-
-
-    By integrating Weavr Multi API in your application you can embed banking capabilities within your app and provide a seamless experience for your customers.
-
-
-    # Authentication
-
-
-    Each request to the Multi API must include an `api-key` that represents your account. You can obtain an API Key by registering for a Multi account [here](https://portal.weavr.io).
-
-
-    Almost all endpoints require a secondary authentication token `auth_token` that represents the user for whom the request is being executed.
-
-    '
+  description: Weavr Multi API provides a simple and flexible way to issue cards and accounts to your customers.
   contact:
     name: Weavr
     url: https://weavr.io
@@ -35,9 +21,7 @@ paths:
     post:
       tags:
       - Access Tokens
-      description: 'This API endpoint accepts a POST request with an auth_token parameter and returns an access_token that grants authorized access to additional resources within the API, with a different expiration time and unique signature.
-
-        '
+      description: This API endpoint accepts a POST request with an auth_token parameter and returns an access_token that grants authorized access to additional resources within the API, with a different expiration time and unique signature.
       summary: Acquire a new access token
       operationId: requestAccessToken
       requestBody:
@@ -66,33 +50,33 @@ paths:
         api-key: []
       - api-key: []
 components:
-  headers:
-    x-ratelimit-limit:
-      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
-
-        The first number (20) is the limit that has been exceeded.
-
-        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
-
-        '
-      required: true
-      schema:
-        type: string
-    request-ref:
-      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
-      required: true
-      schema:
-        type: string
-    x-ratelimit-reset:
-      description: The number of seconds until the window is reset.
-      required: true
-      schema:
-        minimum: 0
-        type: integer
-        format: int32
   responses:
     InternalServerError:
       description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    Locked:
+      description: Locked - Account is temporarily locked due to failed consecutive login attempts. Try again in 30 minutes.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
@@ -118,20 +102,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Too many requests.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-        x-ratelimit-limit:
-          $ref: '#/components/headers/x-ratelimit-limit'
-        x-ratelimit-reset:
-          $ref: '#/components/headers/x-ratelimit-reset'
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
     AccessTokenResponse:
       description: Success
       headers:
@@ -156,33 +126,7 @@ components:
                 enum:
                 - STANDARD
                 - STEPPED_UP
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    Locked:
-      description: Locked - Account is temporarily locked due to failed consecutive login attempts. Try again in 30 minutes.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
   schemas:
-    IdentityId:
-      required:
-      - type
-      - id
-      type: object
-      properties:
-        type:
-          enum:
-          - CONSUMER
-          - CORPORATE
-          type: string
-          description: Indicates the identity type.
-        id:
-          type: string
-          pattern: ^[0-9]+$
-          description: The identifier for the identity.
     CredentialId:
       required:
       - type
@@ -202,6 +146,22 @@ components:
           type: string
           pattern: ^[0-9]+$
           description: The identifier of the user.
+    IdentityId:
+      required:
+      - type
+      - id
+      type: object
+      properties:
+        type:
+          enum:
+          - CONSUMER
+          - CORPORATE
+          type: string
+          description: Indicates the identity type.
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The identifier for the identity.
     SyntaxError:
       type: object
       description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
@@ -239,6 +199,30 @@ components:
           type: string
         message:
           type: string
+  headers:
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    x-ratelimit-limit:
+      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+        The first number (20) is the limit that has been exceeded.
+
+        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+        '
+      required: true
+      schema:
+        type: string
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
   requestBodies:
     AccessTokenRequest:
       required: true

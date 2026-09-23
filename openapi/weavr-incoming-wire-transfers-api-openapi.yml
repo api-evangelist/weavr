@@ -6,21 +6,7 @@ info:
     url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
     backgroundColor: '#FFFFFF'
     altText: Weavr
-  description: 'Weavr Multi API provides a simple and flexible way to issue cards and accounts to your customers.
-
-
-    By integrating Weavr Multi API in your application you can embed banking capabilities within your app and provide a seamless experience for your customers.
-
-
-    # Authentication
-
-
-    Each request to the Multi API must include an `api-key` that represents your account. You can obtain an API Key by registering for a Multi account [here](https://portal.weavr.io).
-
-
-    Almost all endpoints require a secondary authentication token `auth_token` that represents the user for whom the request is being executed.
-
-    '
+  description: Weavr Multi API provides a simple and flexible way to issue cards and accounts to your customers.
   contact:
     name: Weavr
     url: https://weavr.io
@@ -29,17 +15,13 @@ servers:
   url: https://sandbox.weavr.io/multi
 tags:
 - name: Incoming Wire Transfers
-  description: 'Incoming wire transfers received from external bank accounts to managed accounts with IBANs.
-
-    '
+  description: Incoming wire transfers received from external bank accounts to managed accounts with IBANs.
 paths:
   /incoming_wire_transfers:
     get:
       tags:
       - Incoming Wire Transfers
-      description: 'Returns all incoming wire transfers for the authenticated identity.
-
-        '
+      description: Returns all incoming wire transfers for the authenticated identity.
       summary: Get all incoming wire transfers
       operationId: incomingWireTransfersGet
       x-permissions:
@@ -224,95 +206,327 @@ webhooks:
       security:
       - webhooks_key: []
 components:
-  responses:
-    InternalServerError:
-      description: Internal Server Error - There is a problem with the server. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    TooManyRequests:
-      description: Too many requests.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-        x-ratelimit-limit:
-          $ref: '#/components/headers/x-ratelimit-limit'
-        x-ratelimit-reset:
-          $ref: '#/components/headers/x-ratelimit-reset'
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    IncomingWireTransferResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/IncomingWireTransfer'
-    Forbidden:
-      description: Forbidden - Access to the requested resource or action is forbidden.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
+  schemas:
+    LinkedAccountState:
+      type: string
+      description: "The state of the linked account:\n  - **PENDING_VERIFICATION**: The Linked Account is pending the completion of the required verification steps.\n  - **ACTIVE**: The Linked Account is verified and active, ready to be used for self-to-self wire transfers.\n  - **BLOCKED**: The Linked Account is temporarily blocked, preventing any use of this external account in self-to-self wire transfers. A Linked Account can be unblocked by calling the Multi API endpoint `POST /linked_accounts/{id}/unblock`.\n  - **REMOVED**: The Linked Account has been removed from the platform and can no longer be used for self-to-self wire transfers unless a new verification is completed in future.\n  - **REJECTED**: The Linked Account failed the verification process and cannot be used for self-to-self wire transfers unless a new verification is completed in future.\nA Linked Account can transition through these different overall states, starting at the `PENDING_VERIFICATION` state until all verification steps are followed through.\n"
+      enum:
+      - PENDING_VERIFICATION
+      - BLOCKED
+      - ACTIVE
+      - REJECTED
+      - REMOVED
+    Address:
+      required:
+      - addressLine1
+      - city
+      - postCode
+      - country
+      type: object
+      properties:
+        addressLine1:
+          minLength: 1
+          maxLength: 150
+          type: string
+          description: The first line of the address.
+        addressLine2:
+          maxLength: 150
+          type: string
+          description: The second line of the address.
+        city:
+          maxLength: 50
+          type: string
+          description: The city of the address.
+        postCode:
+          maxLength: 10
+          pattern: ^[A-Za-z0-9 -]*$
+          type: string
+          description: The post code associated with the address.
+        state:
+          maxLength: 50
+          type: string
+          description: The state of the address.
+        country:
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]+$
+          type: string
+          description: The country of the address expressed in ISO 3166 alpha-2 format.
+    Iban:
+      required:
+      - iban
+      type: object
+      description: Bank details
+      properties:
+        iban:
+          type: string
+          minLength: 15
+          maxLength: 34
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
+          description: International Bank Account Number, required for wire transfer.
+        bankIdentifierCode:
+          type: string
+          minLength: 8
+          maxLength: 11
+          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
+          description: BIC, for wire transfer over SEPA or RIX.
+    CorporateSourceOfFunds:
+      type: string
+      description: The corporate's source of funds.
+      deprecated: true
+      enum:
+      - LABOUR_CONTRACT
+      - CIVIL_CONTRACT
+      - RENT
+      - FUNDS_FROM_OTHER_AUXILIARY_SOURCES
+      - SALE_OF_MOVABLE_ASSETS
+      - SALE_OF_REAL_ESTATE
+      - ORDINARY_BUSINESS_ACTIVITY
+      - DIVIDENDS
+      - LOAN_FROM_FINANCIAL_INSTITUTIONS_CREDIT_UNIONS
+      - LOAN_FROM_THIRD_PARTIES
+      - SALE_OF_COMPANY_SHARES_BUSINESS
+      - OTHER
+      - DONATION
+      - INHERITANCE
+      - ORIGIN_OF_FUNDS_UNKNOWN
+    InstrumentId:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        type:
+          $ref: '#/components/schemas/InstrumentType'
+    ConsumerRootUser:
+      required:
+      - id
+      - email
+      - name
+      - surname
+      - active
+      - mobile
+      - emailVerified
+      - mobileNumberVerified
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/IdentityId'
+        name:
+          maxLength: 100
+          type: string
+          description: First name of the root user.
+        surname:
+          maxLength: 100
+          type: string
+          description: Last name of the root user.
+        email:
+          $ref: '#/components/schemas/Email'
+        mobile:
+          $ref: '#/components/schemas/Mobile'
+        occupation:
+          $ref: '#/components/schemas/Occupation'
+        active:
+          type: boolean
+          description: The state of the root user. If false, then the user will not be able to log in.
+        emailVerified:
+          type: boolean
+          description: Indicates if the root user's email has been verified.
+        mobileNumberVerified:
+          type: boolean
+          description: Indicates if the root user's mobile number has been verified.
+        dateOfBirth:
+          description: Date of birth of the consumer root user.
+          $ref: '#/components/schemas/Date'
+        address:
+          description: Address of the consumer root user.
+          $ref: '#/components/schemas/AddressWithNoRequiredFields'
+        nationality:
+          description: Nationality of the consumer root user, in ISO 3166 alpha-2 format.
+          $ref: '#/components/schemas/Nationality'
+        placeOfBirth:
+          type: string
+          description: The place of birth of the consumer root user.
+        tag:
+          $ref: '#/components/schemas/Tag'
+        locale:
+          $ref: '#/components/schemas/UserLocale'
+        brand:
+          $ref: '#/components/schemas/Brand'
+    ManagedInstrumentBalance:
+      type: object
+      description: Instruments with funds have 2 balances, the `availableBalance` indicating the funds that are available for transactions such as purchases, and the `actualBalance` indicating the funds that are actually on the instrument.
+      properties:
+        availableBalance:
+          type: integer
+          format: int64
+          description: The funds available for transactions on the instrument. Funds that are blocked or pending are not included in the available balance.
+        actualBalance:
+          type: integer
+          format: int64
+          description: The funds that are actually on the instrument. Funds that are blocked or pending, due to for example, a purchase authorisation or a pending deposit, are included in the actual balance.
+    IdentityId:
+      required:
+      - type
+      - id
+      type: object
+      properties:
+        type:
+          enum:
+          - CONSUMER
+          - CORPORATE
+          type: string
+          description: Indicates the identity type.
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The identifier for the identity.
+    SyntaxError:
+      type: object
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      properties:
+        invalidFields:
+          type: array
+          items:
             type: object
             properties:
-              errorCode:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
                 type: string
                 enum:
-                - INSUFFICIENT_PERMISSIONS
-    IncomingWireTransferListResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/IncomingWireTransferList'
-    NotFound:
-      description: Not found - The requested resource couldn't be found.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequestError:
-      description: Bad Request Error - Your request is invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                maxLength: 255
-                type: string
-                description: When present helps to identify and fix the problem.
-              syntaxErrors:
-                $ref: '#/components/schemas/SyntaxError'
-    Error:
-      description: Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-  schemas:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
+    ProfileId:
+      type: string
+      description: 'The profile Id which a specific identity, instrument or transaction type is linked to.
+
+
+        Profiles contain configuration and determine behavioral aspects of the newly created transaction, for example, fees that may apply.
+
+
+        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s needs.
+
+
+        Profile Ids can be found in the Multi Portal, in the API Credentials page.
+
+        '
+      pattern: ^[0-9]+$
+    CurrencyAmount:
+      required:
+      - currency
+      - amount
+      type: object
+      properties:
+        currency:
+          $ref: '#/components/schemas/Currency'
+        amount:
+          type: integer
+          format: int64
+          description: 'The monetary amount, scaled to the lowest denomination of the currency.
+
+
+            Example, an amount of 1000 for a EUR currency is actually 1000 Euro cents or EUR 10.00.
+
+            '
+      description: The object representing a monetary amount in a particular currency.
+    LegalAddress:
+      required:
+      - addressLine1
+      - city
+      - country
+      type: object
+      description: The legal address of the company. This information is captured via the Due Diligence (KYB) process.
+      properties:
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        city:
+          type: string
+        postCode:
+          maxLength: 10
+          pattern: ^[A-Za-z0-9 -]*$
+          type: string
+        state:
+          maxLength: 50
+          type: string
+        country:
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]+$
+          type: string
+          description: Country of the identity in ISO 3166 alpha-2 format.
+    UserLocale:
+      type: string
+      pattern: ^[a-z]{2}(-[A-Z]{2})?$
+      description: 'BCP47 locale code (e.g. en, en-US). The locale determines which email and SMS user notification templates are used.
+
+        '
+      maxLength: 5
+      example: en-GB
+    AccountDescriptor:
+      required:
+      - accountDescriptor
+      type: object
+      description: Identifier or account number which does not follow either the IBAN or Faster Payment (sort code and account number) format, such as a US bank account identifier.
+      properties:
+        accountDescriptor:
+          type: string
+    ManagedInstrumentState:
+      required:
+      - state
+      type: object
+      properties:
+        state:
+          $ref: '#/components/schemas/InstrumentState'
+        blockedReason:
+          $ref: '#/components/schemas/BlockedReason'
+        destroyedReason:
+          $ref: '#/components/schemas/DestroyedReason'
+    StringWrappedTypeId:
+      required:
+      - type
+      - id
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9_-]+$
+          type: string
+        id:
+          type: string
+          pattern: ^[0-9]+$
+    IncomingWireTransferList:
+      type: object
+      description: A paginated list of incoming wire transfers.
+      properties:
+        incomingWireTransfers:
+          type: array
+          items:
+            $ref: '#/components/schemas/IncomingWireTransfer'
+        count:
+          type: integer
+          format: int64
+        responseCount:
+          type: integer
+          format: int64
     CorporateRootUser:
       required:
       - id
@@ -360,57 +574,6 @@ components:
           $ref: '#/components/schemas/UserLocale'
         brand:
           $ref: '#/components/schemas/Brand'
-    StringWrappedTypeId:
-      required:
-      - type
-      - id
-      type: object
-      properties:
-        type:
-          maxLength: 50
-          pattern: ^[a-zA-Z0-9_-]+$
-          type: string
-        id:
-          type: string
-          pattern: ^[0-9]+$
-    Brand:
-      type: string
-      pattern: ^[a-zA-Z0-9]+$
-      description: 'Brand identifier used to determine the set of email and SMS user notification templates. Must be alphanumeric, up to 25 characters, and contain no spaces.
-
-        '
-      maxLength: 25
-    Industry:
-      type: string
-      description: The industry of the identity.
-      deprecated: true
-      enum:
-      - ACCOUNTING
-      - AUDIT
-      - FINANCE
-      - PUBLIC_SECTOR_ADMINISTRATION
-      - ART_ENTERTAINMENT
-      - AUTO_AVIATION
-      - BANKING_LENDING
-      - BUSINESS_CONSULTANCY_LEGAL
-      - CONSTRUCTION_REPAIR
-      - EDUCATION_PROFESSIONAL_SERVICES
-      - INFORMATIONAL_TECHNOLOGIES
-      - TOBACCO_ALCOHOL
-      - GAMING_GAMBLING
-      - MEDICAL_SERVICES
-      - MANUFACTURING
-      - PR_MARKETING
-      - PRECIOUS_GOODS_JEWELRY
-      - NON_GOVERNMENTAL_ORGANIZATION
-      - INSURANCE_SECURITY
-      - RETAIL_WHOLESALE
-      - TRAVEL_TOURISM
-      - FREELANCER
-    AccountLowBalanceThreshold:
-      type: integer
-      format: int64
-      description: Sends a low balance notification webhook when the available balance drops below this amount. Currency is inherited from the managed account.
     IncomingWireTransfer:
       type: object
       required:
@@ -471,172 +634,6 @@ components:
           type: integer
           format: int64
           description: When the IWT was settled, expressed in Epoch timestamp using millisecond precision.
-    AddressWithNoRequiredFields:
-      type: object
-      description: The address, with none of the separate fields being set as required.
-      properties:
-        addressLine1:
-          type: string
-          description: The first line of the address.
-        addressLine2:
-          type: string
-          description: The second line of the address.
-        city:
-          type: string
-          description: The city of the address.
-        postCode:
-          maxLength: 10
-          pattern: ^[A-Za-z0-9 -]*$
-          type: string
-          description: The post code associated with the address.
-        state:
-          maxLength: 50
-          type: string
-          description: The state of the address.
-        country:
-          maxLength: 2
-          minLength: 2
-          pattern: ^[A-Z]+$
-          type: string
-          description: The country of the address expressed in ISO 3166 alpha-2 format.
-    Id:
-      type: string
-      pattern: ^[0-9]+$
-    Mobile:
-      required:
-      - number
-      - countryCode
-      type: object
-      properties:
-        countryCode:
-          maxLength: 4
-          minLength: 1
-          type: string
-          pattern: ^\+[0-9]+$
-          description: The country code of the user mobile number (e.g. +44).
-        number:
-          pattern: ^[0-9]{1,12}$
-          type: string
-          description: The mobile number of the user - excluding country code.
-    IncomingWireTransferList:
-      type: object
-      description: A paginated list of incoming wire transfers.
-      properties:
-        incomingWireTransfers:
-          type: array
-          items:
-            $ref: '#/components/schemas/IncomingWireTransfer'
-        count:
-          type: integer
-          format: int64
-        responseCount:
-          type: integer
-          format: int64
-    ScaledAmount:
-      type: object
-      properties:
-        value:
-          type: integer
-          format: int64
-        scale:
-          maximum: 127
-          minimum: -128
-          type: integer
-          format: int32
-      description: 'A floating point number, represented as a value and its scale. Its actual value can be obtained using the equation: value * pow(10, -scale).'
-    CurrencyAmount:
-      required:
-      - currency
-      - amount
-      type: object
-      properties:
-        currency:
-          $ref: '#/components/schemas/Currency'
-        amount:
-          type: integer
-          format: int64
-          description: 'The monetary amount, scaled to the lowest denomination of the currency.
-
-
-            Example, an amount of 1000 for a EUR currency is actually 1000 Euro cents or EUR 10.00.
-
-            '
-      description: The object representing a monetary amount in a particular currency.
-    UserLocale:
-      type: string
-      pattern: ^[a-z]{2}(-[A-Z]{2})?$
-      description: 'BCP47 locale code (e.g. en, en-US). The locale determines which email and SMS user notification templates are used.
-
-        '
-      maxLength: 5
-      example: en-GB
-    BlockedReason:
-      type: string
-      description: "The reason why the instrument has been blocked:\n  - USER: The root, or an authorised user, of the identity owning the instrument has temporarily blocked the instrument.\n  - SYSTEM: The platform or an administrator of the platform has temporarily blocked the instrument.\n  - LOST: The instrument has been blocked because it was marked as lost.\n  - SINGLE_SPEND: The instrument has been automatically blocked after its first successful transaction (single-spend card).\n"
-      enum:
-      - USER
-      - SYSTEM
-      - LOST
-      - SINGLE_SPEND
-    CompanyType:
-      type: string
-      description: Supported company types - if company type is not listed, please contact our support team to check if the company type can be supported.
-      enum:
-      - SOLE_TRADER
-      - LLC
-      - PUBLIC_LIMITED_COMPANY
-      - LIMITED_LIABILITY_PARTNERSHIP
-      - NON_PROFIT_ORGANISATION
-    CorporateSourceOfFunds:
-      type: string
-      description: The corporate's source of funds.
-      deprecated: true
-      enum:
-      - LABOUR_CONTRACT
-      - CIVIL_CONTRACT
-      - RENT
-      - FUNDS_FROM_OTHER_AUXILIARY_SOURCES
-      - SALE_OF_MOVABLE_ASSETS
-      - SALE_OF_REAL_ESTATE
-      - ORDINARY_BUSINESS_ACTIVITY
-      - DIVIDENDS
-      - LOAN_FROM_FINANCIAL_INSTITUTIONS_CREDIT_UNIONS
-      - LOAN_FROM_THIRD_PARTIES
-      - SALE_OF_COMPANY_SHARES_BUSINESS
-      - OTHER
-      - DONATION
-      - INHERITANCE
-      - ORIGIN_OF_FUNDS_UNKNOWN
-    SyntaxError:
-      type: object
-      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
-      properties:
-        invalidFields:
-          type: array
-          items:
-            type: object
-            properties:
-              params:
-                type: array
-                items:
-                  type: string
-              fieldName:
-                type: string
-              error:
-                type: string
-                enum:
-                - REQUIRED
-                - HAS_TEXT
-                - REQUIRES
-                - SIZE
-                - RANGE
-                - IN
-                - NOT_IN
-                - REGEX
-                - EXACTLY
-                - AT_LEAST
-                - AT_MOST
-                - ALL_OR_NONE
     Consumer:
       required:
       - id
@@ -679,43 +676,12 @@ components:
           type: string
           description: Description of source of funds in case `OTHER` was chosen.
           deprecated: true
-    Iban:
-      required:
-      - iban
-      type: object
-      description: Bank details
-      properties:
-        iban:
-          type: string
-          minLength: 15
-          maxLength: 34
-          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
-          description: International Bank Account Number, required for wire transfer.
-        bankIdentifierCode:
-          type: string
-          minLength: 8
-          maxLength: 11
-          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
-          description: BIC, for wire transfer over SEPA or RIX.
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-    ManagedInstrumentBalance:
-      type: object
-      description: Instruments with funds have 2 balances, the `availableBalance` indicating the funds that are available for transactions such as purchases, and the `actualBalance` indicating the funds that are actually on the instrument.
-      properties:
-        availableBalance:
-          type: integer
-          format: int64
-          description: The funds available for transactions on the instrument. Funds that are blocked or pending are not included in the available balance.
-        actualBalance:
-          type: integer
-          format: int64
-          description: The funds that are actually on the instrument. Funds that are blocked or pending, due to for example, a purchase authorisation or a pending deposit, are included in the actual balance.
+    AccountType:
+      type: string
+      description: "An account can be of two types, Personal or Business:\n  - PERSONAL means that the account held at the external bank or PSP is registered under the ownership of a natural person or consumer identity;\n  - BUSINESS means that the account held at the external bank or PSP is registered under the ownership of a corporate entity.\n"
+      enum:
+      - BUSINESS
+      - PERSONAL
     LinkedAccount:
       required:
       - id
@@ -769,14 +735,52 @@ components:
           format: int64
         owner:
           $ref: '#/components/schemas/StringWrappedTypeId'
-    AccountDescriptor:
-      required:
-      - accountDescriptor
+    AddressWithNoRequiredFields:
       type: object
-      description: Identifier or account number which does not follow either the IBAN or Faster Payment (sort code and account number) format, such as a US bank account identifier.
+      description: The address, with none of the separate fields being set as required.
       properties:
-        accountDescriptor:
+        addressLine1:
           type: string
+          description: The first line of the address.
+        addressLine2:
+          type: string
+          description: The second line of the address.
+        city:
+          type: string
+          description: The city of the address.
+        postCode:
+          maxLength: 10
+          pattern: ^[A-Za-z0-9 -]*$
+          type: string
+          description: The post code associated with the address.
+        state:
+          maxLength: 50
+          type: string
+          description: The state of the address.
+        country:
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]+$
+          type: string
+          description: The country of the address expressed in ISO 3166 alpha-2 format.
+    AccountNumberAndSortCode:
+      required:
+      - accountNumber
+      - sortCode
+      type: object
+      description: Bank details
+      properties:
+        accountNumber:
+          type: string
+          pattern: ^[0-9]{8}$
+          description: Account number
+        sortCode:
+          type: string
+          pattern: ^[0-9]{6}$
+          description: Sort code
+        secondaryReference:
+          type: string
+          description: Optional secondary reference for accounts without unique sort codes.
     Corporate:
       required:
       - id
@@ -862,6 +866,137 @@ components:
           - RETAIL
           - NON_RETAIL
           - UNKNOWN
+    TransactionForex:
+      type: object
+      description: Foreign exchange details when the transaction involved currency conversion.
+      properties:
+        originalAmount:
+          description: The original amount in the source or merchant currency before conversion.
+          $ref: '#/components/schemas/CurrencyAmount'
+        exchangeRate:
+          description: The exchange rate applied to the conversion.
+          $ref: '#/components/schemas/ScaledAmount'
+        paddingAmount:
+          description: The forex padding amount held during authorisation.
+          $ref: '#/components/schemas/CurrencyAmount'
+        feeAmount:
+          description: The forex markup fee amount.
+          $ref: '#/components/schemas/CurrencyAmount'
+    Email:
+      type: string
+      description: E-mail Address of the user
+      format: email
+    ScaledAmount:
+      type: object
+      properties:
+        value:
+          type: integer
+          format: int64
+        scale:
+          maximum: 127
+          minimum: -128
+          type: integer
+          format: int32
+      description: 'A floating point number, represented as a value and its scale. Its actual value can be obtained using the equation: value * pow(10, -scale).'
+    Mobile:
+      required:
+      - number
+      - countryCode
+      type: object
+      properties:
+        countryCode:
+          maxLength: 4
+          minLength: 1
+          type: string
+          pattern: ^\+[0-9]+$
+          description: The country code of the user mobile number (e.g. +44).
+        number:
+          pattern: ^[0-9]{1,12}$
+          type: string
+          description: The mobile number of the user - excluding country code.
+    AccountLowBalanceThreshold:
+      type: integer
+      format: int64
+      description: Sends a low balance notification webhook when the available balance drops below this amount. Currency is inherited from the managed account.
+    InstrumentType:
+      type: string
+      enum:
+      - managed_cards
+      - managed_accounts
+    IncomingWireTransferMultiState:
+      type: string
+      description: "The state of an incoming wire transfer:\n  - PENDING: The transfer has been received and is being processed. Funds have not yet been credited to the destination account.\n  - COMPLETED: Funds have been credited to the destination account.\n  - REJECTED: The transfer was not accepted; funds were not credited.\n"
+      enum:
+      - PENDING
+      - COMPLETED
+      - REJECTED
+    Industry:
+      type: string
+      description: The industry of the identity.
+      deprecated: true
+      enum:
+      - ACCOUNTING
+      - AUDIT
+      - FINANCE
+      - PUBLIC_SECTOR_ADMINISTRATION
+      - ART_ENTERTAINMENT
+      - AUTO_AVIATION
+      - BANKING_LENDING
+      - BUSINESS_CONSULTANCY_LEGAL
+      - CONSTRUCTION_REPAIR
+      - EDUCATION_PROFESSIONAL_SERVICES
+      - INFORMATIONAL_TECHNOLOGIES
+      - TOBACCO_ALCOHOL
+      - GAMING_GAMBLING
+      - MEDICAL_SERVICES
+      - MANUFACTURING
+      - PR_MARKETING
+      - PRECIOUS_GOODS_JEWELRY
+      - NON_GOVERNMENTAL_ORGANIZATION
+      - INSURANCE_SECURITY
+      - RETAIL_WHOLESALE
+      - TRAVEL_TOURISM
+      - FREELANCER
+    Tag:
+      type: string
+      description: The tag field is a custom field that can be used to search and filter.
+      maxLength: 50
+      pattern: ^[a-zA-Z0-9_-]+$
+    BlockedReason:
+      type: string
+      description: "The reason why the instrument has been blocked:\n  - USER: The root, or an authorised user, of the identity owning the instrument has temporarily blocked the instrument.\n  - SYSTEM: The platform or an administrator of the platform has temporarily blocked the instrument.\n  - LOST: The instrument has been blocked because it was marked as lost.\n  - SINGLE_SPEND: The instrument has been automatically blocked after its first successful transaction (single-spend card).\n"
+      enum:
+      - USER
+      - SYSTEM
+      - LOST
+      - SINGLE_SPEND
+    CompanyType:
+      type: string
+      description: Supported company types - if company type is not listed, please contact our support team to check if the company type can be supported.
+      enum:
+      - SOLE_TRADER
+      - LLC
+      - PUBLIC_LIMITED_COMPANY
+      - LIMITED_LIABILITY_PARTNERSHIP
+      - NON_PROFIT_ORGANISATION
+    DestroyedReason:
+      type: string
+      description: "The reason why the instrument has been destroyed:\n  - SYSTEM: The platform or an administrator of the platform has destroyed the instrument.\n  - USER: The root, or an authorised user, of the identity owning the instrument has destroyed the instrument.\n  - LOST: The instrument was automatically destroyed as it was marked as lost.\n  - STOLEN: The instrument was automatically destroyed as it was marked as stolen.\n  - EXPIRED: The instrument was automatically destroyed as it expired.\n  - COMPROMISED: The instrument was automatically destroyed as it was marked as compromised.\n  - SINGLE_SPEND: The instrument was automatically destroyed as it was a single-spend card that was used.\n"
+      enum:
+      - SYSTEM
+      - USER
+      - LOST
+      - STOLEN
+      - EXPIRED
+      - COMPROMISED
+      - SINGLE_SPEND
+    Brand:
+      type: string
+      pattern: ^[a-zA-Z0-9]+$
+      description: 'Brand identifier used to determine the set of email and SMS user notification templates. Must be alphanumeric, up to 25 characters, and contain no spaces.
+
+        '
+      maxLength: 25
     Date:
       required:
       - year
@@ -884,6 +1019,96 @@ components:
           format: int32
           maximum: 31
           minimum: 1
+    Nationality:
+      maxLength: 2
+      minLength: 2
+      pattern: ^[A-Z]+$
+      type: string
+      description: Nationality of the user - using ISO 3166 alpha-2.
+    UnknownSenderAccount:
+      type: object
+      properties:
+        name:
+          type: string
+        accountReference:
+          oneOf:
+          - $ref: '#/components/schemas/Iban'
+          - $ref: '#/components/schemas/AccountNumberAndSortCode'
+          - $ref: '#/components/schemas/AccountDescriptor'
+    Currency:
+      type: string
+      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
+      maxLength: 3
+      minLength: 3
+      pattern: ^[A-Z]*$
+    ConsumerSourceOfFunds:
+      deprecated: true
+      type: string
+      description: The consumer's source of funds.
+      enum:
+      - PERSONAL_SAVINGS
+      - FAMILY_SAVINGS
+      - LABOUR_CONTRACT
+      - CIVIL_CONTRACT
+      - RENT
+      - FUNDS_FROM_OTHER_AUXILIARY_SOURCES
+      - SALE_OF_MOVABLE_ASSETS
+      - SALE_OF_REAL_ESTATE
+      - ORDINARY_BUSINESS_ACTIVITY
+      - DIVIDENDS
+      - LOAN_FROM_FINANCIAL_INSTITUTIONS_CREDIT_UNIONS
+      - LOAN_FROM_THIRD_PARTIES
+      - INHERITANCE
+      - SALE_OF_COMPANY_SHARES_BUSINESS
+      - OTHER
+    CompanyPosition:
+      type: string
+      description: The company position of the Corporate Root User.
+      enum:
+      - DIRECTOR
+      - AUTHORISED_REPRESENTATIVE
+    Occupation:
+      type: string
+      description: The industry of the identity.
+      deprecated: true
+      enum:
+      - ACCOUNTING
+      - AUDIT
+      - FINANCE
+      - PUBLIC_SECTOR_ADMINISTRATION
+      - ART_ENTERTAINMENT
+      - AUTO_AVIATION
+      - BANKING_LENDING
+      - BUSINESS_CONSULTANCY_LEGAL
+      - CONSTRUCTION_REPAIR
+      - EDUCATION_PROFESSIONAL_SERVICES
+      - INFORMATIONAL_TECHNOLOGIES
+      - TOBACCO_ALCOHOL
+      - GAMING_GAMBLING
+      - MEDICAL_SERVICES
+      - MANUFACTURING
+      - PR_MARKETING
+      - PRECIOUS_GOODS_JEWELRY
+      - NON_GOVERNMENTAL_ORGANIZATION
+      - INSURANCE_SECURITY
+      - RETAIL_WHOLESALE
+      - TRAVEL_TOURISM
+      - FREELANCER
+      - STUDENT
+      - UNEMPLOYED
+      - RETIRED
+      - OTHER
+    InstrumentState:
+      type: string
+      description: "The state of the instrument indicating what it can and cannot do as follows:\n  - ACTIVE: The instrument is in an active state and can be used in transactions.\n  - BLOCKED: The instrument is temporarily blocked and cannot be used. Any funds on the instrument are also frozen. The `blockedReason` provides more information as to why it was blocked.\n  - DESTROYED: The instrument has been permanently destroyed. The `destroyReason` provides more information as to why it was destroyed.\n  - NOT_ENABLED: The instrument is not enabled for use, since the linked user has not completed all necessary verification steps.\n"
+      enum:
+      - ACTIVE
+      - BLOCKED
+      - DESTROYED
+      - NOT_ENABLED
+    Id:
+      type: string
+      pattern: ^[0-9]+$
     ManagedAccount:
       required:
       - id
@@ -920,345 +1145,21 @@ components:
           description: The time when the managed account was created, expressed in Epoch timestamp using millisecond precision.
         lowBalanceThreshold:
           $ref: '#/components/schemas/AccountLowBalanceThreshold'
-    DestroyedReason:
-      type: string
-      description: "The reason why the instrument has been destroyed:\n  - SYSTEM: The platform or an administrator of the platform has destroyed the instrument.\n  - USER: The root, or an authorised user, of the identity owning the instrument has destroyed the instrument.\n  - LOST: The instrument was automatically destroyed as it was marked as lost.\n  - STOLEN: The instrument was automatically destroyed as it was marked as stolen.\n  - EXPIRED: The instrument was automatically destroyed as it expired.\n  - COMPROMISED: The instrument was automatically destroyed as it was marked as compromised.\n  - SINGLE_SPEND: The instrument was automatically destroyed as it was a single-spend card that was used.\n"
-      enum:
-      - SYSTEM
-      - USER
-      - LOST
-      - STOLEN
-      - EXPIRED
-      - COMPROMISED
-      - SINGLE_SPEND
-    Tag:
-      type: string
-      description: The tag field is a custom field that can be used to search and filter.
-      maxLength: 50
-      pattern: ^[a-zA-Z0-9_-]+$
-    Address:
-      required:
-      - addressLine1
-      - city
-      - postCode
-      - country
+    Error:
       type: object
       properties:
-        addressLine1:
-          minLength: 1
-          maxLength: 150
+        code:
           type: string
-          description: The first line of the address.
-        addressLine2:
-          maxLength: 150
+        message:
           type: string
-          description: The second line of the address.
-        city:
-          maxLength: 50
-          type: string
-          description: The city of the address.
-        postCode:
-          maxLength: 10
-          pattern: ^[A-Za-z0-9 -]*$
-          type: string
-          description: The post code associated with the address.
-        state:
-          maxLength: 50
-          type: string
-          description: The state of the address.
-        country:
-          maxLength: 2
-          minLength: 2
-          pattern: ^[A-Z]+$
-          type: string
-          description: The country of the address expressed in ISO 3166 alpha-2 format.
-    AccountNumberAndSortCode:
-      required:
-      - accountNumber
-      - sortCode
-      type: object
-      description: Bank details
-      properties:
-        accountNumber:
-          type: string
-          pattern: ^[0-9]{8}$
-          description: Account number
-        sortCode:
-          type: string
-          pattern: ^[0-9]{6}$
-          description: Sort code
-        secondaryReference:
-          type: string
-          description: Optional secondary reference for accounts without unique sort codes.
-    InstrumentState:
-      type: string
-      description: "The state of the instrument indicating what it can and cannot do as follows:\n  - ACTIVE: The instrument is in an active state and can be used in transactions.\n  - BLOCKED: The instrument is temporarily blocked and cannot be used. Any funds on the instrument are also frozen. The `blockedReason` provides more information as to why it was blocked.\n  - DESTROYED: The instrument has been permanently destroyed. The `destroyReason` provides more information as to why it was destroyed.\n  - NOT_ENABLED: The instrument is not enabled for use, since the linked user has not completed all necessary verification steps.\n"
-      enum:
-      - ACTIVE
-      - BLOCKED
-      - DESTROYED
-      - NOT_ENABLED
-    LegalAddress:
-      required:
-      - addressLine1
-      - city
-      - country
-      type: object
-      description: The legal address of the company. This information is captured via the Due Diligence (KYB) process.
-      properties:
-        addressLine1:
-          type: string
-        addressLine2:
-          type: string
-        city:
-          type: string
-        postCode:
-          maxLength: 10
-          pattern: ^[A-Za-z0-9 -]*$
-          type: string
-        state:
-          maxLength: 50
-          type: string
-        country:
-          maxLength: 2
-          minLength: 2
-          pattern: ^[A-Z]+$
-          type: string
-          description: Country of the identity in ISO 3166 alpha-2 format.
-    IdentityId:
-      required:
-      - type
-      - id
-      type: object
-      properties:
-        type:
-          enum:
-          - CONSUMER
-          - CORPORATE
-          type: string
-          description: Indicates the identity type.
-        id:
-          type: string
-          pattern: ^[0-9]+$
-          description: The identifier for the identity.
-    UnknownSenderAccount:
-      type: object
-      properties:
-        name:
-          type: string
-        accountReference:
-          oneOf:
-          - $ref: '#/components/schemas/Iban'
-          - $ref: '#/components/schemas/AccountNumberAndSortCode'
-          - $ref: '#/components/schemas/AccountDescriptor'
-    InstrumentType:
-      type: string
-      enum:
-      - managed_cards
-      - managed_accounts
-    ProfileId:
-      type: string
-      description: 'The profile Id which a specific identity, instrument or transaction type is linked to.
-
-
-        Profiles contain configuration and determine behavioral aspects of the newly created transaction, for example, fees that may apply.
-
-
-        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s needs.
-
-
-        Profile Ids can be found in the Multi Portal, in the API Credentials page.
-
-        '
-      pattern: ^[0-9]+$
-    Email:
-      type: string
-      description: E-mail Address of the user
-      format: email
-    Occupation:
-      type: string
-      description: The industry of the identity.
-      deprecated: true
-      enum:
-      - ACCOUNTING
-      - AUDIT
-      - FINANCE
-      - PUBLIC_SECTOR_ADMINISTRATION
-      - ART_ENTERTAINMENT
-      - AUTO_AVIATION
-      - BANKING_LENDING
-      - BUSINESS_CONSULTANCY_LEGAL
-      - CONSTRUCTION_REPAIR
-      - EDUCATION_PROFESSIONAL_SERVICES
-      - INFORMATIONAL_TECHNOLOGIES
-      - TOBACCO_ALCOHOL
-      - GAMING_GAMBLING
-      - MEDICAL_SERVICES
-      - MANUFACTURING
-      - PR_MARKETING
-      - PRECIOUS_GOODS_JEWELRY
-      - NON_GOVERNMENTAL_ORGANIZATION
-      - INSURANCE_SECURITY
-      - RETAIL_WHOLESALE
-      - TRAVEL_TOURISM
-      - FREELANCER
-      - STUDENT
-      - UNEMPLOYED
-      - RETIRED
-      - OTHER
-    TransactionForex:
-      type: object
-      description: Foreign exchange details when the transaction involved currency conversion.
-      properties:
-        originalAmount:
-          description: The original amount in the source or merchant currency before conversion.
-          $ref: '#/components/schemas/CurrencyAmount'
-        exchangeRate:
-          description: The exchange rate applied to the conversion.
-          $ref: '#/components/schemas/ScaledAmount'
-        paddingAmount:
-          description: The forex padding amount held during authorisation.
-          $ref: '#/components/schemas/CurrencyAmount'
-        feeAmount:
-          description: The forex markup fee amount.
-          $ref: '#/components/schemas/CurrencyAmount'
-    Currency:
-      type: string
-      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
-      maxLength: 3
-      minLength: 3
-      pattern: ^[A-Z]*$
-    ConsumerSourceOfFunds:
-      deprecated: true
-      type: string
-      description: The consumer's source of funds.
-      enum:
-      - PERSONAL_SAVINGS
-      - FAMILY_SAVINGS
-      - LABOUR_CONTRACT
-      - CIVIL_CONTRACT
-      - RENT
-      - FUNDS_FROM_OTHER_AUXILIARY_SOURCES
-      - SALE_OF_MOVABLE_ASSETS
-      - SALE_OF_REAL_ESTATE
-      - ORDINARY_BUSINESS_ACTIVITY
-      - DIVIDENDS
-      - LOAN_FROM_FINANCIAL_INSTITUTIONS_CREDIT_UNIONS
-      - LOAN_FROM_THIRD_PARTIES
-      - INHERITANCE
-      - SALE_OF_COMPANY_SHARES_BUSINESS
-      - OTHER
-    IncomingWireTransferMultiState:
-      type: string
-      description: "The state of an incoming wire transfer:\n  - PENDING: The transfer has been received and is being processed. Funds have not yet been credited to the destination account.\n  - COMPLETED: Funds have been credited to the destination account.\n  - REJECTED: The transfer was not accepted; funds were not credited.\n"
-      enum:
-      - PENDING
-      - COMPLETED
-      - REJECTED
-    LinkedAccountState:
-      type: string
-      description: "The state of the linked account:\n  - **PENDING_VERIFICATION**: The Linked Account is pending the completion of the required verification steps.\n  - **ACTIVE**: The Linked Account is verified and active, ready to be used for self-to-self wire transfers.\n  - **BLOCKED**: The Linked Account is temporarily blocked, preventing any use of this external account in self-to-self wire transfers. A Linked Account can be unblocked by calling the Multi API endpoint `POST /linked_accounts/{id}/unblock`.\n  - **REMOVED**: The Linked Account has been removed from the platform and can no longer be used for self-to-self wire transfers unless a new verification is completed in future.\n  - **REJECTED**: The Linked Account failed the verification process and cannot be used for self-to-self wire transfers unless a new verification is completed in future.\nA Linked Account can transition through these different overall states, starting at the `PENDING_VERIFICATION` state until all verification steps are followed through.\n"
-      enum:
-      - PENDING_VERIFICATION
-      - BLOCKED
-      - ACTIVE
-      - REJECTED
-      - REMOVED
-    Nationality:
-      maxLength: 2
-      minLength: 2
-      pattern: ^[A-Z]+$
-      type: string
-      description: Nationality of the user - using ISO 3166 alpha-2.
-    ManagedInstrumentState:
-      required:
-      - state
-      type: object
-      properties:
-        state:
-          $ref: '#/components/schemas/InstrumentState'
-        blockedReason:
-          $ref: '#/components/schemas/BlockedReason'
-        destroyedReason:
-          $ref: '#/components/schemas/DestroyedReason'
-    CompanyPosition:
-      type: string
-      description: The company position of the Corporate Root User.
-      enum:
-      - DIRECTOR
-      - AUTHORISED_REPRESENTATIVE
-    InstrumentId:
-      required:
-      - id
-      - type
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        type:
-          $ref: '#/components/schemas/InstrumentType'
-    AccountType:
-      type: string
-      description: "An account can be of two types, Personal or Business:\n  - PERSONAL means that the account held at the external bank or PSP is registered under the ownership of a natural person or consumer identity;\n  - BUSINESS means that the account held at the external bank or PSP is registered under the ownership of a corporate entity.\n"
-      enum:
-      - BUSINESS
-      - PERSONAL
-    ConsumerRootUser:
-      required:
-      - id
-      - email
-      - name
-      - surname
-      - active
-      - mobile
-      - emailVerified
-      - mobileNumberVerified
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/IdentityId'
-        name:
-          maxLength: 100
-          type: string
-          description: First name of the root user.
-        surname:
-          maxLength: 100
-          type: string
-          description: Last name of the root user.
-        email:
-          $ref: '#/components/schemas/Email'
-        mobile:
-          $ref: '#/components/schemas/Mobile'
-        occupation:
-          $ref: '#/components/schemas/Occupation'
-        active:
-          type: boolean
-          description: The state of the root user. If false, then the user will not be able to log in.
-        emailVerified:
-          type: boolean
-          description: Indicates if the root user's email has been verified.
-        mobileNumberVerified:
-          type: boolean
-          description: Indicates if the root user's mobile number has been verified.
-        dateOfBirth:
-          description: Date of birth of the consumer root user.
-          $ref: '#/components/schemas/Date'
-        address:
-          description: Address of the consumer root user.
-          $ref: '#/components/schemas/AddressWithNoRequiredFields'
-        nationality:
-          description: Nationality of the consumer root user, in ISO 3166 alpha-2 format.
-          $ref: '#/components/schemas/Nationality'
-        placeOfBirth:
-          type: string
-          description: The place of birth of the consumer root user.
-        tag:
-          $ref: '#/components/schemas/Tag'
-        locale:
-          $ref: '#/components/schemas/UserLocale'
-        brand:
-          $ref: '#/components/schemas/Brand'
   parameters:
+    request-ref:
+      name: request-ref
+      in: header
+      description: A unique call reference included in every call, that enables the receiver to avoid duplicate handling of a webhook request (e.g. webhook was resent).
+      required: false
+      schema:
+        type: string
     signature:
       name: signature
       in: header
@@ -1269,71 +1170,11 @@ components:
       deprecated: true
       schema:
         type: string
-    published-timestamp:
-      name: published-timestamp
-      in: header
-      description: The timestamp, expressed in Epoch timestamp using millisecond precision, when this event was published.
-      required: true
-      style: simple
-      explode: false
-      schema:
-        type: integer
-        format: int64
-    iwtState:
-      name: state
-      in: query
-      required: false
-      description: Filter incoming wire transfers by state.
-      schema:
-        type: array
-        items:
-          $ref: '#/components/schemas/IncomingWireTransferMultiState'
-    lastUpdatedTimestampFrom:
-      name: lastUpdatedTimestampFrom
-      in: query
-      required: false
-      description: Filter for transactions last updated after this timestamp. Useful for pulling recently changed transactions. Epoch timestamp using millisecond precision.
-      schema:
-        type: integer
-        format: int64
     creationTimestampFrom:
       name: creationTimestampFrom
       in: query
       required: false
       description: Filter for transactions created after this timestamp. Epoch timestamp using millisecond precision.
-      schema:
-        type: integer
-        format: int64
-    request-ref:
-      name: request-ref
-      in: header
-      description: A unique call reference included in every call, that enables the receiver to avoid duplicate handling of a webhook request (e.g. webhook was resent).
-      required: false
-      schema:
-        type: string
-    offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.
-      schema:
-        minimum: 0
-        type: integer
-        format: int32
-    signature-v2:
-      name: signature-v2
-      in: header
-      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `call-ref + payload + published-timestamp` using your API key.
-      required: true
-      style: simple
-      explode: false
-      schema:
-        type: string
-    creationTimestampTo:
-      name: creationTimestampTo
-      in: query
-      required: false
-      description: Filter for transactions created before this timestamp. Epoch timestamp using millisecond precision.
       schema:
         type: integer
         format: int64
@@ -1347,11 +1188,29 @@ components:
         minimum: 1
         type: integer
         format: int32
-    lastUpdatedTimestampTo:
-      name: lastUpdatedTimestampTo
+    published-timestamp:
+      name: published-timestamp
+      in: header
+      description: The timestamp, expressed in Epoch timestamp using millisecond precision, when this event was published.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        format: int64
+    creationTimestampTo:
+      name: creationTimestampTo
       in: query
       required: false
-      description: Filter for transactions last updated before this timestamp. Epoch timestamp using millisecond precision.
+      description: Filter for transactions created before this timestamp. Epoch timestamp using millisecond precision.
+      schema:
+        type: integer
+        format: int64
+    lastUpdatedTimestampFrom:
+      name: lastUpdatedTimestampFrom
+      in: query
+      required: false
+      description: Filter for transactions last updated after this timestamp. Useful for pulling recently changed transactions. Epoch timestamp using millisecond precision.
       schema:
         type: integer
         format: int64
@@ -1365,7 +1224,141 @@ components:
         enum:
         - ASC
         - DESC
+    iwtState:
+      name: state
+      in: query
+      required: false
+      description: Filter incoming wire transfers by state.
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/IncomingWireTransferMultiState'
+    signature-v2:
+      name: signature-v2
+      in: header
+      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `call-ref + payload + published-timestamp` using your API key.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    lastUpdatedTimestampTo:
+      name: lastUpdatedTimestampTo
+      in: query
+      required: false
+      description: Filter for transactions last updated before this timestamp. Epoch timestamp using millisecond precision.
+      schema:
+        type: integer
+        format: int64
+    offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+  responses:
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    IncomingWireTransferListResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IncomingWireTransferList'
+    IncomingWireTransferResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IncomingWireTransfer'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
   headers:
+    x-ratelimit-limit:
+      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+        The first number (20) is the limit that has been exceeded.
+
+        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+        '
+      required: true
+      schema:
+        type: string
     request-ref:
       description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
       required: true
@@ -1378,17 +1371,6 @@ components:
         minimum: 0
         type: integer
         format: int32
-    x-ratelimit-limit:
-      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
-
-        The first number (20) is the limit that has been exceeded.
-
-        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
-
-        '
-      required: true
-      schema:
-        type: string
   securitySchemes:
     api-key:
       type: apiKey

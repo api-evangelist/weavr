@@ -9,7 +9,7 @@ info:
     url: https://weavr-cdn.s3.eu-central-1.amazonaws.com/weavr-payment-run-logo.png
     backgroundColor: '#FFFFFF'
     altText: Weavr
-  description: "Weavr Payment Run Plug-in API provides a simple and flexible way for Embedders to add payment execution capabilities in their application.\n\nBy integrating Weavr Payment Run plug-in API in your application, you can embed banking and payment capabilities within your app to boost productivity for your users in a seamless experience.\n\n# Authentication\nEach request to the API must include an `api_key` that represents your account. You can obtain an API Key by registering for a Embedder account [here](https://portal.weavr.io/register/?plugin=payment-run).\n\nAlmost all endpoints require a secondary authentication token `auth_token` that represents the user for whom the request is being executed.\n\n# Postman Collection\nTo help you get started with your integration, you can download the [Postman](https://postman.com) collection [here](https://sandbox.weavr.io/payment-run/v1/postman). The collection includes the steps you’ll need to follow to integrate Embedded Payment Run within your app. \n\nThe collection makes use of environment variables to pre-fill details associated with your Sandbox account, such as your account’s API Key. You can download your Sandbox Account environment file from the [Sandbox Portal](https://portal.weavr.io/register/?plugin=payment-run).\n"
+  description: Weavr Payment Run Plug-in API provides a simple and flexible way for Embedders to add payment execution capabilities in their application.
 servers:
 - url: https://sandbox.weavr.io/payment-run
   description: Sandbox
@@ -17,8 +17,8 @@ security:
 - apiKey: []
   authToken: []
 tags:
-- name: Payment runs
-  description: "A Payment run contains a list of supplier payments. A Payment run can be \n- created by a user with a `CREATOR` role \n- confirmed by a user with a `CONTROLLER` role\n- funded by a user with a `CONTROLLER` role\n\nNote that the Controller user must have their mobile device enrolled to SCA. \n\nBefore a payment run can be executed, it must be funded. Users with the `CONTROLLER` role must link their company's bank account(s) that are represented as Linked Accounts, which than can be used as the funding source for a payment run.\n\nDepending on the bank's constraints it may not be possible to deposit the total amount of funds required for a payment run, in which case the payment run will be automatically split into funding groups. All funding groups must be funded and executed for the payment run to be marked as completed. \n\nNote that even if the payment is created successfully, you still need to check its status in order to determine if it is `completed` or`failed`.\n"
+- name: Payment Runs
+  description: A Payment run contains a list of supplier payments.
 paths:
   /v1/payment_runs:
     post:
@@ -28,12 +28,11 @@ paths:
         Note that all the supplier payments in a payment run is limited to one currency. The currency of the payment run are enabled upon the Buyer’s registration.
 
 
-
         Required user role: `CREATOR`'
       operationId: postPaymentRun
       summary: Create a payment run
       tags:
-      - Payment runs
+      - Payment Runs
       parameters:
       - in: header
         name: idempotency-ref
@@ -688,7 +687,7 @@ paths:
         Required user roles: `CONTROLLER` OR `CREATOR`'
       operationId: getPaymentRuns
       tags:
-      - Payment runs
+      - Payment Runs
       parameters:
       - name: limit
         in: query
@@ -1240,12 +1239,11 @@ paths:
       description: 'Retrieve a payment run belonging to the buyer that the logged-in user belongs to.
 
 
-
         Required user roles: `CONTROLLER` OR `CREATOR`'
       operationId: getPaymentRunsId
       summary: Get a payment run
       tags:
-      - Payment runs
+      - Payment Runs
       parameters:
       - name: payment_run_id
         in: path
@@ -1729,12 +1727,11 @@ paths:
       description: 'Update the details of a payment identified by the paymentId that is in the `PENDING_CONFIRMATION` state.
 
 
-
         Required user role: `CREATOR`'
       operationId: putPaymentRunsId
       summary: Update a payment
       tags:
-      - Payment runs
+      - Payment Runs
       parameters:
       - name: payment_run_id
         in: path
@@ -2018,12 +2015,11 @@ paths:
       description: 'Confirm that a payment run can be executed.
 
 
-
         Required user role: `CONTROLLER`'
       operationId: postPaymentRunsIdConfirm
       summary: Confirm a payment run
       tags:
-      - Payment runs
+      - Payment Runs
       parameters:
       - name: payment_run_id
         in: path
@@ -2528,12 +2524,11 @@ paths:
         Depending on the maximum payment amount constraints imposed by the bank that is providing the account, the payment run may be split in 2 or more groups. Note that you''ll need to complete a funding process for each instruction returned.
 
 
-
         Required user role: `CONTROLLER`'
       operationId: getPaymentRunsIdFund
       summary: Get a payment run funding instructions
       tags:
-      - Payment runs
+      - Payment Runs
       parameters:
       - name: payment_run_id
         in: path
@@ -3039,11 +3034,17 @@ paths:
                     type: string
   /v1/payment_runs/{payment_run_id}/cancel:
     post:
-      description: "Cancel a payment run. \n\nNote that a payment run can be cancelled when it is in the states `QUEUED`, `PENDING_CONFIRMATION`, `PENDING_CHALLENGE`, OR `PENDING_FUNDING`\n\n\nRequired user roles: `CONTROLLER` OR `CREATOR`"
+      description: 'Cancel a payment run.
+
+
+        Note that a payment run can be cancelled when it is in the states `QUEUED`, `PENDING_CONFIRMATION`, `PENDING_CHALLENGE`, OR `PENDING_FUNDING`
+
+
+        Required user roles: `CONTROLLER` OR `CREATOR`'
       operationId: postPaymentRunsIdCancel
       summary: Cancel a payment run
       tags:
-      - Payment runs
+      - Payment Runs
       parameters:
       - name: payment_run_id
         in: path
@@ -3242,11 +3243,17 @@ paths:
                     type: string
   /v1/payment_runs/{payment_run_id}/cancel/payments:
     put:
-      description: "Cancel a payment within a payment run. \n\nNote that a payment can be cancelled when it is in the state `PENDING_CONFIRMATION`.\n\n\nRequired user roles: `CONTROLLER` OR `CREATOR`"
+      description: 'Cancel a payment within a payment run.
+
+
+        Note that a payment can be cancelled when it is in the state `PENDING_CONFIRMATION`.
+
+
+        Required user roles: `CONTROLLER` OR `CREATOR`'
       operationId: putCancelPaymentRunPayment
       summary: Cancel a payment
       tags:
-      - Payment runs
+      - Payment Runs
       parameters:
       - name: payment_run_id
         in: path
@@ -3463,12 +3470,11 @@ paths:
       description: 'Restart a payment run after it has entered status `SCA_FAILED`.
 
 
-
         Required user role: `CONTROLLER`'
       operationId: postRestartPaymentRun
       summary: Restart a payment run
       tags:
-      - Payment runs
+      - Payment Runs
       parameters:
       - name: payment_run_id
         in: path
@@ -3673,12 +3679,11 @@ paths:
         Note that a payment run group can only be cancelled when it is in the state `AWAITING_FUNDS`.
 
 
-
         Required user role: `CONTROLLER`'
       operationId: postCancelPaymentRunGroup
       summary: Cancel a payment run group
       tags:
-      - Payment runs
+      - Payment Runs
       parameters:
       - name: payment_run_id
         in: path

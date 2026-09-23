@@ -39,6 +39,24 @@ webhooks:
           description: Success - No Content
 components:
   schemas:
+    InstrumentId:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        type:
+          $ref: '#/components/schemas/InstrumentType'
+    InstrumentType:
+      type: string
+      enum:
+      - managed_cards
+      - managed_accounts
+    Id:
+      type: string
+      pattern: ^[0-9]+$
     ManualTransactionEvent:
       required:
       - targetInstrument
@@ -80,24 +98,6 @@ components:
         id:
           type: string
           pattern: ^[0-9]+$
-    InstrumentType:
-      type: string
-      enum:
-      - managed_cards
-      - managed_accounts
-    Id:
-      type: string
-      pattern: ^[0-9]+$
-    InstrumentId:
-      required:
-      - id
-      - type
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        type:
-          $ref: '#/components/schemas/InstrumentType'
   parameters:
     signature:
       name: signature

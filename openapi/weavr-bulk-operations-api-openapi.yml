@@ -21,7 +21,13 @@ webhooks:
       tags:
       - Bulk Operations
       summary: Bulk Process End
-      description: "Reports on the final state of execution of a bulk process the moment it ends:\n  - COMPLETED: the execution of the bulk process is complete and all bulk operations of the bulk process were executed successfully.\n  - FAILED: none of the operations of the bulk process have executed.\n  - PARTIALLY_COMPLETED: the execution of the bulk process is complete and some of the bulk operations of the bulk process failed.\n"
+      description: 'Reports on the final state of execution of a bulk process the moment it ends:
+
+        - COMPLETED: the execution of the bulk process is complete and all bulk operations of the bulk process were executed successfully.
+
+        - FAILED: none of the operations of the bulk process have executed.
+
+        - PARTIALLY_COMPLETED: the execution of the bulk process is complete and some of the bulk operations of the bulk process failed.'
       operationId: bulk_process_end
       parameters:
       - $ref: '#/components/parameters/request-ref'
@@ -39,13 +45,6 @@ webhooks:
       - webhooks_key: []
 components:
   schemas:
-    BulkProcessOperationStatusCounts:
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/BulkProcessOperationStatus'
-        count:
-          type: integer
     BulkProcessOperationStatus:
       type: string
       enum:
@@ -79,6 +78,13 @@ components:
       - FAILED
       - PAUSED
       - CANCELLED
+    BulkProcessOperationStatusCounts:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/BulkProcessOperationStatus'
+        count:
+          type: integer
   parameters:
     request-ref:
       name: request-ref

@@ -6,21 +6,7 @@ info:
     url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
     backgroundColor: '#FFFFFF'
     altText: Weavr
-  description: 'Weavr Multi API provides a simple and flexible way to issue cards and accounts to your customers.
-
-
-    By integrating Weavr Multi API in your application you can embed banking capabilities within your app and provide a seamless experience for your customers.
-
-
-    # Authentication
-
-
-    Each request to the Multi API must include an `api-key` that represents your account. You can obtain an API Key by registering for a Multi account [here](https://portal.weavr.io).
-
-
-    Almost all endpoints require a secondary authentication token `auth_token` that represents the user for whom the request is being executed.
-
-    '
+  description: Weavr Multi API provides a simple and flexible way to issue cards and accounts to your customers.
   contact:
     name: Weavr
     url: https://weavr.io
@@ -41,9 +27,7 @@ paths:
         This code must then be provided in the _corporateRootUserEmailVerify_ operation to verify the root user''s email address.
 
 
-        _Note that on the Sandbox Environment, the `verificationCode` is always set to \"123456\"._
-
-        '
+        _Note that on the Sandbox Environment, the `verificationCode` is always set to \"123456\"._'
       summary: Send email verification code to Corporate root user
       operationId: corporateRootUserEmailVerificationCodeSend
       parameters:
@@ -83,9 +67,7 @@ paths:
         This is needed as part of the verification process for basic due diligence.
 
 
-        _Note that on the Sandbox Environment, the `verificationCode` is always set to \"123456\"._
-
-        '
+        _Note that on the Sandbox Environment, the `verificationCode` is always set to \"123456\"._'
       summary: Verify email of Corporate root user
       operationId: corporateRootUserEmailVerify
       requestBody:
@@ -121,9 +103,7 @@ paths:
         This code must then be provided in the _consumerRootUserEmailVerify_ operation to verify the root user''s email address.
 
 
-        Note that on the Sandbox Environment, the `verificationCode` is always set to \"123456\".
-
-        '
+        Note that on the Sandbox Environment, the `verificationCode` is always set to \"123456\".'
       summary: Send email verification code to Consumer root user
       operationId: consumerRootUserEmailVerificationCodeSend
       requestBody:
@@ -161,9 +141,7 @@ paths:
         This is needed as part of the verification process for basic due diligence.
 
 
-        Note that on the Sandbox Environment, emails are not sent and the verification code is always set to \"123456\".
-
-        '
+        Note that on the Sandbox Environment, emails are not sent and the verification code is always set to \"123456\".'
       summary: Verify email of Consumer root user
       operationId: consumerRootUserEmailVerify
       requestBody:
@@ -191,37 +169,6 @@ paths:
       - api-key: []
 components:
   responses:
-    InternalServerError:
-      description: Internal Server Error - There is a problem with the server. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    TooManyRequests:
-      description: Too many requests.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-        x-ratelimit-limit:
-          $ref: '#/components/headers/x-ratelimit-limit'
-        x-ratelimit-reset:
-          $ref: '#/components/headers/x-ratelimit-reset'
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    VerifyConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - VERIFICATION_CODE_INVALID
-                - EMAIL_NOT_UNIQUE
     Forbidden:
       description: Forbidden - Access to the requested resource or action is forbidden.
       headers:
@@ -249,20 +196,6 @@ components:
                 - EMAIL_NOT_FOUND
                 - ALREADY_VERIFIED
                 - EMAIL_NOT_UNIQUE
-    NoContent:
-      description: Success - No Content.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    NotFound:
-      description: Not found - The requested resource couldn't be found.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     BadRequestError:
       description: Bad Request Error - Your request is invalid.
       headers:
@@ -279,22 +212,63 @@ components:
                 description: When present helps to identify and fix the problem.
               syntaxErrors:
                 $ref: '#/components/schemas/SyntaxError'
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
     Error:
       description: Error
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    VerifyConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - VERIFICATION_CODE_INVALID
+                - EMAIL_NOT_UNIQUE
     ServiceUnavailable:
       description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NoContent:
+      description: Success - No Content.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
   schemas:
-    VerificationCode:
-      type: string
-      description: A randomly generated one-time use code used to verify the user's email address or mobile number.
-      pattern: ^[0-9]{6}$
     SyntaxError:
       type: object
       description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
@@ -325,6 +299,14 @@ components:
                 - AT_LEAST
                 - AT_MOST
                 - ALL_OR_NONE
+    Email:
+      type: string
+      description: E-mail Address of the user
+      format: email
+    VerificationCode:
+      type: string
+      description: A randomly generated one-time use code used to verify the user's email address or mobile number.
+      pattern: ^[0-9]{6}$
     Error:
       type: object
       properties:
@@ -332,19 +314,18 @@ components:
           type: string
         message:
           type: string
-    Email:
-      type: string
-      description: E-mail Address of the user
-      format: email
-  parameters:
-    idempotency-ref:
-      name: idempotency-ref
-      in: header
-      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
-      required: false
+  headers:
+    x-ratelimit-limit:
+      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+        The first number (20) is the limit that has been exceeded.
+
+        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+        '
+      required: true
       schema:
         type: string
-  headers:
     request-ref:
       description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
       required: true
@@ -357,18 +338,26 @@ components:
         minimum: 0
         type: integer
         format: int32
-    x-ratelimit-limit:
-      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
-
-        The first number (20) is the limit that has been exceeded.
-
-        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
-
-        '
-      required: true
+  parameters:
+    idempotency-ref:
+      name: idempotency-ref
+      in: header
+      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
+      required: false
       schema:
         type: string
   requestBodies:
+    EmailRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - email
+            type: object
+            properties:
+              email:
+                $ref: '#/components/schemas/Email'
     EmailVerifyRequest:
       required: true
       content:
@@ -383,17 +372,6 @@ components:
                 $ref: '#/components/schemas/Email'
               verificationCode:
                 $ref: '#/components/schemas/VerificationCode'
-    EmailRequest:
-      required: true
-      content:
-        application/json:
-          schema:
-            required:
-            - email
-            type: object
-            properties:
-              email:
-                $ref: '#/components/schemas/Email'
   securitySchemes:
     api-key:
       type: apiKey

@@ -9,7 +9,7 @@ info:
     url: https://weavr-cdn.s3.eu-central-1.amazonaws.com/weavr-payment-run-logo.png
     backgroundColor: '#FFFFFF'
     altText: Weavr
-  description: "Weavr Payment Run Plug-in API provides a simple and flexible way for Embedders to add payment execution capabilities in their application.\n\nBy integrating Weavr Payment Run plug-in API in your application, you can embed banking and payment capabilities within your app to boost productivity for your users in a seamless experience.\n\n# Authentication\nEach request to the API must include an `api_key` that represents your account. You can obtain an API Key by registering for a Embedder account [here](https://portal.weavr.io/register/?plugin=payment-run).\n\nAlmost all endpoints require a secondary authentication token `auth_token` that represents the user for whom the request is being executed.\n\n# Postman Collection\nTo help you get started with your integration, you can download the [Postman](https://postman.com) collection [here](https://sandbox.weavr.io/payment-run/v1/postman). The collection includes the steps you’ll need to follow to integrate Embedded Payment Run within your app. \n\nThe collection makes use of environment variables to pre-fill details associated with your Sandbox account, such as your account’s API Key. You can download your Sandbox Account environment file from the [Sandbox Portal](https://portal.weavr.io/register/?plugin=payment-run).\n"
+  description: Weavr Payment Run Plug-in API provides a simple and flexible way for Embedders to add payment execution capabilities in their application.
 servers:
 - url: https://sandbox.weavr.io/payment-run
   description: Sandbox
@@ -21,9 +21,7 @@ tags:
   description: 'Simulators enable you to trigger processes in Sandbox that in Production are triggered from an external action rather than from your application. this way you can test scenarios that otherwise you would only encounter in the Live environment.
 
 
-    *Note: These endpoints are only available on Sandbox and won’t work in the Live environment.*
-
-    '
+    *Note: These endpoints are only available on Sandbox and won’t work in the Live environment.*'
 paths:
   /simulate/v1/payment_runs/{payment_run_id}/fund_group/{reference}:
     post:
@@ -33,9 +31,7 @@ paths:
       description: 'Simulate funding a payment run using a linked account.
 
 
-        *This endpoint will only function in Sandbox and should not be used in the Live environment.*
-
-        '
+        *This endpoint will only function in Sandbox and should not be used in the Live environment.*'
       tags:
       - Simulator
       security:
@@ -191,9 +187,7 @@ paths:
       description: 'The Linked Account Simulator allows you to create a simulated linked account that can be used for funding payment runs.
 
 
-        *This endpoint will only function in Sandbox and should not be used in the Live environment.*
-
-        '
+        *This endpoint will only function in Sandbox and should not be used in the Live environment.*'
       tags:
       - Simulator
       security:
@@ -571,7 +565,6 @@ paths:
     post:
       operationId: postSimulateLinkedAccountFundVerification
       summary: Simulate Control Check via Test Funding Transaction
-      description: Simulate Control Check via Test Funding Transaction
       tags:
       - Simulator
       parameters:
@@ -724,9 +717,7 @@ paths:
       description: 'Simulates due diligence (KYB) for Buyers.
 
 
-        *This endpoint will only function in Sandbox and should not be used in the Live environment.*
-
-        '
+        *This endpoint will only function in Sandbox and should not be used in the Live environment.*'
       x-sandbox-only: true
       tags:
       - Simulator
@@ -870,9 +861,7 @@ paths:
       description: 'Simulate AIS consent status change.
 
 
-        *This endpoint will only function in Sandbox and should not be used in the Live environment.*
-
-        '
+        *This endpoint will only function in Sandbox and should not be used in the Live environment.*'
       x-sandbox-only: true
       tags:
       - Simulator
@@ -1036,9 +1025,7 @@ paths:
       description: 'Simulates issuing the SCA challenge for a payment run.
 
 
-        *This endpoint will only function in Sandbox and should not be used in the Live environment.*
-
-        '
+        *This endpoint will only function in Sandbox and should not be used in the Live environment.*'
       x-sandbox-only: true
       tags:
       - Simulator
@@ -1231,9 +1218,7 @@ paths:
       description: 'Simulates verifying the SCA challenge for a payment run.
 
 
-        *This endpoint will only function in Sandbox and should not be used in the Live environment.*
-
-        '
+        *This endpoint will only function in Sandbox and should not be used in the Live environment.*'
       x-sandbox-only: true
       tags:
       - Simulator

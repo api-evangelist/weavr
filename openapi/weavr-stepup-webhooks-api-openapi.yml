@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
+  title: Weavr Stepup Webhooks API
   version: v1
-  title: Weavr Embedded Payment Run Stepup Webhooks API
   license:
     name: private
     url: https://weavr.io
@@ -9,7 +9,7 @@ info:
     url: https://weavr-cdn.s3.eu-central-1.amazonaws.com/weavr-payment-run-logo.png
     backgroundColor: '#FFFFFF'
     altText: Weavr
-  description: "Weavr Payment Run Plug-in API provides a simple and flexible way for Embedders to add payment execution capabilities in their application.\n\nBy integrating Weavr Payment Run plug-in API in your application, you can embed banking and payment capabilities within your app to boost productivity for your users in a seamless experience.\n\n# Authentication\nEach request to the API must include an `api_key` that represents your account. You can obtain an API Key by registering for a Embedder account [here](https://portal.weavr.io/register/?plugin=payment-run).\n\nAlmost all endpoints require a secondary authentication token `auth_token` that represents the user for whom the request is being executed.\n\n# Postman Collection\nTo help you get started with your integration, you can download the [Postman](https://postman.com) collection [here](https://sandbox.weavr.io/payment-run/v1/postman). The collection includes the steps you’ll need to follow to integrate Embedded Payment Run within your app. \n\nThe collection makes use of environment variables to pre-fill details associated with your Sandbox account, such as your account’s API Key. You can download your Sandbox Account environment file from the [Sandbox Portal](https://portal.weavr.io/register/?plugin=payment-run).\n"
+  description: 'Operations tagged Stepup Webhooks across 2 of this provider''s published API definitions: weavr-payment-run-openapi-original.yml, weavr-stepup-webhooks-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://sandbox.weavr.io/payment-run
   description: Sandbox
@@ -133,6 +133,9 @@ webhooks:
       responses:
         '200':
           description: Return a 200 status to indicate that the data was received successfully
+    servers:
+    - url: https://sandbox.weavr.io/payment-run
+      description: Sandbox
 components:
   securitySchemes:
     apiKey:
@@ -145,37 +148,33 @@ components:
       description: The authentication token representing the user. This will be included in the login response object.
       scheme: bearer
       bearerFormat: JWT
+x-refined-from:
+- weavr-payment-run-openapi-original.yml
+- weavr-stepup-webhooks-api-openapi.yml
 x-tagGroups:
-- name: Authentication
+- name: Access
   tags:
-  - Tokens
-  - Passwords
-- name: Authorisation
-  tags:
-  - Additional Factors
-  - Step up
+  - Access Token
+  - User Impersonation
+  - Consent Request
 - name: Identities
   tags:
-  - Buyers
-  - Buyer Authorised Users
-- name: Payment runs
+  - Corporates
+  - Consumers
+- name: User Management
   tags:
-  - Payment runs
+  - Authorised Users
 - name: Instruments
   tags:
-  - Linked Accounts
-- name: Institutions
+  - Managed Accounts
+  - Managed Cards
+- name: Transactions
   tags:
-  - Institutions
-- name: Simulators
+  - Transfers
+- name: Fees
   tags:
-  - Simulator
-- name: Events
+  - Fees
+- name: Bulk Operations [Beta]
   tags:
-  - Buyers Webhooks
-  - Payment runs Webhooks
-  - Linked Accounts Webhooks
-  - Tokens Webhooks
-  - Stepup Webhooks
-  - Authentication Factors Webhooks
-  - Transactions Webhooks
+  - Operations
+  - Manage

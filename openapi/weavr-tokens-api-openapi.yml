@@ -9,7 +9,7 @@ info:
     url: https://weavr-cdn.s3.eu-central-1.amazonaws.com/weavr-payment-run-logo.png
     backgroundColor: '#FFFFFF'
     altText: Weavr
-  description: "Weavr Payment Run Plug-in API provides a simple and flexible way for Embedders to add payment execution capabilities in their application.\n\nBy integrating Weavr Payment Run plug-in API in your application, you can embed banking and payment capabilities within your app to boost productivity for your users in a seamless experience.\n\n# Authentication\nEach request to the API must include an `api_key` that represents your account. You can obtain an API Key by registering for a Embedder account [here](https://portal.weavr.io/register/?plugin=payment-run).\n\nAlmost all endpoints require a secondary authentication token `auth_token` that represents the user for whom the request is being executed.\n\n# Postman Collection\nTo help you get started with your integration, you can download the [Postman](https://postman.com) collection [here](https://sandbox.weavr.io/payment-run/v1/postman). The collection includes the steps you’ll need to follow to integrate Embedded Payment Run within your app. \n\nThe collection makes use of environment variables to pre-fill details associated with your Sandbox account, such as your account’s API Key. You can download your Sandbox Account environment file from the [Sandbox Portal](https://portal.weavr.io/register/?plugin=payment-run).\n"
+  description: Weavr Payment Run Plug-in API provides a simple and flexible way for Embedders to add payment execution capabilities in their application.
 servers:
 - url: https://sandbox.weavr.io/payment-run
   description: Sandbox
@@ -32,9 +32,7 @@ paths:
         solely for updating the password.
 
 
-        The token returned is valid for 5 minutes from last activity.
-
-        '
+        The token returned is valid for 5 minutes from last activity.'
       summary: Acquire auth token
       tags:
       - Tokens
@@ -263,9 +261,7 @@ paths:
       operationId: logout
       description: 'Logs out the user and terminates the session identified by the
 
-        `auth_token` in the Authorization Header.
-
-        '
+        `auth_token` in the Authorization Header.'
       summary: Logout
       tags:
       - Tokens

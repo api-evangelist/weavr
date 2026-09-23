@@ -16,9 +16,7 @@ servers:
 - url: '""'
 tags:
 - name: Outgoing Wire Transfers
-  description: 'The Outgoing Wire Transfer transaction is used to transfer funds from managed accounts to an external bank account.
-
-    '
+  description: The Outgoing Wire Transfer transaction is used to transfer funds from managed accounts to an external bank account.
 paths:
   /outgoing_wire_transfers:
     post:
@@ -28,7 +26,13 @@ paths:
       operationId: outgoingWireTransferCreate
       x-permissions:
       - i:owt:create
-      description: "Transfers funds from managed accounts to an external bank account.\n\nThe Outgoing Wire Transfer Profile (configured in the Multi Portal) specified determines the behaviour and restrictions of the transaction (for example, fees).\n\nNote that even if the transaction is created successfully, you still need to check its state in order to determine if it is pending completion of an authentication challenge by the user. \n"
+      description: 'Transfers funds from managed accounts to an external bank account.
+
+
+        The Outgoing Wire Transfer Profile (configured in the Multi Portal) specified determines the behaviour and restrictions of the transaction (for example, fees).
+
+
+        Note that even if the transaction is created successfully, you still need to check its state in order to determine if it is pending completion of an authentication challenge by the user.'
       parameters:
       - $ref: '#/components/parameters/idempotency-ref'
       requestBody:
@@ -345,7 +349,7 @@ paths:
       deprecated: true
       tags:
       - Outgoing Wire Transfers
-      description: 'Deprecated in favour of [Challenges endpoints](#tag/Confirmation-Challenges/operation/multipleSCAChallenge)
+      description: 'Deprecated in favour of Challenges endpoints
 
 
         Starts the verification process for an outgoing wire transfer in which a one-time password is sent to a device belonging to the logged-in user that was previously enrolled through the `/authentication_factors/otp/{channel}` endpoint.
@@ -354,9 +358,7 @@ paths:
         You should only start this process if the outgoing wire transfer `state` is `PENDING_CHALLENGE`.
 
 
-        _Note that on the Sandbox Environment, text messages are not sent and the one-time-password is always \"123456\"._
-
-        '
+        _Note that on the Sandbox Environment, text messages are not sent and the one-time-password is always \"123456\"._'
       summary: Issue a one-time password that can be used to verify an outgoing wire transfer
       operationId: outgoingWireTransferSCAChallenge
       x-permissions:
@@ -402,7 +404,7 @@ paths:
       deprecated: true
       tags:
       - Outgoing Wire Transfers
-      description: 'Deprecated in favour of [Challenges endpoints](#tag/Confirmation-Challenges/operation/multipleSCAVerify)
+      description: 'Deprecated in favour of Challenges endpoints
 
 
         Completes the verification process for an outgoing wire transfer.
@@ -414,9 +416,7 @@ paths:
         If not verified challenge expires after 5 minutes and the number of incorrect OTP attempts is limited to reduce the risk of fraud.
 
 
-        _Note that on the Sandbox Environment, text messages are not sent and the `verificationCode` is always \"123456\"._
-
-        '
+        _Note that on the Sandbox Environment, text messages are not sent and the `verificationCode` is always \"123456\"._'
       summary: Verify an outgoing wire transfer using a one-time password
       operationId: outgoingWireTransferSCAVerify
       x-permissions:
@@ -462,15 +462,13 @@ paths:
       deprecated: true
       tags:
       - Outgoing Wire Transfers
-      description: 'Deprecated in favour of [Challenges endpoints](#tag/Confirmation-Challenges/operation/multipleSCAChallengePush)
+      description: 'Deprecated in favour of Challenges endpoints
 
 
         Starts the verification process for an outgoing wire transfer in which a push notification is sent to a device belonging to the logged-in user that was previously enrolled through the `/authentication_factors/push/{channel}` endpoint.
 
 
-        You should only start this process if the outgoing wire transfer `state` is `PENDING_CHALLENGE`.
-
-        '
+        You should only start this process if the outgoing wire transfer `state` is `PENDING_CHALLENGE`.'
       summary: Issue a push notification that can be used to verify an outgoing wire transfer
       operationId: outgoingWireTransferSCAChallengePush
       x-permissions:
@@ -536,313 +534,97 @@ webhooks:
     servers:
     - url: '""'
 components:
-  responses:
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    OutgoingWireTransferUpdateBeneficiaryNameConflict:
-      description: Update beneficiary name conflict
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutgoingWireTransferUpdateBeneficiaryNameConflict'
-    NotFound:
-      description: Not found - The requested resource couldn't be found.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    OutgoingWireTransferSCAChallengePushConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - STATE_INVALID
-                - CHANNEL_NOT_SUPPORTED
-                - CHANNEL_NOT_REGISTERED
-                - CHALLENGE_LIMIT_EXCEEDED
-                - SCA_EXEMPTION_APPLIED
-    MethodNotAllowed:
-      description: Method Not Allowed - The request was received but has been rejected for the requested resource.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequestError:
-      description: Bad Request Error - Your request is invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                maxLength: 255
-                type: string
-                description: When present helps to identify and fix the problem.
-              syntaxErrors:
-                $ref: '#/components/schemas/SyntaxError'
-    InternalServerError:
-      description: Internal Server Error - There is a problem with the server. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    OutgoingWireTransferCancelConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INVALID_STATE
-    OutgoingWireTransferSCAVerifyConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - STATE_INVALID
-                - CHANNEL_NOT_SUPPORTED
-                - CHANNEL_NOT_REGISTERED
-                - VERIFICATION_CODE_EXPIRED
-                - VERIFICATION_CODE_INVALID
-                - SCA_EXEMPTION_APPLIED
-                - CHALLENGE_LIMIT_EXCEEDED
-                - ONE_CHALLENGE_LIMIT_REMAINING
-    OutgoingWireTransferSCAChallengeConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                description: "Error codes:\n  * `STATE_INVALID` - The transaction no longer requires additional verification, it was either cancelled or completed.\n  * `CHANNEL_NOT_SUPPORTED` - The channel selected cannot be used to verify this type of transaction.\n  * `CHANNEL_NOT_REGISTERED` - The channel selected must be enrolled to receive one-time passwords before it can be used to verify this type of transaction.\n  * `SCA_EXEMPTION_APPLIED` - The transaction no longer requires additional verification, it was proceeded via PSD2 Regulation low value SCA exemption, it is either cancelled or completed.\n"
-                type: string
-                enum:
-                - STATE_INVALID
-                - CHANNEL_NOT_SUPPORTED
-                - CHANNEL_NOT_REGISTERED
-                - SCA_EXEMPTION_APPLIED
-    InstrumentForbidden:
-      description: Forbidden - Access to the requested resource or action is forbidden.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - STEP_UP_REQUIRED
-                - ACCESS_TOKEN_REQUIRED
-                - INSUFFICIENT_PERMISSIONS
-    Error:
-      description: Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    OutgoingWireTransfersGetPageResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              transfer:
-                type: array
-                items:
-                  $ref: '#/components/schemas/OutgoingWireTransfer'
-              count:
-                type: integer
-                description: Total number of records (excluding the paging limit)
-                format: int32
-              responseCount:
-                type: integer
-                description: Total number of records returned in this response (always capped at 100).
-                format: int32
-    OutgoingWireTransferConfirmConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INVALID_STATE
-    NoContent:
-      description: Success - No Content.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    OutgoingWireTransferPaymentConfirmationConflict:
-      description: The outgoing wire transfer exists but is not in a state for which a payment confirmation can be produced.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutgoingWireTransferPaymentConfirmationConflict'
-    TooManyRequests:
-      description: Too many requests.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-        x-ratelimit-limit:
-          $ref: '#/components/headers/x-ratelimit-limit'
-        x-ratelimit-reset:
-          $ref: '#/components/headers/x-ratelimit-reset'
-    Forbidden:
-      description: Forbidden - Access to the requested resource or action is forbidden.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INSUFFICIENT_PERMISSIONS
-    OutgoingWireTransferCreateConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - PROFILE_INACTIVE
-                - MODEL_CONSTRAINTS_VIOLATED
-                - INTERCEPTOR_DENIED_TRANSACTION
-                - INSTRUMENT_DENIED_TRANSACTION
-                - CURRENCY_MISMATCH
-                - SOURCE_INSTRUMENT_BLOCKED
-                - SOURCE_INSTRUMENT_DESTROYED
-                - AMOUNT_INVALID
-                - FUNDS_INSUFFICIENT
-                - SOURCE_NOT_FOUND
-                - FEE_NOT_CONFIGURED_FOR_CURRENCY
-                - TYPE_NOT_SUPPORTED_BY_PROFILE
-                - IDENTITY_KYC_LEVEL_STEPUP_REQUIRED
-                - BENEFICIARY_NOT_FOUND
-                - BENEFICIARY_TYPE_INVALID
-                - PROFILE_NOT_FOUND
-                - SCHEDULED_TIMESTAMP_INVALID
-                - BENEFICIARY_BANK_DETAILS_INVALID
-                - PLUGIN_FILTER_DATA_INVALID
-                - IBAN_UPGRADE_REQUIRED
-                - EXTERNAL_DESTINATION_ACCOUNT_NOT_FOUND
-                - PURPOSE_OF_PAYMENT_REQUIRED
-    OutgoingWireTransferResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutgoingWireTransfer'
   schemas:
+    OutgoingWireTransferType:
+      type: string
+      description: The wire transfer rails used, from SEPA, Faster Payments, SWIFT or RIX.
+      enum:
+      - SEPA
+      - FASTER_PAYMENTS
+      - SWIFT
+      - RIX
+    TransactionCancellationReason:
+      type: string
+      pattern: ^[ a-zA-Z0-9_-]+$
+      maxLength: 50
+      description: The reason the scheduled transaction was cancelled.
+    ExternalAccountId:
+      type: object
+      description: The id of an external account, such as a Linked Account, registered with the Weavr Platform.
+      required:
+      - type
+      - id
+      properties:
+        type:
+          $ref: '#/components/schemas/ExternalAccountType'
+        id:
+          type: string
+          pattern: ^[0-9]+$
     OutgoingWireTransferPaymentConfirmationConflictErrorCode:
       type: string
       enum:
       - TRANSFER_NOT_COMPLETED
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-    SWIFTBeneficiary:
+    FasterPaymentsBankDetailsOrBACSBankDetails:
       required:
-      - name
-      - account
-      - address
-      - bankCountry
+      - accountNumber
+      - sortCode
       type: object
-      description: Beneficiary details for SWIFT wire transfers.
+      description: Bank details used in case the wire transfer is executed over Faster Payments.
+      properties:
+        accountNumber:
+          type: string
+          pattern: ^[0-9]{8}$
+          description: Account number, required for wire transfer over Faster Payments.
+        sortCode:
+          type: string
+          pattern: ^[0-9]{6}$
+          description: Sort code, required for wire transfer over Faster Payments.
+        secondaryReference:
+          type: string
+    IBANDetails:
+      required:
+      - iban
+      type: object
+      description: Bank details used in case the wire transfer is executed over SEPA or RIX
+      properties:
+        iban:
+          type: string
+          minLength: 15
+          maxLength: 34
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
+          description: International Bank Account Number, required for wire transfer over SEPA or RIX
+        bankIdentifierCode:
+          type: string
+          minLength: 8
+          maxLength: 11
+          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
+          description: BIC, for wire transfer over SEPA or RIX
+    OutgoingWireTransferUpdateBeneficiaryNameRequest:
+      type: object
       properties:
         name:
           type: string
           minLength: 1
           maxLength: 150
-          description: The beneficiary's full name.
-        account:
-          type: string
-          minLength: 1
-          maxLength: 34
-          pattern: ^[a-zA-Z0-9]{1,34}$
-          description: Can be either an account number or an International Bank Account Number (IBAN).
-        bankIdentifierCode:
-          type: string
-          minLength: 8
-          maxLength: 11
-          pattern: ^[a-zA-Z0-9]{8,11}$
-          description: Required if account is not an IBAN. Bank Identifier Code (BIC).
-        address:
-          maxLength: 150
-          minLength: 1
-          type: string
-          description: The beneficiary's address.
-        bankName:
-          type: string
-          description: The beneficiary's bank name.
-        bankAddress:
-          maxLength: 150
-          minLength: 1
-          type: string
-          description: The beneficiary's bank address.
-        bankCountry:
-          type: string
-          description: The beneficiary's bank country in ISO 3166 alpha-2 format.
-          maxLength: 2
-          minLength: 2
-          pattern: ^[A-Z]{2}$
-        nationality:
-          $ref: '#/components/schemas/Nationality'
-        dateOfBirth:
-          $ref: '#/components/schemas/DateOfBirth'
-    ScheduledTimestamp:
-      pattern: ^[0-9]+$
+          description: 'The new beneficiary name. Mutually exclusive with acceptVerifiedName. For FasterPayments/BACS: max 140 chars matching pattern ^[a-zA-Z0-9\/\-?:().,''+\s#=!"%&*<>;\{@\r\n]*$. For IBAN: max 150 chars.'
+        acceptVerifiedName:
+          type: boolean
+          description: Set to true to accept the account name returned with a CLOSE_MATCH or EXACT_MATCH VoP/CoP result. Mutually exclusive with name.
+    OutgoingWireTransferState:
+      description: "The state of the Outgoing wire transfer transaction, as follows:\n  - INVALID: The wire transfer has failed initial validation checks.\n  - PENDING_CHALLENGE: The wire transfer requires the completion of a transaction confirmation challenge before it can be submitted.\n  - SUBMITTED: The wire transfer has been submitted to the sending financial institution for processing.\n  - REJECTED: The wire transfer that was submitted was rejected.\n  - APPROVED: The wire transfer that was submitted has been approved and is being processed by the sending financial institution.\n  - FAILED: There was an issue with the wire transfer, and the transaction has failed.\n  - COMPLETED: The requested funds have been sent from the source instrument.\n  - RETURNED: The wire transfer has been returned to the sender.\n  - SCHEDULED: The wire transfer will be executed at the scheduled time.\n  - CANCELLED: The scheduled wire transfer has been cancelled.\n  - PENDING_CONFIRMATION: The wire transfer requires a manual confirmation by the user before proceeding.\n"
       type: string
-      description: The epoch timestamp at which the transaction is scheduled to be executed.
+      enum:
+      - INVALID
+      - PENDING_CHALLENGE
+      - SUBMITTED
+      - REJECTED
+      - APPROVED
+      - FAILED
+      - COMPLETED
+      - RETURNED
+      - SCHEDULED
+      - CANCELLED
+      - PENDING_CONFIRMATION
     SEPABeneficiary:
       required:
       - name
@@ -904,157 +686,59 @@ components:
           $ref: '#/components/schemas/Nationality'
         dateOfBirth:
           $ref: '#/components/schemas/DateOfBirth'
-    FasterPaymentsBankDetailsOrBACSBankDetails:
-      required:
-      - accountNumber
-      - sortCode
-      type: object
-      description: Bank details used in case the wire transfer is executed over Faster Payments.
-      properties:
-        accountNumber:
-          type: string
-          pattern: ^[0-9]{8}$
-          description: Account number, required for wire transfer over Faster Payments.
-        sortCode:
-          type: string
-          pattern: ^[0-9]{6}$
-          description: Sort code, required for wire transfer over Faster Payments.
-        secondaryReference:
-          type: string
-    DateOfBirth:
-      type: string
-      format: date
-      description: The date of birth in ISO 8601 format (YYYY-MM-DD).
-    OutgoingWireTransferUpdateBeneficiaryNameConflict:
-      type: object
-      properties:
-        errorCode:
-          $ref: '#/components/schemas/OutgoingWireTransferUpdateBeneficiaryNameConflictSchemaErrorCode'
-    SourceInstrumentType:
+    OutgoingWireTransferUpdateBeneficiaryNameConflictSchemaErrorCode:
       type: string
       enum:
-      - managed_accounts
-    OutgoingWireTransferPaymentConfirmationConflict:
-      type: object
-      required:
-      - errorCode
-      properties:
-        errorCode:
-          $ref: '#/components/schemas/OutgoingWireTransferPaymentConfirmationConflictErrorCode'
-    OutgoingWireTransferValidationOutcome:
-      type: object
-      required:
-      - category
-      - categoryResult
-      properties:
-        category:
-          type: string
-          enum:
-          - UK_CONFIRMATION_OF_PAYEE
-          - SEPA_VERIFICATION_OF_PAYEE
-        categoryResult:
-          oneOf:
-          - $ref: '#/components/schemas/UKConfirmationOfPayeeResult'
-          - $ref: '#/components/schemas/SEPAVerificationOfPayeeResult'
-    TransactionCancellationReason:
+      - INVALID_STATE
+      - CONFLICT_BENEFICIARYID_NAME
+      - CONFLICT_EXTERNALACCOUNTID_NAME
+      - MODEL_CONSTRAINTS_VIOLATED
+      - NO_NAME_TO_ACCEPT
+    ExecutionTimestamp:
+      pattern: ^[0-9]+$
       type: string
-      pattern: ^[ a-zA-Z0-9_-]+$
-      maxLength: 50
-      description: The reason the scheduled transaction was cancelled.
-    UKConfirmationOfPayeeResult:
-      type: object
-      required:
-      - match
-      properties:
-        match:
-          type: string
-          description: The result of matching performed by the UK Confirmation of Payee responder
-          enum:
-          - EXACT_MATCH
-          - CLOSE_MATCH
-          - NO_MATCH
-          - NOT_POSSIBLE
-        reasonCode:
-          type: string
-          description: "The reason why the matching failed at the UK Confirmation of Payee responder:\n\n  - ANNM: The CoP responder confirms that the account `name` provided does not match;\n  - MBAM: The CoP responder indicates that the account `name` provided closely matches the actual account in its records, the actual account name is returned in the `accountName` field;\n  - BANM: The account `type` that the user specified is 'PERSONAL', but the CoP responder indicates that the actual account matching the `name` provided is actually BUSINESS;\n  - PANM: The account `type` that the user specified is 'BUSINESS', but the CoP responder indicates that the actual account matching the `name` provided is actually PERSONAL;\n  - BAMM: The account `type` that the user specified is 'PERSONAL', but the CoP responder indicates that an account closely matching the `name` provided is BUSINESS;\n  - PAMM: The account `type` that the user specified is 'BUSINESS', but the CoP responder indicates that an account closely matching the `name` provided is PERSONAL;\n  - AC01: The account does not exist in the CoP responders books, the `accountNumber` specified is likely incorrect; \n  - IVCR: The CoP responder was unable to locate an account based on the `secondaryReference` field;\n  - ACNS: The account is not supported for CoP by the CoP responder;\n  - OPTO: The owner of the account has opted out of CoP service by the CoP responder;\n  - CASS: The account has been switched using the Current Account Switch Service;\n  - SCNS: The `sortCode` provided is not supported at endpoint;\n"
-          enum:
-          - ANNM
-          - MBAM
-          - BANM
-          - PANM
-          - BAMM
-          - PAMM
-          - AC01
-          - IVCR
-          - ACNS
-          - OPTO
-          - CASS
-          - SCNS
-        accountName:
-          type: string
-          description: 'CoP: Returned when the `match` is a `CLOSE_MATCH` and the `reasonCode` is MBAM, BAMM or PAMM
-
-            VoP: Returned when the `match` is a `CLOSE_MATCH`
-
-            '
-    OutgoingWireTransferState:
-      description: "The state of the Outgoing wire transfer transaction, as follows:\n  - INVALID: The wire transfer has failed initial validation checks.\n  - PENDING_CHALLENGE: The wire transfer requires the completion of a transaction confirmation challenge before it can be submitted.\n  - SUBMITTED: The wire transfer has been submitted to the sending financial institution for processing.\n  - REJECTED: The wire transfer that was submitted was rejected.\n  - APPROVED: The wire transfer that was submitted has been approved and is being processed by the sending financial institution.\n  - FAILED: There was an issue with the wire transfer, and the transaction has failed.\n  - COMPLETED: The requested funds have been sent from the source instrument.\n  - RETURNED: The wire transfer has been returned to the sender.\n  - SCHEDULED: The wire transfer will be executed at the scheduled time.\n  - CANCELLED: The scheduled wire transfer has been cancelled.\n  - PENDING_CONFIRMATION: The wire transfer requires a manual confirmation by the user before proceeding.\n"
+      description: The epoch timestamp at which the transaction was executed, transitioning to a final state such as COMPLETED, REJECTED, or FAILED.
+    SCAPushChannel:
       type: string
       enum:
-      - INVALID
-      - PENDING_CHALLENGE
-      - SUBMITTED
-      - REJECTED
-      - APPROVED
-      - FAILED
-      - COMPLETED
-      - RETURNED
-      - SCHEDULED
-      - CANCELLED
-      - PENDING_CONFIRMATION
-    RIXBeneficiary:
+      - AUTHY
+      - BIOMETRIC
+      description: '- "AUTHY": The push notification is sent on the user''s device using [Twilio Authy](https://www.twilio.com/authy)
+
+        - "BIOMETRIC": The push notification is sent to the user''s device
+
+        '
+    SWIFTBeneficiary:
       required:
       - name
-      - iban
+      - account
+      - address
+      - bankCountry
       type: object
-      description: Beneficiary details for RIX wire transfers.
+      description: Beneficiary details for SWIFT wire transfers.
       properties:
         name:
           type: string
           minLength: 1
           maxLength: 150
-          description: 'The beneficiary''s full name. >= 1 character and <= 150 characters.
-
-            An extended character set is accepted to cater for all European languages.
-
-            If RIX does not support a particular character, it is automatically
-
-            converted to an acceptable alternative.
-
-            '
-        iban:
+          description: The beneficiary's full name.
+        account:
           type: string
-          minLength: 15
+          minLength: 1
           maxLength: 34
-          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
-          description: International Bank Account Number, required for wire transfer over RIX.
+          pattern: ^[a-zA-Z0-9]{1,34}$
+          description: Can be either an account number or an International Bank Account Number (IBAN).
         bankIdentifierCode:
           type: string
           minLength: 8
           maxLength: 11
-          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
-          description: BIC (Bank Identifier Code) for wire transfer over RIX.
+          pattern: ^[a-zA-Z0-9]{8,11}$
+          description: Required if account is not an IBAN. Bank Identifier Code (BIC).
         address:
           maxLength: 150
           minLength: 1
           type: string
-          description: 'The beneficiary''s address. An extended character set is accepted to cater
-
-            for all European languages. If RIX does not support a particular character,
-
-            it is automatically converted to an acceptable alternative.
-
-            '
+          description: The beneficiary's address.
         bankName:
           type: string
           description: The beneficiary's bank name.
@@ -1073,26 +757,24 @@ components:
           $ref: '#/components/schemas/Nationality'
         dateOfBirth:
           $ref: '#/components/schemas/DateOfBirth'
-    ExternalAccountType:
-      type: string
-      enum:
-      - linked_accounts
-    SCAPushChannel:
-      type: string
-      enum:
-      - AUTHY
-      - BIOMETRIC
-      description: '- "AUTHY": The push notification is sent on the user''s device using [Twilio Authy](https://www.twilio.com/authy)
+    CurrencyAmount:
+      required:
+      - currency
+      - amount
+      type: object
+      properties:
+        currency:
+          $ref: '#/components/schemas/Currency'
+        amount:
+          type: integer
+          format: int64
+          description: 'The monetary amount, scaled to the lowest denomination of the currency.
 
-        - "BIOMETRIC": The push notification is sent to the user''s device
 
-        '
-    ChallengeExemptionReason:
-      type: string
-      enum:
-      - LOW_VALUE
-      - TRUSTED_BENEFICIARY
-      description: The Reason the transaction was exempted from SCA verification
+            Example, an amount of 1000 for a EUR currency is actually 1000 Euro cents or EUR 10.00.
+
+            '
+      description: The object representing a monetary amount in a particular currency.
     OutgoingWireTransferBeneficiary:
       deprecated: true
       required:
@@ -1154,75 +836,11 @@ components:
           $ref: '#/components/schemas/Nationality'
         dateOfBirth:
           $ref: '#/components/schemas/DateOfBirth'
-    OutgoingWireTransferUpdateBeneficiaryNameRequest:
+    OutgoingWireTransferUpdateBeneficiaryNameConflict:
       type: object
       properties:
-        name:
-          type: string
-          minLength: 1
-          maxLength: 150
-          description: 'The new beneficiary name. Mutually exclusive with acceptVerifiedName. For FasterPayments/BACS: max 140 chars matching pattern ^[a-zA-Z0-9\/\-?:().,''+\s#=!"%&*<>;\{@\r\n]*$. For IBAN: max 150 chars.'
-        acceptVerifiedName:
-          type: boolean
-          description: Set to true to accept the account name returned with a CLOSE_MATCH or EXACT_MATCH VoP/CoP result. Mutually exclusive with name.
-    SyntaxError:
-      type: object
-      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
-      properties:
-        invalidFields:
-          type: array
-          items:
-            type: object
-            properties:
-              params:
-                type: array
-                items:
-                  type: string
-              fieldName:
-                type: string
-              error:
-                type: string
-                enum:
-                - REQUIRED
-                - HAS_TEXT
-                - REQUIRES
-                - SIZE
-                - RANGE
-                - IN
-                - NOT_IN
-                - REGEX
-                - EXACTLY
-                - AT_LEAST
-                - AT_MOST
-                - ALL_OR_NONE
-    OutgoingWireTransferRejectedInfo:
-      description: "Additional info when the outgoing wire transfer has been rejected, as follows:\n  - SYSTEM: The wire transfer was rejected by the system.\n  - USER: The wire transfer was rejected by the user.\n"
-      type: string
-      enum:
-      - SYSTEM
-      - USER
-    ProfileId:
-      type: string
-      description: 'The profile Id which a specific identity, instrument or transaction type is linked to.
-
-
-        Profiles contain configuration and determine behavioral aspects of the newly created transaction, for example, fees that may apply.
-
-
-        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s needs.
-
-
-        Profile Ids can be found in the Multi Portal, in the API Credentials page.
-
-        '
-      pattern: ^[0-9]+$
-    SCAOtpChannel:
-      type: string
-      enum:
-      - SMS
-      description: '- "SMS": The one-time-password is sent as a text message
-
-        '
+        errorCode:
+          $ref: '#/components/schemas/OutgoingWireTransferUpdateBeneficiaryNameConflictSchemaErrorCode'
     OutgoingWireTransfer:
       required:
       - id
@@ -1300,34 +918,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OutgoingWireTransferValidationOutcome'
-    Currency:
+    ScheduledTimestamp:
+      pattern: ^[0-9]+$
       type: string
-      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
-      maxLength: 3
-      minLength: 3
-      pattern: ^[A-Z]*$
-    Nationality:
-      maxLength: 2
-      minLength: 2
-      pattern: ^[A-Z]+$
-      type: string
-      description: Nationality of the user - using ISO 3166 alpha-2.
-    OutgoingWireTransferUpdateBeneficiaryNameConflictSchemaErrorCode:
-      type: string
-      enum:
-      - INVALID_STATE
-      - CONFLICT_BENEFICIARYID_NAME
-      - CONFLICT_EXTERNALACCOUNTID_NAME
-      - MODEL_CONSTRAINTS_VIOLATED
-      - NO_NAME_TO_ACCEPT
-    OutgoingWireTransferType:
-      type: string
-      description: The wire transfer rails used, from SEPA, Faster Payments, SWIFT or RIX.
-      enum:
-      - SEPA
-      - FASTER_PAYMENTS
-      - SWIFT
-      - RIX
+      description: The epoch timestamp at which the transaction is scheduled to be executed.
     FasterPaymentsBeneficiary:
       required:
       - name
@@ -1389,102 +983,50 @@ components:
           $ref: '#/components/schemas/Nationality'
         dateOfBirth:
           $ref: '#/components/schemas/DateOfBirth'
-    Id:
+    Nationality:
+      maxLength: 2
+      minLength: 2
+      pattern: ^[A-Z]+$
       type: string
-      pattern: ^[0-9]+$
-    TransactionSingleCancelRequest:
+      description: Nationality of the user - using ISO 3166 alpha-2.
+    OutgoingWireTransferValidationOutcome:
       type: object
-      properties:
-        cancellationReason:
-          $ref: '#/components/schemas/TransactionCancellationReason'
-    CurrencyAmount:
       required:
-      - currency
-      - amount
-      type: object
+      - category
+      - categoryResult
       properties:
-        currency:
-          $ref: '#/components/schemas/Currency'
-        amount:
-          type: integer
-          format: int64
-          description: 'The monetary amount, scaled to the lowest denomination of the currency.
-
-
-            Example, an amount of 1000 for a EUR currency is actually 1000 Euro cents or EUR 10.00.
-
-            '
-      description: The object representing a monetary amount in a particular currency.
-    ExecutionTimestamp:
-      pattern: ^[0-9]+$
+        category:
+          type: string
+          enum:
+          - UK_CONFIRMATION_OF_PAYEE
+          - SEPA_VERIFICATION_OF_PAYEE
+        categoryResult:
+          oneOf:
+          - $ref: '#/components/schemas/UKConfirmationOfPayeeResult'
+          - $ref: '#/components/schemas/SEPAVerificationOfPayeeResult'
+    OutgoingWireTransferRejectedInfo:
+      description: "Additional info when the outgoing wire transfer has been rejected, as follows:\n  - SYSTEM: The wire transfer was rejected by the system.\n  - USER: The wire transfer was rejected by the user.\n"
       type: string
-      description: The epoch timestamp at which the transaction was executed, transitioning to a final state such as COMPLETED, REJECTED, or FAILED.
-    IBANDetails:
-      required:
-      - iban
-      type: object
-      description: Bank details used in case the wire transfer is executed over SEPA or RIX
-      properties:
-        iban:
-          type: string
-          minLength: 15
-          maxLength: 34
-          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
-          description: International Bank Account Number, required for wire transfer over SEPA or RIX
-        bankIdentifierCode:
-          type: string
-          minLength: 8
-          maxLength: 11
-          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
-          description: BIC, for wire transfer over SEPA or RIX
-    ExternalAccountId:
-      type: object
-      description: The id of an external account, such as a Linked Account, registered with the Weavr Platform.
-      required:
-      - type
-      - id
-      properties:
-        type:
-          $ref: '#/components/schemas/ExternalAccountType'
-        id:
-          type: string
-          pattern: ^[0-9]+$
-    BeneficiaryId:
-      required:
-      - beneficiaryId
-      type: object
-      properties:
-        beneficiaryId:
-          $ref: '#/components/schemas/Id'
-    Tag:
+      enum:
+      - SYSTEM
+      - USER
+    Currency:
       type: string
-      description: The tag field is a custom field that can be used to search and filter.
-      maxLength: 50
-      pattern: ^[a-zA-Z0-9_-]+$
+      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
+      maxLength: 3
+      minLength: 3
+      pattern: ^[A-Z]*$
     Nonce:
       type: string
       description: A randomly generated one-time use code.
       pattern: ^[0-9]{6}$
-    SEPAVerificationOfPayeeResult:
+    OutgoingWireTransferPaymentConfirmationConflict:
       type: object
       required:
-      - match
+      - errorCode
       properties:
-        match:
-          type: string
-          description: The result of the SEPA Verification of Payee check performed by the responding PSP.
-          enum:
-          - MATCH
-          - NO_MATCH
-          - CLOSE_MATCH
-          - NOT_POSSIBLE
-        accountName:
-          type: string
-          description: 'The name of the account holder as registered with the responding PSP.
-
-            Returned when the match result is CLOSE_MATCH to help the payer verify the payee.
-
-            '
+        errorCode:
+          $ref: '#/components/schemas/OutgoingWireTransferPaymentConfirmationConflictErrorCode'
     OutgoingWireTransferCreateRequest:
       required:
       - destinationBeneficiary
@@ -1543,6 +1085,230 @@ components:
           - $ref: '#/components/schemas/ExternalAccountId'
         scheduledTimestamp:
           $ref: '#/components/schemas/ScheduledTimestamp'
+    ChallengeExemptionReason:
+      type: string
+      enum:
+      - LOW_VALUE
+      - TRUSTED_BENEFICIARY
+      description: The Reason the transaction was exempted from SCA verification
+    DateOfBirth:
+      type: string
+      format: date
+      description: The date of birth in ISO 8601 format (YYYY-MM-DD).
+    BeneficiaryId:
+      required:
+      - beneficiaryId
+      type: object
+      properties:
+        beneficiaryId:
+          $ref: '#/components/schemas/Id'
+    SourceInstrumentType:
+      type: string
+      enum:
+      - managed_accounts
+    Tag:
+      type: string
+      description: The tag field is a custom field that can be used to search and filter.
+      maxLength: 50
+      pattern: ^[a-zA-Z0-9_-]+$
+    TransactionSingleCancelRequest:
+      type: object
+      properties:
+        cancellationReason:
+          $ref: '#/components/schemas/TransactionCancellationReason'
+    SCAOtpChannel:
+      type: string
+      enum:
+      - SMS
+      description: '- "SMS": The one-time-password is sent as a text message
+
+        '
+    ExternalAccountType:
+      type: string
+      enum:
+      - linked_accounts
+    Id:
+      type: string
+      pattern: ^[0-9]+$
+    SEPAVerificationOfPayeeResult:
+      type: object
+      required:
+      - match
+      properties:
+        match:
+          type: string
+          description: The result of the SEPA Verification of Payee check performed by the responding PSP.
+          enum:
+          - MATCH
+          - NO_MATCH
+          - CLOSE_MATCH
+          - NOT_POSSIBLE
+        accountName:
+          type: string
+          description: 'The name of the account holder as registered with the responding PSP.
+
+            Returned when the match result is CLOSE_MATCH to help the payer verify the payee.
+
+            '
+    SyntaxError:
+      type: object
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      properties:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
+    ProfileId:
+      type: string
+      description: 'The profile Id which a specific identity, instrument or transaction type is linked to.
+
+
+        Profiles contain configuration and determine behavioral aspects of the newly created transaction, for example, fees that may apply.
+
+
+        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s needs.
+
+
+        Profile Ids can be found in the Multi Portal, in the API Credentials page.
+
+        '
+      pattern: ^[0-9]+$
+    UKConfirmationOfPayeeResult:
+      type: object
+      required:
+      - match
+      properties:
+        match:
+          type: string
+          description: The result of matching performed by the UK Confirmation of Payee responder
+          enum:
+          - EXACT_MATCH
+          - CLOSE_MATCH
+          - NO_MATCH
+          - NOT_POSSIBLE
+        reasonCode:
+          type: string
+          description: "The reason why the matching failed at the UK Confirmation of Payee responder:\n\n  - ANNM: The CoP responder confirms that the account `name` provided does not match;\n  - MBAM: The CoP responder indicates that the account `name` provided closely matches the actual account in its records, the actual account name is returned in the `accountName` field;\n  - BANM: The account `type` that the user specified is 'PERSONAL', but the CoP responder indicates that the actual account matching the `name` provided is actually BUSINESS;\n  - PANM: The account `type` that the user specified is 'BUSINESS', but the CoP responder indicates that the actual account matching the `name` provided is actually PERSONAL;\n  - BAMM: The account `type` that the user specified is 'PERSONAL', but the CoP responder indicates that an account closely matching the `name` provided is BUSINESS;\n  - PAMM: The account `type` that the user specified is 'BUSINESS', but the CoP responder indicates that an account closely matching the `name` provided is PERSONAL;\n  - AC01: The account does not exist in the CoP responders books, the `accountNumber` specified is likely incorrect; \n  - IVCR: The CoP responder was unable to locate an account based on the `secondaryReference` field;\n  - ACNS: The account is not supported for CoP by the CoP responder;\n  - OPTO: The owner of the account has opted out of CoP service by the CoP responder;\n  - CASS: The account has been switched using the Current Account Switch Service;\n  - SCNS: The `sortCode` provided is not supported at endpoint;\n"
+          enum:
+          - ANNM
+          - MBAM
+          - BANM
+          - PANM
+          - BAMM
+          - PAMM
+          - AC01
+          - IVCR
+          - ACNS
+          - OPTO
+          - CASS
+          - SCNS
+        accountName:
+          type: string
+          description: 'CoP: Returned when the `match` is a `CLOSE_MATCH` and the `reasonCode` is MBAM, BAMM or PAMM
+
+            VoP: Returned when the `match` is a `CLOSE_MATCH`
+
+            '
+    RIXBeneficiary:
+      required:
+      - name
+      - iban
+      type: object
+      description: Beneficiary details for RIX wire transfers.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 150
+          description: 'The beneficiary''s full name. >= 1 character and <= 150 characters.
+
+            An extended character set is accepted to cater for all European languages.
+
+            If RIX does not support a particular character, it is automatically
+
+            converted to an acceptable alternative.
+
+            '
+        iban:
+          type: string
+          minLength: 15
+          maxLength: 34
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
+          description: International Bank Account Number, required for wire transfer over RIX.
+        bankIdentifierCode:
+          type: string
+          minLength: 8
+          maxLength: 11
+          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
+          description: BIC (Bank Identifier Code) for wire transfer over RIX.
+        address:
+          maxLength: 150
+          minLength: 1
+          type: string
+          description: 'The beneficiary''s address. An extended character set is accepted to cater
+
+            for all European languages. If RIX does not support a particular character,
+
+            it is automatically converted to an acceptable alternative.
+
+            '
+        bankName:
+          type: string
+          description: The beneficiary's bank name.
+        bankAddress:
+          maxLength: 150
+          minLength: 1
+          type: string
+          description: The beneficiary's bank address.
+        bankCountry:
+          type: string
+          description: The beneficiary's bank country in ISO 3166 alpha-2 format.
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]{2}$
+        nationality:
+          $ref: '#/components/schemas/Nationality'
+        dateOfBirth:
+          $ref: '#/components/schemas/DateOfBirth'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    InstrumentId:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        type:
+          $ref: '#/components/schemas/InstrumentType'
     OutgoingWireTransferEvent:
       required:
       - owner
@@ -1561,6 +1327,14 @@ components:
           description: Epoch timestamp using millisecond precision.
         eventType:
           $ref: '#/components/schemas/OutgoingWireTransferEventType'
+    ChallengeExemptionReason_2:
+      type: string
+      enum:
+      - NO_EXEMPTION
+      - LOW_VALUE
+      - NOT_ENABLED
+      - TRUSTED_BENEFICIARY
+      description: The Reason the transaction was exempted from SCA verification
     StringWrappedTypeId:
       required:
       - type
@@ -1588,14 +1362,51 @@ components:
       - SCHEDULED
       - CANCELLED
       - PENDING_CONFIRMATION
-    ChallengeExemptionReason_2:
+    LegacyCurrencyAmount:
+      required:
+      - currency
+      - amount
+      type: object
+      properties:
+        currency:
+          $ref: '#/components/schemas/Currency'
+        amount:
+          type: string
+          pattern: ^[0-9]+$
+          description: The monetary amount, scaled to the lowest denomination of the currency.
+      description: The object representing a monetary amount in a particular currency.
+    OWTConflictErrorCode:
       type: string
       enum:
-      - NO_EXEMPTION
-      - LOW_VALUE
-      - NOT_ENABLED
-      - TRUSTED_BENEFICIARY
-      description: The Reason the transaction was exempted from SCA verification
+      - UNDEFINED
+      - NO_ERROR
+      - PROFILE_INACTIVE
+      - MODEL_CONSTRAINTS_VIOLATED
+      - DENIED_BY_INTERCEPTOR
+      - DENIED_BY_INSTRUMENT
+      - UNSUPPORTED_CURRENCY
+      - INVALID_AMOUNT
+      - INSUFFICIENT_FUNDS
+      - SOURCE_NOT_FOUND
+      - SOURCE_INSTRUMENT_BLOCKED
+      - FEE_NOT_CONFIGURED_FOR_CURRENCY
+      - TYPE_NOT_SUPPORTED_BY_PROFILE
+      - SOURCE_INSTRUMENT_DESTROYED
+      - IDENTITY_KYC_LEVEL_STEPUP_REQUIRED
+      - CURRENCY_MISMATCH
+      - BENEFICIARY_NOT_FOUND
+      - BENEFICIARY_TYPE_INVALID
+      - PROFILE_NOT_FOUND
+      - SCHEDULED_TIMESTAMP_INVALID
+      - BENEFICIARY_BANK_DETAILS_INVALID
+      - PROVIDER_ERROR
+      - SOURCE_HAS_NO_ACCESS_INSTRUMENT
+      - EXTERNAL_DESTINATION_ACCOUNT_NOT_FOUND
+    InstrumentType:
+      type: string
+      enum:
+      - managed_cards
+      - managed_accounts
     Destination:
       required:
       - beneficiaryName
@@ -1650,38 +1461,6 @@ components:
               type: string
             swift:
               type: string
-    OWTConflictErrorCode:
-      type: string
-      enum:
-      - UNDEFINED
-      - NO_ERROR
-      - PROFILE_INACTIVE
-      - MODEL_CONSTRAINTS_VIOLATED
-      - DENIED_BY_INTERCEPTOR
-      - DENIED_BY_INSTRUMENT
-      - UNSUPPORTED_CURRENCY
-      - INVALID_AMOUNT
-      - INSUFFICIENT_FUNDS
-      - SOURCE_NOT_FOUND
-      - SOURCE_INSTRUMENT_BLOCKED
-      - FEE_NOT_CONFIGURED_FOR_CURRENCY
-      - TYPE_NOT_SUPPORTED_BY_PROFILE
-      - SOURCE_INSTRUMENT_DESTROYED
-      - IDENTITY_KYC_LEVEL_STEPUP_REQUIRED
-      - CURRENCY_MISMATCH
-      - BENEFICIARY_NOT_FOUND
-      - BENEFICIARY_TYPE_INVALID
-      - PROFILE_NOT_FOUND
-      - SCHEDULED_TIMESTAMP_INVALID
-      - BENEFICIARY_BANK_DETAILS_INVALID
-      - PROVIDER_ERROR
-      - SOURCE_HAS_NO_ACCESS_INSTRUMENT
-      - EXTERNAL_DESTINATION_ACCOUNT_NOT_FOUND
-    InstrumentType:
-      type: string
-      enum:
-      - managed_cards
-      - managed_accounts
     LegacyOutgoingWireTransfer:
       required:
       - creationTimestamp
@@ -1744,62 +1523,249 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OutgoingWireTransferValidationOutcome'
-    LegacyCurrencyAmount:
-      required:
-      - currency
-      - amount
-      type: object
-      properties:
-        currency:
-          $ref: '#/components/schemas/Currency'
-        amount:
-          type: string
-          pattern: ^[0-9]+$
-          description: The monetary amount, scaled to the lowest denomination of the currency.
-      description: The object representing a monetary amount in a particular currency.
-    InstrumentId:
-      required:
-      - id
-      - type
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        type:
-          $ref: '#/components/schemas/InstrumentType'
-  requestBodies:
-    SCAVerifyRequest:
-      required: true
+  responses:
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
       content:
         application/json:
           schema:
-            required:
-            - verificationCode
             type: object
             properties:
-              verificationCode:
-                description: The code received by the user on the device.
-                $ref: '#/components/schemas/Nonce'
-    OutgoingWireTransferCreateRequest:
-      required: true
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    OutgoingWireTransfersGetPageResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/OutgoingWireTransferCreateRequest'
-    TransactionSingleCancelRequest:
-      required: false
+            type: object
+            properties:
+              transfer:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OutgoingWireTransfer'
+              count:
+                type: integer
+                description: Total number of records (excluding the paging limit)
+                format: int32
+              responseCount:
+                type: integer
+                description: Total number of records returned in this response (always capped at 100).
+                format: int32
+    OutgoingWireTransferSCAChallengePushConflict:
+      description: Conflict
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/TransactionSingleCancelRequest'
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - STATE_INVALID
+                - CHANNEL_NOT_SUPPORTED
+                - CHANNEL_NOT_REGISTERED
+                - CHALLENGE_LIMIT_EXCEEDED
+                - SCA_EXEMPTION_APPLIED
+    OutgoingWireTransferUpdateBeneficiaryNameConflict:
+      description: Update beneficiary name conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutgoingWireTransferUpdateBeneficiaryNameConflict'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InstrumentForbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - STEP_UP_REQUIRED
+                - ACCESS_TOKEN_REQUIRED
+                - INSUFFICIENT_PERMISSIONS
+    MethodNotAllowed:
+      description: Method Not Allowed - The request was received but has been rejected for the requested resource.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    OutgoingWireTransferConfirmConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INVALID_STATE
+    OutgoingWireTransferSCAVerifyConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - STATE_INVALID
+                - CHANNEL_NOT_SUPPORTED
+                - CHANNEL_NOT_REGISTERED
+                - VERIFICATION_CODE_EXPIRED
+                - VERIFICATION_CODE_INVALID
+                - SCA_EXEMPTION_APPLIED
+                - CHALLENGE_LIMIT_EXCEEDED
+                - ONE_CHALLENGE_LIMIT_REMAINING
+    OutgoingWireTransferPaymentConfirmationConflict:
+      description: The outgoing wire transfer exists but is not in a state for which a payment confirmation can be produced.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutgoingWireTransferPaymentConfirmationConflict'
+    NoContent:
+      description: Success - No Content.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    OutgoingWireTransferCreateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - PROFILE_INACTIVE
+                - MODEL_CONSTRAINTS_VIOLATED
+                - INTERCEPTOR_DENIED_TRANSACTION
+                - INSTRUMENT_DENIED_TRANSACTION
+                - CURRENCY_MISMATCH
+                - SOURCE_INSTRUMENT_BLOCKED
+                - SOURCE_INSTRUMENT_DESTROYED
+                - AMOUNT_INVALID
+                - FUNDS_INSUFFICIENT
+                - SOURCE_NOT_FOUND
+                - FEE_NOT_CONFIGURED_FOR_CURRENCY
+                - TYPE_NOT_SUPPORTED_BY_PROFILE
+                - IDENTITY_KYC_LEVEL_STEPUP_REQUIRED
+                - BENEFICIARY_NOT_FOUND
+                - BENEFICIARY_TYPE_INVALID
+                - PROFILE_NOT_FOUND
+                - SCHEDULED_TIMESTAMP_INVALID
+                - BENEFICIARY_BANK_DETAILS_INVALID
+                - PLUGIN_FILTER_DATA_INVALID
+                - IBAN_UPGRADE_REQUIRED
+                - EXTERNAL_DESTINATION_ACCOUNT_NOT_FOUND
+                - PURPOSE_OF_PAYMENT_REQUIRED
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    OutgoingWireTransferSCAChallengeConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                description: "Error codes:\n  * `STATE_INVALID` - The transaction no longer requires additional verification, it was either cancelled or completed.\n  * `CHANNEL_NOT_SUPPORTED` - The channel selected cannot be used to verify this type of transaction.\n  * `CHANNEL_NOT_REGISTERED` - The channel selected must be enrolled to receive one-time passwords before it can be used to verify this type of transaction.\n  * `SCA_EXEMPTION_APPLIED` - The transaction no longer requires additional verification, it was proceeded via PSD2 Regulation low value SCA exemption, it is either cancelled or completed.\n"
+                type: string
+                enum:
+                - STATE_INVALID
+                - CHANNEL_NOT_SUPPORTED
+                - CHANNEL_NOT_REGISTERED
+                - SCA_EXEMPTION_APPLIED
+    OutgoingWireTransferCancelConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INVALID_STATE
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    OutgoingWireTransferResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutgoingWireTransfer'
   headers:
-    x-ratelimit-reset:
-      description: The number of seconds until the window is reset.
-      required: true
-      schema:
-        minimum: 0
-        type: integer
-        format: int32
     request-ref:
       description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
       required: true
@@ -1816,7 +1782,21 @@ components:
       required: true
       schema:
         type: string
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
   parameters:
+    idempotency-ref:
+      name: idempotency-ref
+      in: header
+      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
+      required: false
+      schema:
+        type: string
     owtState:
       name: state
       in: query
@@ -1827,40 +1807,6 @@ components:
         uniqueItems: true
         items:
           $ref: '#/components/schemas/OutgoingWireTransferState'
-    profileId:
-      name: profileId
-      in: query
-      required: false
-      description: Filter by the managed account/card profile. Leave out to fetch all managed accounts/card.
-      schema:
-        $ref: '#/components/schemas/ProfileId'
-    sourceInstrument_id:
-      name: sourceInstrument.id
-      in: query
-      required: false
-      description: Filter by the source instrument id. Must be specified when `source.type` is provided.
-      schema:
-        $ref: '#/components/schemas/Id'
-    scaPushChannel:
-      name: channel
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/SCAPushChannel'
-    idempotency-ref:
-      name: idempotency-ref
-      in: header
-      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
-      required: false
-      schema:
-        type: string
-    channel:
-      name: channel
-      in: path
-      required: true
-      description: The unique identifier for the channel.
-      schema:
-        $ref: '#/components/schemas/SCAOtpChannel'
     offset:
       name: offset
       in: query
@@ -1870,13 +1816,26 @@ components:
         minimum: 0
         type: integer
         format: int32
-    sourceInstrument_type:
-      name: sourceInstrument.type
+    scaPushChannel:
+      name: channel
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/SCAPushChannel'
+    profileId:
+      name: profileId
       in: query
       required: false
-      description: Filter by the source instrument type. Must be specified when `source.id` is provided.
+      description: Filter by the managed account/card profile. Leave out to fetch all managed accounts/card.
       schema:
-        $ref: '#/components/schemas/SourceInstrumentType'
+        $ref: '#/components/schemas/ProfileId'
+    channel:
+      name: channel
+      in: path
+      required: true
+      description: The unique identifier for the channel.
+      schema:
+        $ref: '#/components/schemas/SCAOtpChannel'
     limit:
       name: limit
       in: query
@@ -1887,6 +1846,20 @@ components:
         minimum: 1
         type: integer
         format: int32
+    sourceInstrument_type:
+      name: sourceInstrument.type
+      in: query
+      required: false
+      description: Filter by the source instrument type. Must be specified when `source.id` is provided.
+      schema:
+        $ref: '#/components/schemas/SourceInstrumentType'
+    sourceInstrument_id:
+      name: sourceInstrument.id
+      in: query
+      required: false
+      description: Filter by the source instrument id. Must be specified when `source.type` is provided.
+      schema:
+        $ref: '#/components/schemas/Id'
     signature:
       name: signature
       in: header
@@ -1895,6 +1868,13 @@ components:
       style: simple
       explode: false
       deprecated: true
+      schema:
+        type: string
+    call-ref:
+      description: A call reference generated by the caller and unique to the caller to provide correlation between the caller and system with a maximum length of 255
+      in: header
+      name: call-ref
+      required: false
       schema:
         type: string
     published-timestamp:
@@ -1916,13 +1896,31 @@ components:
       explode: false
       schema:
         type: string
-    call-ref:
-      description: A call reference generated by the caller and unique to the caller to provide correlation between the caller and system with a maximum length of 255
-      in: header
-      name: call-ref
+  requestBodies:
+    TransactionSingleCancelRequest:
       required: false
-      schema:
-        type: string
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TransactionSingleCancelRequest'
+    OutgoingWireTransferCreateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutgoingWireTransferCreateRequest'
+    SCAVerifyRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - verificationCode
+            type: object
+            properties:
+              verificationCode:
+                description: The code received by the user on the device.
+                $ref: '#/components/schemas/Nonce'
   securitySchemes:
     api-key:
       type: apiKey

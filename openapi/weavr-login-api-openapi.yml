@@ -76,7 +76,7 @@ components:
         type: integer
         format: int64
   schemas:
-    StringWrappedTypeId:
+    CredentialId:
       required:
       - type
       - id
@@ -86,15 +86,15 @@ components:
           maxLength: 50
           pattern: ^[a-zA-Z0-9_-]+$
           type: string
+          enum:
+          - ROOT
+          - USER
+          - API_CLIENT
+          description: The type of user.
         id:
           type: string
           pattern: ^[0-9]+$
-    LoginEventLoginEventStatus:
-      type: string
-      enum:
-      - VERIFIED
-      - DECLINED
-      - EXPIRED
+          description: The identifier of the user.
     LoginEvent:
       required:
       - credential
@@ -116,7 +116,7 @@ components:
           type: string
           pattern: ^[0-9]+$
           description: Epoch timestamp using millisecond precision.
-    CredentialId:
+    StringWrappedTypeId:
       required:
       - type
       - id
@@ -126,15 +126,15 @@ components:
           maxLength: 50
           pattern: ^[a-zA-Z0-9_-]+$
           type: string
-          enum:
-          - ROOT
-          - USER
-          - API_CLIENT
-          description: The type of user.
         id:
           type: string
           pattern: ^[0-9]+$
-          description: The identifier of the user.
+    LoginEventLoginEventStatus:
+      type: string
+      enum:
+      - VERIFIED
+      - DECLINED
+      - EXPIRED
 x-tagGroups:
 - name: Webhooks
   tags:

@@ -9,7 +9,7 @@ info:
     url: https://weavr-cdn.s3.eu-central-1.amazonaws.com/weavr-payment-run-logo.png
     backgroundColor: '#FFFFFF'
     altText: Weavr
-  description: "Weavr Payment Run Plug-in API provides a simple and flexible way for Embedders to add payment execution capabilities in their application.\n\nBy integrating Weavr Payment Run plug-in API in your application, you can embed banking and payment capabilities within your app to boost productivity for your users in a seamless experience.\n\n# Authentication\nEach request to the API must include an `api_key` that represents your account. You can obtain an API Key by registering for a Embedder account [here](https://portal.weavr.io/register/?plugin=payment-run).\n\nAlmost all endpoints require a secondary authentication token `auth_token` that represents the user for whom the request is being executed.\n\n# Postman Collection\nTo help you get started with your integration, you can download the [Postman](https://postman.com) collection [here](https://sandbox.weavr.io/payment-run/v1/postman). The collection includes the steps you’ll need to follow to integrate Embedded Payment Run within your app. \n\nThe collection makes use of environment variables to pre-fill details associated with your Sandbox account, such as your account’s API Key. You can download your Sandbox Account environment file from the [Sandbox Portal](https://portal.weavr.io/register/?plugin=payment-run).\n"
+  description: Weavr Payment Run Plug-in API provides a simple and flexible way for Embedders to add payment execution capabilities in their application.
 servers:
 - url: https://sandbox.weavr.io/payment-run
   description: Sandbox
@@ -21,13 +21,14 @@ tags:
   description: 'Buyers are identities representing a business
 
 
-    Once on-boarded, Buyers can create payment runs and pay their suppliers in your application.
-
-    '
+    Once on-boarded, Buyers can create payment runs and pay their suppliers in your application.'
 paths:
   /v1/buyers:
     post:
-      description: "Buyers are identities representing a business. Once on-boarded, Buyers can create and manage their own instruments via your plugin. \n\nThe information provided must be accurate and will be passed on for KYB verification with our partner.\n"
+      description: 'Buyers are identities representing a business. Once on-boarded, Buyers can create and manage their own instruments via your plugin.
+
+
+        The information provided must be accurate and will be passed on for KYB verification with our partner.'
       summary: Create a buyer
       operationId: buyerCreate
       security:
@@ -758,7 +759,6 @@ paths:
       description: 'Retrieve the details of the buyer that the logged-in user belongs to.
 
 
-
         Required user role: `ADMIN`'
       summary: Get buyer details
       operationId: buyerGet
@@ -1244,7 +1244,6 @@ paths:
                     type: string
     patch:
       description: 'Update the buyer currencies and admin roles.
-
 
 
         Required user role: `ADMIN`'
@@ -1776,9 +1775,7 @@ paths:
         This code must then be provided in the _buyerAdminUserEmailVerify_ operation to verify the admin user''s email address.
 
 
-        _Note that on the Sandbox Environment, the `verificationCode` is always set to \"123456\"._
-
-        '
+        _Note that on the Sandbox Environment, the `verificationCode` is always set to \"123456\"._'
       summary: Start admin user email verification
       security:
       - apiKey: []
@@ -1979,9 +1976,7 @@ paths:
         This is needed as part of the verification process for basic due diligence.
 
 
-        _Note that on the Sandbox Environment, the `verificationCode` is always set to \"123456\"._
-
-        '
+        _Note that on the Sandbox Environment, the `verificationCode` is always set to \"123456\"._'
       summary: Verify admin user email
       security:
       - apiKey: []
@@ -2191,7 +2186,6 @@ paths:
         To initialise the KYB UI Component, you need a `reference` that is given you in the response of this operation.
 
 
-
         Required user role: `ADMIN`'
       summary: Start buyer KYB
       tags:
@@ -2383,7 +2377,6 @@ paths:
       description: 'Returns the KYB status for the buyer that the logged-in user belongs to.
 
 
-
         Required user role: `ADMIN`'
       summary: Get buyer KYB status
       tags:
@@ -2567,7 +2560,6 @@ paths:
 
 
         *If these details need to be changed after due diligence is completed, please contact Customer Support to restart the Due Diligence process.*
-
 
 
         Required user role: `ADMIN`'

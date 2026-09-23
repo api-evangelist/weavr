@@ -27,21 +27,19 @@ paths:
       description: 'Submit the details to update the spend rules of Managed Cards.
 
 
-        The  bulkId returned in the response can subsequently be used to launch the updating of Managed Card spend rules process through <Execute bulk process>. A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any other Authorised User of the same identity of the user that submits the details.
+        The bulkId returned in the response can subsequently be used to launch the updating of Managed Card spend rules process through . A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any other Authorised User of the same identity of the user that submits the details.
 
 
         The status of the bulk process after execution of this operation is set to ‘SUBMITTED’. The execution of the bulk process is launched through the Execute bulk process operation.
 
 
-        The submission of data for a bulk process does not expire but it can be cancelled through <Cancel bulk process>.
+        The submission of data for a bulk process does not expire but it can be cancelled through .
 
 
         The system is configured to accept bulk requests to process up to a maximum of 10,000 bulk operations.
 
 
-        Each spend rules update operation in this bulk process is processed via <Managed Cards > Update a Managed Card.
-
-        '
+        Each spend rules update operation in this bulk process is processed via Update a Managed Card.'
       parameters:
       - $ref: '#/components/parameters/idempotency-ref'
       responses:
@@ -89,21 +87,19 @@ paths:
       description: 'Submit the details for the creation of a batch of Transfers.
 
 
-        The bulkId returned in the response can subsequently be used to launch the execution of the bulk process through [Execute Bulk Process](#tag/Manage/operation/bulkIdExecute). A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.
+        The bulkId returned in the response can subsequently be used to launch the execution of the bulk process through Execute Bulk Process. A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.
 
 
         The status of the bulk process after execution of this operation is set to ‘SUBMITTED’. The execution of the bulk process is launched through the Execute bulk process operation.
 
 
-        The submission of data for a bulk process does not expire but it can be cancelled through [Cancel Bulk Process](#tag/Manage/operation/bulkIdCancel).
+        The submission of data for a bulk process does not expire but it can be cancelled through Cancel Bulk Process.
 
 
         The system is configured to accept bulk requests to process up to a maximum of 10,000 bulk operations.
 
 
-        Each individual operation in this bulk will be processed via [Create a Transfer Transaction](#tag/Transfers/operation/transferCreate).
-
-        '
+        Each individual operation in this bulk will be processed via Create a Transfer Transaction.'
       summary: Create transfer transactions in bulk
       operationId: bulksTransferCreate
       parameters:
@@ -175,7 +171,22 @@ paths:
       - i:users:create
       tags:
       - Operations
-      description: "Submit the details for the creation of a batch of Authorised Users \n\nThe bulkId returned in the response can subsequently be used to launch the execution of the bulk process through [Execute Bulk Process](#tag/Manage/operation/bulkIdExecute). A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.\n\nThe status of the bulk process after execution of this operation is set to ‘SUBMITTED’. The execution of the bulk process is launched through the Execute bulk process operation.\n\nThe submission of data for a bulk process does not expire but it can be cancelled through [Cancel Bulk Process](#tag/Manage/operation/bulkIdCancel).\n\nThe system is configured to accept bulk requests to process up to a maximum of 10,000 bulk operations\n\nEach individual operation in this bulk will be processed via [Create a User](#tag/Setup/operation/userCreate).\n"
+      description: 'Submit the details for the creation of a batch of Authorised Users
+
+
+        The bulkId returned in the response can subsequently be used to launch the execution of the bulk process through Execute Bulk Process. A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.
+
+
+        The status of the bulk process after execution of this operation is set to ‘SUBMITTED’. The execution of the bulk process is launched through the Execute bulk process operation.
+
+
+        The submission of data for a bulk process does not expire but it can be cancelled through Cancel Bulk Process.
+
+
+        The system is configured to accept bulk requests to process up to a maximum of 10,000 bulk operations
+
+
+        Each individual operation in this bulk will be processed via Create a User.'
       summary: Create users in bulk
       operationId: bulksUserCreate
       parameters:
@@ -264,21 +275,19 @@ paths:
       description: 'Submit the details for the creation of a batch of Authorised User invites
 
 
-        The bulkId returned in the response can subsequently be used to launch the execution of the bulk process through [Execute Bulk Process](#tag/Manage/operation/bulkIdExecute). A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.
+        The bulkId returned in the response can subsequently be used to launch the execution of the bulk process through Execute Bulk Process. A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.
 
 
         The status of the bulk process after execution of this operation is set to ‘SUBMITTED’. The execution of the bulk process is launched through the Execute bulk process operation.
 
 
-        The submission of data for a bulk process does not expire but it can be cancelled through [Cancel Bulk Process](#tag/Manage/operation/bulkIdCancel).
+        The submission of data for a bulk process does not expire but it can be cancelled through Cancel Bulk Process.
 
 
         The system is configured to accept bulk requests to process up to a maximum of 10,000 bulk operations
 
 
-        Each individual operation in this bulk will be processed via [Send a User Invite](#tag/Authorised-Users/operation/userInviteSend).
-
-        '
+        Each individual operation in this bulk will be processed via Send a User Invite.'
       parameters:
       - $ref: '#/components/parameters/idempotency-ref'
       responses:
@@ -323,21 +332,19 @@ paths:
       description: 'Submit the details to block Managed Cards.
 
 
-        The bulkId returned in the response can subsequently be used to launch the execution of the bulk process through [Execute Bulk Process](#tag/Manage/operation/bulkIdExecute). A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.
+        The bulkId returned in the response can subsequently be used to launch the execution of the bulk process through Execute Bulk Process. A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.
 
 
         The status of the bulk process after execution of this operation is set to ‘SUBMITTED’. The execution of the bulk process is launched through the Execute bulk process operation.
 
 
-        The submission of data for a bulk process does not expire but it can be cancelled through [Cancel Bulk Process](#tag/Manage/operation/bulkIdCancel).
+        The submission of data for a bulk process does not expire but it can be cancelled through Cancel Bulk Process.
 
 
         The system is configured to accept bulk requests to process up to a maximum of 10,000 bulk operations.
 
 
-        Each individual operation in this bulk will be processed via [Block a Managed Card](#tag/Managed-Cards/operation/managedCardBlock).
-
-        '
+        Each individual operation in this bulk will be processed via Block a Managed Card.'
       summary: Block cards in bulk
       operationId: bulksManagedCardBlock
       x-permissions:
@@ -388,21 +395,19 @@ paths:
       description: 'Submit the details to unblock Managed Cards.
 
 
-        The bulkId returned in the response can subsequently be used to launch the execution of the bulk process through [Execute Bulk Process](#tag/Manage/operation/bulkIdExecute). A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.
+        The bulkId returned in the response can subsequently be used to launch the execution of the bulk process through Execute Bulk Process. A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.
 
 
         The status of the bulk process after execution of this operation is set to ‘SUBMITTED’. The execution of the bulk process is launched through the Execute bulk process operation.
 
 
-        The submission of data for a bulk process does not expire but it can be cancelled through [Cancel Bulk Process](#tag/Manage/operation/bulkIdCancel).
+        The submission of data for a bulk process does not expire but it can be cancelled through Cancel Bulk Process.
 
 
         The system is configured to accept bulk requests to process up to a maximum of 10,000 bulk operations.
 
 
-        Each individual operation in this bulk will be processed via [Unblock a Managed Card](#tag/Managed-Cards/operation/managedCardUnblock).
-
-        '
+        Each individual operation in this bulk will be processed via Unblock a Managed Card.'
       summary: Unblock cards in bulk
       operationId: bulksManagedCardUnblock
       x-permissions:
@@ -453,21 +458,19 @@ paths:
       description: 'Submit the details to remove Managed Cards.
 
 
-        The bulkId returned in the response can subsequently be used to launch the execution of the bulk process through [Execute Bulk Process](#tag/Manage/operation/bulkIdExecute). A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.
+        The bulkId returned in the response can subsequently be used to launch the execution of the bulk process through Execute Bulk Process. A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.
 
 
         The status of the bulk process after execution of this operation is set to ‘SUBMITTED’. The execution of the bulk process is launched through the Execute bulk process operation.
 
 
-        The submission of data for a bulk process does not expire but it can be cancelled through [Cancel Bulk Process](#tag/Manage/operation/bulkIdCancel).
+        The submission of data for a bulk process does not expire but it can be cancelled through Cancel Bulk Process.
 
 
         The system is configured to accept bulk requests to process up to a maximum of 10,000 bulk operations.
 
 
-        Each individual operation in this bulk will be processed via [Remove a Managed Card](#tag/Managed-Cards/operation/managedCardRemove).
-
-        '
+        Each individual operation in this bulk will be processed via Remove a Managed Card.'
       summary: Remove cards in bulk
       operationId: bulksManagedCardRemove
       x-permissions:
@@ -516,21 +519,19 @@ paths:
       description: 'Submit the details for the creation of a batch of Sends.
 
 
-        The bulkId returned in the response can subsequently be used to launch the execution of the bulk process through [Execute Bulk Process](#tag/Manage/operation/bulkIdExecute). A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.
+        The bulkId returned in the response can subsequently be used to launch the execution of the bulk process through Execute Bulk Process. A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.
 
 
         The status of the bulk process after execution of this operation is set to ‘SUBMITTED’. The execution of the bulk process is launched through the Execute bulk process operation.
 
 
-        The submission of data for a bulk process does not expire but it can be cancelled through [Cancel Bulk Process](#tag/Manage/operation/bulkIdCancel).
+        The submission of data for a bulk process does not expire but it can be cancelled through Cancel Bulk Process.
 
 
         The system is configured to accept bulk requests to process up to a maximum of 10,000 bulk operations.
 
 
-        Each individual operation in this bulk will be processed via [Create a Send Transaction](#tag/Sends/operation/sendCreate).
-
-        '
+        Each individual operation in this bulk will be processed via Create a Send Transaction.'
       summary: Create send transactions in bulk
       operationId: bulksSendCreate
       x-permissions:
@@ -583,21 +584,19 @@ paths:
       description: 'Submit the details for the creation of a batch of Outgoing Wire Transfers.
 
 
-        The bulkId returned in the response can subsequently be used to launch the execution of the bulk process through [Execute Bulk Process](#tag/Manage/operation/bulkIdExecute). A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.
+        The bulkId returned in the response can subsequently be used to launch the execution of the bulk process through Execute Bulk Process. A submitted bulk process can be managed (executed, accessed, paused, resumed and cancelled) by any Authorised User of the same identity of the user that submits the details.
 
 
         The status of the bulk process after execution of this operation is set to ‘SUBMITTED’. The execution of the bulk process is launched through the Execute bulk process operation.
 
 
-        The submission of data for a bulk process does not expire but it can be cancelled through [Cancel Bulk Process](#tag/Manage/operation/bulkIdCancel).
+        The submission of data for a bulk process does not expire but it can be cancelled through Cancel Bulk Process.
 
 
         The system is configured to accept bulk requests to process up to a maximum of 10,000 bulk operations.
 
 
-        Each individual operation in this bulk will be processed via [Create an Outgoing Wire Transaction](#tag/Outgoing-Wire-Transfers/operation/outgoingWireTransferCreate).
-
-        '
+        Each individual operation in this bulk will be processed via Create an Outgoing Wire Transaction.'
       parameters:
       - $ref: '#/components/parameters/idempotency-ref'
       responses:
@@ -637,30 +636,27 @@ paths:
       url: https://sandbox.weavr.io/multi
 components:
   schemas:
-    CurrencyAmount:
-      required:
-      - currency
-      - amount
-      type: object
-      properties:
-        currency:
-          $ref: '#/components/schemas/Currency'
-        amount:
-          type: integer
-          format: int64
-          description: 'The monetary amount, scaled to the lowest denomination of the currency.
-
-
-            Example, an amount of 1000 for a EUR currency is actually 1000 Euro cents or EUR 10.00.
-
-            '
-      description: The object representing a monetary amount in a particular currency.
-    Currency:
+    SpendLimitUpdateMethod:
       type: string
-      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
-      maxLength: 3
-      minLength: 3
-      pattern: ^[A-Z]*$
+      description: "The spend limit update method to apply. Currently supported:\n  - OVERWRITE: (default option if nothing selected). Overwrites the previous values for the spendLimit object i.e. sets new limits\n  - INCREMENT : This will increase the existing value of the spend limit by the amount input the value field. If used in conjunction with an ALWAYS interval, this can be used to increment a spend limit on a periodic basis (controlled by you, e.g. monthly), and means that any 'unused' balance from the previous period will still available to spend. See examples in our documentation\n"
+      enum:
+      - OVERWRITE
+      - INCREMENT
+    CardLevelSpendRules:
+      allOf:
+      - $ref: '#/components/schemas/BaseCardLevelSpendRules'
+      - type: object
+        properties:
+          minTransactionAmount:
+            type: integer
+            minimum: 0
+            format: int64
+            description: The minimum transaction amount, in card currency, that is allowed. If the transaction amount is less than this value, then the transaction will be declined.
+          maxTransactionAmount:
+            type: integer
+            minimum: 0
+            format: int64
+            description: The maximum transaction amount, in card currency, that is allowed. If the transaction amount is greater than this value, then the transaction will be declined.
     CommonLevelSpendRules:
       type: object
       properties:
@@ -723,81 +719,12 @@ components:
           description: Indicates if a the card can receive a credit transaction.
         rolloverPolicy:
           $ref: '#/components/schemas/RolloverPolicy'
-    SpendLimit:
-      type: object
-      required:
-      - value
-      - interval
-      properties:
-        startTimestamp:
-          description: The start timestamp of the spend limit, expressed in Epoch timestamp using millisecond precision.
-          type: integer
-          format: int64
-        value:
-          description: The spend limit, as amount and currency, (for the given interval).
-          $ref: '#/components/schemas/CurrencyAmount'
-        interval:
-          $ref: '#/components/schemas/SpendLimitInterval'
-    UpdateCardLevelSpendRules:
-      allOf:
-      - $ref: '#/components/schemas/CardLevelSpendRules'
-      - type: object
-        properties:
-          updateSpendLimitMethod:
-            $ref: '#/components/schemas/SpendLimitUpdateMethod'
-    CardLevelSpendRules:
-      allOf:
-      - $ref: '#/components/schemas/BaseCardLevelSpendRules'
-      - type: object
-        properties:
-          minTransactionAmount:
-            type: integer
-            minimum: 0
-            format: int64
-            description: The minimum transaction amount, in card currency, that is allowed. If the transaction amount is less than this value, then the transaction will be declined.
-          maxTransactionAmount:
-            type: integer
-            minimum: 0
-            format: int64
-            description: The maximum transaction amount, in card currency, that is allowed. If the transaction amount is greater than this value, then the transaction will be declined.
-    RolloverPolicy:
-      type: object
-      description: The rollover policy will dictate how Weavr handles any eventual overspending. This is possible if a merchant clears more funds than authorised, or when a merchant clears funds without authorising, resulting in the `availableToSpend` value to go into negative. Rollover is relative to a `spendLimit.interval`
-      required:
-      - rolloverNegative
-      properties:
-        rolloverNegative:
-          type: boolean
-          description: If set to true any overspend will keep rolling over and get deducted in the upcoming intervals until the `availableToSpend` is back to a positive value. Any overspend will be deducted from the `availableToSpend` at the beginning of the next interval.
-    SpendLimitInterval:
-      description: "The time period for which the `spendLimit` is valid.\n - DAILY: starting from 00:00:00 UTC of current day to 23:59:59 UTC of current day\n - WEEKLY: 00:00:00 UTC Monday of current week to following Sunday 23:59:59 UTC\n - MONTHLY: 1st of current calendar month to end of current calendar month\n - QUARTERLY: starting from beginning of current quarter where quarters are defined as follows:\n  - 1 January 00:00:00 UTC to 31 March 23:59:59 UTC\n  - 1 April 00:00:00 UTC to 30 Jun 23:59:59 UTC\n  - 1 July 00:00:00 UTC to 30 September 23:59:59 UTC\n  - 1 October 00:00:00 UTC to 31 December 23:59:59 UTC\n\n- YEARLY: 1 January 00:00:00 UTC of current calendar year to 31 December 23:59:59 UTC of current calendar year.\n- ALWAYS: This indicates that the `spendLimit` is the total amount that can be spent through the card throughout the whole lifetime of the card.\n"
+    Currency:
       type: string
-      enum:
-      - DAILY
-      - WEEKLY
-      - MONTHLY
-      - QUARTERLY
-      - YEARLY
-      - ALWAYS
-    Tag:
-      type: string
-      description: The tag field is a custom field that can be used to search and filter.
-      maxLength: 50
-      pattern: ^[a-zA-Z0-9_-]+$
-    InstrumentType:
-      type: string
-      enum:
-      - managed_cards
-      - managed_accounts
-    SpendLimitUpdateMethod:
-      type: string
-      description: "The spend limit update method to apply. Currently supported:\n  - OVERWRITE: (default option if nothing selected). Overwrites the previous values for the spendLimit object i.e. sets new limits\n  - INCREMENT : This will increase the existing value of the spend limit by the amount input the value field. If used in conjunction with an ALWAYS interval, this can be used to increment a spend limit on a periodic basis (controlled by you, e.g. monthly), and means that any 'unused' balance from the previous period will still available to spend. See examples in our documentation\n"
-      enum:
-      - OVERWRITE
-      - INCREMENT
-    Id:
-      type: string
-      pattern: ^[0-9]+$
+      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
+      maxLength: 3
+      minLength: 3
+      pattern: ^[A-Z]*$
     InstrumentId:
       required:
       - id
@@ -808,6 +735,42 @@ components:
           $ref: '#/components/schemas/Id'
         type:
           $ref: '#/components/schemas/InstrumentType'
+    RolloverPolicy:
+      type: object
+      description: The rollover policy will dictate how Weavr handles any eventual overspending. This is possible if a merchant clears more funds than authorised, or when a merchant clears funds without authorising, resulting in the `availableToSpend` value to go into negative. Rollover is relative to a `spendLimit.interval`
+      required:
+      - rolloverNegative
+      properties:
+        rolloverNegative:
+          type: boolean
+          description: If set to true any overspend will keep rolling over and get deducted in the upcoming intervals until the `availableToSpend` is back to a positive value. Any overspend will be deducted from the `availableToSpend` at the beginning of the next interval.
+    ScheduledTimestamp:
+      pattern: ^[0-9]+$
+      type: string
+      description: The epoch timestamp at which the transaction is scheduled to be executed.
+    InstrumentType:
+      type: string
+      enum:
+      - managed_cards
+      - managed_accounts
+    CurrencyAmount:
+      required:
+      - currency
+      - amount
+      type: object
+      properties:
+        currency:
+          $ref: '#/components/schemas/Currency'
+        amount:
+          type: integer
+          format: int64
+          description: 'The monetary amount, scaled to the lowest denomination of the currency.
+
+
+            Example, an amount of 1000 for a EUR currency is actually 1000 Euro cents or EUR 10.00.
+
+            '
+      description: The object representing a monetary amount in a particular currency.
     ProfileId:
       type: string
       description: 'The profile Id which a specific identity, instrument or transaction type is linked to.
@@ -823,10 +786,31 @@ components:
 
         '
       pattern: ^[0-9]+$
-    ScheduledTimestamp:
-      pattern: ^[0-9]+$
+    Id:
       type: string
-      description: The epoch timestamp at which the transaction is scheduled to be executed.
+      pattern: ^[0-9]+$
+    Tag:
+      type: string
+      description: The tag field is a custom field that can be used to search and filter.
+      maxLength: 50
+      pattern: ^[a-zA-Z0-9_-]+$
+    UpdateCardLevelSpendRules:
+      allOf:
+      - $ref: '#/components/schemas/CardLevelSpendRules'
+      - type: object
+        properties:
+          updateSpendLimitMethod:
+            $ref: '#/components/schemas/SpendLimitUpdateMethod'
+    SpendLimitInterval:
+      description: "The time period for which the `spendLimit` is valid.\n - DAILY: starting from 00:00:00 UTC of current day to 23:59:59 UTC of current day\n - WEEKLY: 00:00:00 UTC Monday of current week to following Sunday 23:59:59 UTC\n - MONTHLY: 1st of current calendar month to end of current calendar month\n - QUARTERLY: starting from beginning of current quarter where quarters are defined as follows:\n  - 1 January 00:00:00 UTC to 31 March 23:59:59 UTC\n  - 1 April 00:00:00 UTC to 30 Jun 23:59:59 UTC\n  - 1 July 00:00:00 UTC to 30 September 23:59:59 UTC\n  - 1 October 00:00:00 UTC to 31 December 23:59:59 UTC\n\n- YEARLY: 1 January 00:00:00 UTC of current calendar year to 31 December 23:59:59 UTC of current calendar year.\n- ALWAYS: This indicates that the `spendLimit` is the total amount that can be spent through the card throughout the whole lifetime of the card.\n"
+      type: string
+      enum:
+      - DAILY
+      - WEEKLY
+      - MONTHLY
+      - QUARTERLY
+      - YEARLY
+      - ALWAYS
     BaseCardLevelSpendRules:
       allOf:
       - $ref: '#/components/schemas/CommonLevelSpendRules'
@@ -837,59 +821,47 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/SpendLimit'
-    UserPredefinedRole:
-      type: string
-      enum:
-      - CARD_ASSIGNEE
-      - CARDS_MANAGEMENT_ROLE
-      - FUNDS_MANAGEMENT_ROLE
-      - ACCESS_MANAGEMENT_ROLE
-      - ADMIN
-    Brand:
-      type: string
-      pattern: ^[a-zA-Z0-9]+$
-      description: 'Brand identifier used to determine the set of email and SMS user notification templates. Must be alphanumeric, up to 25 characters, and contain no spaces.
-
-        '
-      maxLength: 25
-    FasterPaymentsBeneficiary:
+    SpendLimit:
+      type: object
+      required:
+      - value
+      - interval
+      properties:
+        startTimestamp:
+          description: The start timestamp of the spend limit, expressed in Epoch timestamp using millisecond precision.
+          type: integer
+          format: int64
+        value:
+          description: The spend limit, as amount and currency, (for the given interval).
+          $ref: '#/components/schemas/CurrencyAmount'
+        interval:
+          $ref: '#/components/schemas/SpendLimitInterval'
+    SWIFTBeneficiary:
       required:
       - name
-      - type
-      - accountNumber
-      - sortCode
+      - account
+      - address
+      - bankCountry
       type: object
-      description: Beneficiary details for Faster Payments wire transfers.
+      description: Beneficiary details for SWIFT wire transfers.
       properties:
         name:
           type: string
           minLength: 1
-          maxLength: 140
-          pattern: ^[a-zA-Z0-9\/\-?:().,'+\s#=!"%&*<>;\{@\r\n]*$
-          description: 'The beneficiary''s full name. >= 1 character and <= 140 characters.
-
-            Note: the '' symbol is the unicode value U+2019 (right single quotation mark)
-
-            and not the unicode value U+0027 (apostrophe).
-
-            '
-        type:
+          maxLength: 150
+          description: The beneficiary's full name.
+        account:
           type: string
-          description: The type of beneficiary account. Required for Faster Payments.
-          enum:
-          - PERSONAL
-          - BUSINESS
-        accountNumber:
+          minLength: 1
+          maxLength: 34
+          pattern: ^[a-zA-Z0-9]{1,34}$
+          description: Can be either an account number or an International Bank Account Number (IBAN).
+        bankIdentifierCode:
           type: string
-          pattern: ^[0-9]{8}$
-          description: Account number, required for wire transfer over Faster Payments.
-        sortCode:
-          type: string
-          pattern: ^[0-9]{6}$
-          description: Sort code, required for wire transfer over Faster Payments.
-        secondaryReference:
-          type: string
-          description: Optional secondary reference for accounts without unique sort codes.
+          minLength: 8
+          maxLength: 11
+          pattern: ^[a-zA-Z0-9]{8,11}$
+          description: Required if account is not an IBAN. Bank Identifier Code (BIC).
         address:
           maxLength: 150
           minLength: 1
@@ -913,165 +885,64 @@ components:
           $ref: '#/components/schemas/Nationality'
         dateOfBirth:
           $ref: '#/components/schemas/DateOfBirth'
-    SEPABeneficiary:
+    OutgoingWireTransferCreateRequest:
       required:
-      - name
-      - iban
-      type: object
-      description: Beneficiary details for SEPA/IBAN wire transfers.
-      properties:
-        name:
-          type: string
-          minLength: 1
-          maxLength: 150
-          description: 'The beneficiary''s full name. >= 1 character and <= 150 characters.
-
-            An extended character set is accepted to cater for all European languages.
-
-            If SEPA does not support a particular character, it is automatically
-
-            converted to an acceptable alternative, in line with SEPA scheme guidance.
-
-            '
-        iban:
-          type: string
-          minLength: 15
-          maxLength: 34
-          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
-          description: International Bank Account Number, required for wire transfer over SEPA.
-        bankIdentifierCode:
-          type: string
-          minLength: 8
-          maxLength: 11
-          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
-          description: BIC (Bank Identifier Code) for wire transfer over SEPA.
-        address:
-          maxLength: 150
-          minLength: 1
-          type: string
-          description: 'The beneficiary''s address. An extended character set is accepted to cater
-
-            for all European languages. If SEPA does not support a particular character,
-
-            it is automatically converted to an acceptable alternative.
-
-            '
-        bankName:
-          type: string
-          description: The beneficiary's bank name.
-        bankAddress:
-          maxLength: 150
-          minLength: 1
-          type: string
-          description: The beneficiary's bank address.
-        bankCountry:
-          type: string
-          description: The beneficiary's bank country in ISO 3166 alpha-2 format.
-          maxLength: 2
-          minLength: 2
-          pattern: ^[A-Z]{2}$
-        nationality:
-          $ref: '#/components/schemas/Nationality'
-        dateOfBirth:
-          $ref: '#/components/schemas/DateOfBirth'
-    FasterPaymentsBankDetailsOrBACSBankDetails:
-      required:
-      - accountNumber
-      - sortCode
-      type: object
-      description: Bank details used in case the wire transfer is executed over Faster Payments.
-      properties:
-        accountNumber:
-          type: string
-          pattern: ^[0-9]{8}$
-          description: Account number, required for wire transfer over Faster Payments.
-        sortCode:
-          type: string
-          pattern: ^[0-9]{6}$
-          description: Sort code, required for wire transfer over Faster Payments.
-        secondaryReference:
-          type: string
-    RIXBeneficiary:
-      required:
-      - name
-      - iban
-      type: object
-      description: Beneficiary details for RIX wire transfers.
-      properties:
-        name:
-          type: string
-          minLength: 1
-          maxLength: 150
-          description: 'The beneficiary''s full name. >= 1 character and <= 150 characters.
-
-            An extended character set is accepted to cater for all European languages.
-
-            If RIX does not support a particular character, it is automatically
-
-            converted to an acceptable alternative.
-
-            '
-        iban:
-          type: string
-          minLength: 15
-          maxLength: 34
-          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
-          description: International Bank Account Number, required for wire transfer over RIX.
-        bankIdentifierCode:
-          type: string
-          minLength: 8
-          maxLength: 11
-          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
-          description: BIC (Bank Identifier Code) for wire transfer over RIX.
-        address:
-          maxLength: 150
-          minLength: 1
-          type: string
-          description: 'The beneficiary''s address. An extended character set is accepted to cater
-
-            for all European languages. If RIX does not support a particular character,
-
-            it is automatically converted to an acceptable alternative.
-
-            '
-        bankName:
-          type: string
-          description: The beneficiary's bank name.
-        bankAddress:
-          maxLength: 150
-          minLength: 1
-          type: string
-          description: The beneficiary's bank address.
-        bankCountry:
-          type: string
-          description: The beneficiary's bank country in ISO 3166 alpha-2 format.
-          maxLength: 2
-          minLength: 2
-          pattern: ^[A-Z]{2}$
-        nationality:
-          $ref: '#/components/schemas/Nationality'
-        dateOfBirth:
-          $ref: '#/components/schemas/DateOfBirth'
-    ExternalAccountType:
-      type: string
-      enum:
-      - linked_accounts
-    Mobile:
-      required:
-      - number
-      - countryCode
+      - destinationBeneficiary
+      - profileId
+      - sourceInstrument
+      - transferAmount
       type: object
       properties:
-        countryCode:
-          maxLength: 4
-          minLength: 1
+        profileId:
+          $ref: '#/components/schemas/ProfileId'
+        tag:
+          $ref: '#/components/schemas/Tag'
+        sourceInstrument:
+          description: The managed account from which funds will be collected.
+          required:
+          - type
+          - id
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+              - managed_accounts
+            id:
+              type: string
+              pattern: ^[0-9]+$
+        transferAmount:
+          description: The amount, in same currency as source and destination, that was transferred from the source.
+          $ref: '#/components/schemas/CurrencyAmount'
+        purpose:
           type: string
-          pattern: ^\+[0-9]+$
-          description: The country code of the user mobile number (e.g. +44).
-        number:
-          pattern: ^[0-9]{1,12}$
+          maxLength: 255
+          description: The purpose of the payment. Mandatory for wire transfers executed over `SWIFT`.
+        description:
           type: string
-          description: The mobile number of the user - excluding country code.
+          description: 'These details are passed to the beneficiary as the `reference` . This field is mandatory for wire transfers executed over `SEPA`and `SWIFT`. The allowed length is dependent on the payment type:
+
+
+            `SEPA` <= `35` characters. An extended character set is accepted to cater for all European languages. If `SEPA` does not support a particular character, it is automatically converted to an acceptable alternative, in line with `SEPA` scheme guidance.
+
+
+            `SWIFT` <= `35` characters
+
+
+            `Faster Payments` <= `18` characters
+
+            '
+        destinationBeneficiary:
+          oneOf:
+          - $ref: '#/components/schemas/OutgoingWireTransferBeneficiary'
+          - $ref: '#/components/schemas/SEPABeneficiary'
+          - $ref: '#/components/schemas/SWIFTBeneficiary'
+          - $ref: '#/components/schemas/RIXBeneficiary'
+          - $ref: '#/components/schemas/FasterPaymentsBeneficiary'
+          - $ref: '#/components/schemas/BeneficiaryId'
+          - $ref: '#/components/schemas/ExternalAccountId'
+        scheduledTimestamp:
+          $ref: '#/components/schemas/ScheduledTimestamp'
     UserLocale:
       type: string
       pattern: ^[a-z]{2}(-[A-Z]{2})?$
@@ -1080,24 +951,26 @@ components:
         '
       maxLength: 5
       example: en-GB
-    IBANDetails:
-      required:
-      - iban
+    UserPredefinedRole:
+      type: string
+      enum:
+      - CARD_ASSIGNEE
+      - CARDS_MANAGEMENT_ROLE
+      - FUNDS_MANAGEMENT_ROLE
+      - ACCESS_MANAGEMENT_ROLE
+      - ADMIN
+    ExternalAccountId:
       type: object
-      description: Bank details used in case the wire transfer is executed over SEPA or RIX
+      description: The id of an external account, such as a Linked Account, registered with the Weavr Platform.
+      required:
+      - type
+      - id
       properties:
-        iban:
+        type:
+          $ref: '#/components/schemas/ExternalAccountType'
+        id:
           type: string
-          minLength: 15
-          maxLength: 34
-          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
-          description: International Bank Account Number, required for wire transfer over SEPA or RIX
-        bankIdentifierCode:
-          type: string
-          minLength: 8
-          maxLength: 11
-          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
-          description: BIC, for wire transfer over SEPA or RIX
+          pattern: ^[0-9]+$
     OutgoingWireTransferBeneficiary:
       deprecated: true
       required:
@@ -1159,103 +1032,6 @@ components:
           $ref: '#/components/schemas/Nationality'
         dateOfBirth:
           $ref: '#/components/schemas/DateOfBirth'
-    DateOfBirth:
-      type: string
-      format: date
-      description: The date of birth in ISO 8601 format (YYYY-MM-DD).
-    ExternalAccountId:
-      type: object
-      description: The id of an external account, such as a Linked Account, registered with the Weavr Platform.
-      required:
-      - type
-      - id
-      properties:
-        type:
-          $ref: '#/components/schemas/ExternalAccountType'
-        id:
-          type: string
-          pattern: ^[0-9]+$
-    UserId:
-      type: string
-      pattern: ^[0-9]+$
-    BeneficiaryId:
-      required:
-      - beneficiaryId
-      type: object
-      properties:
-        beneficiaryId:
-          $ref: '#/components/schemas/Id'
-    Date:
-      required:
-      - year
-      - month
-      - day
-      type: object
-      properties:
-        year:
-          type: integer
-          format: int32
-          maximum: 2100
-          minimum: 1900
-        month:
-          type: integer
-          format: int32
-          maximum: 12
-          minimum: 1
-        day:
-          type: integer
-          format: int32
-          maximum: 31
-          minimum: 1
-    SWIFTBeneficiary:
-      required:
-      - name
-      - account
-      - address
-      - bankCountry
-      type: object
-      description: Beneficiary details for SWIFT wire transfers.
-      properties:
-        name:
-          type: string
-          minLength: 1
-          maxLength: 150
-          description: The beneficiary's full name.
-        account:
-          type: string
-          minLength: 1
-          maxLength: 34
-          pattern: ^[a-zA-Z0-9]{1,34}$
-          description: Can be either an account number or an International Bank Account Number (IBAN).
-        bankIdentifierCode:
-          type: string
-          minLength: 8
-          maxLength: 11
-          pattern: ^[a-zA-Z0-9]{8,11}$
-          description: Required if account is not an IBAN. Bank Identifier Code (BIC).
-        address:
-          maxLength: 150
-          minLength: 1
-          type: string
-          description: The beneficiary's address.
-        bankName:
-          type: string
-          description: The beneficiary's bank name.
-        bankAddress:
-          maxLength: 150
-          minLength: 1
-          type: string
-          description: The beneficiary's bank address.
-        bankCountry:
-          type: string
-          description: The beneficiary's bank country in ISO 3166 alpha-2 format.
-          maxLength: 2
-          minLength: 2
-          pattern: ^[A-Z]{2}$
-        nationality:
-          $ref: '#/components/schemas/Nationality'
-        dateOfBirth:
-          $ref: '#/components/schemas/DateOfBirth'
     SendCreateRequest:
       required:
       - profileId
@@ -1283,74 +1059,297 @@ components:
           description: The description details that are passed to the beneficiary.
         scheduledTimestamp:
           $ref: '#/components/schemas/ScheduledTimestamp'
+    DateOfBirth:
+      type: string
+      format: date
+      description: The date of birth in ISO 8601 format (YYYY-MM-DD).
+    BeneficiaryId:
+      required:
+      - beneficiaryId
+      type: object
+      properties:
+        beneficiaryId:
+          $ref: '#/components/schemas/Id'
+    FasterPaymentsBankDetailsOrBACSBankDetails:
+      required:
+      - accountNumber
+      - sortCode
+      type: object
+      description: Bank details used in case the wire transfer is executed over Faster Payments.
+      properties:
+        accountNumber:
+          type: string
+          pattern: ^[0-9]{8}$
+          description: Account number, required for wire transfer over Faster Payments.
+        sortCode:
+          type: string
+          pattern: ^[0-9]{6}$
+          description: Sort code, required for wire transfer over Faster Payments.
+        secondaryReference:
+          type: string
     Email:
       type: string
       description: E-mail Address of the user
       format: email
+    Mobile:
+      required:
+      - number
+      - countryCode
+      type: object
+      properties:
+        countryCode:
+          maxLength: 4
+          minLength: 1
+          type: string
+          pattern: ^\+[0-9]+$
+          description: The country code of the user mobile number (e.g. +44).
+        number:
+          pattern: ^[0-9]{1,12}$
+          type: string
+          description: The mobile number of the user - excluding country code.
+    IBANDetails:
+      required:
+      - iban
+      type: object
+      description: Bank details used in case the wire transfer is executed over SEPA or RIX
+      properties:
+        iban:
+          type: string
+          minLength: 15
+          maxLength: 34
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
+          description: International Bank Account Number, required for wire transfer over SEPA or RIX
+        bankIdentifierCode:
+          type: string
+          minLength: 8
+          maxLength: 11
+          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
+          description: BIC, for wire transfer over SEPA or RIX
+    FasterPaymentsBeneficiary:
+      required:
+      - name
+      - type
+      - accountNumber
+      - sortCode
+      type: object
+      description: Beneficiary details for Faster Payments wire transfers.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 140
+          pattern: ^[a-zA-Z0-9\/\-?:().,'+\s#=!"%&*<>;\{@\r\n]*$
+          description: 'The beneficiary''s full name. >= 1 character and <= 140 characters.
+
+            Note: the '' symbol is the unicode value U+2019 (right single quotation mark)
+
+            and not the unicode value U+0027 (apostrophe).
+
+            '
+        type:
+          type: string
+          description: The type of beneficiary account. Required for Faster Payments.
+          enum:
+          - PERSONAL
+          - BUSINESS
+        accountNumber:
+          type: string
+          pattern: ^[0-9]{8}$
+          description: Account number, required for wire transfer over Faster Payments.
+        sortCode:
+          type: string
+          pattern: ^[0-9]{6}$
+          description: Sort code, required for wire transfer over Faster Payments.
+        secondaryReference:
+          type: string
+          description: Optional secondary reference for accounts without unique sort codes.
+        address:
+          maxLength: 150
+          minLength: 1
+          type: string
+          description: The beneficiary's address.
+        bankName:
+          type: string
+          description: The beneficiary's bank name.
+        bankAddress:
+          maxLength: 150
+          minLength: 1
+          type: string
+          description: The beneficiary's bank address.
+        bankCountry:
+          type: string
+          description: The beneficiary's bank country in ISO 3166 alpha-2 format.
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]{2}$
+        nationality:
+          $ref: '#/components/schemas/Nationality'
+        dateOfBirth:
+          $ref: '#/components/schemas/DateOfBirth'
+    RIXBeneficiary:
+      required:
+      - name
+      - iban
+      type: object
+      description: Beneficiary details for RIX wire transfers.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 150
+          description: 'The beneficiary''s full name. >= 1 character and <= 150 characters.
+
+            An extended character set is accepted to cater for all European languages.
+
+            If RIX does not support a particular character, it is automatically
+
+            converted to an acceptable alternative.
+
+            '
+        iban:
+          type: string
+          minLength: 15
+          maxLength: 34
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
+          description: International Bank Account Number, required for wire transfer over RIX.
+        bankIdentifierCode:
+          type: string
+          minLength: 8
+          maxLength: 11
+          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
+          description: BIC (Bank Identifier Code) for wire transfer over RIX.
+        address:
+          maxLength: 150
+          minLength: 1
+          type: string
+          description: 'The beneficiary''s address. An extended character set is accepted to cater
+
+            for all European languages. If RIX does not support a particular character,
+
+            it is automatically converted to an acceptable alternative.
+
+            '
+        bankName:
+          type: string
+          description: The beneficiary's bank name.
+        bankAddress:
+          maxLength: 150
+          minLength: 1
+          type: string
+          description: The beneficiary's bank address.
+        bankCountry:
+          type: string
+          description: The beneficiary's bank country in ISO 3166 alpha-2 format.
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]{2}$
+        nationality:
+          $ref: '#/components/schemas/Nationality'
+        dateOfBirth:
+          $ref: '#/components/schemas/DateOfBirth'
+    Brand:
+      type: string
+      pattern: ^[a-zA-Z0-9]+$
+      description: 'Brand identifier used to determine the set of email and SMS user notification templates. Must be alphanumeric, up to 25 characters, and contain no spaces.
+
+        '
+      maxLength: 25
+    Date:
+      required:
+      - year
+      - month
+      - day
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int32
+          maximum: 2100
+          minimum: 1900
+        month:
+          type: integer
+          format: int32
+          maximum: 12
+          minimum: 1
+        day:
+          type: integer
+          format: int32
+          maximum: 31
+          minimum: 1
     Nationality:
       maxLength: 2
       minLength: 2
       pattern: ^[A-Z]+$
       type: string
       description: Nationality of the user - using ISO 3166 alpha-2.
-    OutgoingWireTransferCreateRequest:
+    ExternalAccountType:
+      type: string
+      enum:
+      - linked_accounts
+    SEPABeneficiary:
       required:
-      - destinationBeneficiary
-      - profileId
-      - sourceInstrument
-      - transferAmount
+      - name
+      - iban
       type: object
+      description: Beneficiary details for SEPA/IBAN wire transfers.
       properties:
-        profileId:
-          $ref: '#/components/schemas/ProfileId'
-        tag:
-          $ref: '#/components/schemas/Tag'
-        sourceInstrument:
-          description: The managed account from which funds will be collected.
-          required:
-          - type
-          - id
-          type: object
-          properties:
-            type:
-              type: string
-              enum:
-              - managed_accounts
-            id:
-              type: string
-              pattern: ^[0-9]+$
-        transferAmount:
-          description: The amount, in same currency as source and destination, that was transferred from the source.
-          $ref: '#/components/schemas/CurrencyAmount'
-        purpose:
+        name:
           type: string
-          maxLength: 255
-          description: The purpose of the payment. Mandatory for wire transfers executed over `SWIFT`.
-        description:
-          type: string
-          description: 'These details are passed to the beneficiary as the `reference` . This field is mandatory for wire transfers executed over `SEPA`and `SWIFT`. The allowed length is dependent on the payment type:
+          minLength: 1
+          maxLength: 150
+          description: 'The beneficiary''s full name. >= 1 character and <= 150 characters.
 
+            An extended character set is accepted to cater for all European languages.
 
-            `SEPA` <= `35` characters. An extended character set is accepted to cater for all European languages. If `SEPA` does not support a particular character, it is automatically converted to an acceptable alternative, in line with `SEPA` scheme guidance.
+            If SEPA does not support a particular character, it is automatically
 
-
-            `SWIFT` <= `35` characters
-
-
-            `Faster Payments` <= `18` characters
+            converted to an acceptable alternative, in line with SEPA scheme guidance.
 
             '
-        destinationBeneficiary:
-          oneOf:
-          - $ref: '#/components/schemas/OutgoingWireTransferBeneficiary'
-          - $ref: '#/components/schemas/SEPABeneficiary'
-          - $ref: '#/components/schemas/SWIFTBeneficiary'
-          - $ref: '#/components/schemas/RIXBeneficiary'
-          - $ref: '#/components/schemas/FasterPaymentsBeneficiary'
-          - $ref: '#/components/schemas/BeneficiaryId'
-          - $ref: '#/components/schemas/ExternalAccountId'
-        scheduledTimestamp:
-          $ref: '#/components/schemas/ScheduledTimestamp'
+        iban:
+          type: string
+          minLength: 15
+          maxLength: 34
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
+          description: International Bank Account Number, required for wire transfer over SEPA.
+        bankIdentifierCode:
+          type: string
+          minLength: 8
+          maxLength: 11
+          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
+          description: BIC (Bank Identifier Code) for wire transfer over SEPA.
+        address:
+          maxLength: 150
+          minLength: 1
+          type: string
+          description: 'The beneficiary''s address. An extended character set is accepted to cater
+
+            for all European languages. If SEPA does not support a particular character,
+
+            it is automatically converted to an acceptable alternative.
+
+            '
+        bankName:
+          type: string
+          description: The beneficiary's bank name.
+        bankAddress:
+          maxLength: 150
+          minLength: 1
+          type: string
+          description: The beneficiary's bank address.
+        bankCountry:
+          type: string
+          description: The beneficiary's bank country in ISO 3166 alpha-2 format.
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]{2}$
+        nationality:
+          $ref: '#/components/schemas/Nationality'
+        dateOfBirth:
+          $ref: '#/components/schemas/DateOfBirth'
+    UserId:
+      type: string
+      pattern: ^[0-9]+$
   parameters:
     idempotency-ref:
       name: idempotency-ref

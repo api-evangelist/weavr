@@ -13,13 +13,13 @@ info:
 servers:
 - url: https://sandbox.weavr.io/simulate/api"
 tags:
-- name: Wiretransfers
+- name: Wire Transfers
 paths:
   /wiretransfers/outgoing/{outgoing_wire_transfer_id}/accept:
     post:
       tags:
-      - Wiretransfers
-      summary: Simulate completion of  an Outgoing Wire Transfer
+      - Wire Transfers
+      summary: Simulate completion of an Outgoing Wire Transfer
       description: This endpoint is used to simulate the completion of an Outgoing Wire Transfer that has been submitted in the system and sent over our payment network.
       operationId: wiretransfers_outgoing_outgoing_wire_transfer_id_accept
       parameters:
@@ -56,7 +56,7 @@ paths:
   /wiretransfers/outgoing/{outgoing_wire_transfer_id}/reject:
     post:
       tags:
-      - Wiretransfers
+      - Wire Transfers
       summary: Simulate rejection of an Outgoing Wire Transfer
       description: This endpoint is used to simulate the rejection of an Outgoing Wire Transfer that has been submitted in the system and sent over our payment network.
       operationId: wiretransfers_outgoing_outgoing_wire_transfer_id_reject
@@ -93,21 +93,6 @@ paths:
       - API_Secret_Key: []
 components:
   schemas:
-    FieldValidationType:
-      type: string
-      enum:
-      - REQUIRED
-      - HAS_TEXT
-      - REQUIRES
-      - SIZE
-      - RANGE
-      - IN
-      - NOT_IN
-      - REGEX
-      - EXACTLY
-      - AT_LEAST
-      - AT_MOST
-      - ALL_OR_NONE
     FieldValidation:
       type: object
       properties:
@@ -124,29 +109,21 @@ components:
       - DENIED
       - DENIED_WIRE_TRANSFER_NOT_FOUND
       - DENIED_WIRE_TRANSFER_ALREADY_COMPLETED
-    Response:
-      type: object
-      properties:
-        code:
-          $ref: '#/components/schemas/ResponseResponseCode'
-    FieldValidationErrors:
-      type: object
-      properties:
-        name:
-          type: string
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldValidation'
-    MessageValidation:
-      type: object
-      properties:
-        invalid:
-          type: boolean
-        fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldValidationErrors'
+    FieldValidationType:
+      type: string
+      enum:
+      - REQUIRED
+      - HAS_TEXT
+      - REQUIRES
+      - SIZE
+      - RANGE
+      - IN
+      - NOT_IN
+      - REGEX
+      - EXACTLY
+      - AT_LEAST
+      - AT_MOST
+      - ALL_OR_NONE
     DefaultError:
       type: object
       properties:
@@ -156,6 +133,15 @@ components:
           description: When present helps to identify and fix the problem.
           x-fieldValidation: size(_,255)
       description: A default error model in case of errors other than 400, 409 or 504.
+    FieldValidationErrors:
+      type: object
+      properties:
+        name:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidation'
     ClientInvalidRequest:
       type: object
       properties:
@@ -168,6 +154,20 @@ components:
           allOf:
           - $ref: '#/components/schemas/MessageValidation'
           - description: Description of fields which were invalid.
+    MessageValidation:
+      type: object
+      properties:
+        invalid:
+          type: boolean
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidationErrors'
+    Response:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/ResponseResponseCode'
   parameters:
     call-ref:
       name: call-ref

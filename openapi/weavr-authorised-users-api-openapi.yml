@@ -16,13 +16,16 @@ servers:
 - url: '""'
 tags:
 - name: Authorised Users
-  description: "Corporate and Consumer identities can invite authorised users to access their account. Once on-boarded, authorised users can create and manage instruments and transactions on behalf of the identity they are on-boarded with.      \nWith the `access_token` representing the identity and the consent of the identity, you will be able to create and invite authorised users for the Identity.\n\nCreating and inviting users on behalf of identities are restricted features; by default these endpoints are not available for use.\n"
+  description: Corporate and Consumer identities can invite authorised users to access their account.
 paths:
   /users:
     post:
       tags:
       - Authorised Users
-      description: "Creates a user linked to the identity represented by the `access_token`.\n        \nCreating authorised users on behalf of an identity is a restricted feature and by default, this functionality is not available for use.\n"
+      description: 'Creates a user linked to the identity represented by the `access_token`.
+
+
+        Creating authorised users on behalf of an identity is a restricted feature and by default, this functionality is not available for use.'
       summary: Create a user
       operationId: userCreate
       parameters:
@@ -69,9 +72,7 @@ paths:
         This operations is not final and a user can be re-activated using the userActivate operation. Note that another active user would need to log in so as to re-activate the de-activated user.
 
 
-        Please contact our support team or your account manager to request access to this endpoint.
-
-        '
+        Please contact our support team or your account manager to request access to this endpoint.'
       summary: Deactivate a user
       operationId: userDeactivate
       parameters:
@@ -115,9 +116,7 @@ paths:
         An invitation needs to be sent to the user in order to be able to set up the password for the first time. The invitation email, which remains valid for 1 month, will contain a URL having all information required to setup the password.
 
 
-        Inviting authorised users on behalf of an identity is a restricted feature and by default, this functionality is not available for use.
-
-        '
+        Inviting authorised users on behalf of an identity is a restricted feature and by default, this functionality is not available for use.'
       parameters:
       - $ref: '#/components/parameters/userIdExplode'
       responses:
@@ -172,169 +171,23 @@ webhooks:
     servers:
     - url: '""'
 components:
-  responses:
-    InternalServerError:
-      description: Internal Server Error - There is a problem with the server. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    TooManyRequests:
-      description: Too many requests.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-        x-ratelimit-limit:
-          $ref: '#/components/headers/x-ratelimit-limit'
-        x-ratelimit-reset:
-          $ref: '#/components/headers/x-ratelimit-reset'
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    UserDeactivateConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - CARD_HAS_REMAINING_BALANCE
-    Forbidden:
-      description: Forbidden - Access to the requested resource or action is forbidden.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INSUFFICIENT_PERMISSIONS
-    UserResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/User'
-    NoContent:
-      description: Success - No Content.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    NotFound:
-      description: Not found - The requested resource couldn't be found.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UserInviteSendConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INVITE_ALREADY_CONSUMED
-    BadRequestError:
-      description: Bad Request Error - Your request is invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                maxLength: 255
-                type: string
-                description: When present helps to identify and fix the problem.
-              syntaxErrors:
-                $ref: '#/components/schemas/SyntaxError'
-    Error:
-      description: Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UserCreateConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - EMAIL_NOT_UNIQUE
-                - MOBILE_OR_COUNTRY_CODE_INVALID
-                - EMAIL_DOMAIN_NOT_ALLOWED
-                - COUNTRY_OF_RESIDENCE_INVALID
-                - ROLE_NOT_FOUND
-                - CANNOT_MODIFY_OWN_ROLES
-                - ADMIN_ROLE_REMOVAL_NOT_ALLOWED
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
   schemas:
-    UserPredefinedRole:
-      type: string
-      enum:
-      - CARD_ASSIGNEE
-      - CARDS_MANAGEMENT_ROLE
-      - FUNDS_MANAGEMENT_ROLE
-      - ACCESS_MANAGEMENT_ROLE
-      - ADMIN
-    Brand:
-      type: string
-      pattern: ^[a-zA-Z0-9]+$
-      description: 'Brand identifier used to determine the set of email and SMS user notification templates. Must be alphanumeric, up to 25 characters, and contain no spaces.
-
-        '
-      maxLength: 25
-    Mobile:
+    IdentityId:
       required:
-      - number
-      - countryCode
+      - type
+      - id
       type: object
       properties:
-        countryCode:
-          maxLength: 4
-          minLength: 1
+        type:
+          enum:
+          - CONSUMER
+          - CORPORATE
           type: string
-          pattern: ^\+[0-9]+$
-          description: The country code of the user mobile number (e.g. +44).
-        number:
-          pattern: ^[0-9]{1,12}$
+          description: Indicates the identity type.
+        id:
           type: string
-          description: The mobile number of the user - excluding country code.
-    UserLocale:
-      type: string
-      pattern: ^[a-z]{2}(-[A-Z]{2})?$
-      description: 'BCP47 locale code (e.g. en, en-US). The locale determines which email and SMS user notification templates are used.
-
-        '
-      maxLength: 5
-      example: en-GB
+          pattern: ^[0-9]+$
+          description: The identifier for the identity.
     SyntaxError:
       type: object
       description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
@@ -365,59 +218,22 @@ components:
                 - AT_LEAST
                 - AT_MOST
                 - ALL_OR_NONE
-    UserId:
+    UserLocale:
       type: string
-      pattern: ^[0-9]+$
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-    Date:
-      required:
-      - year
-      - month
-      - day
-      type: object
-      properties:
-        year:
-          type: integer
-          format: int32
-          maximum: 2100
-          minimum: 1900
-        month:
-          type: integer
-          format: int32
-          maximum: 12
-          minimum: 1
-        day:
-          type: integer
-          format: int32
-          maximum: 31
-          minimum: 1
-    IdentityId:
-      required:
-      - type
-      - id
-      type: object
-      properties:
-        type:
-          enum:
-          - CONSUMER
-          - CORPORATE
-          type: string
-          description: Indicates the identity type.
-        id:
-          type: string
-          pattern: ^[0-9]+$
-          description: The identifier for the identity.
-    Tag:
+      pattern: ^[a-z]{2}(-[A-Z]{2})?$
+      description: 'BCP47 locale code (e.g. en, en-US). The locale determines which email and SMS user notification templates are used.
+
+        '
+      maxLength: 5
+      example: en-GB
+    UserPredefinedRole:
       type: string
-      description: The tag field is a custom field that can be used to search and filter.
-      maxLength: 50
-      pattern: ^[a-zA-Z0-9_-]+$
+      enum:
+      - CARD_ASSIGNEE
+      - CARDS_MANAGEMENT_ROLE
+      - FUNDS_MANAGEMENT_ROLE
+      - ACCESS_MANAGEMENT_ROLE
+      - ADMIN
     User:
       required:
       - id
@@ -472,19 +288,66 @@ components:
       type: string
       description: E-mail Address of the user
       format: email
-    IdentityDeactivatedEvent:
+    Mobile:
       required:
-      - actionDoneBy
-      - emailAddress
-      - reasonCode
+      - number
+      - countryCode
       type: object
       properties:
-        actionDoneBy:
-          $ref: '#/components/schemas/ActionDoneBy'
-        emailAddress:
+        countryCode:
+          maxLength: 4
+          minLength: 1
           type: string
-        reasonCode:
-          $ref: '#/components/schemas/IdentityDeactivatedReasonCode'
+          pattern: ^\+[0-9]+$
+          description: The country code of the user mobile number (e.g. +44).
+        number:
+          pattern: ^[0-9]{1,12}$
+          type: string
+          description: The mobile number of the user - excluding country code.
+    Tag:
+      type: string
+      description: The tag field is a custom field that can be used to search and filter.
+      maxLength: 50
+      pattern: ^[a-zA-Z0-9_-]+$
+    Brand:
+      type: string
+      pattern: ^[a-zA-Z0-9]+$
+      description: 'Brand identifier used to determine the set of email and SMS user notification templates. Must be alphanumeric, up to 25 characters, and contain no spaces.
+
+        '
+      maxLength: 25
+    Date:
+      required:
+      - year
+      - month
+      - day
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int32
+          maximum: 2100
+          minimum: 1900
+        month:
+          type: integer
+          format: int32
+          maximum: 12
+          minimum: 1
+        day:
+          type: integer
+          format: int32
+          maximum: 31
+          minimum: 1
+    UserId:
+      type: string
+      pattern: ^[0-9]+$
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
     IdentityDeactivatedReasonCode:
       type: string
       enum:
@@ -500,7 +363,174 @@ components:
       - UNDEFINED
       - ADMIN
       - INNOVATOR
+    IdentityDeactivatedEvent:
+      required:
+      - actionDoneBy
+      - emailAddress
+      - reasonCode
+      type: object
+      properties:
+        actionDoneBy:
+          $ref: '#/components/schemas/ActionDoneBy'
+        emailAddress:
+          type: string
+        reasonCode:
+          $ref: '#/components/schemas/IdentityDeactivatedReasonCode'
+  responses:
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    UserDeactivateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - CARD_HAS_REMAINING_BALANCE
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UserCreateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - EMAIL_NOT_UNIQUE
+                - MOBILE_OR_COUNTRY_CODE_INVALID
+                - EMAIL_DOMAIN_NOT_ALLOWED
+                - COUNTRY_OF_RESIDENCE_INVALID
+                - ROLE_NOT_FOUND
+                - CANNOT_MODIFY_OWN_ROLES
+                - ADMIN_ROLE_REMOVAL_NOT_ALLOWED
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NoContent:
+      description: Success - No Content.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    UserInviteSendConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INVITE_ALREADY_CONSUMED
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    UserResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+  headers:
+    x-ratelimit-limit:
+      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+        The first number (20) is the limit that has been exceeded.
+
+        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+        '
+      required: true
+      schema:
+        type: string
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
   parameters:
+    idempotency-ref:
+      name: idempotency-ref
+      in: header
+      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
+      required: false
+      schema:
+        type: string
     userIdExplode:
       name: user_id
       in: path
@@ -510,13 +540,6 @@ components:
       explode: false
       schema:
         $ref: '#/components/schemas/UserId'
-    idempotency-ref:
-      name: idempotency-ref
-      in: header
-      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
-      required: false
-      schema:
-        type: string
     signature:
       name: signature
       in: header
@@ -553,30 +576,6 @@ components:
       schema:
         type: integer
         format: int64
-  headers:
-    request-ref:
-      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
-      required: true
-      schema:
-        type: string
-    x-ratelimit-reset:
-      description: The number of seconds until the window is reset.
-      required: true
-      schema:
-        minimum: 0
-        type: integer
-        format: int32
-    x-ratelimit-limit:
-      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
-
-        The first number (20) is the limit that has been exceeded.
-
-        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
-
-        '
-      required: true
-      schema:
-        type: string
   requestBodies:
     UserCreateRequest:
       required: true

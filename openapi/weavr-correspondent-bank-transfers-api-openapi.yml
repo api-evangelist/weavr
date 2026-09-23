@@ -18,9 +18,7 @@ tags:
 - name: Correspondent Bank Transfers
   description: 'Correspondent bank transfers allow financial institutions to initiate wire transfers on behalf of originators (third parties).
 
-    These transfers comply with travel rule requirements by capturing and transmitting originator information.
-
-    '
+    These transfers comply with travel rule requirements by capturing and transmitting originator information.'
 paths:
   /correspondent_bank_transfers:
     post:
@@ -38,9 +36,7 @@ paths:
 
         The Outgoing Wire Transfer Profile (configured in the Multi Portal) specified determines the behaviour
 
-        and restrictions of the transaction (for example, fees).
-
-        '
+        and restrictions of the transaction (for example, fees).'
       parameters:
       - $ref: '#/components/parameters/idempotency-ref'
       requestBody:
@@ -308,185 +304,74 @@ webhooks:
     servers:
     - url: '""'
 components:
-  responses:
-    InternalServerError:
-      description: Internal Server Error - There is a problem with the server. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    CorrespondentBankingOwtsResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              transfer:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CorrespondentBankingOwt'
-              count:
-                type: integer
-                description: Total number of records (excluding the paging limit)
-                format: int32
-              responseCount:
-                type: integer
-                description: Total number of records returned in this response (always capped at 100).
-                format: int32
-    TooManyRequests:
-      description: Too many requests.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-        x-ratelimit-limit:
-          $ref: '#/components/headers/x-ratelimit-limit'
-        x-ratelimit-reset:
-          $ref: '#/components/headers/x-ratelimit-reset'
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    Forbidden:
-      description: Forbidden - Access to the requested resource or action is forbidden.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INSUFFICIENT_PERMISSIONS
-    CorrespondentBankingOwtResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CorrespondentBankingOwt'
-    CorrespondentBankingOwtConfirmConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INVALID_STATE
-    NotFound:
-      description: Not found - The requested resource couldn't be found.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    CorrespondentBankingOwtCancelConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INVALID_STATE
-    BadRequestError:
-      description: Bad Request Error - Your request is invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                maxLength: 255
-                type: string
-                description: When present helps to identify and fix the problem.
-              syntaxErrors:
-                $ref: '#/components/schemas/SyntaxError'
-    Error:
-      description: Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    CorrespondentBankingOwtCreateConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - PROFILE_INACTIVE
-                - MODEL_CONSTRAINTS_VIOLATED
-                - CURRENCY_MISMATCH
-                - SOURCE_INSTRUMENT_BLOCKED
-                - SOURCE_INSTRUMENT_DESTROYED
-                - AMOUNT_INVALID
-                - FUNDS_INSUFFICIENT
-                - SOURCE_NOT_FOUND
-                - FEE_NOT_CONFIGURED_FOR_CURRENCY
-                - TYPE_NOT_SUPPORTED_BY_PROFILE
-                - PROFILE_NOT_FOUND
-                - SCHEDULED_TIMESTAMP_INVALID
-                - BENEFICIARY_BANK_DETAILS_INVALID
-                - ORIGINATOR_DETAILS_INVALID
-                - PROVIDER_REJECTED
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
   schemas:
-    CorrespondentBankingIndividualAddressAndBirthInfo:
+    CorrespondentBankingFasterPaymentsBeneficiary:
       required:
-      - dateOfBirth
-      - placeOfBirth
+      - name
+      - type
+      - accountNumber
+      - sortCode
+      - address
       type: object
-      description: Birth information for an individual originator.
+      description: CBT-specific beneficiary details for Faster Payments wire transfers with Banking Circle FI-to-FI field limits.
       properties:
-        dateOfBirth:
+        name:
           type: string
-          format: date
-          description: Date of birth in YYYY-MM-DD format.
-        placeOfBirth:
+          minLength: 1
+          maxLength: 35
+          pattern: ^[a-zA-Z0-9\/\-?:().,'+\s#=!"%&*<>;\{@\r\n]*$
+          description: 'The beneficiary''s full name. >= 1 character and <= 35 characters.
+
+            Note: the '' symbol is the unicode value U+2019 (right single quotation mark)
+
+            and not the unicode value U+0027 (apostrophe).
+
+            '
+        type:
           type: string
-          maxLength: 140
-          description: Place of birth - city and country.
-    CorrespondentBankingOwtValidationOutcome:
-      type: object
-      required:
-      - category
-      - categoryResult
-      properties:
-        category:
-          type: string
+          description: The type of beneficiary account. Required for Faster Payments.
           enum:
-          - SEPA_VERIFICATION_OF_PAYEE
-          - UK_CONFIRMATION_OF_PAYEE
-        categoryResult:
-          oneOf:
-          - $ref: '#/components/schemas/SEPAVerificationOfPayeeResult'
-          - $ref: '#/components/schemas/UKConfirmationOfPayeeResult'
+          - PERSONAL
+          - BUSINESS
+        accountNumber:
+          type: string
+          pattern: ^[0-9]{8}$
+          description: Account number, required for wire transfer over Faster Payments.
+        sortCode:
+          type: string
+          pattern: ^[0-9]{6}$
+          description: Sort code, required for wire transfer over Faster Payments.
+        secondaryReference:
+          type: string
+          description: Optional secondary reference for accounts without unique sort codes.
+        address:
+          maxLength: 105
+          minLength: 1
+          type: string
+          description: 'The beneficiary''s address. Required for correspondent banking transfers.
+
+            Maximum 105 characters (split into 3x35-char lines by the provider).
+
+            '
+        bankName:
+          type: string
+          maxLength: 150
+          description: The beneficiary's bank name.
+        bankAddress:
+          maxLength: 150
+          minLength: 1
+          type: string
+          description: The beneficiary's bank address.
+        bankCountry:
+          type: string
+          description: The beneficiary's bank country in ISO 3166 alpha-2 format.
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]{2}$
+        nationality:
+          $ref: '#/components/schemas/Nationality'
+        dateOfBirth:
+          $ref: '#/components/schemas/DateOfBirth'
     CorrespondentBankingSEPABeneficiary:
       required:
       - name
@@ -548,6 +433,203 @@ components:
           $ref: '#/components/schemas/Nationality'
         dateOfBirth:
           $ref: '#/components/schemas/DateOfBirth'
+    SEPAVerificationOfPayeeResult:
+      type: object
+      required:
+      - match
+      properties:
+        match:
+          type: string
+          description: The result of the SEPA Verification of Payee check performed by the responding PSP.
+          enum:
+          - MATCH
+          - NO_MATCH
+          - CLOSE_MATCH
+          - NOT_POSSIBLE
+        accountName:
+          type: string
+          description: 'The name of the account holder as registered with the responding PSP.
+
+            Returned when the match result is CLOSE_MATCH to help the payer verify the payee.
+
+            '
+    SyntaxError:
+      type: object
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      properties:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
+    CurrencyAmount:
+      required:
+      - currency
+      - amount
+      type: object
+      properties:
+        currency:
+          $ref: '#/components/schemas/Currency'
+        amount:
+          type: integer
+          format: int64
+          description: 'The monetary amount, scaled to the lowest denomination of the currency.
+
+
+            Example, an amount of 1000 for a EUR currency is actually 1000 Euro cents or EUR 10.00.
+
+            '
+      description: The object representing a monetary amount in a particular currency.
+    ProfileId:
+      type: string
+      description: 'The profile Id which a specific identity, instrument or transaction type is linked to.
+
+
+        Profiles contain configuration and determine behavioral aspects of the newly created transaction, for example, fees that may apply.
+
+
+        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s needs.
+
+
+        Profile Ids can be found in the Multi Portal, in the API Credentials page.
+
+        '
+      pattern: ^[0-9]+$
+    CorrespondentBankingIndividualAddressAndIdInfo:
+      required:
+      - documentType
+      - documentNumber
+      type: object
+      description: Personal identification for an individual originator.
+      properties:
+        documentType:
+          type: string
+          enum:
+          - NATIONAL_ID
+          - PASSPORT
+          - TAX_ID
+          - OTHER
+          description: Type of personal identification document.
+        documentNumber:
+          type: string
+          maxLength: 35
+          description: Personal identification document number.
+    TransactionCancellationReason:
+      type: string
+      pattern: ^[ a-zA-Z0-9_-]+$
+      maxLength: 50
+      description: The reason the scheduled transaction was cancelled.
+    DateOfBirth:
+      type: string
+      format: date
+      description: The date of birth in ISO 8601 format (YYYY-MM-DD).
+    CorrespondentBankingBusinessAddressAndIdInfo:
+      required:
+      - documentType
+      - documentNumber
+      type: object
+      description: Business identification for a business originator.
+      properties:
+        documentType:
+          type: string
+          enum:
+          - LEI
+          - REGISTRATION_NUMBER
+          - TAX_ID
+          - OTHER
+          description: Type of business identification document.
+        documentNumber:
+          type: string
+          maxLength: 35
+          description: Business identification document number (e.g. LEI code, company registration number).
+    CorrespondentBankingOwtCreateRequest:
+      required:
+      - profileId
+      - sourceInstrument
+      - amount
+      - originator
+      - beneficiary
+      - purpose
+      type: object
+      properties:
+        profileId:
+          $ref: '#/components/schemas/ProfileId'
+        tag:
+          $ref: '#/components/schemas/Tag'
+        sourceInstrument:
+          description: The managed account from which funds will be collected.
+          required:
+          - type
+          - id
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+              - managed_accounts
+            id:
+              type: string
+              pattern: ^[0-9]+$
+        amount:
+          description: The amount to transfer.
+          $ref: '#/components/schemas/CurrencyAmount'
+        originator:
+          oneOf:
+          - $ref: '#/components/schemas/CorrespondentBankingIndividualOriginator'
+          - $ref: '#/components/schemas/CorrespondentBankingBusinessOriginator'
+        beneficiary:
+          oneOf:
+          - $ref: '#/components/schemas/CorrespondentBankingSEPABeneficiary'
+          - $ref: '#/components/schemas/CorrespondentBankingRIXBeneficiary'
+          - $ref: '#/components/schemas/CorrespondentBankingFasterPaymentsBeneficiary'
+        purpose:
+          type: string
+          maxLength: 255
+          description: The purpose of the payment.
+        description:
+          maxLength: 35
+          type: string
+          description: 'These details are passed to the beneficiary as the `reference`. This field is mandatory for wire transfers executed over `SEPA`. The allowed length is dependent on the payment type:
+
+
+            `SEPA` <= `35` characters. An extended character set is accepted to cater for all European languages. If `SEPA` does not support a particular character, it is automatically converted to an acceptable alternative, in line with `SEPA` scheme guidance.
+
+
+            `Faster Payments` <= `18` characters
+
+            '
+        externalData:
+          type: array
+          description: Additional external data as key-value pairs.
+          items:
+            $ref: '#/components/schemas/CorrespondentBankingExternalData'
+        scheduledTimestamp:
+          $ref: '#/components/schemas/ScheduledTimestamp'
+    SourceInstrumentType:
+      type: string
+      enum:
+      - managed_accounts
     CorrespondentBankingIndividualOriginator:
       required:
       - name
@@ -589,47 +671,45 @@ components:
           oneOf:
           - $ref: '#/components/schemas/CorrespondentBankingIndividualAddressAndIdInfo'
           - $ref: '#/components/schemas/CorrespondentBankingIndividualAddressAndBirthInfo'
-    Id:
-      type: string
-      pattern: ^[0-9]+$
-    TransactionSingleCancelRequest:
-      type: object
-      properties:
-        cancellationReason:
-          $ref: '#/components/schemas/TransactionCancellationReason'
-    CurrencyAmount:
+    CorrespondentBankingBusinessOriginator:
       required:
-      - currency
-      - amount
+      - name
+      - registrationAddress
+      - registrationCountry
+      - bankAccountDetails
       type: object
+      description: 'A business (legal entity) originator of the transfer.
+
+
+        Travel Rule Requirements:
+
+        - Mandatory: Full legal name and account number (via bankAccountDetails)
+
+        - Mandatory: Registered address and business identification (LEI, registration number, or tax ID)
+
+        '
       properties:
-        currency:
-          $ref: '#/components/schemas/Currency'
-        amount:
-          type: integer
-          format: int64
-          description: 'The monetary amount, scaled to the lowest denomination of the currency.
-
-
-            Example, an amount of 1000 for a EUR currency is actually 1000 Euro cents or EUR 10.00.
-
-            '
-      description: The object representing a monetary amount in a particular currency.
-    CorrespondentBankingOwtState:
-      description: "The state of the correspondent bank transfer transaction, as follows:\n  - INVALID: The transfer has failed initial validation checks.\n  - PENDING_CHALLENGE: The transfer requires the completion of a transaction confirmation challenge before it can be submitted.\n  - SUBMITTED: The transfer has been submitted to the sending financial institution for processing.\n  - REJECTED: The transfer that was submitted was rejected.\n  - APPROVED: The transfer that was submitted has been approved and is being processed by the sending financial institution.\n  - FAILED: There was an issue with the transfer, and the transaction has failed.\n  - COMPLETED: The requested funds have been sent from the source instrument.\n  - RETURNED: The transfer has been returned to the sender.\n  - SCHEDULED: The transfer will be executed at the scheduled time.\n  - CANCELLED: The scheduled transfer has been cancelled.\n  - PENDING_CONFIRMATION: The transfer requires a manual confirmation by the user before proceeding.\n"
-      type: string
-      enum:
-      - INVALID
-      - PENDING_CHALLENGE
-      - SUBMITTED
-      - REJECTED
-      - APPROVED
-      - FAILED
-      - COMPLETED
-      - RETURNED
-      - SCHEDULED
-      - CANCELLED
-      - PENDING_CONFIRMATION
+        tag:
+          $ref: '#/components/schemas/Tag'
+        name:
+          type: string
+          maxLength: 140
+          description: Full legal name of the business entity.
+        registrationAddress:
+          type: string
+          maxLength: 255
+          description: Registered address of the business entity.
+        registrationCountry:
+          type: string
+          minLength: 2
+          maxLength: 2
+          pattern: ^[A-Z]{2}$
+          description: ISO 3166-1 alpha-2 country code of registration.
+        bankAccountDetails:
+          $ref: '#/components/schemas/CorrespondentBankingBankAccountDetails'
+          description: Account and financial institution details of the originator (travel rule mandatory).
+        supplementaryInformation:
+          $ref: '#/components/schemas/CorrespondentBankingBusinessAddressAndIdInfo'
     CorrespondentBankingRIXBeneficiary:
       required:
       - name
@@ -710,153 +790,101 @@ components:
           maxLength: 11
           pattern: ^[a-zA-Z0-9]{8,11}$
           description: Bank Identifier Code (BIC) of the originator's financial institution.
-    DateOfBirth:
+    ScheduledTimestamp:
+      pattern: ^[0-9]+$
       type: string
-      format: date
-      description: The date of birth in ISO 8601 format (YYYY-MM-DD).
-    CorrespondentBankingOwtCreateRequest:
-      required:
-      - profileId
-      - sourceInstrument
-      - amount
-      - originator
-      - beneficiary
-      - purpose
-      type: object
-      properties:
-        profileId:
-          $ref: '#/components/schemas/ProfileId'
-        tag:
-          $ref: '#/components/schemas/Tag'
-        sourceInstrument:
-          description: The managed account from which funds will be collected.
-          required:
-          - type
-          - id
-          type: object
-          properties:
-            type:
-              type: string
-              enum:
-              - managed_accounts
-            id:
-              type: string
-              pattern: ^[0-9]+$
-        amount:
-          description: The amount to transfer.
-          $ref: '#/components/schemas/CurrencyAmount'
-        originator:
-          oneOf:
-          - $ref: '#/components/schemas/CorrespondentBankingIndividualOriginator'
-          - $ref: '#/components/schemas/CorrespondentBankingBusinessOriginator'
-        beneficiary:
-          oneOf:
-          - $ref: '#/components/schemas/CorrespondentBankingSEPABeneficiary'
-          - $ref: '#/components/schemas/CorrespondentBankingRIXBeneficiary'
-          - $ref: '#/components/schemas/CorrespondentBankingFasterPaymentsBeneficiary'
-        purpose:
-          type: string
-          maxLength: 255
-          description: The purpose of the payment.
-        description:
-          maxLength: 35
-          type: string
-          description: 'These details are passed to the beneficiary as the `reference`. This field is mandatory for wire transfers executed over `SEPA`. The allowed length is dependent on the payment type:
-
-
-            `SEPA` <= `35` characters. An extended character set is accepted to cater for all European languages. If `SEPA` does not support a particular character, it is automatically converted to an acceptable alternative, in line with `SEPA` scheme guidance.
-
-
-            `Faster Payments` <= `18` characters
-
-            '
-        externalData:
-          type: array
-          description: Additional external data as key-value pairs.
-          items:
-            $ref: '#/components/schemas/CorrespondentBankingExternalData'
-        scheduledTimestamp:
-          $ref: '#/components/schemas/ScheduledTimestamp'
-    SourceInstrumentType:
-      type: string
-      enum:
-      - managed_accounts
-    SyntaxError:
-      type: object
-      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
-      properties:
-        invalidFields:
-          type: array
-          items:
-            type: object
-            properties:
-              params:
-                type: array
-                items:
-                  type: string
-              fieldName:
-                type: string
-              error:
-                type: string
-                enum:
-                - REQUIRED
-                - HAS_TEXT
-                - REQUIRES
-                - SIZE
-                - RANGE
-                - IN
-                - NOT_IN
-                - REGEX
-                - EXACTLY
-                - AT_LEAST
-                - AT_MOST
-                - ALL_OR_NONE
-    CorrespondentBankingExternalData:
-      type: object
-      description: External data key-value pair.
-      required:
-      - name
-      - value
-      properties:
-        name:
-          type: string
-          maxLength: 50
-          description: Name/key of the external data.
-        value:
-          type: string
-          maxLength: 255
-          description: Value of the external data.
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-    CorrespondentBankingBusinessAddressAndIdInfo:
-      required:
-      - documentType
-      - documentNumber
-      type: object
-      description: Business identification for a business originator.
-      properties:
-        documentType:
-          type: string
-          enum:
-          - LEI
-          - REGISTRATION_NUMBER
-          - TAX_ID
-          - OTHER
-          description: Type of business identification document.
-        documentNumber:
-          type: string
-          maxLength: 35
-          description: Business identification document number (e.g. LEI code, company registration number).
+      description: The epoch timestamp at which the transaction is scheduled to be executed.
     Tag:
       type: string
       description: The tag field is a custom field that can be used to search and filter.
       maxLength: 50
       pattern: ^[a-zA-Z0-9_-]+$
+    UKConfirmationOfPayeeResult:
+      type: object
+      required:
+      - match
+      properties:
+        match:
+          type: string
+          description: The result of matching performed by the UK Confirmation of Payee responder
+          enum:
+          - EXACT_MATCH
+          - CLOSE_MATCH
+          - NO_MATCH
+          - NOT_POSSIBLE
+        reasonCode:
+          type: string
+          description: "The reason why the matching failed at the UK Confirmation of Payee responder:\n\n  - ANNM: The CoP responder confirms that the account `name` provided does not match;\n  - MBAM: The CoP responder indicates that the account `name` provided closely matches the actual account in its records, the actual account name is returned in the `accountName` field;\n  - BANM: The account `type` that the user specified is 'PERSONAL', but the CoP responder indicates that the actual account matching the `name` provided is actually BUSINESS;\n  - PANM: The account `type` that the user specified is 'BUSINESS', but the CoP responder indicates that the actual account matching the `name` provided is actually PERSONAL;\n  - BAMM: The account `type` that the user specified is 'PERSONAL', but the CoP responder indicates that an account closely matching the `name` provided is BUSINESS;\n  - PAMM: The account `type` that the user specified is 'BUSINESS', but the CoP responder indicates that an account closely matching the `name` provided is PERSONAL;\n  - AC01: The account does not exist in the CoP responders books, the `accountNumber` specified is likely incorrect; \n  - IVCR: The CoP responder was unable to locate an account based on the `secondaryReference` field;\n  - ACNS: The account is not supported for CoP by the CoP responder;\n  - OPTO: The owner of the account has opted out of CoP service by the CoP responder;\n  - CASS: The account has been switched using the Current Account Switch Service;\n  - SCNS: The `sortCode` provided is not supported at endpoint;\n"
+          enum:
+          - ANNM
+          - MBAM
+          - BANM
+          - PANM
+          - BAMM
+          - PAMM
+          - AC01
+          - IVCR
+          - ACNS
+          - OPTO
+          - CASS
+          - SCNS
+        accountName:
+          type: string
+          description: 'CoP: Returned when the `match` is a `CLOSE_MATCH` and the `reasonCode` is MBAM, BAMM or PAMM
+
+            VoP: Returned when the `match` is a `CLOSE_MATCH`
+
+            '
+    TransactionSingleCancelRequest:
+      type: object
+      properties:
+        cancellationReason:
+          $ref: '#/components/schemas/TransactionCancellationReason'
+    CorrespondentBankingOwtState:
+      description: "The state of the correspondent bank transfer transaction, as follows:\n  - INVALID: The transfer has failed initial validation checks.\n  - PENDING_CHALLENGE: The transfer requires the completion of a transaction confirmation challenge before it can be submitted.\n  - SUBMITTED: The transfer has been submitted to the sending financial institution for processing.\n  - REJECTED: The transfer that was submitted was rejected.\n  - APPROVED: The transfer that was submitted has been approved and is being processed by the sending financial institution.\n  - FAILED: There was an issue with the transfer, and the transaction has failed.\n  - COMPLETED: The requested funds have been sent from the source instrument.\n  - RETURNED: The transfer has been returned to the sender.\n  - SCHEDULED: The transfer will be executed at the scheduled time.\n  - CANCELLED: The scheduled transfer has been cancelled.\n  - PENDING_CONFIRMATION: The transfer requires a manual confirmation by the user before proceeding.\n"
+      type: string
+      enum:
+      - INVALID
+      - PENDING_CHALLENGE
+      - SUBMITTED
+      - REJECTED
+      - APPROVED
+      - FAILED
+      - COMPLETED
+      - RETURNED
+      - SCHEDULED
+      - CANCELLED
+      - PENDING_CONFIRMATION
+    CorrespondentBankingIndividualAddressAndBirthInfo:
+      required:
+      - dateOfBirth
+      - placeOfBirth
+      type: object
+      description: Birth information for an individual originator.
+      properties:
+        dateOfBirth:
+          type: string
+          format: date
+          description: Date of birth in YYYY-MM-DD format.
+        placeOfBirth:
+          type: string
+          maxLength: 140
+          description: Place of birth - city and country.
+    Currency:
+      type: string
+      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
+      maxLength: 3
+      minLength: 3
+      pattern: ^[A-Z]*$
+    Nationality:
+      maxLength: 2
+      minLength: 2
+      pattern: ^[A-Z]+$
+      type: string
+      description: Nationality of the user - using ISO 3166 alpha-2.
+    Id:
+      type: string
+      pattern: ^[0-9]+$
     CorrespondentBankingOwt:
       required:
       - id
@@ -939,223 +967,43 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CorrespondentBankingOwtValidationOutcome'
-    ProfileId:
-      type: string
-      description: 'The profile Id which a specific identity, instrument or transaction type is linked to.
-
-
-        Profiles contain configuration and determine behavioral aspects of the newly created transaction, for example, fees that may apply.
-
-
-        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s needs.
-
-
-        Profile Ids can be found in the Multi Portal, in the API Credentials page.
-
-        '
-      pattern: ^[0-9]+$
-    CorrespondentBankingFasterPaymentsBeneficiary:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    CorrespondentBankingExternalData:
+      type: object
+      description: External data key-value pair.
       required:
       - name
-      - type
-      - accountNumber
-      - sortCode
-      - address
-      type: object
-      description: CBT-specific beneficiary details for Faster Payments wire transfers with Banking Circle FI-to-FI field limits.
+      - value
       properties:
         name:
           type: string
-          minLength: 1
-          maxLength: 35
-          pattern: ^[a-zA-Z0-9\/\-?:().,'+\s#=!"%&*<>;\{@\r\n]*$
-          description: 'The beneficiary''s full name. >= 1 character and <= 35 characters.
-
-            Note: the '' symbol is the unicode value U+2019 (right single quotation mark)
-
-            and not the unicode value U+0027 (apostrophe).
-
-            '
-        type:
-          type: string
-          description: The type of beneficiary account. Required for Faster Payments.
-          enum:
-          - PERSONAL
-          - BUSINESS
-        accountNumber:
-          type: string
-          pattern: ^[0-9]{8}$
-          description: Account number, required for wire transfer over Faster Payments.
-        sortCode:
-          type: string
-          pattern: ^[0-9]{6}$
-          description: Sort code, required for wire transfer over Faster Payments.
-        secondaryReference:
-          type: string
-          description: Optional secondary reference for accounts without unique sort codes.
-        address:
-          maxLength: 105
-          minLength: 1
-          type: string
-          description: 'The beneficiary''s address. Required for correspondent banking transfers.
-
-            Maximum 105 characters (split into 3x35-char lines by the provider).
-
-            '
-        bankName:
-          type: string
-          maxLength: 150
-          description: The beneficiary's bank name.
-        bankAddress:
-          maxLength: 150
-          minLength: 1
-          type: string
-          description: The beneficiary's bank address.
-        bankCountry:
-          type: string
-          description: The beneficiary's bank country in ISO 3166 alpha-2 format.
-          maxLength: 2
-          minLength: 2
-          pattern: ^[A-Z]{2}$
-        nationality:
-          $ref: '#/components/schemas/Nationality'
-        dateOfBirth:
-          $ref: '#/components/schemas/DateOfBirth'
-    SEPAVerificationOfPayeeResult:
-      type: object
-      required:
-      - match
-      properties:
-        match:
-          type: string
-          description: The result of the SEPA Verification of Payee check performed by the responding PSP.
-          enum:
-          - MATCH
-          - NO_MATCH
-          - CLOSE_MATCH
-          - NOT_POSSIBLE
-        accountName:
-          type: string
-          description: 'The name of the account holder as registered with the responding PSP.
-
-            Returned when the match result is CLOSE_MATCH to help the payer verify the payee.
-
-            '
-    TransactionCancellationReason:
-      type: string
-      pattern: ^[ a-zA-Z0-9_-]+$
-      maxLength: 50
-      description: The reason the scheduled transaction was cancelled.
-    Currency:
-      type: string
-      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
-      maxLength: 3
-      minLength: 3
-      pattern: ^[A-Z]*$
-    UKConfirmationOfPayeeResult:
-      type: object
-      required:
-      - match
-      properties:
-        match:
-          type: string
-          description: The result of matching performed by the UK Confirmation of Payee responder
-          enum:
-          - EXACT_MATCH
-          - CLOSE_MATCH
-          - NO_MATCH
-          - NOT_POSSIBLE
-        reasonCode:
-          type: string
-          description: "The reason why the matching failed at the UK Confirmation of Payee responder:\n\n  - ANNM: The CoP responder confirms that the account `name` provided does not match;\n  - MBAM: The CoP responder indicates that the account `name` provided closely matches the actual account in its records, the actual account name is returned in the `accountName` field;\n  - BANM: The account `type` that the user specified is 'PERSONAL', but the CoP responder indicates that the actual account matching the `name` provided is actually BUSINESS;\n  - PANM: The account `type` that the user specified is 'BUSINESS', but the CoP responder indicates that the actual account matching the `name` provided is actually PERSONAL;\n  - BAMM: The account `type` that the user specified is 'PERSONAL', but the CoP responder indicates that an account closely matching the `name` provided is BUSINESS;\n  - PAMM: The account `type` that the user specified is 'BUSINESS', but the CoP responder indicates that an account closely matching the `name` provided is PERSONAL;\n  - AC01: The account does not exist in the CoP responders books, the `accountNumber` specified is likely incorrect; \n  - IVCR: The CoP responder was unable to locate an account based on the `secondaryReference` field;\n  - ACNS: The account is not supported for CoP by the CoP responder;\n  - OPTO: The owner of the account has opted out of CoP service by the CoP responder;\n  - CASS: The account has been switched using the Current Account Switch Service;\n  - SCNS: The `sortCode` provided is not supported at endpoint;\n"
-          enum:
-          - ANNM
-          - MBAM
-          - BANM
-          - PANM
-          - BAMM
-          - PAMM
-          - AC01
-          - IVCR
-          - ACNS
-          - OPTO
-          - CASS
-          - SCNS
-        accountName:
-          type: string
-          description: 'CoP: Returned when the `match` is a `CLOSE_MATCH` and the `reasonCode` is MBAM, BAMM or PAMM
-
-            VoP: Returned when the `match` is a `CLOSE_MATCH`
-
-            '
-    CorrespondentBankingIndividualAddressAndIdInfo:
-      required:
-      - documentType
-      - documentNumber
-      type: object
-      description: Personal identification for an individual originator.
-      properties:
-        documentType:
-          type: string
-          enum:
-          - NATIONAL_ID
-          - PASSPORT
-          - TAX_ID
-          - OTHER
-          description: Type of personal identification document.
-        documentNumber:
-          type: string
-          maxLength: 35
-          description: Personal identification document number.
-    Nationality:
-      maxLength: 2
-      minLength: 2
-      pattern: ^[A-Z]+$
-      type: string
-      description: Nationality of the user - using ISO 3166 alpha-2.
-    CorrespondentBankingBusinessOriginator:
-      required:
-      - name
-      - registrationAddress
-      - registrationCountry
-      - bankAccountDetails
-      type: object
-      description: 'A business (legal entity) originator of the transfer.
-
-
-        Travel Rule Requirements:
-
-        - Mandatory: Full legal name and account number (via bankAccountDetails)
-
-        - Mandatory: Registered address and business identification (LEI, registration number, or tax ID)
-
-        '
-      properties:
-        tag:
-          $ref: '#/components/schemas/Tag'
-        name:
-          type: string
-          maxLength: 140
-          description: Full legal name of the business entity.
-        registrationAddress:
+          maxLength: 50
+          description: Name/key of the external data.
+        value:
           type: string
           maxLength: 255
-          description: Registered address of the business entity.
-        registrationCountry:
+          description: Value of the external data.
+    CorrespondentBankingOwtValidationOutcome:
+      type: object
+      required:
+      - category
+      - categoryResult
+      properties:
+        category:
           type: string
-          minLength: 2
-          maxLength: 2
-          pattern: ^[A-Z]{2}$
-          description: ISO 3166-1 alpha-2 country code of registration.
-        bankAccountDetails:
-          $ref: '#/components/schemas/CorrespondentBankingBankAccountDetails'
-          description: Account and financial institution details of the originator (travel rule mandatory).
-        supplementaryInformation:
-          $ref: '#/components/schemas/CorrespondentBankingBusinessAddressAndIdInfo'
-    ScheduledTimestamp:
-      pattern: ^[0-9]+$
-      type: string
-      description: The epoch timestamp at which the transaction is scheduled to be executed.
+          enum:
+          - SEPA_VERIFICATION_OF_PAYEE
+          - UK_CONFIRMATION_OF_PAYEE
+        categoryResult:
+          oneOf:
+          - $ref: '#/components/schemas/SEPAVerificationOfPayeeResult'
+          - $ref: '#/components/schemas/UKConfirmationOfPayeeResult'
     StringWrappedTypeId:
       required:
       - type
@@ -1201,7 +1049,189 @@ components:
       - SCHEDULED
       - CANCELLED
       - PENDING_CONFIRMATION
+  responses:
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    CorrespondentBankingOwtCancelConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INVALID_STATE
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    CorrespondentBankingOwtsResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              transfer:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CorrespondentBankingOwt'
+              count:
+                type: integer
+                description: Total number of records (excluding the paging limit)
+                format: int32
+              responseCount:
+                type: integer
+                description: Total number of records returned in this response (always capped at 100).
+                format: int32
+    CorrespondentBankingOwtResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CorrespondentBankingOwt'
+    CorrespondentBankingOwtConfirmConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INVALID_STATE
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    CorrespondentBankingOwtCreateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - PROFILE_INACTIVE
+                - MODEL_CONSTRAINTS_VIOLATED
+                - CURRENCY_MISMATCH
+                - SOURCE_INSTRUMENT_BLOCKED
+                - SOURCE_INSTRUMENT_DESTROYED
+                - AMOUNT_INVALID
+                - FUNDS_INSUFFICIENT
+                - SOURCE_NOT_FOUND
+                - FEE_NOT_CONFIGURED_FOR_CURRENCY
+                - TYPE_NOT_SUPPORTED_BY_PROFILE
+                - PROFILE_NOT_FOUND
+                - SCHEDULED_TIMESTAMP_INVALID
+                - BENEFICIARY_BANK_DETAILS_INVALID
+                - ORIGINATOR_DETAILS_INVALID
+                - PROVIDER_REJECTED
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+  headers:
+    x-ratelimit-limit:
+      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+        The first number (20) is the limit that has been exceeded.
+
+        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+        '
+      required: true
+      schema:
+        type: string
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
   parameters:
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: The limit of the results for paging, starting at the offset. Limit is always capped at 100.
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
     idempotency-ref:
       name: idempotency-ref
       in: header
@@ -1209,6 +1239,20 @@ components:
       required: false
       schema:
         type: string
+    profileId:
+      name: profileId
+      in: query
+      required: false
+      description: Filter by the managed account/card profile. Leave out to fetch all managed accounts/card.
+      schema:
+        $ref: '#/components/schemas/ProfileId'
+    sourceInstrument_type:
+      name: sourceInstrument.type
+      in: query
+      required: false
+      description: Filter by the source instrument type. Must be specified when `source.id` is provided.
+      schema:
+        $ref: '#/components/schemas/SourceInstrumentType'
     sourceInstrument_id:
       name: sourceInstrument.id
       in: query
@@ -1225,30 +1269,6 @@ components:
         minimum: 0
         type: integer
         format: int32
-    profileId:
-      name: profileId
-      in: query
-      required: false
-      description: Filter by the managed account/card profile. Leave out to fetch all managed accounts/card.
-      schema:
-        $ref: '#/components/schemas/ProfileId'
-    sourceInstrument_type:
-      name: sourceInstrument.type
-      in: query
-      required: false
-      description: Filter by the source instrument type. Must be specified when `source.id` is provided.
-      schema:
-        $ref: '#/components/schemas/SourceInstrumentType'
-    limit:
-      name: limit
-      in: query
-      required: false
-      description: The limit of the results for paging, starting at the offset. Limit is always capped at 100.
-      schema:
-        maximum: 100
-        minimum: 1
-        type: integer
-        format: int32
     signature:
       name: signature
       in: header
@@ -1257,6 +1277,13 @@ components:
       style: simple
       explode: false
       deprecated: true
+      schema:
+        type: string
+    call-ref:
+      description: A call reference generated by the caller and unique to the caller to provide correlation between the caller and system with a maximum length of 255
+      in: header
+      name: call-ref
+      required: false
       schema:
         type: string
     published-timestamp:
@@ -1276,37 +1303,6 @@ components:
       required: true
       style: simple
       explode: false
-      schema:
-        type: string
-    call-ref:
-      description: A call reference generated by the caller and unique to the caller to provide correlation between the caller and system with a maximum length of 255
-      in: header
-      name: call-ref
-      required: false
-      schema:
-        type: string
-  headers:
-    request-ref:
-      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
-      required: true
-      schema:
-        type: string
-    x-ratelimit-reset:
-      description: The number of seconds until the window is reset.
-      required: true
-      schema:
-        minimum: 0
-        type: integer
-        format: int32
-    x-ratelimit-limit:
-      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
-
-        The first number (20) is the limit that has been exceeded.
-
-        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
-
-        '
-      required: true
       schema:
         type: string
   requestBodies:

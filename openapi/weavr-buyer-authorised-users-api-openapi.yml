@@ -9,7 +9,7 @@ info:
     url: https://weavr-cdn.s3.eu-central-1.amazonaws.com/weavr-payment-run-logo.png
     backgroundColor: '#FFFFFF'
     altText: Weavr
-  description: "Weavr Payment Run Plug-in API provides a simple and flexible way for Embedders to add payment execution capabilities in their application.\n\nBy integrating Weavr Payment Run plug-in API in your application, you can embed banking and payment capabilities within your app to boost productivity for your users in a seamless experience.\n\n# Authentication\nEach request to the API must include an `api_key` that represents your account. You can obtain an API Key by registering for a Embedder account [here](https://portal.weavr.io/register/?plugin=payment-run).\n\nAlmost all endpoints require a secondary authentication token `auth_token` that represents the user for whom the request is being executed.\n\n# Postman Collection\nTo help you get started with your integration, you can download the [Postman](https://postman.com) collection [here](https://sandbox.weavr.io/payment-run/v1/postman). The collection includes the steps you’ll need to follow to integrate Embedded Payment Run within your app. \n\nThe collection makes use of environment variables to pre-fill details associated with your Sandbox account, such as your account’s API Key. You can download your Sandbox Account environment file from the [Sandbox Portal](https://portal.weavr.io/register/?plugin=payment-run).\n"
+  description: Weavr Payment Run Plug-in API provides a simple and flexible way for Embedders to add payment execution capabilities in their application.
 servers:
 - url: https://sandbox.weavr.io/payment-run
   description: Sandbox
@@ -24,20 +24,17 @@ tags:
     Authorised users are typically employees who have access to company''s banking accounts.
 
 
-    Note that `/users` endpoints are to be used only for performing operations related to authorised users - getting or updating the details of _admin_ users is to be done via `/buyers` endpoints.
-
-    '
+    Note that `/users` endpoints are to be used only for performing operations related to authorised users - getting or updating the details of _admin_ users is to be done via `/buyers` endpoints.'
 paths:
   /v1/users:
     post:
-      description: 'Creates a user that belongs to the buyer that the logged-in user belongs to. To Create an Authorised User you would need a stepped-up token. After calling this endpoint you need to step-up ( issue a challenge `/stepup/challenges/otp/{channel}` ). More details on how to step-up a token can be found here [Step-Up](https://docs.weavr.io/payment-run/plugin-api/plugin-api-authentication-stepup/).
+      description: 'Creates a user that belongs to the buyer that the logged-in user belongs to. To Create an Authorised User you would need a stepped-up token. After calling this endpoint you need to step-up ( issue a challenge `/stepup/challenges/otp/{channel}` ). More details on how to step-up a token can be found here Step-Up.
 
 
         Once on-boarded, users have access and manage the buyer''s payment runs.
 
 
         Users are assigned `roles` which limit the level of access they have and what they can do on behalf of the buyer.
-
 
 
         Required user role: `ADMIN`'
@@ -424,7 +421,6 @@ paths:
       description: 'Fetches all authorised users associated with the buyer that the logged-in user belongs to.
 
 
-
         Required user role: `ADMIN`'
       summary: Get all users
       operationId: usersGet
@@ -739,7 +735,6 @@ paths:
       description: 'Retrieves the user identified by the `user_id` path parameter.
 
 
-
         Required user role: `ADMIN`'
       summary: Get a user
       operationId: userGetById
@@ -1029,14 +1024,13 @@ paths:
                   message:
                     type: string
     patch:
-      description: 'Update the details of a user identified by the user_id in the the path parameter. After calling this endpoint you need to step-up ( issue a challenge /stepup/challenges/otp/{channel} ). More details on how to step-up a token can be found here [Step-Up](https://docs.weavr.io/payment-run/plugin-api/plugin-api-authentication-stepup/)..
+      description: 'Update the details of a user identified by the user_id in the the path parameter. After calling this endpoint you need to step-up ( issue a challenge /stepup/challenges/otp/{channel} ). More details on how to step-up a token can be found here Step-Up..
 
 
         Only the fields that are specified in the request body will be updated. All other fields will remain unchanged.
 
 
         When patching a mobile number, the new mobile number should be enrolled for Additional Factors.
-
 
 
         Required user role: `ADMIN`'
@@ -1425,7 +1419,6 @@ paths:
         By default, any new users created will be automatically activated. This operation needs to be used only if the user was previously de-activated using the _userDeactivate_ operation, or if the user was de-activated automatically after multiple incorrect login attempts.
 
 
-
         Required user role: `ADMIN`'
       summary: Activate a user
       operationId: userActivate
@@ -1633,7 +1626,6 @@ paths:
 
 
         This operations is not final and a user can be re-activated using the userActivate operation. Note that another active user would need to log in so as to re-activate the de-activated user.
-
 
 
         Required user role: `ADMIN`'
@@ -1846,7 +1838,6 @@ paths:
         An invitation needs to be sent to the user in order to be able to set up the password for the first time. The invitation email, which remains valid for 1 month, will contain a URL having all information required to setup the password via the _userInviteConsume_.
 
 
-
         Required user role: `ADMIN`'
       parameters:
       - name: user_id
@@ -2048,9 +2039,7 @@ paths:
 
         to avoid having the user fill in a form only to be held by a validation issue
 
-        (eg. expired invite).
-
-        '
+        (eg. expired invite).'
       summary: Validate a user invite
       operationId: userInviteValidate
       tags:
@@ -2271,9 +2260,7 @@ paths:
       description: 'Consumes an invitation previously sent to the user via _userInviteSend_. This is needed so that the invited user sets up the password.
 
 
-        _Note that on the Sandbox Environment, the `inviteCode` is always set to \"123456\"._
-
-        '
+        _Note that on the Sandbox Environment, the `inviteCode` is always set to \"123456\"._'
       summary: Consume a user invite
       operationId: userInviteConsume
       tags:
@@ -2525,9 +2512,7 @@ paths:
         This code must then be provided in the _authorisedUserEmailVerify_ operation to verify the authorised user''s email address.
 
 
-        _Note that on the Sandbox Environment, the `verificationCode` is always set to \"123456\"._
-
-        '
+        _Note that on the Sandbox Environment, the `verificationCode` is always set to \"123456\"._'
       summary: Send an email verification code to the authorised user
       operationId: authorisedUserEmailVerificationCodeSend
       tags:
@@ -2726,9 +2711,7 @@ paths:
         This is needed as part of the verification process for basic due diligence.
 
 
-        _Note that on the Sandbox Environment, the `verificationCode` is always set to \"123456\"._
-
-        '
+        _Note that on the Sandbox Environment, the `verificationCode` is always set to \"123456\"._'
       summary: Verify email of the authorised user
       operationId: authorisedUserEmailVerify
       tags:

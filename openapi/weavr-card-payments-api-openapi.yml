@@ -6,21 +6,7 @@ info:
     url: https://storage.googleapis.com/weavr-cdn/weavr_logo-new.png
     backgroundColor: '#FFFFFF'
     altText: Weavr
-  description: 'Weavr Multi API provides a simple and flexible way to issue cards and accounts to your customers.
-
-
-    By integrating Weavr Multi API in your application you can embed banking capabilities within your app and provide a seamless experience for your customers.
-
-
-    # Authentication
-
-
-    Each request to the Multi API must include an `api-key` that represents your account. You can obtain an API Key by registering for a Multi account [here](https://portal.weavr.io).
-
-
-    Almost all endpoints require a secondary authentication token `auth_token` that represents the user for whom the request is being executed.
-
-    '
+  description: Weavr Multi API provides a simple and flexible way to issue cards and accounts to your customers.
   contact:
     name: Weavr
     url: https://weavr.io
@@ -135,290 +121,27 @@ paths:
       - auth_token: []
         api-key: []
 components:
-  parameters:
-    cardPaymentStatus:
-      name: status
-      in: query
-      required: false
-      explode: false
-      description: Filter by one or more card payment statuses.
-      schema:
-        type: array
-        items:
-          $ref: '#/components/schemas/CardPaymentStatus'
-    cardPaymentEventSortOrder:
-      name: sortOrder
-      in: query
-      required: false
-      description: Sort order on event timestamp. ASC = oldest first (default DESC).
-      schema:
-        type: string
-        enum:
-        - ASC
-        - DESC
-    cardPaymentCreationTimestampTo:
-      name: creationTimestampTo
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-    cardPaymentEventSubtype:
-      name: subtype
-      in: query
-      required: false
-      explode: false
-      description: Filter events by one or more network subtypes.
-      schema:
-        type: array
-        items:
-          $ref: '#/components/schemas/CardPaymentSubtype'
-    accept:
-      name: accept
-      in: header
-      description: 'A request parameter specifying the type of response the client would like. Must be one of `application/json`, `application/pdf` or `text/csv`.
+  schemas:
+    CardPaymentEventDetail:
+      type: object
+      description: 'Standalone card payment event — same four variants as `CardPaymentEvent`, but each row also carries the parent `CardPayment` context (`cardPaymentId`, `card`, `merchant`) so embedders can render an event-centric history feed without fetching each parent card payment.
 
 
-        The default response type (`application/json`) will be returned if specified incorrectly or not specified.
+        Used as the item type of `GET /card_payment_events`. For the lean nested version (inside `CardPayment.events[]`), see `CardPaymentEvent`.
 
         '
-      required: false
-      schema:
-        type: string
-    cardPaymentRelatedCardPaymentId:
-      name: relatedCardPaymentId
-      in: query
-      required: false
-      description: Filter for card payments related to the given parent id.
-      schema:
-        type: string
-        pattern: ^[0-9]+$
-    cardPaymentAmountFrom:
-      name: amountFrom
-      in: query
-      required: false
-      description: Filter for `displayAmount.amount >= amountFrom`.
-      schema:
-        type: integer
-        format: int64
-    cardPaymentMerchantName:
-      name: merchantName
-      in: query
-      required: false
-      description: Partial, case-insensitive match against merchant name.
-      schema:
-        type: string
-    cardPaymentEventReversal:
-      name: reversal
-      in: query
-      required: false
-      description: Filter events by reversal flag.
-      schema:
-        type: boolean
-    cardPaymentId:
-      name: id
-      in: path
-      required: true
-      description: The unique identifier of a card payment.
-      schema:
-        type: string
-        pattern: ^[0-9]+$
-    cardPaymentEventCardId:
-      name: cardId
-      in: query
-      required: false
-      description: Filter events to those on a single managed card.
-      schema:
-        type: string
-        pattern: ^[0-9]+$
-    cardPaymentSortOrder:
-      name: sortOrder
-      in: query
-      required: false
-      description: Sort order on `creationTimestamp`. ASC = oldest first.
-      schema:
-        type: string
-        enum:
-        - ASC
-        - DESC
-    cardPaymentEventCardPaymentId:
-      name: cardPaymentId
-      in: query
-      required: false
-      description: Filter events to a single card payment.
-      schema:
-        type: string
-        pattern: ^[0-9]+$
-    cardPaymentLastUpdatedTimestampFrom:
-      name: lastUpdatedTimestampFrom
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-    cardPaymentAmountTo:
-      name: amountTo
-      in: query
-      required: false
-      description: Filter for `displayAmount.amount <= amountTo`.
-      schema:
-        type: integer
-        format: int64
-    offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.
-      schema:
-        minimum: 0
-        type: integer
-        format: int32
-    cardPaymentType:
-      name: type
-      in: query
-      required: false
-      explode: false
-      description: Filter by one or more card payment types.
-      schema:
-        type: array
-        items:
-          $ref: '#/components/schemas/CardPaymentType'
-    cardPaymentCardId:
-      name: cardId
-      in: query
-      required: false
-      description: Filter by the managed card the payment belongs to.
-      schema:
-        type: string
-        pattern: ^[0-9]+$
-    cardPaymentEventTimestampTo:
-      name: timestampTo
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-    cardPaymentLastUpdatedTimestampTo:
-      name: lastUpdatedTimestampTo
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-    cardPaymentEventTimestampFrom:
-      name: timestampFrom
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-    cardPaymentSubtype:
-      name: subtype
-      in: query
-      required: false
-      explode: false
-      description: Filter by one or more event subtypes (joined against the events timeline).
-      schema:
-        type: array
-        items:
-          $ref: '#/components/schemas/CardPaymentSubtype'
-    cardPaymentCreationTimestampFrom:
-      name: creationTimestampFrom
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-    cardPaymentEventType:
-      name: type
-      in: query
-      required: false
-      explode: false
-      description: Filter by one or more event types.
-      schema:
-        type: array
-        items:
+      required:
+      - type
+      properties:
+        type:
           $ref: '#/components/schemas/CardPaymentEventType'
-    limit:
-      name: limit
-      in: query
-      required: false
-      description: The limit of the results for paging, starting at the offset. Limit is always capped at 100.
-      schema:
-        maximum: 100
-        minimum: 1
-        type: integer
-        format: int32
-  responses:
-    InternalServerError:
-      description: Internal Server Error - There is a problem with the server. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    CardPaymentResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CardPayment'
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    CardPaymentEventListResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CardPaymentEventList'
-    NotFound:
-      description: Not found - The requested resource couldn't be found.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    CardPaymentListResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CardPaymentList'
-    BadRequestError:
-      description: Bad Request Error - Your request is invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                maxLength: 255
-                type: string
-                description: When present helps to identify and fix the problem.
-              syntaxErrors:
-                $ref: '#/components/schemas/SyntaxError'
-    Error:
-      description: Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-  schemas:
+      discriminator:
+        propertyName: type
+        mapping:
+          AUTHORISATION: '#/components/schemas/CardPaymentAuthorisationEventDetail'
+          SETTLEMENT: '#/components/schemas/CardPaymentSettlementEventDetail'
+          REFUND: '#/components/schemas/CardPaymentRefundEventDetail'
+          ORIGINAL_CREDIT: '#/components/schemas/CardPaymentOriginalCreditEventDetail'
     CardPayment:
       type: object
       description: "One card transaction's full lifecycle — authorisation, settlement, refunds — as a single resource that the platform keeps up to date as scheme events arrive.\n\nDesigned for two audiences:\n  - **Building UI?** Read the top-level summary fields (`displayAmount`, `status`, `type`, `merchant`, `card`). They are platform-maintained — show them as-is. No need to understand auth-vs-clearing, reversals, or scheme messages. The debit/credit direction is implicit from `type` (purchases / cash withdrawals / account funding debit the card; refunds / original credits credit it). For the issuer authorisation code, walk `events[]` — every event in the lifecycle carries it.\n  - **Need scheme-level detail?** Walk `events[]` for the full per-step audit trail — every authorisation, clearing, reversal, and refund step — with original scheme amounts (merchant + card currency, with exchange rates), reason codes, and fees attached to the event that triggered them.\n\nEach card payment corresponds to one card-scheme lifecycle (Visa Transaction Identifier / Mastercard TLID). Related-but-separate transactions (refunds, tips, recurring follow-ups) are separate card payments linked via `relatedCardPaymentId` (direct parent).\n"
@@ -468,31 +191,36 @@ components:
           type: integer
           format: int64
           description: When the most recent event for this payment was received, Epoch millis.
-    CardPaymentType:
-      type: string
-      description: 'High-level type of card payment, derived from the first event.
-
-
-        - `PURCHASE` — standard purchase at a merchant.
-
-        - `REFUND` — refund from a merchant to the cardholder.
-
-        - `ORIGINAL_CREDIT` — push credit to the cardholder (OCT).
-
-        - `ACCOUNT_FUNDING` — load funds onto an account.
-
-        - `CASH_WITHDRAWAL` — cash withdrawn at ATM or scheme cash service.
-
-        - `BALANCE_INQUIRY` — non-financial balance check.
-
-        '
-      enum:
-      - PURCHASE
-      - REFUND
-      - ORIGINAL_CREDIT
-      - ACCOUNT_FUNDING
-      - CASH_WITHDRAWAL
-      - BALANCE_INQUIRY
+    SyntaxError:
+      type: object
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      properties:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
     CurrencyAmount:
       required:
       - currency
@@ -511,21 +239,72 @@ components:
 
             '
       description: The object representing a monetary amount in a particular currency.
-    CardPaymentSubtype:
+    ProfileId:
       type: string
-      description: Scheme-network subtype that further classifies an event. Reversal-vs-original lives on the separate `reversal` field on each event.
+      description: 'The profile Id which a specific identity, instrument or transaction type is linked to.
+
+
+        Profiles contain configuration and determine behavioral aspects of the newly created transaction, for example, fees that may apply.
+
+
+        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s needs.
+
+
+        Profile Ids can be found in the Multi Portal, in the API Credentials page.
+
+        '
+      pattern: ^[0-9]+$
+    CardPaymentStatus:
+      type: string
+      description: 'Lifecycle status of a CardPayment.
+
+
+        - `SETTLEMENT_IN_PROGRESS` — authorised, not yet (or not fully) settled. The hold is still on the card.
+
+        - `SETTLED` — fully settled. The customer has been charged.
+
+        - `DECLINED` — the latest authorisation was declined; no money moved.
+
+        - `CANCELLED` — the authorisation was cancelled/reversed before settlement; no charge applied.
+
+        - `EXPIRED` — the authorisation timed out without settling.
+
+        '
       enum:
-      - sale_purchases
-      - cash_withdrawals
-      - sales_with_cashback
-      - mail_or_telephone_orders
-      - account_funding
-      - purchase_reversals
-      - cash_withdrawal_reversals
-      - purchase_refunds
-      - purchase_refund_reversals
-      - original_credit_transactions
-      - original_credit_transaction_reversals
+      - SETTLEMENT_IN_PROGRESS
+      - SETTLED
+      - DECLINED
+      - CANCELLED
+      - EXPIRED
+    CardPaymentEvent:
+      type: object
+      description: "An event in a card payment's lifecycle, lean — used **nested** inside `CardPayment.events[]`. The parent card payment provides `cardPaymentId`, `card`, and `merchant`, so the lean variants don't repeat them. Each event carries its own `authCode`. Four variants discriminated by `type`:\n\n  - `AUTHORISATION` → `CardPaymentAuthorisationEvent`\n  - `SETTLEMENT` → `CardPaymentSettlementEvent`\n  - `REFUND` → `CardPaymentRefundEvent`\n  - `ORIGINAL_CREDIT` → `CardPaymentOriginalCreditEvent` (Visa OCT / Mastercard MoneySend)\n\nFor the **standalone** version returned by `GET /card_payment_events` — which carries `cardPaymentId`, `card`, and `merchant` so each row is self-contained — see `CardPaymentEventDetail`.\n"
+      required:
+      - type
+      properties:
+        type:
+          $ref: '#/components/schemas/CardPaymentEventType'
+      discriminator:
+        propertyName: type
+        mapping:
+          AUTHORISATION: '#/components/schemas/CardPaymentAuthorisationEvent'
+          SETTLEMENT: '#/components/schemas/CardPaymentSettlementEvent'
+          REFUND: '#/components/schemas/CardPaymentRefundEvent'
+          ORIGINAL_CREDIT: '#/components/schemas/CardPaymentOriginalCreditEvent'
+    CardPaymentList:
+      type: object
+      description: Paginated list of CardPayments.
+      properties:
+        cardPayments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CardPayment'
+        count:
+          type: integer
+          format: int64
+        responseCount:
+          type: integer
+          format: int64
     Merchant:
       type: object
       description: Information about a merchant — used wherever a merchant appears in card-payment flows, statement entries, and transaction activity.
@@ -581,92 +360,21 @@ components:
         logoUrl:
           type: string
           description: Merchant logo URL, when available.
-    SyntaxError:
-      type: object
-      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
-      properties:
-        invalidFields:
-          type: array
-          items:
-            type: object
-            properties:
-              params:
-                type: array
-                items:
-                  type: string
-              fieldName:
-                type: string
-              error:
-                type: string
-                enum:
-                - REQUIRED
-                - HAS_TEXT
-                - REQUIRES
-                - SIZE
-                - RANGE
-                - IN
-                - NOT_IN
-                - REGEX
-                - EXACTLY
-                - AT_LEAST
-                - AT_MOST
-                - ALL_OR_NONE
-    CardPaymentList:
-      type: object
-      description: Paginated list of CardPayments.
-      properties:
-        cardPayments:
-          type: array
-          items:
-            $ref: '#/components/schemas/CardPayment'
-        count:
-          type: integer
-          format: int64
-        responseCount:
-          type: integer
-          format: int64
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-    CardPaymentEvent:
-      type: object
-      description: "An event in a card payment's lifecycle, lean — used **nested** inside `CardPayment.events[]`. The parent card payment provides `cardPaymentId`, `card`, and `merchant`, so the lean variants don't repeat them. Each event carries its own `authCode`. Four variants discriminated by `type`:\n\n  - `AUTHORISATION` → `CardPaymentAuthorisationEvent`\n  - `SETTLEMENT` → `CardPaymentSettlementEvent`\n  - `REFUND` → `CardPaymentRefundEvent`\n  - `ORIGINAL_CREDIT` → `CardPaymentOriginalCreditEvent` (Visa OCT / Mastercard MoneySend)\n\nFor the **standalone** version returned by `GET /card_payment_events` — which carries `cardPaymentId`, `card`, and `merchant` so each row is self-contained — see `CardPaymentEventDetail`.\n"
-      required:
-      - type
-      properties:
-        type:
-          $ref: '#/components/schemas/CardPaymentEventType'
-      discriminator:
-        propertyName: type
-        mapping:
-          AUTHORISATION: '#/components/schemas/CardPaymentAuthorisationEvent'
-          SETTLEMENT: '#/components/schemas/CardPaymentSettlementEvent'
-          REFUND: '#/components/schemas/CardPaymentRefundEvent'
-          ORIGINAL_CREDIT: '#/components/schemas/CardPaymentOriginalCreditEvent'
-    CardPaymentEventDetail:
-      type: object
-      description: 'Standalone card payment event — same four variants as `CardPaymentEvent`, but each row also carries the parent `CardPayment` context (`cardPaymentId`, `card`, `merchant`) so embedders can render an event-centric history feed without fetching each parent card payment.
-
-
-        Used as the item type of `GET /card_payment_events`. For the lean nested version (inside `CardPayment.events[]`), see `CardPaymentEvent`.
-
-        '
-      required:
-      - type
-      properties:
-        type:
-          $ref: '#/components/schemas/CardPaymentEventType'
-      discriminator:
-        propertyName: type
-        mapping:
-          AUTHORISATION: '#/components/schemas/CardPaymentAuthorisationEventDetail'
-          SETTLEMENT: '#/components/schemas/CardPaymentSettlementEventDetail'
-          REFUND: '#/components/schemas/CardPaymentRefundEventDetail'
-          ORIGINAL_CREDIT: '#/components/schemas/CardPaymentOriginalCreditEventDetail'
+    CardPaymentSubtype:
+      type: string
+      description: Scheme-network subtype that further classifies an event. Reversal-vs-original lives on the separate `reversal` field on each event.
+      enum:
+      - sale_purchases
+      - cash_withdrawals
+      - sales_with_cashback
+      - mail_or_telephone_orders
+      - account_funding
+      - purchase_reversals
+      - cash_withdrawal_reversals
+      - purchase_refunds
+      - purchase_refund_reversals
+      - original_credit_transactions
+      - original_credit_transaction_reversals
     CardPaymentEventList:
       type: object
       description: Paginated list of `CardPaymentEventDetail`.
@@ -681,21 +389,31 @@ components:
         responseCount:
           type: integer
           format: int64
-    ProfileId:
+    CardPaymentType:
       type: string
-      description: 'The profile Id which a specific identity, instrument or transaction type is linked to.
+      description: 'High-level type of card payment, derived from the first event.
 
 
-        Profiles contain configuration and determine behavioral aspects of the newly created transaction, for example, fees that may apply.
+        - `PURCHASE` — standard purchase at a merchant.
 
+        - `REFUND` — refund from a merchant to the cardholder.
 
-        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s needs.
+        - `ORIGINAL_CREDIT` — push credit to the cardholder (OCT).
 
+        - `ACCOUNT_FUNDING` — load funds onto an account.
 
-        Profile Ids can be found in the Multi Portal, in the API Credentials page.
+        - `CASH_WITHDRAWAL` — cash withdrawn at ATM or scheme cash service.
+
+        - `BALANCE_INQUIRY` — non-financial balance check.
 
         '
-      pattern: ^[0-9]+$
+      enum:
+      - PURCHASE
+      - REFUND
+      - ORIGINAL_CREDIT
+      - ACCOUNT_FUNDING
+      - CASH_WITHDRAWAL
+      - BALANCE_INQUIRY
     CardPaymentEventType:
       type: string
       description: Type of event recorded against a CardPayment. The `reversal` flag on each event distinguishes a reversal from the original action.
@@ -759,28 +477,296 @@ components:
           type: string
           pattern: ^[0-9]+$
           description: Identifier of the managed account this card draws funds from. Populated only when `mode` is `debit`.
-    CardPaymentStatus:
-      type: string
-      description: 'Lifecycle status of a CardPayment.
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+  parameters:
+    cardPaymentType:
+      name: type
+      in: query
+      required: false
+      explode: false
+      description: Filter by one or more card payment types.
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/CardPaymentType'
+    cardPaymentAmountTo:
+      name: amountTo
+      in: query
+      required: false
+      description: Filter for `displayAmount.amount <= amountTo`.
+      schema:
+        type: integer
+        format: int64
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: The limit of the results for paging, starting at the offset. Limit is always capped at 100.
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+    cardPaymentId:
+      name: id
+      in: path
+      required: true
+      description: The unique identifier of a card payment.
+      schema:
+        type: string
+        pattern: ^[0-9]+$
+    accept:
+      name: accept
+      in: header
+      description: 'A request parameter specifying the type of response the client would like. Must be one of `application/json`, `application/pdf` or `text/csv`.
 
 
-        - `SETTLEMENT_IN_PROGRESS` — authorised, not yet (or not fully) settled. The hold is still on the card.
-
-        - `SETTLED` — fully settled. The customer has been charged.
-
-        - `DECLINED` — the latest authorisation was declined; no money moved.
-
-        - `CANCELLED` — the authorisation was cancelled/reversed before settlement; no charge applied.
-
-        - `EXPIRED` — the authorisation timed out without settling.
+        The default response type (`application/json`) will be returned if specified incorrectly or not specified.
 
         '
-      enum:
-      - SETTLEMENT_IN_PROGRESS
-      - SETTLED
-      - DECLINED
-      - CANCELLED
-      - EXPIRED
+      required: false
+      schema:
+        type: string
+    cardPaymentCardId:
+      name: cardId
+      in: query
+      required: false
+      description: Filter by the managed card the payment belongs to.
+      schema:
+        type: string
+        pattern: ^[0-9]+$
+    cardPaymentEventSubtype:
+      name: subtype
+      in: query
+      required: false
+      explode: false
+      description: Filter events by one or more network subtypes.
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/CardPaymentSubtype'
+    cardPaymentEventType:
+      name: type
+      in: query
+      required: false
+      explode: false
+      description: Filter by one or more event types.
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/CardPaymentEventType'
+    cardPaymentSubtype:
+      name: subtype
+      in: query
+      required: false
+      explode: false
+      description: Filter by one or more event subtypes (joined against the events timeline).
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/CardPaymentSubtype'
+    cardPaymentLastUpdatedTimestampTo:
+      name: lastUpdatedTimestampTo
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+    cardPaymentRelatedCardPaymentId:
+      name: relatedCardPaymentId
+      in: query
+      required: false
+      description: Filter for card payments related to the given parent id.
+      schema:
+        type: string
+        pattern: ^[0-9]+$
+    cardPaymentEventCardId:
+      name: cardId
+      in: query
+      required: false
+      description: Filter events to those on a single managed card.
+      schema:
+        type: string
+        pattern: ^[0-9]+$
+    cardPaymentEventCardPaymentId:
+      name: cardPaymentId
+      in: query
+      required: false
+      description: Filter events to a single card payment.
+      schema:
+        type: string
+        pattern: ^[0-9]+$
+    cardPaymentCreationTimestampFrom:
+      name: creationTimestampFrom
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+    cardPaymentEventTimestampFrom:
+      name: timestampFrom
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+    cardPaymentCreationTimestampTo:
+      name: creationTimestampTo
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+    cardPaymentEventSortOrder:
+      name: sortOrder
+      in: query
+      required: false
+      description: Sort order on event timestamp. ASC = oldest first (default DESC).
+      schema:
+        type: string
+        enum:
+        - ASC
+        - DESC
+    cardPaymentStatus:
+      name: status
+      in: query
+      required: false
+      explode: false
+      description: Filter by one or more card payment statuses.
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/CardPaymentStatus'
+    cardPaymentEventTimestampTo:
+      name: timestampTo
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+    cardPaymentAmountFrom:
+      name: amountFrom
+      in: query
+      required: false
+      description: Filter for `displayAmount.amount >= amountFrom`.
+      schema:
+        type: integer
+        format: int64
+    offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    cardPaymentLastUpdatedTimestampFrom:
+      name: lastUpdatedTimestampFrom
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+    cardPaymentEventReversal:
+      name: reversal
+      in: query
+      required: false
+      description: Filter events by reversal flag.
+      schema:
+        type: boolean
+    cardPaymentSortOrder:
+      name: sortOrder
+      in: query
+      required: false
+      description: Sort order on `creationTimestamp`. ASC = oldest first.
+      schema:
+        type: string
+        enum:
+        - ASC
+        - DESC
+    cardPaymentMerchantName:
+      name: merchantName
+      in: query
+      required: false
+      description: Partial, case-insensitive match against merchant name.
+      schema:
+        type: string
+  responses:
+    CardPaymentResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CardPayment'
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    CardPaymentEventListResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CardPaymentEventList'
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    CardPaymentListResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CardPaymentList'
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
   headers:
     request-ref:
       description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.

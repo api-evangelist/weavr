@@ -5,7 +5,14 @@
     "_original/weavr-multi-openapi-original.yml",
     "_original/weavr-payment-run-openapi-original.yml",
     "_original/weavr-simulator-openapi-original.yml",
-    "_original/weavr-webhooks-openapi-original.yml"
+    "_original/weavr-webhooks-openapi-original.yml",
+    "weavr-authentication-factors-webhooks-api-openapi.yml",
+    "weavr-buyers-webhooks-api-openapi.yml",
+    "weavr-linked-accounts-webhooks-api-openapi.yml",
+    "weavr-payment-runs-webhooks-api-openapi.yml",
+    "weavr-stepup-webhooks-api-openapi.yml",
+    "weavr-tokens-webhooks-api-openapi.yml",
+    "weavr-transactions-webhooks-api-openapi.yml"
   ],
   "outputs": [
     "weavr-access-token-api-openapi.yml",
@@ -64,9 +71,19 @@
     "weavr-manual-transactions-api-openapi.yml",
     "weavr-stepup-api-openapi.yml"
   ],
-  "archived": [],
+  "archived": [
+    "deleted 2 superseded output(s) from the previous generation"
+  ],
   "errors": [],
-  "warnings": [],
+  "warnings": [
+    "weavr-authentication-factors-webhooks-api-openapi.yml: previously refined output kept for 1 operation(s) no archived document covers (e.g. webhook:authenticationFactorsWatch post); its other 0 operation(s) came from the archive and were dropped from it. The archive is incomplete for this provider \u2014 re-harvest to restore _original/ as the full source of truth.",
+    "weavr-buyers-webhooks-api-openapi.yml: previously refined output kept for 4 operation(s) no archived document covers (e.g. webhook:buyerBeneficiaryStatusWatch post, webhook:buyerDeactivatedWatch post, webhook:buyerKYBWatch post); its other 0 operation(s) came from the archive and were dropped from it. The archive is incomplete for this provider \u2014 re-harvest to restore _original/ as the full source of truth.",
+    "weavr-linked-accounts-webhooks-api-openapi.yml: previously refined output kept for 2 operation(s) no archived document covers (e.g. webhook:linkedAccountExpiringSoonWatch post, webhook:linkedAccountWatch post); its other 0 operation(s) came from the archive and were dropped from it. The archive is incomplete for this provider \u2014 re-harvest to restore _original/ as the full source of truth.",
+    "weavr-payment-runs-webhooks-api-openapi.yml: previously refined output kept for 3 operation(s) no archived document covers (e.g. webhook:paymentRunGroupNotFunded post, webhook:paymentRunPaymentWatch post, webhook:paymentRunWatch post); its other 0 operation(s) came from the archive and were dropped from it. The archive is incomplete for this provider \u2014 re-harvest to restore _original/ as the full source of truth.",
+    "weavr-stepup-webhooks-api-openapi.yml: previously refined output kept for 1 operation(s) no archived document covers (e.g. webhook:stepupWatch post); its other 0 operation(s) came from the archive and were dropped from it. The archive is incomplete for this provider \u2014 re-harvest to restore _original/ as the full source of truth.",
+    "weavr-tokens-webhooks-api-openapi.yml: previously refined output kept for 1 operation(s) no archived document covers (e.g. webhook:loginWatch post); its other 0 operation(s) came from the archive and were dropped from it. The archive is incomplete for this provider \u2014 re-harvest to restore _original/ as the full source of truth.",
+    "weavr-transactions-webhooks-api-openapi.yml: previously refined output kept for 1 operation(s) no archived document covers (e.g. webhook:sweepingWatch post); its other 0 operation(s) came from the archive and were dropped from it. The archive is incomplete for this provider \u2014 re-harvest to restore _original/ as the full source of truth."
+  ],
   "notes": [
     "sourced from openapi/_original/ (5 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "weavr-multi-backoffice-openapi-original.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
@@ -128,7 +145,16 @@
     "tag 'Linked Accounts' spans 4 source specs (weavr-multi-openapi-original.yml, weavr-payment-run-openapi-original.yml, weavr-simulator-openapi-original.yml, weavr-webhooks-openapi-original.yml): per-path servers applied",
     "tag 'Outgoing Wire Transfers' spans 2 source specs (weavr-multi-openapi-original.yml, weavr-webhooks-openapi-original.yml): per-path servers applied",
     "tag 'Sends' spans 2 source specs (weavr-multi-openapi-original.yml, weavr-webhooks-openapi-original.yml): per-path servers applied",
-    "tag 'Trusted Payees' spans 2 source specs (weavr-multi-openapi-original.yml, weavr-webhooks-openapi-original.yml): per-path servers applied"
+    "tag 'Trusted Payees' spans 2 source specs (weavr-multi-openapi-original.yml, weavr-webhooks-openapi-original.yml): per-path servers applied",
+    "tag 'Authentication Factors Webhooks' spans 2 source specs (weavr-payment-run-openapi-original.yml, weavr-authentication-factors-webhooks-api-openapi.yml): per-path servers applied",
+    "tag 'Buyers Webhooks' spans 2 source specs (weavr-payment-run-openapi-original.yml, weavr-buyers-webhooks-api-openapi.yml): per-path servers applied",
+    "tag 'Linked Accounts Webhooks' spans 2 source specs (weavr-payment-run-openapi-original.yml, weavr-linked-accounts-webhooks-api-openapi.yml): per-path servers applied",
+    "tag 'Payment runs Webhooks' spans 2 source specs (weavr-payment-run-openapi-original.yml, weavr-payment-runs-webhooks-api-openapi.yml): per-path servers applied",
+    "tag 'Stepup Webhooks' spans 2 source specs (weavr-payment-run-openapi-original.yml, weavr-stepup-webhooks-api-openapi.yml): per-path servers applied",
+    "tag 'Tokens Webhooks' spans 2 source specs (weavr-payment-run-openapi-original.yml, weavr-tokens-webhooks-api-openapi.yml): per-path servers applied",
+    "tag 'Transactions Webhooks' spans 2 source specs (weavr-payment-run-openapi-original.yml, weavr-transactions-webhooks-api-openapi.yml): per-path servers applied",
+    "superseded outputs removed: weavr-iba-ns-api-openapi.yml, weavr-wire-transfers-api-openapi.yml",
+    "apis.yml register: written (+3 apis, 55 total)"
   ],
   "skipped": [
     "weavr-access-token-api-openapi.yml: previously refined output, superseded by openapi/_original/",
@@ -138,6 +164,7 @@
     "weavr-authentication-factors-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-authorised-signatories-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-authorised-users-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "weavr-bulk-operations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-buyer-authorised-users-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-buyers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-card-payments-api-openapi.yml: previously refined output, superseded by openapi/_original/",
@@ -149,12 +176,15 @@
     "weavr-customer-data-due-diligence-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-factors-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-fees-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "weavr-iba-ns-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-incoming-wire-transfers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-institutions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-linked-accounts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "weavr-login-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-manage-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-managed-accounts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-managed-cards-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "weavr-manual-transactions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-operations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-outgoing-wire-transfers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-passwords-api-openapi.yml: previously refined output, superseded by openapi/_original/",
@@ -173,6 +203,6 @@
     "weavr-transfers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-trusted-payees-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-user-impersonation-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "weavr-wiretransfers-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+    "weavr-wire-transfers-api-openapi.yml: previously refined output, superseded by openapi/_original/"
   ]
 }
