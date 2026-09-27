@@ -295,7 +295,197 @@ paths:
     - description: Weavr Sandbox Environment
       url: https://sandbox.weavr.io/multi/backoffice
 components:
+  parameters:
+    bulkId:
+      name: bulk_id
+      in: path
+      required: true
+      description: The bulk id of the bulk process.
+      schema:
+        $ref: '#/components/schemas/BulkId'
+    sequence:
+      name: sequence
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: The limit of the results for paging, starting at the offset. Limit is always capped at 100.
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+    offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    bulkProcessStatus:
+      name: status
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/BulkProcessStatus'
+    bulkProcessOperationStatus:
+      name: status
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/BulkProcessOperationStatus'
+  responses:
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BulkProcessOperations:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BulkProcessOperationsPaged'
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    BulkProcessorConflictResponse:
+      description: BulkProcessorConflict - bulk processor conflict.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BulkProcessConflict'
+    NoContent:
+      description: Success - No Content.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BulkProcessDetails:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BulkProcessDetails'
   schemas:
+    BulkId:
+      type: string
+      pattern: ^[0-9]+$
+    BulkProcessStatus:
+      type: string
+      enum:
+      - SUBMITTED
+      - RUNNING
+      - PARTIALLY_COMPLETED
+      - COMPLETED
+      - FAILED
+      - PAUSED
+      - CANCELLED
+    BulkProcessOperationStatus:
+      type: string
+      enum:
+      - SUBMITTED
+      - RUNNING
+      - COMPLETED
+      - FAILED
+      - CANCELLED
+    BulkProcessOperationsPaged:
+      properties:
+        count:
+          description: Total number of records (excluding limit)
+          format: int32
+          type: integer
+        operations:
+          items:
+            $ref: '#/components/schemas/BulkProcessOperation'
+          type: array
+        responseCount:
+          description: Total number of records returned in this response
+          format: int32
+          type: integer
+      type: object
+    BulkProcessConflictErrorCode:
+      enum:
+      - VALIDATION_FAILED
+      - USER_VALIDATION_FAILED
+      - ALREADY_SUBMITTED
+      - DUPLICATE_OPERATION_TYPE
+      - NO_CONFIG_FOUND
+      - INVALID_STATE
+      - TOO_MANY_REQUESTS
+      type: string
+    BulkProcessConflict:
+      properties:
+        errorCode:
+          $ref: '#/components/schemas/BulkProcessConflictErrorCode'
+      type: object
     BulkProcess:
       type: object
       properties:
@@ -322,16 +512,6 @@ components:
         mode:
           description: The mode that was instructed when execution was started
           $ref: '#/components/schemas/BulkProcessMode'
-    BulkProcessConflictErrorCode:
-      enum:
-      - VALIDATION_FAILED
-      - USER_VALIDATION_FAILED
-      - ALREADY_SUBMITTED
-      - DUPLICATE_OPERATION_TYPE
-      - NO_CONFIG_FOUND
-      - INVALID_STATE
-      - TOO_MANY_REQUESTS
-      type: string
     SyntaxError:
       type: object
       description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
@@ -362,11 +542,6 @@ components:
                 - AT_LEAST
                 - AT_MOST
                 - ALL_OR_NONE
-    BulkProcessConflict:
-      properties:
-        errorCode:
-          $ref: '#/components/schemas/BulkProcessConflictErrorCode'
-      type: object
     BulkProcessExecute:
       type: object
       properties:
@@ -376,28 +551,6 @@ components:
           description: The count of operations after which a Bulk Process Progress will be sent. For example, if set to 10, a webhook will be sent after every 10th operation is attempted. The minimum value fo count is 25% of all operations. If a value below this is entered, a webhook will only be sent for each 25% of operations attempted (i.e. 4 webhooks per Bulk Process).
           format: int32
           type: integer
-    BulkProcessOperationStatusCounts:
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/BulkProcessOperationStatus'
-        count:
-          type: integer
-    BulkProcessOperationsPaged:
-      properties:
-        count:
-          description: Total number of records (excluding limit)
-          format: int32
-          type: integer
-        operations:
-          items:
-            $ref: '#/components/schemas/BulkProcessOperation'
-          type: array
-        responseCount:
-          description: Total number of records returned in this response
-          format: int32
-          type: integer
-      type: object
     BulkProcessesPaged:
       properties:
         count:
@@ -413,36 +566,13 @@ components:
           format: int32
           type: integer
       type: object
-    BulkProcessMode:
-      description: 'ON_FAILURE_STOP : the execution of the bulk process stops after the first bulk operation that fails (operation returns a 4xx or 5xx response code).
-
-        ON_FAILURE_CONTINUE: the execution of the bulk process resumes as normal even when any of the bulk operations fail.
-
-        '
-      type: string
-      enum:
-      - ON_FAILURE_STOP
-      - ON_FAILURE_CONTINUE
-    BulkProcessOperationStatus:
-      type: string
-      enum:
-      - SUBMITTED
-      - RUNNING
-      - COMPLETED
-      - FAILED
-      - CANCELLED
-    BulkProcessDetails:
-      allOf:
-      - $ref: '#/components/schemas/BulkProcess'
-      - type: object
-        properties:
-          operationStatusCounts:
-            type: array
-            items:
-              $ref: '#/components/schemas/BulkProcessOperationStatusCounts'
-    BulkId:
-      type: string
-      pattern: ^[0-9]+$
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
     BulkProcessOperation:
       type: object
       properties:
@@ -470,168 +600,32 @@ components:
         responsePayload:
           description: The response for the execution of the operation
           type: string
-    BulkProcessStatus:
+    BulkProcessDetails:
+      allOf:
+      - $ref: '#/components/schemas/BulkProcess'
+      - type: object
+        properties:
+          operationStatusCounts:
+            type: array
+            items:
+              $ref: '#/components/schemas/BulkProcessOperationStatusCounts'
+    BulkProcessMode:
+      description: 'ON_FAILURE_STOP : the execution of the bulk process stops after the first bulk operation that fails (operation returns a 4xx or 5xx response code).
+
+        ON_FAILURE_CONTINUE: the execution of the bulk process resumes as normal even when any of the bulk operations fail.
+
+        '
       type: string
       enum:
-      - SUBMITTED
-      - RUNNING
-      - PARTIALLY_COMPLETED
-      - COMPLETED
-      - FAILED
-      - PAUSED
-      - CANCELLED
-    Error:
+      - ON_FAILURE_STOP
+      - ON_FAILURE_CONTINUE
+    BulkProcessOperationStatusCounts:
       type: object
       properties:
-        code:
-          type: string
-        message:
-          type: string
-  parameters:
-    bulkProcessOperationStatus:
-      name: status
-      in: query
-      required: false
-      schema:
-        $ref: '#/components/schemas/BulkProcessOperationStatus'
-    bulkProcessStatus:
-      name: status
-      in: query
-      required: false
-      schema:
-        $ref: '#/components/schemas/BulkProcessStatus'
-    limit:
-      name: limit
-      in: query
-      required: false
-      description: The limit of the results for paging, starting at the offset. Limit is always capped at 100.
-      schema:
-        maximum: 100
-        minimum: 1
-        type: integer
-        format: int32
-    bulkId:
-      name: bulk_id
-      in: path
-      required: true
-      description: The bulk id of the bulk process.
-      schema:
-        $ref: '#/components/schemas/BulkId'
-    sequence:
-      name: sequence
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-    offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.
-      schema:
-        minimum: 0
-        type: integer
-        format: int32
-  responses:
-    Forbidden:
-      description: Forbidden - Access to the requested resource or action is forbidden.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INSUFFICIENT_PERMISSIONS
-    BadRequestError:
-      description: Bad Request Error - Your request is invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                maxLength: 255
-                type: string
-                description: When present helps to identify and fix the problem.
-              syntaxErrors:
-                $ref: '#/components/schemas/SyntaxError'
-    BulkProcessorConflictResponse:
-      description: BulkProcessorConflict - bulk processor conflict.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/BulkProcessConflict'
-    Error:
-      description: Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal Server Error - There is a problem with the server. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    BulkProcessDetails:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/BulkProcessDetails'
-    NotFound:
-      description: Not found - The requested resource couldn't be found.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NoContent:
-      description: Success - No Content.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    BulkProcessOperations:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/BulkProcessOperationsPaged'
-  headers:
-    request-ref:
-      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
-      required: true
-      schema:
-        type: string
+        status:
+          $ref: '#/components/schemas/BulkProcessOperationStatus'
+        count:
+          type: integer
   requestBodies:
     BulkProcessExecute:
       required: true
@@ -639,6 +633,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/BulkProcessExecute'
+  headers:
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
   securitySchemes:
     api_key:
       type: apiKey

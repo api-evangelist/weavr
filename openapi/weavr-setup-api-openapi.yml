@@ -604,6 +604,94 @@ paths:
       - api-key: []
 components:
   responses:
+    TokenExpired:
+      description: Gone - The requested token is expired.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TokenError'
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    UserInviteValidateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INVITE_OR_INVITE_CODE_INVALID
+    UserInviteConsumeConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INVITE_OR_INVITE_CODE_INVALID
+                - UNRESOLVED_IDENTITY
+                - PASSWORD_ALREADY_USED
+                - PASSWORD_PROFILE_NOT_CONFIGURED_FOR_CREDENTIAL_TYPE
+                - PASSWORD_TOO_SHORT
+                - PASSWORD_TOO_LONG
+                - PASSWORD_TOO_SIMPLE
+                - PASSWORD_KEY_ALREADY_IN_USE
+                - PASSWORD_ALREADY_CREATED
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UserForbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - STEP_UP_REQUIRED
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
     UserPatchConflict:
       description: Conflict
       content:
@@ -624,43 +712,20 @@ components:
                 - ROLE_NOT_FOUND
                 - CANNOT_MODIFY_OWN_ROLES
                 - ADMIN_ROLE_REMOVAL_NOT_ALLOWED
-    Forbidden:
-      description: Forbidden - Access to the requested resource or action is forbidden.
+    UserResponse:
+      description: Success
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INSUFFICIENT_PERMISSIONS
-    NotFoundToken:
-      description: Not found - The requested token couldn't be found.
+            $ref: '#/components/schemas/User'
+    NoContent:
+      description: Success - No Content.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/TokenError'
-    UserForbidden:
-      description: Forbidden - Access to the requested resource or action is forbidden.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - STEP_UP_REQUIRED
     UserIdentitiesConflict:
       description: Conflict
       content:
@@ -672,68 +737,6 @@ components:
                 type: string
                 enum:
                 - IDENTITY_TYPE_NOT_SUPPORTED
-    UserInviteConsumeConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INVITE_OR_INVITE_CODE_INVALID
-                - UNRESOLVED_IDENTITY
-                - PASSWORD_ALREADY_USED
-                - PASSWORD_PROFILE_NOT_CONFIGURED_FOR_CREDENTIAL_TYPE
-                - PASSWORD_TOO_SHORT
-                - PASSWORD_TOO_LONG
-                - PASSWORD_TOO_SIMPLE
-                - PASSWORD_KEY_ALREADY_IN_USE
-                - PASSWORD_ALREADY_CREATED
-    BadRequestError:
-      description: Bad Request Error - Your request is invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                maxLength: 255
-                type: string
-                description: When present helps to identify and fix the problem.
-              syntaxErrors:
-                $ref: '#/components/schemas/SyntaxError'
-    TooManyRequests:
-      description: Too many requests.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-        x-ratelimit-limit:
-          $ref: '#/components/headers/x-ratelimit-limit'
-        x-ratelimit-reset:
-          $ref: '#/components/headers/x-ratelimit-reset'
-    TokenResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/TokenResponse'
-    TokenExpired:
-      description: Gone - The requested token is expired.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/TokenError'
     UserIdentitiesGetResponse:
       description: Success
       headers:
@@ -743,39 +746,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/UserIdentitiesGetResponseSchema'
-    Error:
-      description: Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UserCreateConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - EMAIL_NOT_UNIQUE
-                - MOBILE_OR_COUNTRY_CODE_INVALID
-                - EMAIL_DOMAIN_NOT_ALLOWED
-                - COUNTRY_OF_RESIDENCE_INVALID
-                - ROLE_NOT_FOUND
-                - CANNOT_MODIFY_OWN_ROLES
-                - ADMIN_ROLE_REMOVAL_NOT_ALLOWED
-    InternalServerError:
-      description: Internal Server Error - There is a problem with the server. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
     UsersGetResponse:
       description: Success
       headers:
@@ -799,16 +769,30 @@ components:
                 type: integer
                 description: The total number of records returned in this response (always capped at 100).
                 format: int32
-    NotFound:
-      description: Not found - The requested resource couldn't be found.
+    NotFoundToken:
+      description: Not found - The requested token couldn't be found.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
-    UserInviteValidateConflict:
+            $ref: '#/components/schemas/TokenError'
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    UserCreateConflict:
       description: Conflict
       content:
         application/json:
@@ -818,12 +802,33 @@ components:
               errorCode:
                 type: string
                 enum:
-                - INVITE_OR_INVITE_CODE_INVALID
-    NoContent:
-      description: Success - No Content.
+                - EMAIL_NOT_UNIQUE
+                - MOBILE_OR_COUNTRY_CODE_INVALID
+                - EMAIL_DOMAIN_NOT_ALLOWED
+                - COUNTRY_OF_RESIDENCE_INVALID
+                - ROLE_NOT_FOUND
+                - CANNOT_MODIFY_OWN_ROLES
+                - ADMIN_ROLE_REMOVAL_NOT_ALLOWED
+    TokenResponse:
+      description: Success
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TokenResponse'
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     UserInviteSendConflict:
       description: Conflict
       content:
@@ -835,156 +840,43 @@ components:
                 type: string
                 enum:
                 - INVITE_ALREADY_CONSUMED
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
+    TooManyRequests:
+      description: Too many requests.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
-    UserResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/User'
-  parameters:
-    active:
-      name: active
-      in: query
-      required: false
-      description: Filter for active or deactivated users. Leave out to fetch all users.
-      schema:
-        type: boolean
-    idempotency-ref:
-      name: idempotency-ref
-      in: header
-      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
-      required: false
-      schema:
-        type: string
-    limit:
-      name: limit
-      in: query
-      required: false
-      description: The limit of the results for paging, starting at the offset. Limit is always capped at 100.
-      schema:
-        maximum: 100
-        minimum: 1
-        type: integer
-        format: int32
-    email:
-      name: email
-      in: query
-      required: false
-      description: Filter by the email address of the user.
-      schema:
-        $ref: '#/components/schemas/Email'
-    tag:
-      name: tag
-      in: query
-      required: false
-      description: Filter by the managed account/card tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all managed accounts/card.
-      schema:
-        type: string
-    userId:
-      name: user_id
-      in: path
-      required: true
-      description: The unique identifier for the user.
-      schema:
-        $ref: '#/components/schemas/UserId'
-    offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.
-      schema:
-        minimum: 0
-        type: integer
-        format: int32
-    userIdExplode:
-      name: user_id
-      in: path
-      required: true
-      description: The unique identifier for the user.
-      style: simple
-      explode: false
-      schema:
-        $ref: '#/components/schemas/UserId'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
   schemas:
-    IdentityId:
+    Email:
+      type: string
+      description: E-mail Address of the user
+      format: email
+    UserId:
+      type: string
+      pattern: ^[0-9]+$
+    UserIdentitiesGetResponseSchema:
       required:
-      - type
-      - id
+      - identities
+      - count
+      - responseCount
       type: object
       properties:
-        type:
-          enum:
-          - CONSUMER
-          - CORPORATE
-          type: string
-          description: Indicates the identity type.
-        id:
-          type: string
-          pattern: ^[0-9]+$
-          description: The identifier for the identity.
-    SyntaxError:
-      type: object
-      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
-      properties:
-        invalidFields:
+        identities:
           type: array
+          description: The list of identities available to user.
           items:
-            type: object
-            properties:
-              params:
-                type: array
-                items:
-                  type: string
-              fieldName:
-                type: string
-              error:
-                type: string
-                enum:
-                - REQUIRED
-                - HAS_TEXT
-                - REQUIRES
-                - SIZE
-                - RANGE
-                - IN
-                - NOT_IN
-                - REGEX
-                - EXACTLY
-                - AT_LEAST
-                - AT_MOST
-                - ALL_OR_NONE
-    UserLocale:
-      type: string
-      pattern: ^[a-z]{2}(-[A-Z]{2})?$
-      description: 'BCP47 locale code (e.g. en, en-US). The locale determines which email and SMS user notification templates are used.
-
-        '
-      maxLength: 5
-      example: en-GB
-    UserPredefinedRole:
-      type: string
-      enum:
-      - CARD_ASSIGNEE
-      - CARDS_MANAGEMENT_ROLE
-      - FUNDS_MANAGEMENT_ROLE
-      - ACCESS_MANAGEMENT_ROLE
-      - ADMIN
-    TokenError:
-      description: The used token is expired or not found
-      type: object
-      properties:
-        errorCode:
-          type: string
-          enum:
-          - TOKEN_EXPIRED
-          - TOKEN_NOT_FOUND
+            $ref: '#/components/schemas/UserIdentity'
+        count:
+          type: integer
+          description: The total number of records (excluding the paging limit).
+          format: int32
+        responseCount:
+          type: integer
+          description: The total number of records returned in this response (always capped at 100).
+          format: int32
     User:
       required:
       - id
@@ -1035,10 +927,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UserPredefinedRole'
-    Email:
+    Brand:
       type: string
-      description: E-mail Address of the user
-      format: email
+      pattern: ^[a-zA-Z0-9]+$
+      description: 'Brand identifier used to determine the set of email and SMS user notification templates. Must be alphanumeric, up to 25 characters, and contain no spaces.
+
+        '
+      maxLength: 25
+    Tag:
+      type: string
+      description: The tag field is a custom field that can be used to search and filter.
+      maxLength: 50
+      pattern: ^[a-zA-Z0-9_-]+$
     Mobile:
       required:
       - number
@@ -1055,34 +955,75 @@ components:
           pattern: ^[0-9]{1,12}$
           type: string
           description: The mobile number of the user - excluding country code.
-    Nonce:
-      type: string
-      description: A randomly generated one-time use code.
-      pattern: ^[0-9]{6}$
-    Tag:
-      type: string
-      description: The tag field is a custom field that can be used to search and filter.
-      maxLength: 50
-      pattern: ^[a-zA-Z0-9_-]+$
-    Brand:
-      type: string
-      pattern: ^[a-zA-Z0-9]+$
-      description: 'Brand identifier used to determine the set of email and SMS user notification templates. Must be alphanumeric, up to 25 characters, and contain no spaces.
-
-        '
-      maxLength: 25
-    UserIdentity:
+    SensitivePassword:
+      type: object
+      description: "The user's password or passcode used to log in a user.\nPasswords must be:\n  - minimum 8 characters for end-users (Consumers and Corporates); 12 characters for others\n  - maximum 30 characters\n  - include a lowercase character\n  - include an uppercase character\n  - include a digit and a special character\n  - different from any of the 5 last such passwords used.\n\nFor non-PCI compliant integrations, the password submitted must be **tokenised**.\n"
       required:
-      - id
-      - name
+      - value
+      properties:
+        value:
+          maxLength: 100
+          type: string
+          format: password
+    UserPredefinedRole:
+      type: string
+      enum:
+      - CARD_ASSIGNEE
+      - CARDS_MANAGEMENT_ROLE
+      - FUNDS_MANAGEMENT_ROLE
+      - ACCESS_MANAGEMENT_ROLE
+      - ADMIN
+    SyntaxError:
+      type: object
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      properties:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
+    TokenError:
+      description: The used token is expired or not found
       type: object
       properties:
-        id:
-          description: The unique identifier of the Corporate Identity.
-          $ref: '#/components/schemas/IdentityId'
-        name:
+        errorCode:
           type: string
-          description: The name of the company.
+          enum:
+          - TOKEN_EXPIRED
+          - TOKEN_NOT_FOUND
+    VerificationCode:
+      type: string
+      description: A randomly generated one-time use code used to verify the user's email address or mobile number.
+      pattern: ^[0-9]{6}$
+    UserLocale:
+      type: string
+      pattern: ^[a-z]{2}(-[A-Z]{2})?$
+      description: 'BCP47 locale code (e.g. en, en-US). The locale determines which email and SMS user notification templates are used.
+
+        '
+      maxLength: 5
+      example: en-GB
     Date:
       required:
       - year
@@ -1105,49 +1046,6 @@ components:
           format: int32
           maximum: 31
           minimum: 1
-    VerificationCode:
-      type: string
-      description: A randomly generated one-time use code used to verify the user's email address or mobile number.
-      pattern: ^[0-9]{6}$
-    UserIdentitiesGetResponseSchema:
-      required:
-      - identities
-      - count
-      - responseCount
-      type: object
-      properties:
-        identities:
-          type: array
-          description: The list of identities available to user.
-          items:
-            $ref: '#/components/schemas/UserIdentity'
-        count:
-          type: integer
-          description: The total number of records (excluding the paging limit).
-          format: int32
-        responseCount:
-          type: integer
-          description: The total number of records returned in this response (always capped at 100).
-          format: int32
-    TokenResponse:
-      type: object
-      properties:
-        token:
-          type: string
-          description: An authorisation token to be used in the Authorization header for secured operations.
-    UserId:
-      type: string
-      pattern: ^[0-9]+$
-    SensitivePassword:
-      type: object
-      description: "The user's password or passcode used to log in a user.\nPasswords must be:\n  - minimum 8 characters for end-users (Consumers and Corporates); 12 characters for others\n  - maximum 30 characters\n  - include a lowercase character\n  - include an uppercase character\n  - include a digit and a special character\n  - different from any of the 5 last such passwords used.\n\nFor non-PCI compliant integrations, the password submitted must be **tokenised**.\n"
-      required:
-      - value
-      properties:
-        value:
-          maxLength: 100
-          type: string
-          format: password
     Error:
       type: object
       properties:
@@ -1155,7 +1053,57 @@ components:
           type: string
         message:
           type: string
+    TokenResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: An authorisation token to be used in the Authorization header for secured operations.
+    Nonce:
+      type: string
+      description: A randomly generated one-time use code.
+      pattern: ^[0-9]{6}$
+    UserIdentity:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          description: The unique identifier of the Corporate Identity.
+          $ref: '#/components/schemas/IdentityId'
+        name:
+          type: string
+          description: The name of the company.
+    IdentityId:
+      required:
+      - type
+      - id
+      type: object
+      properties:
+        type:
+          enum:
+          - CONSUMER
+          - CORPORATE
+          type: string
+          description: Indicates the identity type.
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The identifier for the identity.
   headers:
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
     x-ratelimit-limit:
       description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
 
@@ -1167,47 +1115,7 @@ components:
       required: true
       schema:
         type: string
-    request-ref:
-      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
-      required: true
-      schema:
-        type: string
-    x-ratelimit-reset:
-      description: The number of seconds until the window is reset.
-      required: true
-      schema:
-        minimum: 0
-        type: integer
-        format: int32
   requestBodies:
-    UserInviteConsumeRequest:
-      required: true
-      content:
-        application/json:
-          schema:
-            required:
-            - inviteCode
-            - password
-            type: object
-            properties:
-              inviteCode:
-                $ref: '#/components/schemas/Nonce'
-              password:
-                $ref: '#/components/schemas/SensitivePassword'
-              mobile:
-                $ref: '#/components/schemas/Mobile'
-                description: Optional mobile number for the user. If provided, the user's mobile is set/replaced as part of consuming the invite. The new number is left unverified — it must be enrolled afterwards.
-    UserInviteValidateRequest:
-      required: true
-      content:
-        application/json:
-          schema:
-            required:
-            - inviteCode
-            type: object
-            properties:
-              inviteCode:
-                $ref: '#/components/schemas/Nonce'
     UserPatchRequest:
       required: true
       content:
@@ -1243,6 +1151,34 @@ components:
                 items:
                   $ref: '#/components/schemas/UserPredefinedRole'
                 description: Optional roles to assign to the user. This uses overwrite behaviour - roles included in this list will be assigned, and roles not included will be unassigned. Users cannot update their own roles. For a full description of the permissions associated to each role, see our product documentation.
+    UserInviteConsumeRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - inviteCode
+            - password
+            type: object
+            properties:
+              inviteCode:
+                $ref: '#/components/schemas/Nonce'
+              password:
+                $ref: '#/components/schemas/SensitivePassword'
+              mobile:
+                $ref: '#/components/schemas/Mobile'
+                description: Optional mobile number for the user. If provided, the user's mobile is set/replaced as part of consuming the invite. The new number is left unverified — it must be enrolled afterwards.
+    UserInviteValidateRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - inviteCode
+            type: object
+            properties:
+              inviteCode:
+                $ref: '#/components/schemas/Nonce'
     UserCreateRequest:
       required: true
       content:
@@ -1287,6 +1223,70 @@ components:
                 items:
                   $ref: '#/components/schemas/UserPredefinedRole'
                 description: Optional roles to assign to the user. For a full description of the permissions associated with each role, see our product documentation.
+  parameters:
+    userId:
+      name: user_id
+      in: path
+      required: true
+      description: The unique identifier for the user.
+      schema:
+        $ref: '#/components/schemas/UserId'
+    email:
+      name: email
+      in: query
+      required: false
+      description: Filter by the email address of the user.
+      schema:
+        $ref: '#/components/schemas/Email'
+    idempotency-ref:
+      name: idempotency-ref
+      in: header
+      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
+      required: false
+      schema:
+        type: string
+    tag:
+      name: tag
+      in: query
+      required: false
+      description: Filter by the managed account/card tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all managed accounts/card.
+      schema:
+        type: string
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: The limit of the results for paging, starting at the offset. Limit is always capped at 100.
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+    offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    userIdExplode:
+      name: user_id
+      in: path
+      required: true
+      description: The unique identifier for the user.
+      style: simple
+      explode: false
+      schema:
+        $ref: '#/components/schemas/UserId'
+    active:
+      name: active
+      in: query
+      required: false
+      description: Filter for active or deactivated users. Leave out to fetch all users.
+      schema:
+        type: boolean
   securitySchemes:
     api-key:
       type: apiKey

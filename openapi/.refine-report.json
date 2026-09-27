@@ -72,7 +72,7 @@
     "weavr-stepup-api-openapi.yml"
   ],
   "archived": [
-    "deleted 2 superseded output(s) from the previous generation"
+    "deleted 1 superseded output(s) from the previous generation"
   ],
   "errors": [],
   "warnings": [
@@ -153,8 +153,8 @@
     "tag 'Stepup Webhooks' spans 2 source specs (weavr-payment-run-openapi-original.yml, weavr-stepup-webhooks-api-openapi.yml): per-path servers applied",
     "tag 'Tokens Webhooks' spans 2 source specs (weavr-payment-run-openapi-original.yml, weavr-tokens-webhooks-api-openapi.yml): per-path servers applied",
     "tag 'Transactions Webhooks' spans 2 source specs (weavr-payment-run-openapi-original.yml, weavr-transactions-webhooks-api-openapi.yml): per-path servers applied",
-    "superseded outputs removed: weavr-iba-ns-api-openapi.yml, weavr-wire-transfers-api-openapi.yml",
-    "apis.yml register: written (+3 apis, 55 total)"
+    "superseded outputs removed: weavr-wire-transfers-api-openapi.yml",
+    "apis.yml register: written (+2 apis, 55 total)"
   ],
   "skipped": [
     "weavr-access-token-api-openapi.yml: previously refined output, superseded by openapi/_original/",
@@ -176,7 +176,7 @@
     "weavr-customer-data-due-diligence-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-factors-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-fees-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "weavr-iba-ns-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "weavr-ibans-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-incoming-wire-transfers-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-institutions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "weavr-linked-accounts-api-openapi.yml: previously refined output, superseded by openapi/_original/",

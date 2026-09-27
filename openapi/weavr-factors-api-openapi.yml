@@ -155,11 +155,36 @@ paths:
         API_Secret_Key: []
 components:
   schemas:
-    SimulateVerifyChallengeResponseResponseCode:
-      type: string
-      enum:
-      - COMPLETED
-      - DENIED
+    ClientInvalidRequest:
+      type: object
+      properties:
+        message:
+          maxLength: 255
+          type: string
+          description: When present helps to identify and fix the problem.
+          x-fieldValidation: size(_,255)
+        validation:
+          allOf:
+          - $ref: '#/components/schemas/MessageValidation'
+          - description: Description of fields which were invalid.
+    FieldValidationErrors:
+      type: object
+      properties:
+        name:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidation'
+    DefaultError:
+      type: object
+      properties:
+        message:
+          maxLength: 255
+          type: string
+          description: When present helps to identify and fix the problem.
+          x-fieldValidation: size(_,255)
+      description: A default error model in case of errors other than 400, 409 or 504.
     FieldValidation:
       type: object
       properties:
@@ -169,6 +194,29 @@ components:
           type: array
           items:
             type: string
+    SimulateVerifyChallengeResponse:
+      required:
+      - code
+      type: object
+      properties:
+        code:
+          allOf:
+          - $ref: '#/components/schemas/SimulateVerifyChallengeResponseResponseCode'
+          - x-fieldValidation: required
+    SimulateVerifyChallengeResponseResponseCode:
+      type: string
+      enum:
+      - COMPLETED
+      - DENIED
+    MessageValidation:
+      type: object
+      properties:
+        invalid:
+          type: boolean
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidationErrors'
     FieldValidationType:
       type: string
       enum:
@@ -184,54 +232,6 @@ components:
       - AT_LEAST
       - AT_MOST
       - ALL_OR_NONE
-    DefaultError:
-      type: object
-      properties:
-        message:
-          maxLength: 255
-          type: string
-          description: When present helps to identify and fix the problem.
-          x-fieldValidation: size(_,255)
-      description: A default error model in case of errors other than 400, 409 or 504.
-    FieldValidationErrors:
-      type: object
-      properties:
-        name:
-          type: string
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldValidation'
-    SimulateVerifyChallengeResponse:
-      required:
-      - code
-      type: object
-      properties:
-        code:
-          allOf:
-          - $ref: '#/components/schemas/SimulateVerifyChallengeResponseResponseCode'
-          - x-fieldValidation: required
-    ClientInvalidRequest:
-      type: object
-      properties:
-        message:
-          maxLength: 255
-          type: string
-          description: When present helps to identify and fix the problem.
-          x-fieldValidation: size(_,255)
-        validation:
-          allOf:
-          - $ref: '#/components/schemas/MessageValidation'
-          - description: Description of fields which were invalid.
-    MessageValidation:
-      type: object
-      properties:
-        invalid:
-          type: boolean
-        fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldValidationErrors'
   parameters:
     call-ref:
       name: call-ref

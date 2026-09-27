@@ -39,38 +39,6 @@ webhooks:
           description: Success - No Content
 components:
   schemas:
-    FasterPaymentsBankDetailsOrBACSBankDetails:
-      required:
-      - accountNumber
-      - sortCode
-      type: object
-      description: Bank details used in case the wire transfer is executed over Faster Payments.
-      properties:
-        accountNumber:
-          type: string
-          pattern: ^[0-9]{8}$
-          description: Account number, required for wire transfer over Faster Payments.
-        sortCode:
-          type: string
-          pattern: ^[0-9]{6}$
-          description: Sort code, required for wire transfer over Faster Payments.
-        secondaryReference:
-          type: string
-    IbanInstrumentState:
-      required:
-      - state
-      type: object
-      properties:
-        state:
-          $ref: '#/components/schemas/IbanState'
-        destroyedReason:
-          $ref: '#/components/schemas/DestroyedReason'
-    Currency:
-      type: string
-      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
-      maxLength: 3
-      minLength: 3
-      pattern: ^[A-Z]*$
     IbanInstrument:
       required:
       - id
@@ -153,6 +121,38 @@ components:
                 - $ref: '#/components/schemas/IBANDetails'
                 - $ref: '#/components/schemas/FasterPaymentsBankDetailsOrBACSBankDetails'
                 - $ref: '#/components/schemas/SwiftBankDetails'
+    FasterPaymentsBankDetailsOrBACSBankDetails:
+      required:
+      - accountNumber
+      - sortCode
+      type: object
+      description: Bank details used in case the wire transfer is executed over Faster Payments.
+      properties:
+        accountNumber:
+          type: string
+          pattern: ^[0-9]{8}$
+          description: Account number, required for wire transfer over Faster Payments.
+        sortCode:
+          type: string
+          pattern: ^[0-9]{6}$
+          description: Sort code, required for wire transfer over Faster Payments.
+        secondaryReference:
+          type: string
+    Tag:
+      type: string
+      description: The tag field is a custom field that can be used to search and filter.
+      maxLength: 50
+      pattern: ^[a-zA-Z0-9_-]+$
+    IbanEventType:
+      type: string
+      enum:
+      - CREATED
+      - UPDATED
+      - REQUESTED
+      - REJECTED
+      - BLOCKED
+      - UNBLOCKED
+      - DESTROYED
     ProfileId:
       type: string
       description: 'The profile Id which a specific identity, instrument or transaction type is linked to.
@@ -168,21 +168,26 @@ components:
 
         '
       pattern: ^[0-9]+$
-    IbanEvent:
-      required:
-      - iban
-      - publishedTimestamp
-      - type
-      type: object
-      properties:
-        iban:
-          $ref: '#/components/schemas/IbanInstrument'
-        publishedTimestamp:
-          type: string
-          pattern: ^[0-9]+$
-          description: Epoch timestamp using millisecond precision.
-        type:
-          $ref: '#/components/schemas/IbanEventType'
+    DestroyedReason:
+      type: string
+      description: "The reason why the instrument has been destroyed:\n  - SYSTEM: The platform or an administrator of the platform has destroyed the instrument.\n  - USER: The root, or an authorised user, of the identity owning the instrument has destroyed the instrument.\n  - LOST: The instrument was automatically destroyed as it was marked as lost.\n  - STOLEN: The instrument was automatically destroyed as it was marked as stolen.\n  - EXPIRED: The instrument was automatically destroyed as it expired.\n  - COMPROMISED: The instrument was automatically destroyed as it was marked as compromised.\n  - SINGLE_SPEND: The instrument was automatically destroyed as it was a single-spend card that was used.\n"
+      enum:
+      - SYSTEM
+      - USER
+      - LOST
+      - STOLEN
+      - EXPIRED
+      - COMPROMISED
+      - SINGLE_SPEND
+    IbanState:
+      type: string
+      description: "The state of the instrument indicating what it can and cannot do as follows:\n  - PENDING: The instrument is pending creation.\n  - ACTIVE: The instrument is in an active state and can be used in transactions.\n  - BLOCKED: The instrument is temporarily blocked and cannot be used. Any funds on the instrument are also frozen. The `blockedReason` provides more information as to why it was blocked.\n  - REJECTED: The instrument was rejected from being created.\n  - DESTROYED: The instrument has been permanently destroyed. The `destroyReason` provides more information as to why it was destroyed.\n"
+      enum:
+      - PENDING
+      - ACTIVE
+      - BLOCKED
+      - REJECTED
+      - DESTROYED
     IBANDetails:
       required:
       - iban
@@ -201,30 +206,6 @@ components:
           maxLength: 11
           pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
           description: BIC, for wire transfer over SEPA or RIX
-    Tag:
-      type: string
-      description: The tag field is a custom field that can be used to search and filter.
-      maxLength: 50
-      pattern: ^[a-zA-Z0-9_-]+$
-    IbanEventType:
-      type: string
-      enum:
-      - CREATED
-      - UPDATED
-      - REQUESTED
-      - REJECTED
-      - BLOCKED
-      - UNBLOCKED
-      - DESTROYED
-    IbanState:
-      type: string
-      description: "The state of the instrument indicating what it can and cannot do as follows:\n  - PENDING: The instrument is pending creation.\n  - ACTIVE: The instrument is in an active state and can be used in transactions.\n  - BLOCKED: The instrument is temporarily blocked and cannot be used. Any funds on the instrument are also frozen. The `blockedReason` provides more information as to why it was blocked.\n  - REJECTED: The instrument was rejected from being created.\n  - DESTROYED: The instrument has been permanently destroyed. The `destroyReason` provides more information as to why it was destroyed.\n"
-      enum:
-      - PENDING
-      - ACTIVE
-      - BLOCKED
-      - REJECTED
-      - DESTROYED
     SwiftBankDetails:
       required:
       - iban
@@ -244,28 +225,37 @@ components:
           maxLength: 11
           pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
           description: SWIFT code, identifying a particular bank or branch, required for wire transfer over SWIFT.
-    DestroyedReason:
+    IbanEvent:
+      required:
+      - iban
+      - publishedTimestamp
+      - type
+      type: object
+      properties:
+        iban:
+          $ref: '#/components/schemas/IbanInstrument'
+        publishedTimestamp:
+          type: string
+          pattern: ^[0-9]+$
+          description: Epoch timestamp using millisecond precision.
+        type:
+          $ref: '#/components/schemas/IbanEventType'
+    Currency:
       type: string
-      description: "The reason why the instrument has been destroyed:\n  - SYSTEM: The platform or an administrator of the platform has destroyed the instrument.\n  - USER: The root, or an authorised user, of the identity owning the instrument has destroyed the instrument.\n  - LOST: The instrument was automatically destroyed as it was marked as lost.\n  - STOLEN: The instrument was automatically destroyed as it was marked as stolen.\n  - EXPIRED: The instrument was automatically destroyed as it expired.\n  - COMPROMISED: The instrument was automatically destroyed as it was marked as compromised.\n  - SINGLE_SPEND: The instrument was automatically destroyed as it was a single-spend card that was used.\n"
-      enum:
-      - SYSTEM
-      - USER
-      - LOST
-      - STOLEN
-      - EXPIRED
-      - COMPROMISED
-      - SINGLE_SPEND
+      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
+      maxLength: 3
+      minLength: 3
+      pattern: ^[A-Z]*$
+    IbanInstrumentState:
+      required:
+      - state
+      type: object
+      properties:
+        state:
+          $ref: '#/components/schemas/IbanState'
+        destroyedReason:
+          $ref: '#/components/schemas/DestroyedReason'
   parameters:
-    signature:
-      name: signature
-      in: header
-      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `published-timestamp` using your API key.
-      required: true
-      style: simple
-      explode: false
-      deprecated: true
-      schema:
-        type: string
     signature-v2:
       name: signature-v2
       in: header
@@ -280,6 +270,16 @@ components:
       in: header
       name: call-ref
       required: false
+      schema:
+        type: string
+    signature:
+      name: signature
+      in: header
+      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `published-timestamp` using your API key.
+      required: true
+      style: simple
+      explode: false
+      deprecated: true
       schema:
         type: string
     published-timestamp:

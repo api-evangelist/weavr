@@ -208,7 +208,211 @@ webhooks:
     servers:
     - url: '""'
 components:
+  responses:
+    ChargeFeeResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ChargeFee'
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    ChargeFeeConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - UNRESOLVED_FEE_TYPE
+                - UNRESOLVED_CURRENCY
+                - UNRESOLVED_INSTRUMENT
+                - FUNDS_INSUFFICIENT
+                - IDENTITY_NOT_OWNER_OF_INSTRUMENT
+                - FEE_AMOUNT_NOT_SET
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    FeeTransactionListResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FeeTransactionList'
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
   schemas:
+    CurrencyAmount:
+      required:
+      - currency
+      - amount
+      type: object
+      properties:
+        currency:
+          $ref: '#/components/schemas/Currency'
+        amount:
+          type: integer
+          format: int64
+          description: 'The monetary amount, scaled to the lowest denomination of the currency.
+
+
+            Example, an amount of 1000 for a EUR currency is actually 1000 Euro cents or EUR 10.00.
+
+            '
+      description: The object representing a monetary amount in a particular currency.
+    ChargeFee:
+      required:
+      - transactionId
+      - profileId
+      - feeType
+      - source
+      - destination
+      - availableBalanceAdjustment
+      - state
+      - creationTimestamp
+      type: object
+      properties:
+        transactionId:
+          $ref: '#/components/schemas/TransactionId'
+          description: The unique identifier of the transaction.
+        profileId:
+          type: string
+          description: The profile Id which a specific identity, instrument or transaction type is linked to.
+        feeType:
+          type: string
+          description: The fee type as defined in the Multi Portal, and as sent in the request.
+        source:
+          $ref: '#/components/schemas/InstrumentId'
+        availableBalanceAdjustment:
+          $ref: '#/components/schemas/CurrencyAmount'
+          description: The object representing a monetary amount in a particular currency.
+        state:
+          $ref: '#/components/schemas/TransactionState'
+          description: The transaction entry state.
+        creationTimestamp:
+          type: integer
+          format: int64
+    Id:
+      type: string
+      pattern: ^[0-9]+$
+    Currency:
+      type: string
+      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
+      maxLength: 3
+      minLength: 3
+      pattern: ^[A-Z]*$
+    TransactionState:
+      type: string
+      description: Status of the transaction.
+      enum:
+      - INITIALISED
+      - COMPLETED
+      - REJECTED
+      - FAILED
+      - PENDING
+      - SCHEDULED
+      - CANCELLED
+    SyntaxError:
+      type: object
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      properties:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
     InstrumentId:
       required:
       - id
@@ -330,97 +534,6 @@ components:
         id:
           type: string
           pattern: ^[0-9]+$
-    SyntaxError:
-      type: object
-      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
-      properties:
-        invalidFields:
-          type: array
-          items:
-            type: object
-            properties:
-              params:
-                type: array
-                items:
-                  type: string
-              fieldName:
-                type: string
-              error:
-                type: string
-                enum:
-                - REQUIRED
-                - HAS_TEXT
-                - REQUIRES
-                - SIZE
-                - RANGE
-                - IN
-                - NOT_IN
-                - REGEX
-                - EXACTLY
-                - AT_LEAST
-                - AT_MOST
-                - ALL_OR_NONE
-    CurrencyAmount:
-      required:
-      - currency
-      - amount
-      type: object
-      properties:
-        currency:
-          $ref: '#/components/schemas/Currency'
-        amount:
-          type: integer
-          format: int64
-          description: 'The monetary amount, scaled to the lowest denomination of the currency.
-
-
-            Example, an amount of 1000 for a EUR currency is actually 1000 Euro cents or EUR 10.00.
-
-            '
-      description: The object representing a monetary amount in a particular currency.
-    TransactionState:
-      type: string
-      description: Status of the transaction.
-      enum:
-      - INITIALISED
-      - COMPLETED
-      - REJECTED
-      - FAILED
-      - PENDING
-      - SCHEDULED
-      - CANCELLED
-    ChargeFee:
-      required:
-      - transactionId
-      - profileId
-      - feeType
-      - source
-      - destination
-      - availableBalanceAdjustment
-      - state
-      - creationTimestamp
-      type: object
-      properties:
-        transactionId:
-          $ref: '#/components/schemas/TransactionId'
-          description: The unique identifier of the transaction.
-        profileId:
-          type: string
-          description: The profile Id which a specific identity, instrument or transaction type is linked to.
-        feeType:
-          type: string
-          description: The fee type as defined in the Multi Portal, and as sent in the request.
-        source:
-          $ref: '#/components/schemas/InstrumentId'
-        availableBalanceAdjustment:
-          $ref: '#/components/schemas/CurrencyAmount'
-          description: The object representing a monetary amount in a particular currency.
-        state:
-          $ref: '#/components/schemas/TransactionState'
-          description: The transaction entry state.
-        creationTimestamp:
-          type: integer
-          format: int64
     Fee:
       required:
       - feeType
@@ -438,15 +551,6 @@ components:
       enum:
       - managed_cards
       - managed_accounts
-    Currency:
-      type: string
-      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
-      maxLength: 3
-      minLength: 3
-      pattern: ^[A-Z]*$
-    Id:
-      type: string
-      pattern: ^[0-9]+$
     Error:
       type: object
       properties:
@@ -454,6 +558,29 @@ components:
           type: string
         message:
           type: string
+    FeeTransactionStatus:
+      type: string
+      description: "Lifecycle status of a fee transaction:\n  - PENDING: Fee accompanies a transaction that is still processing; it may still be cancelled.\n  - COMPLETED: Fee was charged and posted to the instrument balance.\n  - CANCELLED: Fee was cancelled before being charged.\n  - REVERSED: Fee was previously charged and has been reversed.\n"
+      enum:
+      - PENDING
+      - COMPLETED
+      - CANCELLED
+      - REVERSED
+    FeeTransactionList:
+      type: object
+      description: A paginated list of fee transactions.
+      properties:
+        fees:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeeTransaction'
+        count:
+          type: integer
+          format: int64
+          description: The total number of records matching the filter criteria.
+        responseCount:
+          type: integer
+          format: int64
     FeeSubtype:
       type: string
       description: The category of fee — indicates the activity or instrument-lifecycle event the fee relates to.
@@ -473,14 +600,6 @@ components:
       - instrument_delete_fees
       - funds_redemption_fees
       - system_transaction_fees
-    FeeTransactionStatus:
-      type: string
-      description: "Lifecycle status of a fee transaction:\n  - PENDING: Fee accompanies a transaction that is still processing; it may still be cancelled.\n  - COMPLETED: Fee was charged and posted to the instrument balance.\n  - CANCELLED: Fee was cancelled before being charged.\n  - REVERSED: Fee was previously charged and has been reversed.\n"
-      enum:
-      - PENDING
-      - COMPLETED
-      - CANCELLED
-      - REVERSED
     FeeTransaction:
       type: object
       required:
@@ -523,81 +642,48 @@ components:
         lastUpdatedTimestamp:
           type: integer
           format: int64
-    FeeTransactionList:
-      type: object
-      description: A paginated list of fee transactions.
-      properties:
-        fees:
-          type: array
-          items:
-            $ref: '#/components/schemas/FeeTransaction'
-        count:
-          type: integer
-          format: int64
-          description: The total number of records matching the filter criteria.
-        responseCount:
-          type: integer
-          format: int64
-    LegacyTransactionBatch:
+    ChargeFeeEvent:
       required:
-      - id
-      - instrument
-      - state
-      - transaction
+      - chargeFee
+      - publishedTimestamp
+      - type
       type: object
       properties:
-        id:
-          type: string
-          pattern: ^[0-9]+$
-        transaction:
-          $ref: '#/components/schemas/StringWrappedTypeId'
-        relatedBatchId:
-          type: string
-          pattern: ^[0-9]+$
-        intercept:
-          type: array
-          items:
-            $ref: '#/components/schemas/TransactionBatchIntercept'
-        instrument:
+        chargeFee:
           type: object
-          additionalProperties:
-            $ref: '#/components/schemas/LegacyTransactionBatchInstrument'
-          description: The id of the map should be the instrument id
-        forexTrade:
-          type: array
-          items:
-            $ref: '#/components/schemas/LegacyTransactionBatchForexTrade'
-        completedTimestamp:
+          required:
+          - feeSpec
+          - feeType
+          - id
+          - source
+          properties:
+            id:
+              type: string
+              pattern: ^[0-9]+$
+            feeType:
+              $ref: '#/components/schemas/FeeType'
+            feeSubType:
+              maxLength: 50
+              type: string
+              description: Optional sub fee type value (e.g. PRINTED_STATEMENT)
+            note:
+              type: string
+              description: Note added to the transaction and visible in the statements as an additional field
+            source:
+              $ref: '#/components/schemas/InstrumentId'
+            feeSpec:
+              $ref: '#/components/schemas/LegacyFeeSpec'
+            batch:
+              $ref: '#/components/schemas/LegacyTransactionBatch'
+              description: The transaction batch if a transaction was executed for the charge
+            profileId:
+              type: string
+        publishedTimestamp:
           type: string
           pattern: ^[0-9]+$
           description: Epoch timestamp using millisecond precision.
-        state:
-          $ref: '#/components/schemas/TransactionBatchState'
-        conflict:
-          $ref: '#/components/schemas/TransactionBatchErrorType'
-        authSessionId:
-          type: string
-          pattern: ^[0-9]+$
-        note:
-          type: string
-    TransactionBatchParticipantState:
-      type: string
-      enum:
-      - EXECUTION_PENDING
-      - EXECUTED
-      - COMMITTED
-      - REJECTED
-      - FAILED
-      - COMPENSATION_PENDING
-      - COMPENSATED
-      - OBSOLETE
-      - EXECUTION_SUSPENDED
-      - COMPENSATION_SUSPENDED
-    ForexTradeParticipantErrorType:
-      type: string
-      enum:
-      - NO_FOREX_TRADE_ERROR
-      - RATE_EXPIRED
+        type:
+          $ref: '#/components/schemas/ChargeFeeEventType'
     StringWrappedTypeId:
       required:
       - type
@@ -611,117 +697,24 @@ components:
         id:
           type: string
           pattern: ^[0-9]+$
-    BlockedDetailsSubType:
-      type: string
-      enum:
-      - FREEZE
-      - LOST
-      - SINGLE_SPEND
-      - PENDING_APPROVAL
-    LegacyForexTradeParticipant:
-      required:
-      - provider
-      - rate
-      - rateId
-      - sourceCurrency
-      - targetCurrency
+    LegacyInstrumentBalances:
       type: object
       properties:
-        rateId:
+        availableBalance:
           type: string
           pattern: ^[0-9]+$
-        provider:
-          maxLength: 50
-          pattern: ^[a-zA-Z0-9_-]+$
-          type: string
-        sourceCurrency:
-          maxLength: 3
-          minLength: 3
-          pattern: ^[A-Z]*$
-          type: string
-        sourceAmount:
+        reservedBalance:
           type: string
           pattern: ^[0-9]+$
-        sourceSystem:
+        deltaBalance:
           type: string
           pattern: ^[0-9]+$
-          description: The rounding error when aggregating multiple conversions. Always positive
-        targetCurrency:
-          maxLength: 3
-          minLength: 3
-          pattern: ^[A-Z]*$
-          type: string
-        targetAmount:
+        pendingBalance:
           type: string
           pattern: ^[0-9]+$
-        rate:
-          $ref: '#/components/schemas/LegacyScaledAmount'
-          description: The forex rate between unscaled amount of given currencies
-    LegacyTransactionBatchForexTrade:
-      required:
-      - forexTrade
-      - id
-      type: object
-      properties:
-        id:
+        limitBalance:
           type: string
           pattern: ^[0-9]+$
-        forexTrade:
-          $ref: '#/components/schemas/LegacyForexTradeParticipant'
-        state:
-          $ref: '#/components/schemas/TransactionBatchParticipantState'
-        conflict:
-          $ref: '#/components/schemas/ForexTradeParticipantErrorType'
-        executedTimestamp:
-          type: string
-          pattern: ^[0-9]+$
-          description: Epoch timestamp using millisecond precision.
-        compensatedRateId:
-          type: string
-          pattern: ^[0-9]+$
-        sourceSystemCompensation:
-          type: string
-          pattern: ^[0-9]+$
-          description: The difference between the source and the actual compensation amount, may be positive (profit) or negative (loss)
-        compensatedRate:
-          $ref: '#/components/schemas/LegacyScaledAmount'
-          description: The compensation forex rate between unscaled amount of given currencies
-        compensatedTimestamp:
-          type: string
-          pattern: ^[0-9]+$
-          description: Epoch timestamp using millisecond precision.
-    ReplacementType:
-      type: string
-      enum:
-      - DAMAGED
-      - LOST_STOLEN
-      - RENEW
-      - COMPROMISED
-    LegacyCurrencyAmount:
-      required:
-      - currency
-      - amount
-      type: object
-      properties:
-        currency:
-          $ref: '#/components/schemas/Currency'
-        amount:
-          type: string
-          pattern: ^[0-9]+$
-          description: The monetary amount, scaled to the lowest denomination of the currency.
-      description: The object representing a monetary amount in a particular currency.
-    DestroyType:
-      type: string
-      enum:
-      - USER
-      - ADMIN
-      - SYSTEM
-      - LOST
-      - STOLEN
-      - SINGLE_SPEND
-      - ACCOUNT_REJECTED
-      - EXPIRED
-      - COMPROMISED
     FeeType:
       type: string
       enum:
@@ -736,96 +729,46 @@ components:
       - OWT
       - CUSTOM
       - OTHER
-    TransactionBatchInterceptState:
+    ChargeFeeEventType:
       type: string
       enum:
-      - PENDING
-      - ALLOWED
-      - DENIED
+      - UNDEFINED
+      - COMPLETED
+    TransactionBatchState:
+      type: string
+      enum:
+      - EXECUTION_PENDING
+      - EXECUTED
+      - COMPLETED
+      - COMPENSATION_PENDING
+      - REJECTED
       - FAILED
-      - SUSPENDED
-    LegacyFeeSpec:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/FeeSpecType'
-        flatAmount:
-          type: array
-          description: The flat fee amounts to be taken per currency. Required for FLAT, MAX, MIN and PLUS fee types.
-          items:
-            $ref: '#/components/schemas/LegacyCurrencyAmount'
-        percentage:
-          $ref: '#/components/schemas/LegacyScaledAmount'
-          description: The percentage amount to be taken as a fee. Required for PERCENTAGE, MAX, MIN and PLUS fee types.
-    BlockedDetailsType:
+      - EXECUTION_SUSPENDED
+      - COMPENSATION_SUSPENDED
+    DestroyType:
       type: string
       enum:
-      - VELOCITY
       - USER
-      - ACCOUNT
       - ADMIN
-    LegacyTransactionBatchInstrument:
-      required:
-      - id
-      - instrument
-      - instrumentId
-      - state
+      - SYSTEM
+      - LOST
+      - STOLEN
+      - SINGLE_SPEND
+      - ACCOUNT_REJECTED
+      - EXPIRED
+      - COMPROMISED
+    LegacyScaledAmount:
       type: object
       properties:
-        id:
+        value:
           type: string
           pattern: ^[0-9]+$
-        instrumentId:
-          $ref: '#/components/schemas/InstrumentId'
-        instrument:
-          $ref: '#/components/schemas/LegacyInstrumentParticipant'
-        state:
-          $ref: '#/components/schemas/TransactionBatchParticipantState'
-        conflict:
-          $ref: '#/components/schemas/InstrumentParticipantErrorType'
-        after:
-          $ref: '#/components/schemas/LegacyInstrumentBalances'
-        executedTimestamp:
-          type: string
-          pattern: ^[0-9]+$
-          description: Epoch timestamp using millisecond precision.
-        remaining:
-          $ref: '#/components/schemas/LegacyTransactionBatchInstrumentRemaining'
-        afterCompensation:
-          $ref: '#/components/schemas/LegacyInstrumentBalances'
-        compensatedTimestamp:
-          type: string
-          pattern: ^[0-9]+$
-          description: Epoch timestamp using millisecond precision.
-        treasuryPending:
-          type: boolean
-    TransactionBatchIntercept:
-      required:
-      - provider
-      type: object
-      properties:
-        provider:
-          maxLength: 50
-          pattern: ^[a-zA-Z0-9_-]+$
-          type: string
-        state:
-          $ref: '#/components/schemas/TransactionBatchInterceptState'
-        denialReason:
-          maxLength: 50
-          type: string
-        suspendedReason:
-          maxLength: 255
-          type: string
-    TransactionBatchErrorType:
-      type: string
-      enum:
-      - REVERSAL_EXCEEDS_REMAINING
-      - DENIED_BY_INTERCEPTOR
-      - DENIED_BY_INSTRUMENT
-      - DENIED_BY_FOREX_TRADE
-      - FI_PROVIDER_TREASURY_UNSUPPORTED
-      - DENIED_BY_SUSPENSE
-      - DENIED_BY_STATE_CHANGE
+        scale:
+          maximum: 127
+          minimum: -128
+          type: integer
+          format: int32
+      description: 'A floating point number, represented as a value and its scale. Its actual value can be obtained using the equation: value * pow(10, -scale).'
     LegacyTransactionBatchInstrumentRemaining:
       type: object
       properties:
@@ -928,66 +871,83 @@ components:
         forceBalance:
           type: boolean
           description: If set, force the action bypassing balance limits
-    LegacyInstrumentBalances:
-      type: object
-      properties:
-        availableBalance:
-          type: string
-          pattern: ^[0-9]+$
-        reservedBalance:
-          type: string
-          pattern: ^[0-9]+$
-        deltaBalance:
-          type: string
-          pattern: ^[0-9]+$
-        pendingBalance:
-          type: string
-          pattern: ^[0-9]+$
-        limitBalance:
-          type: string
-          pattern: ^[0-9]+$
-    ChargeFeeEvent:
+    LegacyTransactionBatchInstrument:
       required:
-      - chargeFee
-      - publishedTimestamp
-      - type
+      - id
+      - instrument
+      - instrumentId
+      - state
       type: object
       properties:
-        chargeFee:
-          type: object
-          required:
-          - feeSpec
-          - feeType
-          - id
-          - source
-          properties:
-            id:
-              type: string
-              pattern: ^[0-9]+$
-            feeType:
-              $ref: '#/components/schemas/FeeType'
-            feeSubType:
-              maxLength: 50
-              type: string
-              description: Optional sub fee type value (e.g. PRINTED_STATEMENT)
-            note:
-              type: string
-              description: Note added to the transaction and visible in the statements as an additional field
-            source:
-              $ref: '#/components/schemas/InstrumentId'
-            feeSpec:
-              $ref: '#/components/schemas/LegacyFeeSpec'
-            batch:
-              $ref: '#/components/schemas/LegacyTransactionBatch'
-              description: The transaction batch if a transaction was executed for the charge
-            profileId:
-              type: string
-        publishedTimestamp:
+        id:
+          type: string
+          pattern: ^[0-9]+$
+        instrumentId:
+          $ref: '#/components/schemas/InstrumentId'
+        instrument:
+          $ref: '#/components/schemas/LegacyInstrumentParticipant'
+        state:
+          $ref: '#/components/schemas/TransactionBatchParticipantState'
+        conflict:
+          $ref: '#/components/schemas/InstrumentParticipantErrorType'
+        after:
+          $ref: '#/components/schemas/LegacyInstrumentBalances'
+        executedTimestamp:
           type: string
           pattern: ^[0-9]+$
           description: Epoch timestamp using millisecond precision.
-        type:
-          $ref: '#/components/schemas/ChargeFeeEventType'
+        remaining:
+          $ref: '#/components/schemas/LegacyTransactionBatchInstrumentRemaining'
+        afterCompensation:
+          $ref: '#/components/schemas/LegacyInstrumentBalances'
+        compensatedTimestamp:
+          type: string
+          pattern: ^[0-9]+$
+          description: Epoch timestamp using millisecond precision.
+        treasuryPending:
+          type: boolean
+    LegacyTransactionBatch:
+      required:
+      - id
+      - instrument
+      - state
+      - transaction
+      type: object
+      properties:
+        id:
+          type: string
+          pattern: ^[0-9]+$
+        transaction:
+          $ref: '#/components/schemas/StringWrappedTypeId'
+        relatedBatchId:
+          type: string
+          pattern: ^[0-9]+$
+        intercept:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransactionBatchIntercept'
+        instrument:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/LegacyTransactionBatchInstrument'
+          description: The id of the map should be the instrument id
+        forexTrade:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegacyTransactionBatchForexTrade'
+        completedTimestamp:
+          type: string
+          pattern: ^[0-9]+$
+          description: Epoch timestamp using millisecond precision.
+        state:
+          $ref: '#/components/schemas/TransactionBatchState'
+        conflict:
+          $ref: '#/components/schemas/TransactionBatchErrorType'
+        authSessionId:
+          type: string
+          pattern: ^[0-9]+$
+        note:
+          type: string
     FeeSpecType:
       type: string
       enum:
@@ -996,17 +956,6 @@ components:
       - PLUS
       - MAX
       - MIN
-    TransactionBatchState:
-      type: string
-      enum:
-      - EXECUTION_PENDING
-      - EXECUTED
-      - COMPLETED
-      - COMPENSATION_PENDING
-      - REJECTED
-      - FAILED
-      - EXECUTION_SUSPENDED
-      - COMPENSATION_SUSPENDED
     InstrumentParticipantErrorType:
       type: string
       enum:
@@ -1022,151 +971,178 @@ components:
       - PROVIDER_REJECTED
       - INSTRUMENT_ALREADY_BLOCKED
       - INSTRUMENT_NOT_BLOCKED
-    ChargeFeeEventType:
-      type: string
-      enum:
-      - UNDEFINED
-      - COMPLETED
-    LegacyScaledAmount:
+    LegacyFeeSpec:
       type: object
       properties:
-        value:
+        type:
+          $ref: '#/components/schemas/FeeSpecType'
+        flatAmount:
+          type: array
+          description: The flat fee amounts to be taken per currency. Required for FLAT, MAX, MIN and PLUS fee types.
+          items:
+            $ref: '#/components/schemas/LegacyCurrencyAmount'
+        percentage:
+          $ref: '#/components/schemas/LegacyScaledAmount'
+          description: The percentage amount to be taken as a fee. Required for PERCENTAGE, MAX, MIN and PLUS fee types.
+    LegacyTransactionBatchForexTrade:
+      required:
+      - forexTrade
+      - id
+      type: object
+      properties:
+        id:
           type: string
           pattern: ^[0-9]+$
-        scale:
-          maximum: 127
-          minimum: -128
-          type: integer
-          format: int32
-      description: 'A floating point number, represented as a value and its scale. Its actual value can be obtained using the equation: value * pow(10, -scale).'
-  responses:
-    Forbidden:
-      description: Forbidden - Access to the requested resource or action is forbidden.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INSUFFICIENT_PERMISSIONS
-    BadRequestError:
-      description: Bad Request Error - Your request is invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                maxLength: 255
-                type: string
-                description: When present helps to identify and fix the problem.
-              syntaxErrors:
-                $ref: '#/components/schemas/SyntaxError'
-    Error:
-      description: Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal Server Error - There is a problem with the server. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    ChargeFeeConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - UNRESOLVED_FEE_TYPE
-                - UNRESOLVED_CURRENCY
-                - UNRESOLVED_INSTRUMENT
-                - FUNDS_INSUFFICIENT
-                - IDENTITY_NOT_OWNER_OF_INSTRUMENT
-                - FEE_AMOUNT_NOT_SET
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    NotFound:
-      description: Not found - The requested resource couldn't be found.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    ChargeFeeResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ChargeFee'
-    TooManyRequests:
-      description: Too many requests.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-        x-ratelimit-limit:
-          $ref: '#/components/headers/x-ratelimit-limit'
-        x-ratelimit-reset:
-          $ref: '#/components/headers/x-ratelimit-reset'
-    FeeTransactionListResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/FeeTransactionList'
-  headers:
-    request-ref:
-      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
-      required: true
-      schema:
-        type: string
-    x-ratelimit-limit:
-      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
-
-        The first number (20) is the limit that has been exceeded.
-
-        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
-
-        '
-      required: true
-      schema:
-        type: string
-    x-ratelimit-reset:
-      description: The number of seconds until the window is reset.
-      required: true
-      schema:
-        minimum: 0
-        type: integer
-        format: int32
+        forexTrade:
+          $ref: '#/components/schemas/LegacyForexTradeParticipant'
+        state:
+          $ref: '#/components/schemas/TransactionBatchParticipantState'
+        conflict:
+          $ref: '#/components/schemas/ForexTradeParticipantErrorType'
+        executedTimestamp:
+          type: string
+          pattern: ^[0-9]+$
+          description: Epoch timestamp using millisecond precision.
+        compensatedRateId:
+          type: string
+          pattern: ^[0-9]+$
+        sourceSystemCompensation:
+          type: string
+          pattern: ^[0-9]+$
+          description: The difference between the source and the actual compensation amount, may be positive (profit) or negative (loss)
+        compensatedRate:
+          $ref: '#/components/schemas/LegacyScaledAmount'
+          description: The compensation forex rate between unscaled amount of given currencies
+        compensatedTimestamp:
+          type: string
+          pattern: ^[0-9]+$
+          description: Epoch timestamp using millisecond precision.
+    TransactionBatchInterceptState:
+      type: string
+      enum:
+      - PENDING
+      - ALLOWED
+      - DENIED
+      - FAILED
+      - SUSPENDED
+    TransactionBatchErrorType:
+      type: string
+      enum:
+      - REVERSAL_EXCEEDS_REMAINING
+      - DENIED_BY_INTERCEPTOR
+      - DENIED_BY_INSTRUMENT
+      - DENIED_BY_FOREX_TRADE
+      - FI_PROVIDER_TREASURY_UNSUPPORTED
+      - DENIED_BY_SUSPENSE
+      - DENIED_BY_STATE_CHANGE
+    LegacyForexTradeParticipant:
+      required:
+      - provider
+      - rate
+      - rateId
+      - sourceCurrency
+      - targetCurrency
+      type: object
+      properties:
+        rateId:
+          type: string
+          pattern: ^[0-9]+$
+        provider:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9_-]+$
+          type: string
+        sourceCurrency:
+          maxLength: 3
+          minLength: 3
+          pattern: ^[A-Z]*$
+          type: string
+        sourceAmount:
+          type: string
+          pattern: ^[0-9]+$
+        sourceSystem:
+          type: string
+          pattern: ^[0-9]+$
+          description: The rounding error when aggregating multiple conversions. Always positive
+        targetCurrency:
+          maxLength: 3
+          minLength: 3
+          pattern: ^[A-Z]*$
+          type: string
+        targetAmount:
+          type: string
+          pattern: ^[0-9]+$
+        rate:
+          $ref: '#/components/schemas/LegacyScaledAmount'
+          description: The forex rate between unscaled amount of given currencies
+    TransactionBatchIntercept:
+      required:
+      - provider
+      type: object
+      properties:
+        provider:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9_-]+$
+          type: string
+        state:
+          $ref: '#/components/schemas/TransactionBatchInterceptState'
+        denialReason:
+          maxLength: 50
+          type: string
+        suspendedReason:
+          maxLength: 255
+          type: string
+    BlockedDetailsType:
+      type: string
+      enum:
+      - VELOCITY
+      - USER
+      - ACCOUNT
+      - ADMIN
+    BlockedDetailsSubType:
+      type: string
+      enum:
+      - FREEZE
+      - LOST
+      - SINGLE_SPEND
+      - PENDING_APPROVAL
+    ReplacementType:
+      type: string
+      enum:
+      - DAMAGED
+      - LOST_STOLEN
+      - RENEW
+      - COMPROMISED
+    TransactionBatchParticipantState:
+      type: string
+      enum:
+      - EXECUTION_PENDING
+      - EXECUTED
+      - COMMITTED
+      - REJECTED
+      - FAILED
+      - COMPENSATION_PENDING
+      - COMPENSATED
+      - OBSOLETE
+      - EXECUTION_SUSPENDED
+      - COMPENSATION_SUSPENDED
+    LegacyCurrencyAmount:
+      required:
+      - currency
+      - amount
+      type: object
+      properties:
+        currency:
+          $ref: '#/components/schemas/Currency'
+        amount:
+          type: string
+          pattern: ^[0-9]+$
+          description: The monetary amount, scaled to the lowest denomination of the currency.
+      description: The object representing a monetary amount in a particular currency.
+    ForexTradeParticipantErrorType:
+      type: string
+      enum:
+      - NO_FOREX_TRADE_ERROR
+      - RATE_EXPIRED
   parameters:
     idempotency-ref:
       name: idempotency-ref
@@ -1175,6 +1151,24 @@ components:
       required: false
       schema:
         type: string
+    sortOrder:
+      name: sortOrder
+      in: query
+      required: false
+      description: "Sort order for the results:\n  - ASC: Ascending order, oldest first.\n  - DESC: Descending order, most recent first.\n"
+      schema:
+        type: string
+        enum:
+        - ASC
+        - DESC
+    creationTimestampTo:
+      name: creationTimestampTo
+      in: query
+      required: false
+      description: Filter for transactions created before this timestamp. Epoch timestamp using millisecond precision.
+      schema:
+        type: integer
+        format: int64
     creationTimestampFrom:
       name: creationTimestampFrom
       in: query
@@ -1193,24 +1187,6 @@ components:
         minimum: 1
         type: integer
         format: int32
-    creationTimestampTo:
-      name: creationTimestampTo
-      in: query
-      required: false
-      description: Filter for transactions created before this timestamp. Epoch timestamp using millisecond precision.
-      schema:
-        type: integer
-        format: int64
-    sortOrder:
-      name: sortOrder
-      in: query
-      required: false
-      description: "Sort order for the results:\n  - ASC: Ascending order, oldest first.\n  - DESC: Descending order, most recent first.\n"
-      schema:
-        type: string
-        enum:
-        - ASC
-        - DESC
     offset:
       name: offset
       in: query
@@ -1220,6 +1196,22 @@ components:
         minimum: 0
         type: integer
         format: int32
+    signature-v2:
+      name: signature-v2
+      in: header
+      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `call-ref + payload + published-timestamp` using your API key.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    call-ref:
+      description: A call reference generated by the caller and unique to the caller to provide correlation between the caller and system with a maximum length of 255
+      in: header
+      name: call-ref
+      required: false
+      schema:
+        type: string
     signature:
       name: signature
       in: header
@@ -1228,13 +1220,6 @@ components:
       style: simple
       explode: false
       deprecated: true
-      schema:
-        type: string
-    call-ref:
-      description: A call reference generated by the caller and unique to the caller to provide correlation between the caller and system with a maximum length of 255
-      in: header
-      name: call-ref
-      required: false
       schema:
         type: string
     published-timestamp:
@@ -1247,13 +1232,28 @@ components:
       schema:
         type: integer
         format: int64
-    signature-v2:
-      name: signature-v2
-      in: header
-      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `call-ref + payload + published-timestamp` using your API key.
+  headers:
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
       required: true
-      style: simple
-      explode: false
+      schema:
+        type: string
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    x-ratelimit-limit:
+      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+        The first number (20) is the limit that has been exceeded.
+
+        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+        '
+      required: true
       schema:
         type: string
   requestBodies:

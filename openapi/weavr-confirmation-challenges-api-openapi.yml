@@ -159,34 +159,6 @@ paths:
         api-key: []
 components:
   responses:
-    MultipleSCAChallengePushConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - STATE_INVALID
-                - CHANNEL_NOT_SUPPORTED
-                - CHANNEL_NOT_REGISTERED
-                - CHALLENGE_LIMIT_EXCEEDED
-    Forbidden:
-      description: Forbidden - Access to the requested resource or action is forbidden.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INSUFFICIENT_PERMISSIONS
     MethodNotAllowed:
       description: Method Not Allowed - The request was received but has been rejected for the requested resource.
       headers:
@@ -228,6 +200,49 @@ components:
                 - CHANNEL_NOT_REGISTERED
                 - RETRY_IN_15SEC
                 - CHALLENGE_LIMIT_EXCEEDED
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    NoContent:
+      description: Success - No Content.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    MultipleSCAChallengePushConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - STATE_INVALID
+                - CHANNEL_NOT_SUPPORTED
+                - CHANNEL_NOT_REGISTERED
+                - CHALLENGE_LIMIT_EXCEEDED
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
     MultipleSCAVerifyConflict:
       description: Conflict
       content:
@@ -245,26 +260,17 @@ components:
                 - VERIFICATION_CODE_INVALID
                 - CHALLENGE_LIMIT_EXCEEDED
                 - ONE_CHALLENGE_LIMIT_REMAINING
-    TooManyRequests:
-      description: Too many requests.
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
-        x-ratelimit-limit:
-          $ref: '#/components/headers/x-ratelimit-limit'
-        x-ratelimit-reset:
-          $ref: '#/components/headers/x-ratelimit-reset'
     Error:
       description: Error
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    InternalServerError:
-      description: Internal Server Error - There is a problem with the server. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
     SCAChallengeResponse:
       description: Success
       headers:
@@ -277,94 +283,28 @@ components:
             properties:
               scaChallengeId:
                 $ref: '#/components/schemas/Id'
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+    TooManyRequests:
+      description: Too many requests.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
-    NoContent:
-      description: Success - No Content.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-  schemas:
-    SCAPushChannel:
-      type: string
-      enum:
-      - AUTHY
-      - BIOMETRIC
-      description: '- "AUTHY": The push notification is sent on the user''s device using [Twilio Authy](https://www.twilio.com/authy)
-
-        - "BIOMETRIC": The push notification is sent to the user''s device
-
-        '
-    SyntaxError:
-      type: object
-      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
-      properties:
-        invalidFields:
-          type: array
-          items:
-            type: object
-            properties:
-              params:
-                type: array
-                items:
-                  type: string
-              fieldName:
-                type: string
-              error:
-                type: string
-                enum:
-                - REQUIRED
-                - HAS_TEXT
-                - REQUIRES
-                - SIZE
-                - RANGE
-                - IN
-                - NOT_IN
-                - REGEX
-                - EXACTLY
-                - AT_LEAST
-                - AT_MOST
-                - ALL_OR_NONE
-    Nonce:
-      type: string
-      description: A randomly generated one-time use code.
-      pattern: ^[0-9]{6}$
-    SCAOtpChannel:
-      type: string
-      enum:
-      - SMS
-      description: '- "SMS": The one-time-password is sent as a text message
-
-        '
-    Id:
-      type: string
-      pattern: ^[0-9]+$
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-    MultipleSCAResourceType:
-      type: string
-      description: 'The operation type upon which an SCA Challenge is being contested.
-
-        '
-      enum:
-      - outgoing_wire_transfers
-      - sends
-      - linked_account_declaration
-      - correspondent_bank_transfers
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
   headers:
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
     x-ratelimit-limit:
       description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
 
@@ -376,26 +316,7 @@ components:
       required: true
       schema:
         type: string
-    request-ref:
-      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
-      required: true
-      schema:
-        type: string
-    x-ratelimit-reset:
-      description: The number of seconds until the window is reset.
-      required: true
-      schema:
-        minimum: 0
-        type: integer
-        format: int32
   parameters:
-    idempotency-ref:
-      name: idempotency-ref
-      in: header
-      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
-      required: false
-      schema:
-        type: string
     channel:
       name: channel
       in: path
@@ -403,6 +324,13 @@ components:
       description: The unique identifier for the channel.
       schema:
         $ref: '#/components/schemas/SCAOtpChannel'
+    idempotency-ref:
+      name: idempotency-ref
+      in: header
+      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
+      required: false
+      schema:
+        type: string
     scaPushChannel:
       name: channel
       in: path
@@ -445,6 +373,78 @@ components:
                 items:
                   type: string
                   pattern: ^[0-9]{1,}$
+  schemas:
+    Id:
+      type: string
+      pattern: ^[0-9]+$
+    SCAPushChannel:
+      type: string
+      enum:
+      - AUTHY
+      - BIOMETRIC
+      description: '- "AUTHY": The push notification is sent on the user''s device using [Twilio Authy](https://www.twilio.com/authy)
+
+        - "BIOMETRIC": The push notification is sent to the user''s device
+
+        '
+    SyntaxError:
+      type: object
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      properties:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
+    MultipleSCAResourceType:
+      type: string
+      description: 'The operation type upon which an SCA Challenge is being contested.
+
+        '
+      enum:
+      - outgoing_wire_transfers
+      - sends
+      - linked_account_declaration
+      - correspondent_bank_transfers
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+    Nonce:
+      type: string
+      description: A randomly generated one-time use code.
+      pattern: ^[0-9]{6}$
+    SCAOtpChannel:
+      type: string
+      enum:
+      - SMS
+      description: '- "SMS": The one-time-password is sent as a text message
+
+        '
   securitySchemes:
     api-key:
       type: apiKey

@@ -134,6 +134,188 @@ paths:
       - auth_token: []
         api-key: []
 components:
+  responses:
+    MethodNotAllowed:
+      description: Method Not Allowed - The request was received but has been rejected for the requested resource.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    NoContent:
+      description: Success - No Content.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    StepUpSCAChallengeConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - CHANNEL_NOT_SUPPORTED
+                - CHANNEL_NOT_REGISTERED
+                - MOBILE_NUMBER_INVALID
+                - MOBILE_COUNTRY_NOT_SUPPORTED
+                - RETRY_IN_15SEC
+                - CHALLENGE_LIMIT_EXCEEDED
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    StepUpSCAChallengePushResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                pattern: ^[0-9]+$
+                description: The challenge id.
+    StepUpSCAChallengePushConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - STATE_INVALID
+                - CHANNEL_NOT_SUPPORTED
+                - CHANNEL_NOT_REGISTERED
+                - CHALLENGE_LIMIT_EXCEEDED
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    StepUpSCAVerifyConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - STATE_INVALID
+                - VERIFICATION_CODE_EXPIRED
+                - VERIFICATION_CODE_INVALID
+                - CHANNEL_NOT_SUPPORTED
+                - CHANNEL_NOT_REGISTERED
+                - ONE_CHALLENGE_LIMIT_REMAINING
+                - CHALLENGE_LIMIT_EXCEEDED
+                - ALREADY_VERIFIED
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+  headers:
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
+    x-ratelimit-limit:
+      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+        The first number (20) is the limit that has been exceeded.
+
+        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+        '
+      required: true
+      schema:
+        type: string
+  parameters:
+    channel:
+      name: channel
+      in: path
+      required: true
+      description: The unique identifier for the channel.
+      schema:
+        $ref: '#/components/schemas/SCAOtpChannel'
+    idempotency-ref:
+      name: idempotency-ref
+      in: header
+      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
+      required: false
+      schema:
+        type: string
+    scaPushChannel:
+      name: channel
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/SCAPushChannel'
   schemas:
     SCAPushChannel:
       type: string
@@ -175,6 +357,13 @@ components:
                 - AT_LEAST
                 - AT_MOST
                 - ALL_OR_NONE
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
     Nonce:
       type: string
       description: A randomly generated one-time use code.
@@ -186,195 +375,6 @@ components:
       description: '- "SMS": The one-time-password is sent as a text message
 
         '
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-  responses:
-    StepUpSCAVerifyConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - STATE_INVALID
-                - VERIFICATION_CODE_EXPIRED
-                - VERIFICATION_CODE_INVALID
-                - CHANNEL_NOT_SUPPORTED
-                - CHANNEL_NOT_REGISTERED
-                - ONE_CHALLENGE_LIMIT_REMAINING
-                - CHALLENGE_LIMIT_EXCEEDED
-                - ALREADY_VERIFIED
-    Forbidden:
-      description: Forbidden - Access to the requested resource or action is forbidden.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INSUFFICIENT_PERMISSIONS
-    MethodNotAllowed:
-      description: Method Not Allowed - The request was received but has been rejected for the requested resource.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequestError:
-      description: Bad Request Error - Your request is invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                maxLength: 255
-                type: string
-                description: When present helps to identify and fix the problem.
-              syntaxErrors:
-                $ref: '#/components/schemas/SyntaxError'
-    TooManyRequests:
-      description: Too many requests.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-        x-ratelimit-limit:
-          $ref: '#/components/headers/x-ratelimit-limit'
-        x-ratelimit-reset:
-          $ref: '#/components/headers/x-ratelimit-reset'
-    Error:
-      description: Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    StepUpSCAChallengePushConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - STATE_INVALID
-                - CHANNEL_NOT_SUPPORTED
-                - CHANNEL_NOT_REGISTERED
-                - CHALLENGE_LIMIT_EXCEEDED
-    InternalServerError:
-      description: Internal Server Error - There is a problem with the server. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    StepUpSCAChallengePushResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              id:
-                type: string
-                pattern: ^[0-9]+$
-                description: The challenge id.
-    NoContent:
-      description: Success - No Content.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    StepUpSCAChallengeConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - CHANNEL_NOT_SUPPORTED
-                - CHANNEL_NOT_REGISTERED
-                - MOBILE_NUMBER_INVALID
-                - MOBILE_COUNTRY_NOT_SUPPORTED
-                - RETRY_IN_15SEC
-                - CHALLENGE_LIMIT_EXCEEDED
-  headers:
-    x-ratelimit-limit:
-      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
-
-        The first number (20) is the limit that has been exceeded.
-
-        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
-
-        '
-      required: true
-      schema:
-        type: string
-    request-ref:
-      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
-      required: true
-      schema:
-        type: string
-    x-ratelimit-reset:
-      description: The number of seconds until the window is reset.
-      required: true
-      schema:
-        minimum: 0
-        type: integer
-        format: int32
-  parameters:
-    idempotency-ref:
-      name: idempotency-ref
-      in: header
-      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
-      required: false
-      schema:
-        type: string
-    channel:
-      name: channel
-      in: path
-      required: true
-      description: The unique identifier for the channel.
-      schema:
-        $ref: '#/components/schemas/SCAOtpChannel'
-    scaPushChannel:
-      name: channel
-      in: path
-      required: true
-      schema:
-        $ref: '#/components/schemas/SCAPushChannel'
   requestBodies:
     SCAVerifyRequest:
       required: true

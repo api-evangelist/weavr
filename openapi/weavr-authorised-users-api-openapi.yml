@@ -171,69 +171,137 @@ webhooks:
     servers:
     - url: '""'
 components:
-  schemas:
-    IdentityId:
-      required:
-      - type
-      - id
-      type: object
-      properties:
-        type:
-          enum:
-          - CONSUMER
-          - CORPORATE
-          type: string
-          description: Indicates the identity type.
-        id:
-          type: string
-          pattern: ^[0-9]+$
-          description: The identifier for the identity.
-    SyntaxError:
-      type: object
-      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
-      properties:
-        invalidFields:
-          type: array
-          items:
+  responses:
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
             type: object
             properties:
-              params:
-                type: array
-                items:
-                  type: string
-              fieldName:
+              message:
+                maxLength: 255
                 type: string
-              error:
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    UserResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+    NoContent:
+      description: Success - No Content.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    UserDeactivateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
                 type: string
                 enum:
-                - REQUIRED
-                - HAS_TEXT
-                - REQUIRES
-                - SIZE
-                - RANGE
-                - IN
-                - NOT_IN
-                - REGEX
-                - EXACTLY
-                - AT_LEAST
-                - AT_MOST
-                - ALL_OR_NONE
-    UserLocale:
+                - CARD_HAS_REMAINING_BALANCE
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    UserCreateConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - EMAIL_NOT_UNIQUE
+                - MOBILE_OR_COUNTRY_CODE_INVALID
+                - EMAIL_DOMAIN_NOT_ALLOWED
+                - COUNTRY_OF_RESIDENCE_INVALID
+                - ROLE_NOT_FOUND
+                - CANNOT_MODIFY_OWN_ROLES
+                - ADMIN_ROLE_REMOVAL_NOT_ALLOWED
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UserInviteSendConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INVITE_ALREADY_CONSUMED
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+  schemas:
+    Email:
       type: string
-      pattern: ^[a-z]{2}(-[A-Z]{2})?$
-      description: 'BCP47 locale code (e.g. en, en-US). The locale determines which email and SMS user notification templates are used.
-
-        '
-      maxLength: 5
-      example: en-GB
-    UserPredefinedRole:
+      description: E-mail Address of the user
+      format: email
+    UserId:
       type: string
-      enum:
-      - CARD_ASSIGNEE
-      - CARDS_MANAGEMENT_ROLE
-      - FUNDS_MANAGEMENT_ROLE
-      - ACCESS_MANAGEMENT_ROLE
-      - ADMIN
+      pattern: ^[0-9]+$
     User:
       required:
       - id
@@ -284,10 +352,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/UserPredefinedRole'
-    Email:
+    Brand:
       type: string
-      description: E-mail Address of the user
-      format: email
+      pattern: ^[a-zA-Z0-9]+$
+      description: 'Brand identifier used to determine the set of email and SMS user notification templates. Must be alphanumeric, up to 25 characters, and contain no spaces.
+
+        '
+      maxLength: 25
+    Tag:
+      type: string
+      description: The tag field is a custom field that can be used to search and filter.
+      maxLength: 50
+      pattern: ^[a-zA-Z0-9_-]+$
     Mobile:
       required:
       - number
@@ -304,18 +380,52 @@ components:
           pattern: ^[0-9]{1,12}$
           type: string
           description: The mobile number of the user - excluding country code.
-    Tag:
+    UserPredefinedRole:
       type: string
-      description: The tag field is a custom field that can be used to search and filter.
-      maxLength: 50
-      pattern: ^[a-zA-Z0-9_-]+$
-    Brand:
+      enum:
+      - CARD_ASSIGNEE
+      - CARDS_MANAGEMENT_ROLE
+      - FUNDS_MANAGEMENT_ROLE
+      - ACCESS_MANAGEMENT_ROLE
+      - ADMIN
+    SyntaxError:
+      type: object
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      properties:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
+    UserLocale:
       type: string
-      pattern: ^[a-zA-Z0-9]+$
-      description: 'Brand identifier used to determine the set of email and SMS user notification templates. Must be alphanumeric, up to 25 characters, and contain no spaces.
+      pattern: ^[a-z]{2}(-[A-Z]{2})?$
+      description: 'BCP47 locale code (e.g. en, en-US). The locale determines which email and SMS user notification templates are used.
 
         '
-      maxLength: 25
+      maxLength: 5
+      example: en-GB
     Date:
       required:
       - year
@@ -338,9 +448,6 @@ components:
           format: int32
           maximum: 31
           minimum: 1
-    UserId:
-      type: string
-      pattern: ^[0-9]+$
     Error:
       type: object
       properties:
@@ -348,6 +455,22 @@ components:
           type: string
         message:
           type: string
+    IdentityId:
+      required:
+      - type
+      - id
+      type: object
+      properties:
+        type:
+          enum:
+          - CONSUMER
+          - CORPORATE
+          type: string
+          description: Indicates the identity type.
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The identifier for the identity.
     IdentityDeactivatedReasonCode:
       type: string
       enum:
@@ -376,130 +499,19 @@ components:
           type: string
         reasonCode:
           $ref: '#/components/schemas/IdentityDeactivatedReasonCode'
-  responses:
-    Forbidden:
-      description: Forbidden - Access to the requested resource or action is forbidden.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INSUFFICIENT_PERMISSIONS
-    UserDeactivateConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - CARD_HAS_REMAINING_BALANCE
-    BadRequestError:
-      description: Bad Request Error - Your request is invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                maxLength: 255
-                type: string
-                description: When present helps to identify and fix the problem.
-              syntaxErrors:
-                $ref: '#/components/schemas/SyntaxError'
-    TooManyRequests:
-      description: Too many requests.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-        x-ratelimit-limit:
-          $ref: '#/components/headers/x-ratelimit-limit'
-        x-ratelimit-reset:
-          $ref: '#/components/headers/x-ratelimit-reset'
-    Error:
-      description: Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UserCreateConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - EMAIL_NOT_UNIQUE
-                - MOBILE_OR_COUNTRY_CODE_INVALID
-                - EMAIL_DOMAIN_NOT_ALLOWED
-                - COUNTRY_OF_RESIDENCE_INVALID
-                - ROLE_NOT_FOUND
-                - CANNOT_MODIFY_OWN_ROLES
-                - ADMIN_ROLE_REMOVAL_NOT_ALLOWED
-    InternalServerError:
-      description: Internal Server Error - There is a problem with the server. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    NotFound:
-      description: Not found - The requested resource couldn't be found.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NoContent:
-      description: Success - No Content.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    UserInviteSendConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INVITE_ALREADY_CONSUMED
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    UserResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/User'
   headers:
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
     x-ratelimit-limit:
       description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
 
@@ -511,18 +523,6 @@ components:
       required: true
       schema:
         type: string
-    request-ref:
-      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
-      required: true
-      schema:
-        type: string
-    x-ratelimit-reset:
-      description: The number of seconds until the window is reset.
-      required: true
-      schema:
-        minimum: 0
-        type: integer
-        format: int32
   parameters:
     idempotency-ref:
       name: idempotency-ref
@@ -540,16 +540,6 @@ components:
       explode: false
       schema:
         $ref: '#/components/schemas/UserId'
-    signature:
-      name: signature
-      in: header
-      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `published-timestamp` using your API key.
-      required: true
-      style: simple
-      explode: false
-      deprecated: true
-      schema:
-        type: string
     signature-v2:
       name: signature-v2
       in: header
@@ -564,6 +554,16 @@ components:
       in: header
       name: call-ref
       required: false
+      schema:
+        type: string
+    signature:
+      name: signature
+      in: header
+      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `published-timestamp` using your API key.
+      required: true
+      style: simple
+      explode: false
+      deprecated: true
       schema:
         type: string
     published-timestamp:

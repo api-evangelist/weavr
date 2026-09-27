@@ -466,173 +466,198 @@ webhooks:
     servers:
     - url: '""'
 components:
-  schemas:
-    SCAPushChannel:
-      type: string
-      enum:
-      - AUTHY
-      - BIOMETRIC
-      description: '- "AUTHY": The push notification is sent on the user''s device using [Twilio Authy](https://www.twilio.com/authy)
-
-        - "BIOMETRIC": The push notification is sent to the user''s device
-
-        '
-    InstrumentDetailsBeneficiary:
-      required:
-      - instrument
-      type: object
-      description: Represents a Weavr beneficiary instrument typically used in Send transactions.
-      properties:
-        instrument:
-          $ref: '#/components/schemas/InstrumentId'
-    BeneficiaryTrustLevel:
-      type: string
-      description: The value that determines whether a Beneficiary is trusted or not.
-      enum:
-      - TRUSTED
-    BeneficiaryBatchOperation:
-      type: string
-      enum:
-      - CREATE
-      - REMOVE
-    InstrumentId:
-      required:
-      - id
-      - type
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        type:
-          $ref: '#/components/schemas/InstrumentType'
-    SyntaxError:
-      type: object
-      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
-      properties:
-        invalidFields:
-          type: array
-          items:
+  responses:
+    MethodNotAllowed:
+      description: Method Not Allowed - The request was received but has been rejected for the requested resource.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
             type: object
             properties:
-              params:
-                type: array
-                items:
-                  type: string
-              fieldName:
+              message:
+                maxLength: 255
                 type: string
-              error:
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BeneficiaryBatchSCAChallengePushConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
                 type: string
                 enum:
-                - REQUIRED
-                - HAS_TEXT
-                - REQUIRES
-                - SIZE
-                - RANGE
-                - IN
-                - NOT_IN
-                - REGEX
-                - EXACTLY
-                - AT_LEAST
-                - AT_MOST
-                - ALL_OR_NONE
-    BeneficiaryBatchState:
-      type: string
-      enum:
-      - INITIALISED
-      - FAILED
-      - PENDING_CHALLENGE
-      - CHALLENGE_FAILED
-      - CHALLENGE_COMPLETED
-      - COMPLETED
-    BankAccountDetailsBeneficiary:
-      required:
-      - bankAccountDetails
-      type: object
-      description: Represent the beneficiary bank account typically used in Outgoing Wire Transfer transactions.
-      properties:
-        address:
-          maxLength: 150
-          minLength: 1
-          type: string
-          description: The beneficiary's address.
-        bankName:
-          type: string
-          description: The beneficiary's bank name.
-        bankAddress:
-          maxLength: 150
-          minLength: 1
-          type: string
-          description: The beneficiary's bank address.
-        bankCountry:
-          type: string
-          description: The beneficiary's bank country in ISO 3166 alpha-2 format.
-          maxLength: 2
-          minLength: 2
-          pattern: ^[A-Z]{2}$
-        bankAccountDetails:
-          description: Details of the beneficiary bank account, depending on the type of transfer chosen.
-          oneOf:
-          - $ref: '#/components/schemas/IBANDetails'
-          - $ref: '#/components/schemas/FasterPaymentsBankDetailsOrBACSBankDetails'
+                - STATE_INVALID
+                - CHANNEL_NOT_SUPPORTED
+                - CHANNEL_NOT_REGISTERED
+                - CHALLENGE_LIMIT_EXCEEDED
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    BeneficiaryPageResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              beneficiaries:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Beneficiary'
+              count:
+                type: integer
+                description: The total number of records (excluding the paging limit).
+                format: int32
+              responseCount:
+                type: integer
+                description: The total number of records returned in this response (always capped at 100).
+                format: int32
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    NoContent:
+      description: Success - No Content.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    BeneficiaryBatchSCAChallengeConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                description: "Error codes:\n  * `STATE_INVALID` - The operation no longer requires additional verification, it was either cancelled or completed.\n  * `CHANNEL_NOT_SUPPORTED` - The channel selected cannot be used to verify this type of operation.\n  * `CHANNEL_NOT_REGISTERED` - The channel selected must be enrolled to receive one-time passwords before it can be used to verify this type of operation.\n"
+                type: string
+                enum:
+                - STATE_INVALID
+                - CHANNEL_NOT_SUPPORTED
+                - CHANNEL_NOT_REGISTERED
+    BeneficiaryResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Beneficiary'
+    BeneficiaryBatchSCAVerifyConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - STATE_INVALID
+                - CHANNEL_NOT_SUPPORTED
+                - CHANNEL_NOT_REGISTERED
+                - VERIFICATION_CODE_EXPIRED
+                - VERIFICATION_CODE_INVALID
+                - ONE_CHALLENGE_LIMIT_REMAINING
+                - CHALLENGE_LIMIT_EXCEEDED
+    BeneficiaryBatchResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BeneficiaryBatch'
+    BeneficiaryBatchPageResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              batches:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BeneficiaryBatch'
+              count:
+                type: integer
+                description: The total number of records (excluding the paging limit).
+                format: int32
+              responseCount:
+                type: integer
+                description: The total number of records returned in this response (always capped at 100).
+                format: int32
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
     Error:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-    BusinessBeneficiaryType:
-      required:
-      - businessName
-      type: object
-      properties:
-        businessName:
-          type: string
-          description: 'The business beneficiary name. The allowed length and pattern is dependent on the beneficiary details type:
-
-
-            `InstrumentDetailsBeneficiary` or `BankAccountDetailsBeneficiary` with `IBANDetails`: >= `1` character and <= `150` characters
-
-
-            `BankAccountDetailsBeneficiary` with `FasterPaymentsBankDetailsOrBACSBankDetails`: >= `1` character and <= `140` characters with a pattern of `^[a-zA-Z0-9\/\-?:().,’+\s#=!"%&*<>;\{@\r\n]*$`
-
-            (please note that the `’` symbol is the unicode value U+2019 (right single quotation mark) and not the unicode value U+0027 (apostrophe))
-
-            '
-    Beneficiary:
-      allOf:
-      - $ref: '#/components/schemas/BasicBeneficiary'
-      - type: object
-        required:
-        - id
-        - relatedOperationBatches
-        - state
-        properties:
-          id:
-            type: string
-            pattern: ^[0-9]+$
-            description: The unique identifier of a Beneficiary.
-          relatedOperationBatches:
-            description: The object representing the list of batch IDs and the operations that occurred for each batch.
-            type: array
-            items:
-              $ref: '#/components/schemas/BeneficiaryOperationBatchId'
-          state:
-            $ref: '#/components/schemas/BeneficiaryState'
-          validationFailure:
-            $ref: '#/components/schemas/BeneficiaryValidationFailure'
-    BeneficiaryBatch:
-      type: object
-      required:
-      - operationBatchId
-      - state
-      properties:
-        operationBatchId:
-          $ref: '#/components/schemas/BeneficiaryOperationBatchId'
-        tag:
-          $ref: '#/components/schemas/Tag'
-        state:
-          $ref: '#/components/schemas/BeneficiaryBatchState'
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+  schemas:
     FasterPaymentsBankDetailsOrBACSBankDetails:
       required:
       - accountNumber
@@ -650,11 +675,24 @@ components:
           description: Sort code, required for wire transfer over Faster Payments.
         secondaryReference:
           type: string
-    InstrumentType:
-      type: string
-      enum:
-      - managed_cards
-      - managed_accounts
+    IBANDetails:
+      required:
+      - iban
+      type: object
+      description: Bank details used in case the wire transfer is executed over SEPA or RIX
+      properties:
+        iban:
+          type: string
+          minLength: 15
+          maxLength: 34
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
+          description: International Bank Account Number, required for wire transfer over SEPA or RIX
+        bankIdentifierCode:
+          type: string
+          minLength: 8
+          maxLength: 11
+          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
+          description: BIC, for wire transfer over SEPA or RIX
     BasicBeneficiary:
       required:
       - trustLevel
@@ -689,33 +727,92 @@ components:
       description: The tag field is a custom field that can be used to search and filter.
       maxLength: 50
       pattern: ^[a-zA-Z0-9_-]+$
-    BeneficiaryState:
+    SCAOtpChannel:
       type: string
       enum:
-      - INITIALISED
-      - INVALID
-      - PENDING_CHALLENGE
-      - CHALLENGE_FAILED
-      - ACTIVE
-      - REMOVED
-    IBANDetails:
-      required:
-      - iban
+      - SMS
+      description: '- "SMS": The one-time-password is sent as a text message
+
+        '
+    Id:
+      type: string
+      pattern: ^[0-9]+$
+    SCAPushChannel:
+      type: string
+      enum:
+      - AUTHY
+      - BIOMETRIC
+      description: '- "AUTHY": The push notification is sent on the user''s device using [Twilio Authy](https://www.twilio.com/authy)
+
+        - "BIOMETRIC": The push notification is sent to the user''s device
+
+        '
+    SyntaxError:
       type: object
-      description: Bank details used in case the wire transfer is executed over SEPA or RIX
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
       properties:
-        iban:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
+    InstrumentDetailsBeneficiary:
+      required:
+      - instrument
+      type: object
+      description: Represents a Weavr beneficiary instrument typically used in Send transactions.
+      properties:
+        instrument:
+          $ref: '#/components/schemas/InstrumentId'
+    InstrumentId:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        type:
+          $ref: '#/components/schemas/InstrumentType'
+    BusinessBeneficiaryType:
+      required:
+      - businessName
+      type: object
+      properties:
+        businessName:
           type: string
-          minLength: 15
-          maxLength: 34
-          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
-          description: International Bank Account Number, required for wire transfer over SEPA or RIX
-        bankIdentifierCode:
-          type: string
-          minLength: 8
-          maxLength: 11
-          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
-          description: BIC, for wire transfer over SEPA or RIX
+          description: 'The business beneficiary name. The allowed length and pattern is dependent on the beneficiary details type:
+
+
+            `InstrumentDetailsBeneficiary` or `BankAccountDetailsBeneficiary` with `IBANDetails`: >= `1` character and <= `150` characters
+
+
+            `BankAccountDetailsBeneficiary` with `FasterPaymentsBankDetailsOrBACSBankDetails`: >= `1` character and <= `140` characters with a pattern of `^[a-zA-Z0-9\/\-?:().,’+\s#=!"%&*<>;\{@\r\n]*$`
+
+            (please note that the `’` symbol is the unicode value U+2019 (right single quotation mark) and not the unicode value U+0027 (apostrophe))
+
+            '
     ConsumerBeneficiaryType:
       required:
       - fullName
@@ -742,19 +839,30 @@ components:
             (please note that the `’` symbol is the unicode value U+2019 (right single quotation mark) and not the unicode value U+0027 (apostrophe))
 
             '
-    SCAOtpChannel:
+    BeneficiaryBatch:
+      type: object
+      required:
+      - operationBatchId
+      - state
+      properties:
+        operationBatchId:
+          $ref: '#/components/schemas/BeneficiaryOperationBatchId'
+        tag:
+          $ref: '#/components/schemas/Tag'
+        state:
+          $ref: '#/components/schemas/BeneficiaryBatchState'
+    InstrumentType:
       type: string
       enum:
-      - SMS
-      description: '- "SMS": The one-time-password is sent as a text message
-
-        '
-    BeneficiaryValidationFailure:
-      type: string
-      enum:
-      - INSTRUMENT_DETAILS_NOT_FOUND
-      - BENEFICIARY_DETAILS_ALREADY_EXIST
-      - BENEFICIARY_BELONGS_TO_SAME_IDENTITY
+      - managed_cards
+      - managed_accounts
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
     BeneficiaryOperationBatchId:
       required:
       - batchId
@@ -768,13 +876,96 @@ components:
         operation:
           description: Describes the operation that has occurred on a beneficiary batch.
           $ref: '#/components/schemas/BeneficiaryBatchOperation'
-    Id:
+    BeneficiaryTrustLevel:
       type: string
-      pattern: ^[0-9]+$
+      description: The value that determines whether a Beneficiary is trusted or not.
+      enum:
+      - TRUSTED
+    BeneficiaryBatchState:
+      type: string
+      enum:
+      - INITIALISED
+      - FAILED
+      - PENDING_CHALLENGE
+      - CHALLENGE_FAILED
+      - CHALLENGE_COMPLETED
+      - COMPLETED
     Nonce:
       type: string
       description: A randomly generated one-time use code.
       pattern: ^[0-9]{6}$
+    BeneficiaryBatchOperation:
+      type: string
+      enum:
+      - CREATE
+      - REMOVE
+    BankAccountDetailsBeneficiary:
+      required:
+      - bankAccountDetails
+      type: object
+      description: Represent the beneficiary bank account typically used in Outgoing Wire Transfer transactions.
+      properties:
+        address:
+          maxLength: 150
+          minLength: 1
+          type: string
+          description: The beneficiary's address.
+        bankName:
+          type: string
+          description: The beneficiary's bank name.
+        bankAddress:
+          maxLength: 150
+          minLength: 1
+          type: string
+          description: The beneficiary's bank address.
+        bankCountry:
+          type: string
+          description: The beneficiary's bank country in ISO 3166 alpha-2 format.
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]{2}$
+        bankAccountDetails:
+          description: Details of the beneficiary bank account, depending on the type of transfer chosen.
+          oneOf:
+          - $ref: '#/components/schemas/IBANDetails'
+          - $ref: '#/components/schemas/FasterPaymentsBankDetailsOrBACSBankDetails'
+    BeneficiaryState:
+      type: string
+      enum:
+      - INITIALISED
+      - INVALID
+      - PENDING_CHALLENGE
+      - CHALLENGE_FAILED
+      - ACTIVE
+      - REMOVED
+    BeneficiaryValidationFailure:
+      type: string
+      enum:
+      - INSTRUMENT_DETAILS_NOT_FOUND
+      - BENEFICIARY_DETAILS_ALREADY_EXIST
+      - BENEFICIARY_BELONGS_TO_SAME_IDENTITY
+    Beneficiary:
+      allOf:
+      - $ref: '#/components/schemas/BasicBeneficiary'
+      - type: object
+        required:
+        - id
+        - relatedOperationBatches
+        - state
+        properties:
+          id:
+            type: string
+            pattern: ^[0-9]+$
+            description: The unique identifier of a Beneficiary.
+          relatedOperationBatches:
+            description: The object representing the list of batch IDs and the operations that occurred for each batch.
+            type: array
+            items:
+              $ref: '#/components/schemas/BeneficiaryOperationBatchId'
+          state:
+            $ref: '#/components/schemas/BeneficiaryState'
+          validationFailure:
+            $ref: '#/components/schemas/BeneficiaryValidationFailure'
     BeneficiaryBatchEventType:
       type: string
       enum:
@@ -783,6 +974,64 @@ components:
       - PENDING_CHALLENGE
       - CHALLENGE_FAILED
       - CHALLENGE_COMPLETED
+    BeneficiaryBatchEvent:
+      required:
+      - id
+      - operation
+      - eventType
+      - publishedTimestamp
+      - beneficiaries
+      type: object
+      properties:
+        id:
+          type: string
+          pattern: ^[0-9]+$
+        operation:
+          $ref: '#/components/schemas/BeneficiaryBatchOperation'
+        tag:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9_-]+$
+          type: string
+        publishedTimestamp:
+          type: string
+          pattern: ^[0-9]+$
+          description: Epoch timestamp using millisecond precision.
+        eventType:
+          $ref: '#/components/schemas/BeneficiaryBatchEventType'
+        beneficiaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegacyBeneficiary'
+    LegacyBankAccountDetailsBeneficiary:
+      type: object
+      properties:
+        beneficiaryName:
+          maxLength: 100
+          minLength: 1
+          type: string
+          description: The name of the beneficiary
+        address:
+          maxLength: 150
+          type: string
+          description: The beneficiary address
+        bankName:
+          maxLength: 150
+          type: string
+          description: The name of the beneficiary bank
+        bankAddress:
+          maxLength: 150
+          type: string
+          description: The beneficiary bank address
+        bankCountry:
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]+$
+          type: string
+          description: The beneficiary bank country - using ISO 3166 alpha-2
+        sepaBankDetails:
+          $ref: '#/components/schemas/IBANDetails'
+        fasterPaymentsBankDetails:
+          $ref: '#/components/schemas/FasterPaymentsBankDetailsOrBACSBankDetails'
     LegacyBeneficiary:
       required:
       - trustLevel
@@ -823,64 +1072,6 @@ components:
           $ref: '#/components/schemas/BeneficiaryState'
         validationFailure:
           $ref: '#/components/schemas/BeneficiaryValidationFailure_2'
-    LegacyBankAccountDetailsBeneficiary:
-      type: object
-      properties:
-        beneficiaryName:
-          maxLength: 100
-          minLength: 1
-          type: string
-          description: The name of the beneficiary
-        address:
-          maxLength: 150
-          type: string
-          description: The beneficiary address
-        bankName:
-          maxLength: 150
-          type: string
-          description: The name of the beneficiary bank
-        bankAddress:
-          maxLength: 150
-          type: string
-          description: The beneficiary bank address
-        bankCountry:
-          maxLength: 2
-          minLength: 2
-          pattern: ^[A-Z]+$
-          type: string
-          description: The beneficiary bank country - using ISO 3166 alpha-2
-        sepaBankDetails:
-          $ref: '#/components/schemas/IBANDetails'
-        fasterPaymentsBankDetails:
-          $ref: '#/components/schemas/FasterPaymentsBankDetailsOrBACSBankDetails'
-    BeneficiaryBatchEvent:
-      required:
-      - id
-      - operation
-      - eventType
-      - publishedTimestamp
-      - beneficiaries
-      type: object
-      properties:
-        id:
-          type: string
-          pattern: ^[0-9]+$
-        operation:
-          $ref: '#/components/schemas/BeneficiaryBatchOperation'
-        tag:
-          maxLength: 50
-          pattern: ^[a-zA-Z0-9_-]+$
-          type: string
-        publishedTimestamp:
-          type: string
-          pattern: ^[0-9]+$
-          description: Epoch timestamp using millisecond precision.
-        eventType:
-          $ref: '#/components/schemas/BeneficiaryBatchEventType'
-        beneficiaries:
-          type: array
-          items:
-            $ref: '#/components/schemas/LegacyBeneficiary'
     BeneficiaryValidationFailure_2:
       type: string
       enum:
@@ -888,198 +1079,19 @@ components:
       - BENEFICIARY_DETAILS_ALREADY_EXIST
       - BENEFICIARY_BELONGS_TO_SAME_IDENTITY
       - BENEFICIARY_VALIDATION_FAILURE_UNKNOWN
-  responses:
-    Forbidden:
-      description: Forbidden - Access to the requested resource or action is forbidden.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INSUFFICIENT_PERMISSIONS
-    BeneficiaryBatchSCAChallengePushConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - STATE_INVALID
-                - CHANNEL_NOT_SUPPORTED
-                - CHANNEL_NOT_REGISTERED
-                - CHALLENGE_LIMIT_EXCEEDED
-    MethodNotAllowed:
-      description: Method Not Allowed - The request was received but has been rejected for the requested resource.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BeneficiaryBatchResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/BeneficiaryBatch'
-    BadRequestError:
-      description: Bad Request Error - Your request is invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                maxLength: 255
-                type: string
-                description: When present helps to identify and fix the problem.
-              syntaxErrors:
-                $ref: '#/components/schemas/SyntaxError'
-    BeneficiaryPageResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              beneficiaries:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Beneficiary'
-              count:
-                type: integer
-                description: The total number of records (excluding the paging limit).
-                format: int32
-              responseCount:
-                type: integer
-                description: The total number of records returned in this response (always capped at 100).
-                format: int32
-    TooManyRequests:
-      description: Too many requests.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-        x-ratelimit-limit:
-          $ref: '#/components/headers/x-ratelimit-limit'
-        x-ratelimit-reset:
-          $ref: '#/components/headers/x-ratelimit-reset'
-    BeneficiaryBatchSCAChallengeConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                description: "Error codes:\n  * `STATE_INVALID` - The operation no longer requires additional verification, it was either cancelled or completed.\n  * `CHANNEL_NOT_SUPPORTED` - The channel selected cannot be used to verify this type of operation.\n  * `CHANNEL_NOT_REGISTERED` - The channel selected must be enrolled to receive one-time passwords before it can be used to verify this type of operation.\n"
-                type: string
-                enum:
-                - STATE_INVALID
-                - CHANNEL_NOT_SUPPORTED
-                - CHANNEL_NOT_REGISTERED
-    Error:
-      description: Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BeneficiaryResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Beneficiary'
-    InternalServerError:
-      description: Internal Server Error - There is a problem with the server. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    BeneficiaryBatchPageResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              batches:
-                type: array
-                items:
-                  $ref: '#/components/schemas/BeneficiaryBatch'
-              count:
-                type: integer
-                description: The total number of records (excluding the paging limit).
-                format: int32
-              responseCount:
-                type: integer
-                description: The total number of records returned in this response (always capped at 100).
-                format: int32
-    BeneficiaryBatchSCAVerifyConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - STATE_INVALID
-                - CHANNEL_NOT_SUPPORTED
-                - CHANNEL_NOT_REGISTERED
-                - VERIFICATION_CODE_EXPIRED
-                - VERIFICATION_CODE_INVALID
-                - ONE_CHALLENGE_LIMIT_REMAINING
-                - CHALLENGE_LIMIT_EXCEEDED
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    NotFound:
-      description: Not found - The requested resource couldn't be found.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NoContent:
-      description: Success - No Content.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
   headers:
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
     x-ratelimit-limit:
       description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
 
@@ -1091,19 +1103,21 @@ components:
       required: true
       schema:
         type: string
-    request-ref:
-      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+  parameters:
+    channel:
+      name: channel
+      in: path
       required: true
+      description: The unique identifier for the channel.
+      schema:
+        $ref: '#/components/schemas/SCAOtpChannel'
+    idempotency-ref:
+      name: idempotency-ref
+      in: header
+      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
+      required: false
       schema:
         type: string
-    x-ratelimit-reset:
-      description: The number of seconds until the window is reset.
-      required: true
-      schema:
-        minimum: 0
-        type: integer
-        format: int32
-  parameters:
     limit:
       name: limit
       in: query
@@ -1114,20 +1128,6 @@ components:
         minimum: 1
         type: integer
         format: int32
-    idempotency-ref:
-      name: idempotency-ref
-      in: header
-      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
-      required: false
-      schema:
-        type: string
-    channel:
-      name: channel
-      in: path
-      required: true
-      description: The unique identifier for the channel.
-      schema:
-        $ref: '#/components/schemas/SCAOtpChannel'
     offset:
       name: offset
       in: query
@@ -1143,6 +1143,22 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/SCAPushChannel'
+    signature-v2:
+      name: signature-v2
+      in: header
+      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `call-ref + payload + published-timestamp` using your API key.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    call-ref:
+      description: A call reference generated by the caller and unique to the caller to provide correlation between the caller and system with a maximum length of 255
+      in: header
+      name: call-ref
+      required: false
+      schema:
+        type: string
     signature:
       name: signature
       in: header
@@ -1151,13 +1167,6 @@ components:
       style: simple
       explode: false
       deprecated: true
-      schema:
-        type: string
-    call-ref:
-      description: A call reference generated by the caller and unique to the caller to provide correlation between the caller and system with a maximum length of 255
-      in: header
-      name: call-ref
-      required: false
       schema:
         type: string
     published-timestamp:
@@ -1170,15 +1179,6 @@ components:
       schema:
         type: integer
         format: int64
-    signature-v2:
-      name: signature-v2
-      in: header
-      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `call-ref + payload + published-timestamp` using your API key.
-      required: true
-      style: simple
-      explode: false
-      schema:
-        type: string
   requestBodies:
     BeneficiaryBatchRemoveRequest:
       required: true

@@ -49,14 +49,6 @@ components:
           $ref: '#/components/schemas/Id'
         type:
           $ref: '#/components/schemas/InstrumentType'
-    InstrumentType:
-      type: string
-      enum:
-      - managed_cards
-      - managed_accounts
-    Id:
-      type: string
-      pattern: ^[0-9]+$
     ManualTransactionEvent:
       required:
       - targetInstrument
@@ -98,17 +90,15 @@ components:
         id:
           type: string
           pattern: ^[0-9]+$
+    Id:
+      type: string
+      pattern: ^[0-9]+$
+    InstrumentType:
+      type: string
+      enum:
+      - managed_cards
+      - managed_accounts
   parameters:
-    signature:
-      name: signature
-      in: header
-      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `published-timestamp` using your API key.
-      required: true
-      style: simple
-      explode: false
-      deprecated: true
-      schema:
-        type: string
     signature-v2:
       name: signature-v2
       in: header
@@ -123,6 +113,16 @@ components:
       in: header
       name: call-ref
       required: false
+      schema:
+        type: string
+    signature:
+      name: signature
+      in: header
+      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `published-timestamp` using your API key.
+      required: true
+      style: simple
+      explode: false
+      deprecated: true
       schema:
         type: string
     published-timestamp:
