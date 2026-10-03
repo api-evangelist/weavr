@@ -44,25 +44,15 @@ webhooks:
       security:
       - webhooks_key: []
 components:
-  parameters:
-    request-ref:
-      name: request-ref
-      in: header
-      description: A unique call reference included in every call, that enables the receiver to avoid duplicate handling of a webhook request (e.g. webhook was resent).
-      required: false
-      schema:
-        type: string
-    published-timestamp:
-      name: published-timestamp
-      in: header
-      description: The timestamp, expressed in Epoch timestamp using millisecond precision, when this event was published.
-      required: true
-      style: simple
-      explode: false
-      schema:
-        type: integer
-        format: int64
   schemas:
+    BulkProcessOperationStatus:
+      type: string
+      enum:
+      - SUBMITTED
+      - RUNNING
+      - COMPLETED
+      - FAILED
+      - CANCELLED
     BulkProcessProgressEvent:
       type: object
       properties:
@@ -79,6 +69,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BulkProcessOperationStatusCounts'
+    BulkProcessOperationStatusCounts:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/BulkProcessOperationStatus'
+        count:
+          type: integer
     BulkProcessProgressStatus:
       type: string
       enum:
@@ -88,21 +85,24 @@ components:
       - FAILED
       - PAUSED
       - CANCELLED
-    BulkProcessOperationStatus:
-      type: string
-      enum:
-      - SUBMITTED
-      - RUNNING
-      - COMPLETED
-      - FAILED
-      - CANCELLED
-    BulkProcessOperationStatusCounts:
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/BulkProcessOperationStatus'
-        count:
-          type: integer
+  parameters:
+    published-timestamp:
+      name: published-timestamp
+      in: header
+      description: The timestamp, expressed in Epoch timestamp using millisecond precision, when this event was published.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        format: int64
+    request-ref:
+      name: request-ref
+      in: header
+      description: A unique call reference included in every call, that enables the receiver to avoid duplicate handling of a webhook request (e.g. webhook was resent).
+      required: false
+      schema:
+        type: string
 x-tagGroups:
 - name: Webhooks
   tags:

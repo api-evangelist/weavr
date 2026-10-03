@@ -97,6 +97,15 @@ paths:
       - API_Secret_Key: []
 components:
   schemas:
+    TransferType:
+      type: string
+      enum:
+      - SEPA
+      - FASTER_PAYMENTS
+      - SWIFT
+      - BACS
+      - CHAPS
+      - RIX
     ClientInvalidRequest:
       type: object
       properties:
@@ -109,16 +118,7 @@ components:
           allOf:
           - $ref: '#/components/schemas/MessageValidation'
           - description: Description of fields which were invalid.
-    FieldValidationErrors:
-      type: object
-      properties:
-        name:
-          type: string
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldValidation'
-    DepositResponseDepositResponseCode1:
+    DepositResponseDepositResponseCode0:
       type: string
       enum:
       - COMPLETED
@@ -128,26 +128,21 @@ components:
       - DENIED_ACCOUNT_INACTIVE
       - DENIED_INVALID_TX_ID
       - DENIED_OTHER
-      - DENIED_ACCOUNT_NOT_UPGRADED_TO_IBAN
-    IBANDetails:
-      required:
-      - iban
-      type: object
-      properties:
-        iban:
-          maxLength: 34
-          minLength: 15
-          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
-          type: string
-          description: International Bank Account Number, required for wire transfer over SEPA or RIX
-          x-fieldValidation: required size(15,34) regex(^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$)
-        bankIdentifierCode:
-          maxLength: 11
-          minLength: 8
-          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
-          type: string
-          description: BIC, for wire transfer over SEPA or RIX
-          x-fieldValidation: size(8,11) regex(^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$)
+    FieldValidationType:
+      type: string
+      enum:
+      - REQUIRED
+      - HAS_TEXT
+      - REQUIRES
+      - SIZE
+      - RANGE
+      - IN
+      - NOT_IN
+      - REGEX
+      - EXACTLY
+      - AT_LEAST
+      - AT_MOST
+      - ALL_OR_NONE
     DepositRequestByAccountId:
       required:
       - depositAmount
@@ -186,84 +181,6 @@ components:
           allOf:
           - $ref: '#/components/schemas/TransferType'
           - description: Optional field which indicates the payment network to use. If not provided, a default payment network will be chosen based on the currency.
-    IbanDetails:
-      required:
-      - iban
-      type: object
-      properties:
-        iban:
-          pattern: ^[A-Z0-9]*$
-          type: string
-          x-fieldValidation: required regex([A-Z0-9]*)
-        bankIdentifierCode:
-          pattern: ^[A-Z0-9]*$
-          type: string
-          x-fieldValidation: regex([A-Z0-9]*)
-    FieldValidation:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/FieldValidationType'
-        params:
-          type: array
-          items:
-            type: string
-    CurrencyAmount:
-      required:
-      - currency
-      type: object
-      properties:
-        currency:
-          maxLength: 3
-          minLength: 3
-          pattern: ^[A-Z]*$
-          type: string
-          description: The currency ISO-4217 code, i.e. a three letter uppercase code, such as GBP, EUR, USD.
-          x-fieldValidation: required size(3,3) regex([A-Z]*)
-        amount:
-          type: integer
-          description: The monetary amount, scaled to the lowest denomination of the currency. For example, an amount of 1000 for a EUR currency is actually 1000 Euro cents, i.e. EUR 10.00.
-          format: int64
-      description: A message representing a monetary amount in a particular currency.
-    FasterPaymentsDetails:
-      required:
-      - accountNumber
-      - sortCode
-      type: object
-      properties:
-        sortCode:
-          maxLength: 6
-          minLength: 6
-          pattern: ^[0-9]*$
-          type: string
-          x-fieldValidation: required size(6,6) regex([0-9]*)
-        accountNumber:
-          pattern: ^[0-9]*$
-          type: string
-          x-fieldValidation: required regex([0-9]*)
-        secondaryReference:
-          type: string
-          description: Supplementary identifier used by financial institutions for accounts without unique sort codes, ensuring distinction between different accounts or customers
-    FasterPaymentsBankDetails:
-      required:
-      - accountNumber
-      - sortCode
-      type: object
-      properties:
-        accountNumber:
-          maxLength: 8
-          minLength: 8
-          pattern: ^[0-9]{8}$
-          type: string
-          description: Account number, required for wire transfer over Faster Payments.
-          x-fieldValidation: required size(8,8) regex(^[0-9]{8}$)
-        sortCode:
-          maxLength: 6
-          minLength: 6
-          pattern: ^[0-9]{6}$
-          type: string
-          description: Sort code, required for wire transfer over Faster Payments.
-          x-fieldValidation: required size(6,6) regex(^[0-9]{6}$)
     MessageValidation:
       type: object
       properties:
@@ -273,30 +190,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FieldValidationErrors'
-    TransferType:
-      type: string
-      enum:
-      - SEPA
-      - FASTER_PAYMENTS
-      - SWIFT
-      - BACS
-      - CHAPS
-      - RIX
-    FieldValidationType:
-      type: string
-      enum:
-      - REQUIRED
-      - HAS_TEXT
-      - REQUIRES
-      - SIZE
-      - RANGE
-      - IN
-      - NOT_IN
-      - REGEX
-      - EXACTLY
-      - AT_LEAST
-      - AT_MOST
-      - ALL_OR_NONE
     DepositRequest:
       required:
       - depositAmount
@@ -341,6 +234,39 @@ components:
           allOf:
           - $ref: '#/components/schemas/TransferType'
           - description: Optional field which indicates the payment network to use. If not provided, a default payment network will be chosen based on the currency.
+    FieldValidation:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/FieldValidationType'
+        params:
+          type: array
+          items:
+            type: string
+    DepositResponseDepositResponseCode1:
+      type: string
+      enum:
+      - COMPLETED
+      - DENIED_ACCOUNT_NOT_FOUND
+      - DENIED_AMOUNT_NOT_POSITIVE
+      - DENIED_CURRENCY_NOT_ACCOUNT_CURRENCY
+      - DENIED_ACCOUNT_INACTIVE
+      - DENIED_INVALID_TX_ID
+      - DENIED_OTHER
+      - DENIED_ACCOUNT_NOT_UPGRADED_TO_IBAN
+    IbanDetails:
+      required:
+      - iban
+      type: object
+      properties:
+        iban:
+          pattern: ^[A-Z0-9]*$
+          type: string
+          x-fieldValidation: required regex([A-Z0-9]*)
+        bankIdentifierCode:
+          pattern: ^[A-Z0-9]*$
+          type: string
+          x-fieldValidation: regex([A-Z0-9]*)
     DefaultError:
       type: object
       properties:
@@ -350,6 +276,37 @@ components:
           description: When present helps to identify and fix the problem.
           x-fieldValidation: size(_,255)
       description: A default error model in case of errors other than 400, 409 or 504.
+    CurrencyAmount:
+      required:
+      - currency
+      type: object
+      properties:
+        currency:
+          maxLength: 3
+          minLength: 3
+          pattern: ^[A-Z]*$
+          type: string
+          description: The currency ISO-4217 code, i.e. a three letter uppercase code, such as GBP, EUR, USD.
+          x-fieldValidation: required size(3,3) regex([A-Z]*)
+        amount:
+          type: integer
+          description: The monetary amount, scaled to the lowest denomination of the currency. For example, an amount of 1000 for a EUR currency is actually 1000 Euro cents, i.e. EUR 10.00.
+          format: int64
+      description: A message representing a monetary amount in a particular currency.
+    FieldValidationErrors:
+      type: object
+      properties:
+        name:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidation'
+    DepositResponse0:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/DepositResponseDepositResponseCode1'
     DepositResponse1:
       type: object
       properties:
@@ -365,21 +322,64 @@ components:
           type: string
           description: An identifier of an account that has neither an IBAN nor Faster Payments details.
           x-fieldValidation: required size(_,50)
-    DepositResponseDepositResponseCode0:
-      type: string
-      enum:
-      - COMPLETED
-      - DENIED_ACCOUNT_NOT_FOUND
-      - DENIED_AMOUNT_NOT_POSITIVE
-      - DENIED_CURRENCY_NOT_ACCOUNT_CURRENCY
-      - DENIED_ACCOUNT_INACTIVE
-      - DENIED_INVALID_TX_ID
-      - DENIED_OTHER
-    DepositResponse0:
+    FasterPaymentsDetails:
+      required:
+      - accountNumber
+      - sortCode
       type: object
       properties:
-        code:
-          $ref: '#/components/schemas/DepositResponseDepositResponseCode1'
+        sortCode:
+          maxLength: 6
+          minLength: 6
+          pattern: ^[0-9]*$
+          type: string
+          x-fieldValidation: required size(6,6) regex([0-9]*)
+        accountNumber:
+          pattern: ^[0-9]*$
+          type: string
+          x-fieldValidation: required regex([0-9]*)
+        secondaryReference:
+          type: string
+          description: Supplementary identifier used by financial institutions for accounts without unique sort codes, ensuring distinction between different accounts or customers
+    IBANDetails:
+      required:
+      - iban
+      type: object
+      properties:
+        iban:
+          maxLength: 34
+          minLength: 15
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
+          type: string
+          description: International Bank Account Number, required for wire transfer over SEPA or RIX
+          x-fieldValidation: required size(15,34) regex(^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$)
+        bankIdentifierCode:
+          maxLength: 11
+          minLength: 8
+          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
+          type: string
+          description: BIC, for wire transfer over SEPA or RIX
+          x-fieldValidation: size(8,11) regex(^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$)
+    FasterPaymentsBankDetails:
+      required:
+      - accountNumber
+      - sortCode
+      type: object
+      properties:
+        accountNumber:
+          maxLength: 8
+          minLength: 8
+          pattern: ^[0-9]{8}$
+          type: string
+          description: Account number, required for wire transfer over Faster Payments.
+          x-fieldValidation: required size(8,8) regex(^[0-9]{8}$)
+        sortCode:
+          maxLength: 6
+          minLength: 6
+          pattern: ^[0-9]{6}$
+          type: string
+          description: Sort code, required for wire transfer over Faster Payments.
+          x-fieldValidation: required size(6,6) regex(^[0-9]{6}$)
   parameters:
     call-ref:
       name: call-ref

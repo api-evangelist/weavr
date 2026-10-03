@@ -93,66 +93,6 @@ paths:
       - API_Secret_Key: []
 components:
   schemas:
-    ClientInvalidRequest:
-      type: object
-      properties:
-        message:
-          maxLength: 255
-          type: string
-          description: When present helps to identify and fix the problem.
-          x-fieldValidation: size(_,255)
-        validation:
-          allOf:
-          - $ref: '#/components/schemas/MessageValidation'
-          - description: Description of fields which were invalid.
-    Response:
-      type: object
-      properties:
-        code:
-          $ref: '#/components/schemas/ResponseResponseCode'
-    FieldValidationErrors:
-      type: object
-      properties:
-        name:
-          type: string
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldValidation'
-    DefaultError:
-      type: object
-      properties:
-        message:
-          maxLength: 255
-          type: string
-          description: When present helps to identify and fix the problem.
-          x-fieldValidation: size(_,255)
-      description: A default error model in case of errors other than 400, 409 or 504.
-    FieldValidation:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/FieldValidationType'
-        params:
-          type: array
-          items:
-            type: string
-    MessageValidation:
-      type: object
-      properties:
-        invalid:
-          type: boolean
-        fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldValidationErrors'
-    ResponseResponseCode:
-      type: string
-      enum:
-      - COMPLETED
-      - DENIED
-      - DENIED_WIRE_TRANSFER_NOT_FOUND
-      - DENIED_WIRE_TRANSFER_ALREADY_COMPLETED
     FieldValidationType:
       type: string
       enum:
@@ -168,6 +108,66 @@ components:
       - AT_LEAST
       - AT_MOST
       - ALL_OR_NONE
+    ResponseResponseCode:
+      type: string
+      enum:
+      - COMPLETED
+      - DENIED
+      - DENIED_WIRE_TRANSFER_NOT_FOUND
+      - DENIED_WIRE_TRANSFER_ALREADY_COMPLETED
+    DefaultError:
+      type: object
+      properties:
+        message:
+          maxLength: 255
+          type: string
+          description: When present helps to identify and fix the problem.
+          x-fieldValidation: size(_,255)
+      description: A default error model in case of errors other than 400, 409 or 504.
+    MessageValidation:
+      type: object
+      properties:
+        invalid:
+          type: boolean
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidationErrors'
+    Response:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/ResponseResponseCode'
+    ClientInvalidRequest:
+      type: object
+      properties:
+        message:
+          maxLength: 255
+          type: string
+          description: When present helps to identify and fix the problem.
+          x-fieldValidation: size(_,255)
+        validation:
+          allOf:
+          - $ref: '#/components/schemas/MessageValidation'
+          - description: Description of fields which were invalid.
+    FieldValidationErrors:
+      type: object
+      properties:
+        name:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidation'
+    FieldValidation:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/FieldValidationType'
+        params:
+          type: array
+          items:
+            type: string
   parameters:
     call-ref:
       name: call-ref

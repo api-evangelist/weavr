@@ -291,6 +291,18 @@ paths:
       - API_Secret_Key: []
 components:
   schemas:
+    ExpireManagedCardConflict:
+      type: object
+      properties:
+        errorCode:
+          $ref: '#/components/schemas/ExpireManagedCardConflictErrorCode'
+    RenewManagedCardConflictErrorCode:
+      type: string
+      enum:
+      - INSTRUMENT_DESTROYED
+      - INSTRUMENT_MARKED_LOST_STOLEN
+      - INSTRUMENT_NOT_RENEWABLE
+      - TRANSACTION_BATCH_EXCEPTION
     ClientInvalidRequest:
       type: object
       properties:
@@ -303,20 +315,138 @@ components:
           allOf:
           - $ref: '#/components/schemas/MessageValidation'
           - description: Description of fields which were invalid.
-    FieldValidationErrors:
-      type: object
-      properties:
-        name:
-          type: string
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldValidation'
     RenewManagedCardConflict:
       type: object
       properties:
         errorCode:
           $ref: '#/components/schemas/RenewManagedCardConflictErrorCode'
+    CardHolderPresent:
+      type: string
+      enum:
+      - PRESENT
+      - NOT_PRESENT
+      - PRESENCE_UNKNOWN
+    FieldValidationType:
+      type: string
+      enum:
+      - REQUIRED
+      - HAS_TEXT
+      - REQUIRES
+      - SIZE
+      - RANGE
+      - IN
+      - NOT_IN
+      - REGEX
+      - EXACTLY
+      - AT_LEAST
+      - AT_MOST
+      - ALL_OR_NONE
+    MessageValidation:
+      type: object
+      properties:
+        invalid:
+          type: boolean
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidationErrors'
+    PurchaseResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/PurchaseResponsePurchaseResponseCode'
+        threeDSecureChallengeId:
+          $ref: '#/components/schemas/NullableInt64'
+    PurchaseResponsePurchaseResponseCode:
+      type: string
+      enum:
+      - APPROVED
+      - DENIED_NOT_ENOUGH_FUNDS
+      - DENIED_CARD_NOT_FOUND
+      - DENIED_INCORRECT_CVV
+      - DENIED_CARD_EXPIRY
+      - DENIED_AMOUNT_NOT_POSITIVE
+      - DENIED_CARD_INACTIVE
+      - DENIED_OTHER
+      - DENIED_SPEND_CONTROL
+      - PENDING_BIOMETRIC_THREEDS_VERIFICATION
+      - CARD_NOT_ENROLLED_FOR_BIOMETRIC_THREEDS
+    FieldValidation:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/FieldValidationType'
+        params:
+          type: array
+          items:
+            type: string
+    PurchaseRequestByCardId:
+      required:
+      - merchantName
+      - transactionAmount
+      type: object
+      properties:
+        merchantName:
+          maxLength: 50
+          minLength: 1
+          type: string
+          description: The merchant name
+          x-fieldValidation: required size(1,50)
+        merchantId:
+          maxLength: 15
+          minLength: 1
+          type: string
+          description: The merchant id (MID). If not specified, a random value will be used
+          x-fieldValidation: size(1,15)
+        merchantCategoryCode:
+          maxLength: 4
+          minLength: 1
+          type: string
+          description: The merchant category code (MCC). If unspecified or an invalid MCC is specified, the Merchant Code 5399 (Misc. General Merchandise) will be used instead
+          x-fieldValidation: size(1,4)
+        transactionAmount:
+          allOf:
+          - $ref: '#/components/schemas/CurrencyAmount'
+          - description: The amount of the purchase
+            x-fieldValidation: required
+        transactionCountry:
+          maxLength: 3
+          minLength: 3
+          pattern: ^[A-Z]*$
+          type: string
+          description: The transaction country in ISO 3166 - alpha-3 format
+          x-fieldValidation: size(3,3) regex([A-Z]*)
+        forexFee:
+          type: integer
+          description: If this is a cross-currency transaction, the forex fee amount in the card currency. Deprecated; the forex fee percentage configured at the card profile will be applied if this field is not provided
+          format: int64
+          deprecated: true
+        forexPadding:
+          type: integer
+          description: If this is a cross-currency transaction, the forex padding amount in the card currency. Deprecated; a 2% forex padding will be applied if this field is not provided
+          format: int64
+          deprecated: true
+        atmWithdrawal:
+          type: boolean
+          description: If set to true, this purchase simulates and ATM Withdrawal transaction. MCC will automatically be set to 6011
+        additionalMerchantData:
+          allOf:
+          - $ref: '#/components/schemas/AdditionalMerchantData'
+          - description: Additional merchant data
+        cardHolderPresent:
+          allOf:
+          - $ref: '#/components/schemas/CardHolderPresent'
+          - description: Optional detail indicating if the card holder was present when the authorisation occurred.
+        cardPresent:
+          type: boolean
+          description: Optional detail indicating if the card was present when the authorisation occurred.
+        initiateBiometricThreeDSecure:
+          type: boolean
+          description: If the card is enrolled for Biometric Authentication, a 3DS Flow is initiated before the Purchase can resume.
+        transactionTimestamp:
+          type: integer
+          description: Epoch timestamp using millisecond precision.
+          format: int64
     AdditionalMerchantData:
       type: object
       properties:
@@ -344,21 +474,15 @@ components:
           type: string
         merchantContact:
           type: string
-    ExpireManagedCardConflictErrorCode:
-      type: string
-      enum:
-      - INSTRUMENT_DESTROYED
-      - INSTRUMENT_NOT_EXPIRABLE
-      - TRANSACTION_BATCH_EXCEPTION
-    FieldValidation:
+    DefaultError:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/FieldValidationType'
-        params:
-          type: array
-          items:
-            type: string
+        message:
+          maxLength: 255
+          type: string
+          description: When present helps to identify and fix the problem.
+          x-fieldValidation: size(_,255)
+      description: A default error model in case of errors other than 400, 409 or 504.
     CurrencyAmount:
       required:
       - currency
@@ -376,17 +500,6 @@ components:
           description: The monetary amount, scaled to the lowest denomination of the currency. For example, an amount of 1000 for a EUR currency is actually 1000 Euro cents, i.e. EUR 10.00.
           format: int64
       description: A message representing a monetary amount in a particular currency.
-    ExpireManagedCardConflict:
-      type: object
-      properties:
-        errorCode:
-          $ref: '#/components/schemas/ExpireManagedCardConflictErrorCode'
-    CardHolderPresent:
-      type: string
-      enum:
-      - PRESENT
-      - NOT_PRESENT
-      - PRESENCE_UNKNOWN
     NullableInt64:
       type: object
       properties:
@@ -397,20 +510,6 @@ components:
         hasValue:
           type: boolean
           description: If value is default (0) then true indicates 0 while false indicates null
-    PurchaseResponsePurchaseResponseCode:
-      type: string
-      enum:
-      - APPROVED
-      - DENIED_NOT_ENOUGH_FUNDS
-      - DENIED_CARD_NOT_FOUND
-      - DENIED_INCORRECT_CVV
-      - DENIED_CARD_EXPIRY
-      - DENIED_AMOUNT_NOT_POSITIVE
-      - DENIED_CARD_INACTIVE
-      - DENIED_OTHER
-      - DENIED_SPEND_CONTROL
-      - PENDING_BIOMETRIC_THREEDS_VERIFICATION
-      - CARD_NOT_ENROLLED_FOR_BIOMETRIC_THREEDS
     PurchaseRequest:
       required:
       - cardNumber
@@ -489,120 +588,21 @@ components:
           type: integer
           description: Epoch timestamp using millisecond precision.
           format: int64
-    MessageValidation:
+    FieldValidationErrors:
       type: object
       properties:
-        invalid:
-          type: boolean
-        fields:
+        name:
+          type: string
+        errors:
           type: array
           items:
-            $ref: '#/components/schemas/FieldValidationErrors'
-    FieldValidationType:
-      type: string
-      enum:
-      - REQUIRED
-      - HAS_TEXT
-      - REQUIRES
-      - SIZE
-      - RANGE
-      - IN
-      - NOT_IN
-      - REGEX
-      - EXACTLY
-      - AT_LEAST
-      - AT_MOST
-      - ALL_OR_NONE
-    DefaultError:
-      type: object
-      properties:
-        message:
-          maxLength: 255
-          type: string
-          description: When present helps to identify and fix the problem.
-          x-fieldValidation: size(_,255)
-      description: A default error model in case of errors other than 400, 409 or 504.
-    RenewManagedCardConflictErrorCode:
+            $ref: '#/components/schemas/FieldValidation'
+    ExpireManagedCardConflictErrorCode:
       type: string
       enum:
       - INSTRUMENT_DESTROYED
-      - INSTRUMENT_MARKED_LOST_STOLEN
-      - INSTRUMENT_NOT_RENEWABLE
+      - INSTRUMENT_NOT_EXPIRABLE
       - TRANSACTION_BATCH_EXCEPTION
-    PurchaseResponse:
-      type: object
-      properties:
-        code:
-          $ref: '#/components/schemas/PurchaseResponsePurchaseResponseCode'
-        threeDSecureChallengeId:
-          $ref: '#/components/schemas/NullableInt64'
-    PurchaseRequestByCardId:
-      required:
-      - merchantName
-      - transactionAmount
-      type: object
-      properties:
-        merchantName:
-          maxLength: 50
-          minLength: 1
-          type: string
-          description: The merchant name
-          x-fieldValidation: required size(1,50)
-        merchantId:
-          maxLength: 15
-          minLength: 1
-          type: string
-          description: The merchant id (MID). If not specified, a random value will be used
-          x-fieldValidation: size(1,15)
-        merchantCategoryCode:
-          maxLength: 4
-          minLength: 1
-          type: string
-          description: The merchant category code (MCC). If unspecified or an invalid MCC is specified, the Merchant Code 5399 (Misc. General Merchandise) will be used instead
-          x-fieldValidation: size(1,4)
-        transactionAmount:
-          allOf:
-          - $ref: '#/components/schemas/CurrencyAmount'
-          - description: The amount of the purchase
-            x-fieldValidation: required
-        transactionCountry:
-          maxLength: 3
-          minLength: 3
-          pattern: ^[A-Z]*$
-          type: string
-          description: The transaction country in ISO 3166 - alpha-3 format
-          x-fieldValidation: size(3,3) regex([A-Z]*)
-        forexFee:
-          type: integer
-          description: If this is a cross-currency transaction, the forex fee amount in the card currency. Deprecated; the forex fee percentage configured at the card profile will be applied if this field is not provided
-          format: int64
-          deprecated: true
-        forexPadding:
-          type: integer
-          description: If this is a cross-currency transaction, the forex padding amount in the card currency. Deprecated; a 2% forex padding will be applied if this field is not provided
-          format: int64
-          deprecated: true
-        atmWithdrawal:
-          type: boolean
-          description: If set to true, this purchase simulates and ATM Withdrawal transaction. MCC will automatically be set to 6011
-        additionalMerchantData:
-          allOf:
-          - $ref: '#/components/schemas/AdditionalMerchantData'
-          - description: Additional merchant data
-        cardHolderPresent:
-          allOf:
-          - $ref: '#/components/schemas/CardHolderPresent'
-          - description: Optional detail indicating if the card holder was present when the authorisation occurred.
-        cardPresent:
-          type: boolean
-          description: Optional detail indicating if the card was present when the authorisation occurred.
-        initiateBiometricThreeDSecure:
-          type: boolean
-          description: If the card is enrolled for Biometric Authentication, a 3DS Flow is initiated before the Purchase can resume.
-        transactionTimestamp:
-          type: integer
-          description: Epoch timestamp using millisecond precision.
-          format: int64
   parameters:
     call-ref:
       name: call-ref

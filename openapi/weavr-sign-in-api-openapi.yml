@@ -141,6 +141,11 @@ paths:
         api-key: []
 components:
   responses:
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
     TokenExpired:
       description: Gone - The requested token is expired.
       headers:
@@ -150,6 +155,27 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/TokenError'
+    NotFoundToken:
+      description: Not found - The requested token couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TokenError'
+    LoginViaBiometricsConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - CHANNEL_NOT_REGISTERED
+                - CHANNEL_NOT_SUPPORTED
     BadRequestError:
       description: Bad Request Error - Your request is invalid.
       headers:
@@ -168,56 +194,6 @@ components:
                 $ref: '#/components/schemas/SyntaxError'
     Locked:
       description: Locked - Account is temporarily locked due to failed consecutive login attempts. Try again in 30 minutes.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    LoginViaBiometricsConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - CHANNEL_NOT_REGISTERED
-                - CHANNEL_NOT_SUPPORTED
-    LoginViaBiometricsResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              challengeId:
-                type: string
-                description: The unique identifier of a Biometric challenge.
-    InternalServerError:
-      description: Internal Server Error - There is a problem with the server. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    LoginWithPasswordConflict:
-      description: The user's password has expired. Use the returned temporary token to update their password via the  '_/passwords/update_' endpoint.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              token:
-                type: string
-                description: Temporary authorisation token required to initiate the _passwordUpdate_ operation.
-    NoContent:
-      description: Success - No Content.
       headers:
         request-ref:
           $ref: '#/components/headers/request-ref'
@@ -242,6 +218,43 @@ components:
               credentials:
                 description: The unique identifier for the logged-in user.
                 $ref: '#/components/schemas/CredentialId'
+    LoginViaBiometricsResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              challengeId:
+                type: string
+                description: The unique identifier of a Biometric challenge.
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    NoContent:
+      description: Success - No Content.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
     LogoutResponse:
       description: Success
       headers:
@@ -255,76 +268,23 @@ components:
               url:
                 type: string
                 description: The logout url for third party auth providers.
-    NotFoundToken:
-      description: Not found - The requested token couldn't be found.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/TokenError'
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
     Error:
       description: Error
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Too many requests.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-        x-ratelimit-limit:
-          $ref: '#/components/headers/x-ratelimit-limit'
-        x-ratelimit-reset:
-          $ref: '#/components/headers/x-ratelimit-reset'
+    LoginWithPasswordConflict:
+      description: The user's password has expired. Use the returned temporary token to update their password via the  '_/passwords/update_' endpoint.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                description: Temporary authorisation token required to initiate the _passwordUpdate_ operation.
   schemas:
-    Email:
-      type: string
-      description: E-mail Address of the user
-      format: email
-    TokenType:
-      type: string
-      description: "The auth token received can only be used to access the following endpoints:\n  - `/identities`\n  - `/access_token`\n"
-      enum:
-      - NO_TYPE
-      - AUTH
-      - ACCESS
-    CredentialId:
-      required:
-      - type
-      - id
-      type: object
-      properties:
-        type:
-          maxLength: 50
-          pattern: ^[a-zA-Z0-9_-]+$
-          type: string
-          enum:
-          - ROOT
-          - USER
-          - API_CLIENT
-          description: The type of user.
-        id:
-          type: string
-          pattern: ^[0-9]+$
-          description: The identifier of the user.
-    SensitivePassword:
-      type: object
-      description: "The user's password or passcode used to log in a user.\nPasswords must be:\n  - minimum 8 characters for end-users (Consumers and Corporates); 12 characters for others\n  - maximum 30 characters\n  - include a lowercase character\n  - include an uppercase character\n  - include a digit and a special character\n  - different from any of the 5 last such passwords used.\n\nFor non-PCI compliant integrations, the password submitted must be **tokenised**.\n"
-      required:
-      - value
-      properties:
-        value:
-          maxLength: 100
-          type: string
-          format: password
     SyntaxError:
       type: object
       description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
@@ -364,13 +324,25 @@ components:
           enum:
           - TOKEN_EXPIRED
           - TOKEN_NOT_FOUND
-    Error:
+    CredentialId:
+      required:
+      - type
+      - id
       type: object
       properties:
-        code:
+        type:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9_-]+$
           type: string
-        message:
+          enum:
+          - ROOT
+          - USER
+          - API_CLIENT
+          description: The type of user.
+        id:
           type: string
+          pattern: ^[0-9]+$
+          description: The identifier of the user.
     IdentityId:
       required:
       - type
@@ -387,31 +359,48 @@ components:
           type: string
           pattern: ^[0-9]+$
           description: The identifier for the identity.
-  headers:
-    x-ratelimit-reset:
-      description: The number of seconds until the window is reset.
-      required: true
-      schema:
-        minimum: 0
-        type: integer
-        format: int32
-    request-ref:
-      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
-      required: true
-      schema:
-        type: string
-    x-ratelimit-limit:
-      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
-
-        The first number (20) is the limit that has been exceeded.
-
-        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
-
-        '
-      required: true
-      schema:
-        type: string
+    SensitivePassword:
+      type: object
+      description: "The user's password or passcode used to log in a user.\nPasswords must be:\n  - minimum 8 characters for end-users (Consumers and Corporates); 12 characters for others\n  - maximum 30 characters\n  - include a lowercase character\n  - include an uppercase character\n  - include a digit and a special character\n  - different from any of the 5 last such passwords used.\n\nFor non-PCI compliant integrations, the password submitted must be **tokenised**.\n"
+      required:
+      - value
+      properties:
+        value:
+          maxLength: 100
+          type: string
+          format: password
+    TokenType:
+      type: string
+      description: "The auth token received can only be used to access the following endpoints:\n  - `/identities`\n  - `/access_token`\n"
+      enum:
+      - NO_TYPE
+      - AUTH
+      - ACCESS
+    Email:
+      type: string
+      description: E-mail Address of the user
+      format: email
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
   requestBodies:
+    LoginViaBiometricsRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - email
+            type: object
+            properties:
+              email:
+                $ref: '#/components/schemas/Email'
+              identity:
+                $ref: '#/components/schemas/IdentityId'
     LoginWithPasswordRequest:
       required: true
       content:
@@ -426,19 +415,30 @@ components:
                 $ref: '#/components/schemas/Email'
               password:
                 $ref: '#/components/schemas/SensitivePassword'
-    LoginViaBiometricsRequest:
+  headers:
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
       required: true
-      content:
-        application/json:
-          schema:
-            required:
-            - email
-            type: object
-            properties:
-              email:
-                $ref: '#/components/schemas/Email'
-              identity:
-                $ref: '#/components/schemas/IdentityId'
+      schema:
+        type: string
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    x-ratelimit-limit:
+      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+        The first number (20) is the limit that has been exceeded.
+
+        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+        '
+      required: true
+      schema:
+        type: string
   securitySchemes:
     api-key:
       type: apiKey

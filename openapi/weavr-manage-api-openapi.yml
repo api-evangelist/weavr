@@ -295,53 +295,220 @@ paths:
     - description: Weavr Sandbox Environment
       url: https://sandbox.weavr.io/multi/backoffice
 components:
-  parameters:
-    bulkId:
-      name: bulk_id
-      in: path
+  schemas:
+    BulkProcessConflictErrorCode:
+      enum:
+      - VALIDATION_FAILED
+      - USER_VALIDATION_FAILED
+      - ALREADY_SUBMITTED
+      - DUPLICATE_OPERATION_TYPE
+      - NO_CONFIG_FOUND
+      - INVALID_STATE
+      - TOO_MANY_REQUESTS
+      type: string
+    SyntaxError:
+      type: object
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      properties:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
+    BulkProcessConflict:
+      properties:
+        errorCode:
+          $ref: '#/components/schemas/BulkProcessConflictErrorCode'
+      type: object
+    BulkProcessOperationsPaged:
+      properties:
+        count:
+          description: Total number of records (excluding limit)
+          format: int32
+          type: integer
+        operations:
+          items:
+            $ref: '#/components/schemas/BulkProcessOperation'
+          type: array
+        responseCount:
+          description: Total number of records returned in this response
+          format: int32
+          type: integer
+      type: object
+    BulkProcessOperationStatus:
+      type: string
+      enum:
+      - SUBMITTED
+      - RUNNING
+      - COMPLETED
+      - FAILED
+      - CANCELLED
+    BulkProcessOperation:
+      type: object
+      properties:
+        operationId:
+          description: Id of a specific bulk operation. Useful only if you need to refer to a specific operation when reporting an issue
+          type: string
+        sequence:
+          description: The operations submitted in a Bulk Processes are executed in sequence. This field indicates the position of this specific operation in the context of such sequence
+          format: int32
+          type: integer
+        method:
+          description: HTTP request method used for the executed operation within the Bulk process
+          type: string
+        path:
+          description: The endpoint path for the Operation
+          type: string
+        status:
+          description: 'The execution status of the operation within the Bulk Process. This can be one of: "SUBMITTED" "RUNNING" "COMPLETED" "FAILED" "CANCELLED"
+
+            '
+          $ref: '#/components/schemas/BulkProcessOperationStatus'
+        requestPayload:
+          description: This is the payload for the execution of an operation within the context of a Bulk Process
+          type: string
+        responsePayload:
+          description: The response for the execution of the operation
+          type: string
+    BulkProcessOperationStatusCounts:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/BulkProcessOperationStatus'
+        count:
+          type: integer
+    BulkId:
+      type: string
+      pattern: ^[0-9]+$
+    BulkProcessStatus:
+      type: string
+      enum:
+      - SUBMITTED
+      - RUNNING
+      - PARTIALLY_COMPLETED
+      - COMPLETED
+      - FAILED
+      - PAUSED
+      - CANCELLED
+    BulkProcessDetails:
+      allOf:
+      - $ref: '#/components/schemas/BulkProcess'
+      - type: object
+        properties:
+          operationStatusCounts:
+            type: array
+            items:
+              $ref: '#/components/schemas/BulkProcessOperationStatusCounts'
+    BulkProcessExecute:
+      type: object
+      properties:
+        mode:
+          $ref: '#/components/schemas/BulkProcessMode'
+        webhookInterval:
+          description: The count of operations after which a Bulk Process Progress will be sent. For example, if set to 10, a webhook will be sent after every 10th operation is attempted. The minimum value fo count is 25% of all operations. If a value below this is entered, a webhook will only be sent for each 25% of operations attempted (i.e. 4 webhooks per Bulk Process).
+          format: int32
+          type: integer
+    BulkProcessesPaged:
+      properties:
+        count:
+          description: Total number of records (excluding limit)
+          format: int32
+          type: integer
+        bulkProcesses:
+          items:
+            $ref: '#/components/schemas/BulkProcess'
+          type: array
+        responseCount:
+          description: Total number of records returned in this response
+          format: int32
+          type: integer
+      type: object
+    BulkProcess:
+      type: object
+      properties:
+        bulkId:
+          description: The bulk id of the bulk process
+          type: string
+        status:
+          description: "\"SUBMITTED\": the data for the bulk process operations has been persisted and bulk process is ready for execution. A bulk process in this status can be executed or submitted. This is the initial state for a bulk process\n\n\"RUNNING\" :  the bulk process is currently being executed by the system\n\n\"COMPLETED\"  : the execution of the bulk process is complete and all bulk operations of the bulk process were executed successfully. This is a final state for the bulk process \n\n\"PARTIALLY_COMPLETED\"  the execution of the bulk process is complete and some of the bulk operations of the bulk process failed. This is a final state for the bulk process\n\n\"FAILED\" : none of the operations of the bulk process have executed. This is a final state for the bulk process\n\n\"PAUSED\"  : the execution of bulk process has been paused through the Pause bulk process operation  Execution can be resumed through Resume bulk operation\n\n\"CANCELLED\" : the execution of bulk process has been cancelled through Cancel bulk operation. This is a final state for the bulk process\n"
+          type: string
+        submittedItemsCount:
+          description: The number of bulk operations in the bulk process
+          type: integer
+        executionStart:
+          description: Timestamp of when the execution of the Bulk Process started
+          type: integer
+          format: int64
+        executionFinish:
+          description: Timestamp of when the execution of the Bulk Process finished.
+          type: integer
+          format: int64
+        operation:
+          description: The underlying operations contained within the Bulk; shown as the endpoint for the equivalent single operation.
+          type: string
+        mode:
+          description: The mode that was instructed when execution was started
+          $ref: '#/components/schemas/BulkProcessMode'
+    BulkProcessMode:
+      description: 'ON_FAILURE_STOP : the execution of the bulk process stops after the first bulk operation that fails (operation returns a 4xx or 5xx response code).
+
+        ON_FAILURE_CONTINUE: the execution of the bulk process resumes as normal even when any of the bulk operations fail.
+
+        '
+      type: string
+      enum:
+      - ON_FAILURE_STOP
+      - ON_FAILURE_CONTINUE
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+  requestBodies:
+    BulkProcessExecute:
       required: true
-      description: The bulk id of the bulk process.
-      schema:
-        $ref: '#/components/schemas/BulkId'
-    sequence:
-      name: sequence
-      in: query
-      required: false
-      schema:
-        type: integer
-        format: int64
-    limit:
-      name: limit
-      in: query
-      required: false
-      description: The limit of the results for paging, starting at the offset. Limit is always capped at 100.
-      schema:
-        maximum: 100
-        minimum: 1
-        type: integer
-        format: int32
-    offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.
-      schema:
-        minimum: 0
-        type: integer
-        format: int32
-    bulkProcessStatus:
-      name: status
-      in: query
-      required: false
-      schema:
-        $ref: '#/components/schemas/BulkProcessStatus'
-    bulkProcessOperationStatus:
-      name: status
-      in: query
-      required: false
-      schema:
-        $ref: '#/components/schemas/BulkProcessOperationStatus'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BulkProcessExecute'
   responses:
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     BadRequestError:
       description: Bad Request Error - Your request is invalid.
       headers:
@@ -358,16 +525,7 @@ components:
                 description: When present helps to identify and fix the problem.
               syntaxErrors:
                 $ref: '#/components/schemas/SyntaxError'
-    NotFound:
-      description: Not found - The requested resource couldn't be found.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BulkProcessOperations:
+    BulkProcessDetails:
       description: Success
       headers:
         request-ref:
@@ -375,12 +533,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/BulkProcessOperationsPaged'
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
+            $ref: '#/components/schemas/BulkProcessDetails'
     InternalServerError:
       description: Internal Server Error - There is a problem with the server. Please try again later.
       headers:
@@ -425,7 +578,7 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    BulkProcessDetails:
+    BulkProcessOperations:
       description: Success
       headers:
         request-ref:
@@ -433,206 +586,53 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/BulkProcessDetails'
-  schemas:
-    BulkId:
-      type: string
-      pattern: ^[0-9]+$
-    BulkProcessStatus:
-      type: string
-      enum:
-      - SUBMITTED
-      - RUNNING
-      - PARTIALLY_COMPLETED
-      - COMPLETED
-      - FAILED
-      - PAUSED
-      - CANCELLED
-    BulkProcessOperationStatus:
-      type: string
-      enum:
-      - SUBMITTED
-      - RUNNING
-      - COMPLETED
-      - FAILED
-      - CANCELLED
-    BulkProcessOperationsPaged:
-      properties:
-        count:
-          description: Total number of records (excluding limit)
-          format: int32
-          type: integer
-        operations:
-          items:
-            $ref: '#/components/schemas/BulkProcessOperation'
-          type: array
-        responseCount:
-          description: Total number of records returned in this response
-          format: int32
-          type: integer
-      type: object
-    BulkProcessConflictErrorCode:
-      enum:
-      - VALIDATION_FAILED
-      - USER_VALIDATION_FAILED
-      - ALREADY_SUBMITTED
-      - DUPLICATE_OPERATION_TYPE
-      - NO_CONFIG_FOUND
-      - INVALID_STATE
-      - TOO_MANY_REQUESTS
-      type: string
-    BulkProcessConflict:
-      properties:
-        errorCode:
-          $ref: '#/components/schemas/BulkProcessConflictErrorCode'
-      type: object
-    BulkProcess:
-      type: object
-      properties:
-        bulkId:
-          description: The bulk id of the bulk process
-          type: string
-        status:
-          description: "\"SUBMITTED\": the data for the bulk process operations has been persisted and bulk process is ready for execution. A bulk process in this status can be executed or submitted. This is the initial state for a bulk process\n\n\"RUNNING\" :  the bulk process is currently being executed by the system\n\n\"COMPLETED\"  : the execution of the bulk process is complete and all bulk operations of the bulk process were executed successfully. This is a final state for the bulk process \n\n\"PARTIALLY_COMPLETED\"  the execution of the bulk process is complete and some of the bulk operations of the bulk process failed. This is a final state for the bulk process\n\n\"FAILED\" : none of the operations of the bulk process have executed. This is a final state for the bulk process\n\n\"PAUSED\"  : the execution of bulk process has been paused through the Pause bulk process operation  Execution can be resumed through Resume bulk operation\n\n\"CANCELLED\" : the execution of bulk process has been cancelled through Cancel bulk operation. This is a final state for the bulk process\n"
-          type: string
-        submittedItemsCount:
-          description: The number of bulk operations in the bulk process
-          type: integer
-        executionStart:
-          description: Timestamp of when the execution of the Bulk Process started
-          type: integer
-          format: int64
-        executionFinish:
-          description: Timestamp of when the execution of the Bulk Process finished.
-          type: integer
-          format: int64
-        operation:
-          description: The underlying operations contained within the Bulk; shown as the endpoint for the equivalent single operation.
-          type: string
-        mode:
-          description: The mode that was instructed when execution was started
-          $ref: '#/components/schemas/BulkProcessMode'
-    SyntaxError:
-      type: object
-      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
-      properties:
-        invalidFields:
-          type: array
-          items:
-            type: object
-            properties:
-              params:
-                type: array
-                items:
-                  type: string
-              fieldName:
-                type: string
-              error:
-                type: string
-                enum:
-                - REQUIRED
-                - HAS_TEXT
-                - REQUIRES
-                - SIZE
-                - RANGE
-                - IN
-                - NOT_IN
-                - REGEX
-                - EXACTLY
-                - AT_LEAST
-                - AT_MOST
-                - ALL_OR_NONE
-    BulkProcessExecute:
-      type: object
-      properties:
-        mode:
-          $ref: '#/components/schemas/BulkProcessMode'
-        webhookInterval:
-          description: The count of operations after which a Bulk Process Progress will be sent. For example, if set to 10, a webhook will be sent after every 10th operation is attempted. The minimum value fo count is 25% of all operations. If a value below this is entered, a webhook will only be sent for each 25% of operations attempted (i.e. 4 webhooks per Bulk Process).
-          format: int32
-          type: integer
-    BulkProcessesPaged:
-      properties:
-        count:
-          description: Total number of records (excluding limit)
-          format: int32
-          type: integer
-        bulkProcesses:
-          items:
-            $ref: '#/components/schemas/BulkProcess'
-          type: array
-        responseCount:
-          description: Total number of records returned in this response
-          format: int32
-          type: integer
-      type: object
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-    BulkProcessOperation:
-      type: object
-      properties:
-        operationId:
-          description: Id of a specific bulk operation. Useful only if you need to refer to a specific operation when reporting an issue
-          type: string
-        sequence:
-          description: The operations submitted in a Bulk Processes are executed in sequence. This field indicates the position of this specific operation in the context of such sequence
-          format: int32
-          type: integer
-        method:
-          description: HTTP request method used for the executed operation within the Bulk process
-          type: string
-        path:
-          description: The endpoint path for the Operation
-          type: string
-        status:
-          description: 'The execution status of the operation within the Bulk Process. This can be one of: "SUBMITTED" "RUNNING" "COMPLETED" "FAILED" "CANCELLED"
-
-            '
-          $ref: '#/components/schemas/BulkProcessOperationStatus'
-        requestPayload:
-          description: This is the payload for the execution of an operation within the context of a Bulk Process
-          type: string
-        responsePayload:
-          description: The response for the execution of the operation
-          type: string
-    BulkProcessDetails:
-      allOf:
-      - $ref: '#/components/schemas/BulkProcess'
-      - type: object
-        properties:
-          operationStatusCounts:
-            type: array
-            items:
-              $ref: '#/components/schemas/BulkProcessOperationStatusCounts'
-    BulkProcessMode:
-      description: 'ON_FAILURE_STOP : the execution of the bulk process stops after the first bulk operation that fails (operation returns a 4xx or 5xx response code).
-
-        ON_FAILURE_CONTINUE: the execution of the bulk process resumes as normal even when any of the bulk operations fail.
-
-        '
-      type: string
-      enum:
-      - ON_FAILURE_STOP
-      - ON_FAILURE_CONTINUE
-    BulkProcessOperationStatusCounts:
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/BulkProcessOperationStatus'
-        count:
-          type: integer
-  requestBodies:
-    BulkProcessExecute:
+            $ref: '#/components/schemas/BulkProcessOperationsPaged'
+  parameters:
+    bulkProcessStatus:
+      name: status
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/BulkProcessStatus'
+    bulkProcessOperationStatus:
+      name: status
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/BulkProcessOperationStatus'
+    sequence:
+      name: sequence
+      in: query
+      required: false
+      schema:
+        type: integer
+        format: int64
+    bulkId:
+      name: bulk_id
+      in: path
       required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/BulkProcessExecute'
+      description: The bulk id of the bulk process.
+      schema:
+        $ref: '#/components/schemas/BulkId'
+    offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: The limit of the results for paging, starting at the offset. Limit is always capped at 100.
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
   headers:
     request-ref:
       description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
