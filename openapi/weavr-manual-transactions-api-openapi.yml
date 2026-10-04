@@ -39,16 +39,6 @@ webhooks:
           description: Success - No Content
 components:
   parameters:
-    signature:
-      name: signature
-      in: header
-      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `published-timestamp` using your API key.
-      required: true
-      style: simple
-      explode: false
-      deprecated: true
-      schema:
-        type: string
     published-timestamp:
       name: published-timestamp
       in: header
@@ -75,17 +65,17 @@ components:
       required: false
       schema:
         type: string
+    signature:
+      name: signature
+      in: header
+      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `published-timestamp` using your API key.
+      required: true
+      style: simple
+      explode: false
+      deprecated: true
+      schema:
+        type: string
   schemas:
-    InstrumentId:
-      required:
-      - id
-      - type
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/Id'
-        type:
-          $ref: '#/components/schemas/InstrumentType'
     Id:
       type: string
       pattern: ^[0-9]+$
@@ -94,19 +84,6 @@ components:
       enum:
       - managed_cards
       - managed_accounts
-    StringWrappedTypeId:
-      required:
-      - type
-      - id
-      type: object
-      properties:
-        type:
-          maxLength: 50
-          pattern: ^[a-zA-Z0-9_-]+$
-          type: string
-        id:
-          type: string
-          pattern: ^[0-9]+$
     ManualTransactionEvent:
       required:
       - targetInstrument
@@ -135,6 +112,29 @@ components:
           description: The timestamp when the transaction was processed by the system, expressed in Epoch timestamp using millisecond precision.
         owner:
           $ref: '#/components/schemas/StringWrappedTypeId'
+    InstrumentId:
+      required:
+      - id
+      - type
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+        type:
+          $ref: '#/components/schemas/InstrumentType'
+    StringWrappedTypeId:
+      required:
+      - type
+      - id
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9_-]+$
+          type: string
+        id:
+          type: string
+          pattern: ^[0-9]+$
 x-tagGroups:
 - name: Webhooks
   tags:

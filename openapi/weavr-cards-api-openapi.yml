@@ -291,95 +291,6 @@ paths:
       - API_Secret_Key: []
 components:
   schemas:
-    ExpireManagedCardConflict:
-      type: object
-      properties:
-        errorCode:
-          $ref: '#/components/schemas/ExpireManagedCardConflictErrorCode'
-    RenewManagedCardConflictErrorCode:
-      type: string
-      enum:
-      - INSTRUMENT_DESTROYED
-      - INSTRUMENT_MARKED_LOST_STOLEN
-      - INSTRUMENT_NOT_RENEWABLE
-      - TRANSACTION_BATCH_EXCEPTION
-    ClientInvalidRequest:
-      type: object
-      properties:
-        message:
-          maxLength: 255
-          type: string
-          description: When present helps to identify and fix the problem.
-          x-fieldValidation: size(_,255)
-        validation:
-          allOf:
-          - $ref: '#/components/schemas/MessageValidation'
-          - description: Description of fields which were invalid.
-    RenewManagedCardConflict:
-      type: object
-      properties:
-        errorCode:
-          $ref: '#/components/schemas/RenewManagedCardConflictErrorCode'
-    CardHolderPresent:
-      type: string
-      enum:
-      - PRESENT
-      - NOT_PRESENT
-      - PRESENCE_UNKNOWN
-    FieldValidationType:
-      type: string
-      enum:
-      - REQUIRED
-      - HAS_TEXT
-      - REQUIRES
-      - SIZE
-      - RANGE
-      - IN
-      - NOT_IN
-      - REGEX
-      - EXACTLY
-      - AT_LEAST
-      - AT_MOST
-      - ALL_OR_NONE
-    MessageValidation:
-      type: object
-      properties:
-        invalid:
-          type: boolean
-        fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldValidationErrors'
-    PurchaseResponse:
-      type: object
-      properties:
-        code:
-          $ref: '#/components/schemas/PurchaseResponsePurchaseResponseCode'
-        threeDSecureChallengeId:
-          $ref: '#/components/schemas/NullableInt64'
-    PurchaseResponsePurchaseResponseCode:
-      type: string
-      enum:
-      - APPROVED
-      - DENIED_NOT_ENOUGH_FUNDS
-      - DENIED_CARD_NOT_FOUND
-      - DENIED_INCORRECT_CVV
-      - DENIED_CARD_EXPIRY
-      - DENIED_AMOUNT_NOT_POSITIVE
-      - DENIED_CARD_INACTIVE
-      - DENIED_OTHER
-      - DENIED_SPEND_CONTROL
-      - PENDING_BIOMETRIC_THREEDS_VERIFICATION
-      - CARD_NOT_ENROLLED_FOR_BIOMETRIC_THREEDS
-    FieldValidation:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/FieldValidationType'
-        params:
-          type: array
-          items:
-            type: string
     PurchaseRequestByCardId:
       required:
       - merchantName
@@ -447,42 +358,6 @@ components:
           type: integer
           description: Epoch timestamp using millisecond precision.
           format: int64
-    AdditionalMerchantData:
-      type: object
-      properties:
-        merchantStreet:
-          type: string
-        merchantCity:
-          type: string
-        merchantState:
-          type: string
-        merchantPostalCode:
-          type: string
-        merchantCountry:
-          maxLength: 3
-          minLength: 3
-          pattern: ^[A-Z]*$
-          type: string
-          x-fieldValidation: size(3,3) regex([A-Z]*)
-        merchantTelephone:
-          type: string
-        merchantURL:
-          type: string
-        merchantNameOther:
-          type: string
-        merchantNetworkId:
-          type: string
-        merchantContact:
-          type: string
-    DefaultError:
-      type: object
-      properties:
-        message:
-          maxLength: 255
-          type: string
-          description: When present helps to identify and fix the problem.
-          x-fieldValidation: size(_,255)
-      description: A default error model in case of errors other than 400, 409 or 504.
     CurrencyAmount:
       required:
       - currency
@@ -500,16 +375,6 @@ components:
           description: The monetary amount, scaled to the lowest denomination of the currency. For example, an amount of 1000 for a EUR currency is actually 1000 Euro cents, i.e. EUR 10.00.
           format: int64
       description: A message representing a monetary amount in a particular currency.
-    NullableInt64:
-      type: object
-      properties:
-        value:
-          type: integer
-          description: If value is 0, set has_value to true
-          format: int64
-        hasValue:
-          type: boolean
-          description: If value is default (0) then true indicates 0 while false indicates null
     PurchaseRequest:
       required:
       - cardNumber
@@ -588,6 +453,35 @@ components:
           type: integer
           description: Epoch timestamp using millisecond precision.
           format: int64
+    ExpireManagedCardConflict:
+      type: object
+      properties:
+        errorCode:
+          $ref: '#/components/schemas/ExpireManagedCardConflictErrorCode'
+    FieldValidationType:
+      type: string
+      enum:
+      - REQUIRED
+      - HAS_TEXT
+      - REQUIRES
+      - SIZE
+      - RANGE
+      - IN
+      - NOT_IN
+      - REGEX
+      - EXACTLY
+      - AT_LEAST
+      - AT_MOST
+      - ALL_OR_NONE
+    DefaultError:
+      type: object
+      properties:
+        message:
+          maxLength: 255
+          type: string
+          description: When present helps to identify and fix the problem.
+          x-fieldValidation: size(_,255)
+      description: A default error model in case of errors other than 400, 409 or 504.
     FieldValidationErrors:
       type: object
       properties:
@@ -597,12 +491,118 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FieldValidation'
+    FieldValidation:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/FieldValidationType'
+        params:
+          type: array
+          items:
+            type: string
+    NullableInt64:
+      type: object
+      properties:
+        value:
+          type: integer
+          description: If value is 0, set has_value to true
+          format: int64
+        hasValue:
+          type: boolean
+          description: If value is default (0) then true indicates 0 while false indicates null
+    AdditionalMerchantData:
+      type: object
+      properties:
+        merchantStreet:
+          type: string
+        merchantCity:
+          type: string
+        merchantState:
+          type: string
+        merchantPostalCode:
+          type: string
+        merchantCountry:
+          maxLength: 3
+          minLength: 3
+          pattern: ^[A-Z]*$
+          type: string
+          x-fieldValidation: size(3,3) regex([A-Z]*)
+        merchantTelephone:
+          type: string
+        merchantURL:
+          type: string
+        merchantNameOther:
+          type: string
+        merchantNetworkId:
+          type: string
+        merchantContact:
+          type: string
+    RenewManagedCardConflict:
+      type: object
+      properties:
+        errorCode:
+          $ref: '#/components/schemas/RenewManagedCardConflictErrorCode'
     ExpireManagedCardConflictErrorCode:
       type: string
       enum:
       - INSTRUMENT_DESTROYED
       - INSTRUMENT_NOT_EXPIRABLE
       - TRANSACTION_BATCH_EXCEPTION
+    PurchaseResponsePurchaseResponseCode:
+      type: string
+      enum:
+      - APPROVED
+      - DENIED_NOT_ENOUGH_FUNDS
+      - DENIED_CARD_NOT_FOUND
+      - DENIED_INCORRECT_CVV
+      - DENIED_CARD_EXPIRY
+      - DENIED_AMOUNT_NOT_POSITIVE
+      - DENIED_CARD_INACTIVE
+      - DENIED_OTHER
+      - DENIED_SPEND_CONTROL
+      - PENDING_BIOMETRIC_THREEDS_VERIFICATION
+      - CARD_NOT_ENROLLED_FOR_BIOMETRIC_THREEDS
+    MessageValidation:
+      type: object
+      properties:
+        invalid:
+          type: boolean
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidationErrors'
+    ClientInvalidRequest:
+      type: object
+      properties:
+        message:
+          maxLength: 255
+          type: string
+          description: When present helps to identify and fix the problem.
+          x-fieldValidation: size(_,255)
+        validation:
+          allOf:
+          - $ref: '#/components/schemas/MessageValidation'
+          - description: Description of fields which were invalid.
+    RenewManagedCardConflictErrorCode:
+      type: string
+      enum:
+      - INSTRUMENT_DESTROYED
+      - INSTRUMENT_MARKED_LOST_STOLEN
+      - INSTRUMENT_NOT_RENEWABLE
+      - TRANSACTION_BATCH_EXCEPTION
+    CardHolderPresent:
+      type: string
+      enum:
+      - PRESENT
+      - NOT_PRESENT
+      - PRESENCE_UNKNOWN
+    PurchaseResponse:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/PurchaseResponsePurchaseResponseCode'
+        threeDSecureChallengeId:
+          $ref: '#/components/schemas/NullableInt64'
   parameters:
     call-ref:
       name: call-ref

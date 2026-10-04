@@ -39,16 +39,6 @@ webhooks:
           description: Success - No Content
 components:
   parameters:
-    signature:
-      name: signature
-      in: header
-      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `published-timestamp` using your API key.
-      required: true
-      style: simple
-      explode: false
-      deprecated: true
-      schema:
-        type: string
     published-timestamp:
       name: published-timestamp
       in: header
@@ -75,45 +65,17 @@ components:
       required: false
       schema:
         type: string
+    signature:
+      name: signature
+      in: header
+      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `published-timestamp` using your API key.
+      required: true
+      style: simple
+      explode: false
+      deprecated: true
+      schema:
+        type: string
   schemas:
-    CredentialId:
-      required:
-      - type
-      - id
-      type: object
-      properties:
-        type:
-          maxLength: 50
-          pattern: ^[a-zA-Z0-9_-]+$
-          type: string
-          enum:
-          - ROOT
-          - USER
-          - API_CLIENT
-          description: The type of user.
-        id:
-          type: string
-          pattern: ^[0-9]+$
-          description: The identifier of the user.
-    LoginEventLoginEventStatus:
-      type: string
-      enum:
-      - VERIFIED
-      - DECLINED
-      - EXPIRED
-    StringWrappedTypeId:
-      required:
-      - type
-      - id
-      type: object
-      properties:
-        type:
-          maxLength: 50
-          pattern: ^[a-zA-Z0-9_-]+$
-          type: string
-        id:
-          type: string
-          pattern: ^[0-9]+$
     LoginEvent:
       required:
       - credential
@@ -135,6 +97,44 @@ components:
           type: string
           pattern: ^[0-9]+$
           description: Epoch timestamp using millisecond precision.
+    LoginEventLoginEventStatus:
+      type: string
+      enum:
+      - VERIFIED
+      - DECLINED
+      - EXPIRED
+    CredentialId:
+      required:
+      - type
+      - id
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9_-]+$
+          type: string
+          enum:
+          - ROOT
+          - USER
+          - API_CLIENT
+          description: The type of user.
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The identifier of the user.
+    StringWrappedTypeId:
+      required:
+      - type
+      - id
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9_-]+$
+          type: string
+        id:
+          type: string
+          pattern: ^[0-9]+$
 x-tagGroups:
 - name: Webhooks
   tags:

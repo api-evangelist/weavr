@@ -155,15 +155,15 @@ paths:
         API_Secret_Key: []
 components:
   schemas:
-    SimulateVerifyChallengeResponse:
-      required:
-      - code
+    FieldValidationErrors:
       type: object
       properties:
-        code:
-          allOf:
-          - $ref: '#/components/schemas/SimulateVerifyChallengeResponseResponseCode'
-          - x-fieldValidation: required
+        name:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidation'
     FieldValidationType:
       type: string
       enum:
@@ -179,20 +179,24 @@ components:
       - AT_LEAST
       - AT_MOST
       - ALL_OR_NONE
-    SimulateVerifyChallengeResponseResponseCode:
-      type: string
-      enum:
-      - COMPLETED
-      - DENIED
-    MessageValidation:
+    FieldValidation:
       type: object
       properties:
-        invalid:
-          type: boolean
-        fields:
+        type:
+          $ref: '#/components/schemas/FieldValidationType'
+        params:
           type: array
           items:
-            $ref: '#/components/schemas/FieldValidationErrors'
+            type: string
+    SimulateVerifyChallengeResponse:
+      required:
+      - code
+      type: object
+      properties:
+        code:
+          allOf:
+          - $ref: '#/components/schemas/SimulateVerifyChallengeResponseResponseCode'
+          - x-fieldValidation: required
     DefaultError:
       type: object
       properties:
@@ -202,6 +206,15 @@ components:
           description: When present helps to identify and fix the problem.
           x-fieldValidation: size(_,255)
       description: A default error model in case of errors other than 400, 409 or 504.
+    MessageValidation:
+      type: object
+      properties:
+        invalid:
+          type: boolean
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidationErrors'
     ClientInvalidRequest:
       type: object
       properties:
@@ -214,24 +227,11 @@ components:
           allOf:
           - $ref: '#/components/schemas/MessageValidation'
           - description: Description of fields which were invalid.
-    FieldValidationErrors:
-      type: object
-      properties:
-        name:
-          type: string
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldValidation'
-    FieldValidation:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/FieldValidationType'
-        params:
-          type: array
-          items:
-            type: string
+    SimulateVerifyChallengeResponseResponseCode:
+      type: string
+      enum:
+      - COMPLETED
+      - DENIED
   parameters:
     call-ref:
       name: call-ref

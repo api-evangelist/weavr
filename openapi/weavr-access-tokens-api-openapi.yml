@@ -50,6 +50,124 @@ paths:
         api-key: []
       - api-key: []
 components:
+  responses:
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    AccessTokenResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+              identity:
+                description: The identity to which the logged-in user belongs to.
+                $ref: '#/components/schemas/IdentityId'
+              credentials:
+                description: The unique identifier for the logged-in user.
+                $ref: '#/components/schemas/CredentialId'
+              status:
+                type: string
+                description: "The token status, as follows:\n  - STANDARD: it is a standard token. \n  - STEPPED_UP: it is a stepped up token.\n"
+                enum:
+                - STANDARD
+                - STEPPED_UP
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Locked:
+      description: Locked - Account is temporarily locked due to failed consecutive login attempts. Try again in 30 minutes.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+  headers:
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    x-ratelimit-limit:
+      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
+
+        The first number (20) is the limit that has been exceeded.
+
+        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+
+        '
+      required: true
+      schema:
+        type: string
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
+      schema:
+        type: string
+  requestBodies:
+    AccessTokenRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            required:
+            - identity
+            type: object
+            properties:
+              identity:
+                $ref: '#/components/schemas/IdentityId'
+              clientAssertion:
+                description: Generated using the certificate linked to the Delegated API Client. This feature is available only to customers that have been enabled with delegation functionality.
+                type: string
+              token:
+                description: A short-lived one-time token to be exchanged for an access token. This token is used for identity verification and authorisation purposes.
+                type: string
   schemas:
     SyntaxError:
       type: object
@@ -81,25 +199,6 @@ components:
                 - AT_LEAST
                 - AT_MOST
                 - ALL_OR_NONE
-    CredentialId:
-      required:
-      - type
-      - id
-      type: object
-      properties:
-        type:
-          maxLength: 50
-          pattern: ^[a-zA-Z0-9_-]+$
-          type: string
-          enum:
-          - ROOT
-          - USER
-          - API_CLIENT
-          description: The type of user.
-        id:
-          type: string
-          pattern: ^[0-9]+$
-          description: The identifier of the user.
     IdentityId:
       required:
       - type
@@ -123,124 +222,25 @@ components:
           type: string
         message:
           type: string
-  responses:
-    BadRequestError:
-      description: Bad Request Error - Your request is invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                maxLength: 255
-                type: string
-                description: When present helps to identify and fix the problem.
-              syntaxErrors:
-                $ref: '#/components/schemas/SyntaxError'
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    Error:
-      description: Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    AccessTokenResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              token:
-                type: string
-              identity:
-                description: The identity to which the logged-in user belongs to.
-                $ref: '#/components/schemas/IdentityId'
-              credentials:
-                description: The unique identifier for the logged-in user.
-                $ref: '#/components/schemas/CredentialId'
-              status:
-                type: string
-                description: "The token status, as follows:\n  - STANDARD: it is a standard token. \n  - STEPPED_UP: it is a stepped up token.\n"
-                enum:
-                - STANDARD
-                - STEPPED_UP
-    Locked:
-      description: Locked - Account is temporarily locked due to failed consecutive login attempts. Try again in 30 minutes.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    TooManyRequests:
-      description: Too many requests.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-        x-ratelimit-limit:
-          $ref: '#/components/headers/x-ratelimit-limit'
-        x-ratelimit-reset:
-          $ref: '#/components/headers/x-ratelimit-reset'
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    InternalServerError:
-      description: Internal Server Error - There is a problem with the server. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-  headers:
-    request-ref:
-      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
-      required: true
-      schema:
-        type: string
-    x-ratelimit-reset:
-      description: The number of seconds until the window is reset.
-      required: true
-      schema:
-        minimum: 0
-        type: integer
-        format: int32
-    x-ratelimit-limit:
-      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
-
-        The first number (20) is the limit that has been exceeded.
-
-        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
-
-        '
-      required: true
-      schema:
-        type: string
-  requestBodies:
-    AccessTokenRequest:
-      required: true
-      content:
-        application/json:
-          schema:
-            required:
-            - identity
-            type: object
-            properties:
-              identity:
-                $ref: '#/components/schemas/IdentityId'
-              clientAssertion:
-                description: Generated using the certificate linked to the Delegated API Client. This feature is available only to customers that have been enabled with delegation functionality.
-                type: string
-              token:
-                description: A short-lived one-time token to be exchanged for an access token. This token is used for identity verification and authorisation purposes.
-                type: string
+    CredentialId:
+      required:
+      - type
+      - id
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9_-]+$
+          type: string
+          enum:
+          - ROOT
+          - USER
+          - API_CLIENT
+          description: The type of user.
+        id:
+          type: string
+          pattern: ^[0-9]+$
+          description: The identifier of the user.
   securitySchemes:
     api-key:
       type: apiKey

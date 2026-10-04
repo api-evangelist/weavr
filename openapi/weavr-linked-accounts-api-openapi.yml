@@ -1939,368 +1939,162 @@ webhooks:
     servers:
     - url: '""'
 components:
-  responses:
-    ServiceUnavailable:
-      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    LinkedAccountRemoveConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - LINKED_ACCOUNT_ALREADY_REMOVED
-                - LINKED_ACCOUNT_HAS_PENDING_ACTIONS
-                - LINKED_ACCOUNT_REJECTED
-    NotFound:
-      description: Not found - The requested resource couldn't be found.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequestError:
-      description: Bad Request Error - Your request is invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                maxLength: 255
-                type: string
-                description: When present helps to identify and fix the problem.
-              syntaxErrors:
-                $ref: '#/components/schemas/SyntaxError'
-    LinkedAccountsGetResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              accounts:
-                description: The filtered managed accounts list.
-                type: array
-                items:
-                  $ref: '#/components/schemas/LinkedAccount'
-              count:
-                type: integer
-                description: The total number of records (excluding the paging limit).
-                format: int32
-              responseCount:
-                type: integer
-                description: The total number of records returned in this response (always capped at 100).
-                format: int32
-    InternalServerError:
-      description: Internal Server Error - There is a problem with the server. Please try again later.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    LinkedAccountUnblockConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - LINKED_ACCOUNT_INACTIVE
-                - LINKED_ACCOUNT_NOT_BLOCKED
-                - LINKED_ACCOUNT_REMOVED
-    TooManyRequests:
-      description: Too many requests.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-        x-ratelimit-limit:
-          $ref: '#/components/headers/x-ratelimit-limit'
-        x-ratelimit-reset:
-          $ref: '#/components/headers/x-ratelimit-reset'
-    LinkedAccountResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/LinkedAccount'
-    NoContent:
-      description: Success - No Content.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    Forbidden:
-      description: Forbidden - Access to the requested resource or action is forbidden.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - INSUFFICIENT_PERMISSIONS
-    Unauthorized:
-      description: Unauthorized - Your credentials or access token are invalid.
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-    LinkedAccountVerificationRunsGetResponse:
-      description: Success
-      headers:
-        request-ref:
-          $ref: '#/components/headers/request-ref'
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              verificationRuns:
-                type: array
-                items:
-                  $ref: '#/components/schemas/LinkedAccountVerificationRun'
-              count:
-                type: integer
-                description: The total number of records (excluding the paging limit).
-                format: int32
-              responseCount:
-                type: integer
-                description: The total number of records returned in this response (always capped at 100).
-                format: int32
-    LinkedAccountRegisterConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - PROFILE_NOT_FOUND
-                - PROFILE_INACTIVE
-                - MODEL_CONSTRAINTS_VIOLATED
-                - CURRENCY_NOT_SUPPORTED_BY_PROFILE
-                - COUNTRY_NOT_SUPPORTED_BY_PROFILE
-                - ACCOUNT_NUMBER_MISSING
-                - SORT_CODE_MISSING
-                - ACCOUNT_NUMBER_AND_IBAN_PROVIDED
-                - SORT_CODE_AND_IBAN_PROVIDED
-                - NO_ACCOUNT_DETAILS_PROVIDED
-                - INVALID_IDENTITY_TYPE
-                - IBAN_MISSING
-                - LINKED_ACCOUNT_ALREADY_ADDED
-                - MANAGED_ACCOUNT_MISSING
-                - THIS_IS_A_MANAGED_ACCOUNT
-                - ACCOUNT_DESCRIPTOR_MISSING
-    LinkedAccountBlockConflict:
-      description: Conflict
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - LINKED_ACCOUNT_INACTIVE
-                - LINKED_ACCOUNT_ALREADY_BLOCKED
-                - LINKED_ACCOUNT_REMOVED
-    InstrumentForbidden:
-      description: Forbidden - Access to the requested resource or action is forbidden.
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              errorCode:
-                type: string
-                enum:
-                - STEP_UP_REQUIRED
-                - ACCESS_TOKEN_REQUIRED
-                - INSUFFICIENT_PERMISSIONS
-    Error:
-      description: Error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-  parameters:
-    idempotency-ref:
-      name: idempotency-ref
-      in: header
-      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
-      required: false
-      schema:
-        type: string
-    friendlyName:
-      name: friendlyName
-      in: query
-      required: false
-      description: 'Filter by the managed account/card friendly name. Leave out to fetch all managed accounts/card.
-
-
-        The exact name must be provided, as wildcards are not supported.
-
-        '
-      schema:
-        minLength: 1
-        maxLength: 50
-        type: string
-    createdFrom:
-      name: createdFrom
-      in: query
-      required: false
-      description: Filter for managed accounts/cards created after `createdFrom` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all managed accounts/cards.
-      schema:
-        type: integer
-        format: int64
-    createdTo:
-      name: createdTo
-      in: query
-      required: false
-      description: Filter for managed accounts/cards created before `createdTo` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all managed accounts/cards.
-      schema:
-        type: integer
-        format: int64
-    offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.
+  headers:
+    x-ratelimit-reset:
+      description: The number of seconds until the window is reset.
+      required: true
       schema:
         minimum: 0
         type: integer
         format: int32
-    limit:
-      name: limit
-      in: query
-      required: false
-      description: The limit of the results for paging, starting at the offset. Limit is always capped at 100.
+    request-ref:
+      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
+      required: true
       schema:
-        maximum: 100
-        minimum: 1
-        type: integer
-        format: int32
-    verificationRunState:
-      name: state
-      in: query
-      required: false
-      schema:
-        type: array
-        uniqueItems: true
-        items:
-          $ref: '#/components/schemas/LinkedAccountVerificationRunState'
-    state:
-      name: state
-      in: query
-      required: false
-      schema:
-        type: array
-        uniqueItems: true
-        items:
-          $ref: '#/components/schemas/InstrumentState'
-    profileId:
-      name: profileId
-      in: query
-      required: false
-      description: Filter by the managed account/card profile. Leave out to fetch all managed accounts/card.
-      schema:
-        $ref: '#/components/schemas/ProfileId'
-    currency:
-      name: currency
-      in: query
-      required: false
-      description: 'Filter by the managed account/card currency.
+        type: string
+    x-ratelimit-limit:
+      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
 
+        The first number (20) is the limit that has been exceeded.
 
-        Currencies are expressed as an ISO 4217 code. Leave out to fetch all managed accounts/card.
+        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
 
         '
-      schema:
-        $ref: '#/components/schemas/Currency'
-    tag:
-      name: tag
-      in: query
-      required: false
-      description: Filter by the managed account/card tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all managed accounts/card.
-      schema:
-        type: string
-    call-ref:
-      name: call-ref
-      in: header
-      description: A call reference generated by the caller and unique to the caller to provide correlation between the caller and system with a maximum length of 255
-      required: false
-      style: simple
-      explode: false
-      schema:
-        type: string
-    signature:
-      name: signature
-      in: header
-      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `published-timestamp` using your API key.
       required: true
-      style: simple
-      explode: false
-      deprecated: true
-      schema:
-        type: string
-    published-timestamp:
-      name: published-timestamp
-      in: header
-      description: The timestamp, expressed in Epoch timestamp using millisecond precision, when this event was published.
-      required: true
-      style: simple
-      explode: false
-      schema:
-        type: integer
-        format: int64
-    signature-v2:
-      name: signature-v2
-      in: header
-      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `call-ref + payload + published-timestamp` using your API key.
-      required: true
-      style: simple
-      explode: false
-      schema:
-        type: string
-    call-ref_2:
-      description: A call reference generated by the caller and unique to the caller to provide correlation between the caller and system with a maximum length of 255
-      in: header
-      name: call-ref
-      required: false
       schema:
         type: string
   schemas:
-    LinkedAccountMicroDepositVerification:
+    Iban:
+      required:
+      - iban
+      type: object
+      description: Bank details
+      properties:
+        iban:
+          type: string
+          minLength: 15
+          maxLength: 34
+          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
+          description: International Bank Account Number, required for wire transfer.
+        bankIdentifierCode:
+          type: string
+          minLength: 8
+          maxLength: 11
+          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
+          description: BIC, for wire transfer over SEPA or RIX.
+    CurrencyAmount:
+      required:
+      - currency
+      - amount
+      type: object
+      properties:
+        currency:
+          $ref: '#/components/schemas/Currency'
+        amount:
+          type: integer
+          format: int64
+          description: 'The monetary amount, scaled to the lowest denomination of the currency.
+
+
+            Example, an amount of 1000 for a EUR currency is actually 1000 Euro cents or EUR 10.00.
+
+            '
+      description: The object representing a monetary amount in a particular currency.
+    LinkedAccountVerificationRun:
       type: object
       required:
-      - amount
+      - state
       properties:
-        amount:
-          $ref: '#/components/schemas/CurrencyAmount'
-        senderName:
+        id:
+          type: string
+          description: The unique identifier of the linked account verification
+        state:
+          description: The state of the linked account verification
+          $ref: '#/components/schemas/LinkedAccountVerificationRunState'
+        completedTimestamp:
+          type: integer
+          format: int64
+          description: The timestamp when the verification was completed, expressed in Epoch timestamp using millisecond precision.
+        verificationSteps:
+          type: array
+          items:
+            type: object
+            properties:
+              step:
+                $ref: '#/components/schemas/LinkedAccountVerificationStep'
+              details:
+                oneOf:
+                - $ref: '#/components/schemas/LinkedAccountVerificationTransferInstruction'
+                - $ref: '#/components/schemas/LinkedAccountMicroDepositVerification'
+              status:
+                $ref: '#/components/schemas/LinkedAccountVerificationStepStatus'
+              completedTimestamp:
+                type: integer
+                format: int64
+                description: The timestamp when the card will be renewed, expressed in Epoch timestamp using millisecond precision.
+        overriddenReason:
+          type: string
+          description: Optional field for users to provide a reason for overriding the verification steps
+    AccountType:
+      type: string
+      description: "An account can be of two types, Personal or Business:\n  - PERSONAL means that the account held at the external bank or PSP is registered under the ownership of a natural person or consumer identity;\n  - BUSINESS means that the account held at the external bank or PSP is registered under the ownership of a corporate entity.\n"
+      enum:
+      - BUSINESS
+      - PERSONAL
+    ProfileId:
+      type: string
+      description: 'The profile Id which a specific identity, instrument or transaction type is linked to.
+
+
+        Profiles contain configuration and determine behavioral aspects of the newly created transaction, for example, fees that may apply.
+
+
+        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s needs.
+
+
+        Profile Ids can be found in the Multi Portal, in the API Credentials page.
+
+        '
+      pattern: ^[0-9]+$
+    StringWrappedTypeId:
+      required:
+      - type
+      - id
+      type: object
+      properties:
+        type:
+          maxLength: 50
+          pattern: ^[a-zA-Z0-9_-]+$
+          type: string
+        id:
+          type: string
+          pattern: ^[0-9]+$
+    Tag:
+      type: string
+      description: The tag field is a custom field that can be used to search and filter.
+      maxLength: 50
+      pattern: ^[a-zA-Z0-9_-]+$
+    LinkedAccountProfileId:
+      type: string
+      description: 'The id of the Linked Account Profile which this instrument is linked to.
+
+
+        You can have one or more profiles linked to your application, and these can be used to drive different behaviours according to your product''s needs.
+
+
+        This field is necessary only if you have been provided with multiple Linked Account Profiles.
+
+
+        Profile Ids can be found in the Multi Portal, in the API Credentials page.
+
+        '
+      pattern: ^[0-9]+$
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
           type: string
     LinkedAccountVerificationTransferInstruction:
       type: object
@@ -2324,140 +2118,21 @@ components:
               - $ref: '#/components/schemas/Iban'
               - $ref: '#/components/schemas/AccountNumberAndSortCode'
               - $ref: '#/components/schemas/AccountDescriptor'
-    LinkedAccountProfileId:
-      type: string
-      description: 'The id of the Linked Account Profile which this instrument is linked to.
-
-
-        You can have one or more profiles linked to your application, and these can be used to drive different behaviours according to your product''s needs.
-
-
-        This field is necessary only if you have been provided with multiple Linked Account Profiles.
-
-
-        Profile Ids can be found in the Multi Portal, in the API Credentials page.
-
-        '
-      pattern: ^[0-9]+$
-    Currency:
-      type: string
-      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
-      maxLength: 3
-      minLength: 3
-      pattern: ^[A-Z]*$
-    Iban:
-      required:
-      - iban
-      type: object
-      description: Bank details
-      properties:
-        iban:
-          type: string
-          minLength: 15
-          maxLength: 34
-          pattern: ^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$
-          description: International Bank Account Number, required for wire transfer.
-        bankIdentifierCode:
-          type: string
-          minLength: 8
-          maxLength: 11
-          pattern: ^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$
-          description: BIC, for wire transfer over SEPA or RIX.
-    SyntaxError:
-      type: object
-      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
-      properties:
-        invalidFields:
-          type: array
-          items:
-            type: object
-            properties:
-              params:
-                type: array
-                items:
-                  type: string
-              fieldName:
-                type: string
-              error:
-                type: string
-                enum:
-                - REQUIRED
-                - HAS_TEXT
-                - REQUIRES
-                - SIZE
-                - RANGE
-                - IN
-                - NOT_IN
-                - REGEX
-                - EXACTLY
-                - AT_LEAST
-                - AT_MOST
-                - ALL_OR_NONE
-    Tag:
-      type: string
-      description: The tag field is a custom field that can be used to search and filter.
-      maxLength: 50
-      pattern: ^[a-zA-Z0-9_-]+$
-    CreateLinkedAccountRequest:
-      required:
-      - name
-      - accountReference
-      - country
-      - type
-      type: object
-      properties:
-        profileId:
-          $ref: '#/components/schemas/LinkedAccountProfileId'
-        tag:
-          $ref: '#/components/schemas/Tag'
-        name:
-          description: 'The full name or corporate name of the account holder as registered with the external bank or payment service provider. This is the name under which the account is officially held.
-
-            '
-          type: string
-          minLength: 1
-          maxLength: 100
-        type:
-          $ref: '#/components/schemas/AccountType'
-        accountReference:
-          description: The IBAN, or Account Number and Sort Code, or Account Descriptor of the account held at the external bank or payment service provider.
-          oneOf:
-          - $ref: '#/components/schemas/Iban'
-          - $ref: '#/components/schemas/AccountNumberAndSortCode'
-          - $ref: '#/components/schemas/AccountDescriptor'
-        country:
-          description: The country of the bank or institution at which the account is held.
-          type: string
-          maxLength: 2
-          minLength: 2
-          pattern: ^[A-Z]+$
-        friendlyName:
-          description: A user-friendly label assigned to the Linked Account to help end-users easily identify it within the application. This name can be updated at any time using the `PATCH` endpoint.
-          type: string
-          maxLength: 50
-        currency:
-          oneOf:
-          - $ref: '#/components/schemas/Currency'
-    StringWrappedTypeId:
-      required:
-      - type
-      - id
-      type: object
-      properties:
-        type:
-          maxLength: 50
-          pattern: ^[a-zA-Z0-9_-]+$
-          type: string
-        id:
-          type: string
-          pattern: ^[0-9]+$
-    LinkedAccountVerificationStep:
+    LinkedAccountVerificationRunState:
       type: string
       enum:
-      - TRANSFER_INSTRUCTION
-      - USER_DECLARATION_SCA_CHALLENGE
-      - INTERNAL_CHECKS
-      - MICRO_DEPOSIT
+      - PENDING
+      - VERIFIED
+      - REJECTED
+    LinkedAccountState:
+      type: string
+      description: "The state of the linked account:\n  - **PENDING_VERIFICATION**: The Linked Account is pending the completion of the required verification steps.\n  - **ACTIVE**: The Linked Account is verified and active, ready to be used for self-to-self wire transfers.\n  - **BLOCKED**: The Linked Account is temporarily blocked, preventing any use of this external account in self-to-self wire transfers. A Linked Account can be unblocked by calling the Multi API endpoint `POST /linked_accounts/{id}/unblock`.\n  - **REMOVED**: The Linked Account has been removed from the platform and can no longer be used for self-to-self wire transfers unless a new verification is completed in future.\n  - **REJECTED**: The Linked Account failed the verification process and cannot be used for self-to-self wire transfers unless a new verification is completed in future.\nA Linked Account can transition through these different overall states, starting at the `PENDING_VERIFICATION` state until all verification steps are followed through.\n"
+      enum:
+      - PENDING_VERIFICATION
+      - BLOCKED
+      - ACTIVE
+      - REJECTED
+      - REMOVED
     LinkedAccount:
       required:
       - id
@@ -2511,33 +2186,42 @@ components:
           format: int64
         owner:
           $ref: '#/components/schemas/StringWrappedTypeId'
-    CurrencyAmount:
-      required:
-      - currency
-      - amount
+    SyntaxError:
       type: object
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
       properties:
-        currency:
-          $ref: '#/components/schemas/Currency'
-        amount:
-          type: integer
-          format: int64
-          description: 'The monetary amount, scaled to the lowest denomination of the currency.
-
-
-            Example, an amount of 1000 for a EUR currency is actually 1000 Euro cents or EUR 10.00.
-
-            '
-      description: The object representing a monetary amount in a particular currency.
-    LinkedAccountState:
+        invalidFields:
+          type: array
+          items:
+            type: object
+            properties:
+              params:
+                type: array
+                items:
+                  type: string
+              fieldName:
+                type: string
+              error:
+                type: string
+                enum:
+                - REQUIRED
+                - HAS_TEXT
+                - REQUIRES
+                - SIZE
+                - RANGE
+                - IN
+                - NOT_IN
+                - REGEX
+                - EXACTLY
+                - AT_LEAST
+                - AT_MOST
+                - ALL_OR_NONE
+    Currency:
       type: string
-      description: "The state of the linked account:\n  - **PENDING_VERIFICATION**: The Linked Account is pending the completion of the required verification steps.\n  - **ACTIVE**: The Linked Account is verified and active, ready to be used for self-to-self wire transfers.\n  - **BLOCKED**: The Linked Account is temporarily blocked, preventing any use of this external account in self-to-self wire transfers. A Linked Account can be unblocked by calling the Multi API endpoint `POST /linked_accounts/{id}/unblock`.\n  - **REMOVED**: The Linked Account has been removed from the platform and can no longer be used for self-to-self wire transfers unless a new verification is completed in future.\n  - **REJECTED**: The Linked Account failed the verification process and cannot be used for self-to-self wire transfers unless a new verification is completed in future.\nA Linked Account can transition through these different overall states, starting at the `PENDING_VERIFICATION` state until all verification steps are followed through.\n"
-      enum:
-      - PENDING_VERIFICATION
-      - BLOCKED
-      - ACTIVE
-      - REJECTED
-      - REMOVED
+      description: 'The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.'
+      maxLength: 3
+      minLength: 3
+      pattern: ^[A-Z]*$
     AccountNumberAndSortCode:
       required:
       - accountNumber
@@ -2556,6 +2240,62 @@ components:
         secondaryReference:
           type: string
           description: Optional secondary reference for accounts without unique sort codes.
+    CreateLinkedAccountRequest:
+      required:
+      - name
+      - accountReference
+      - country
+      - type
+      type: object
+      properties:
+        profileId:
+          $ref: '#/components/schemas/LinkedAccountProfileId'
+        tag:
+          $ref: '#/components/schemas/Tag'
+        name:
+          description: 'The full name or corporate name of the account holder as registered with the external bank or payment service provider. This is the name under which the account is officially held.
+
+            '
+          type: string
+          minLength: 1
+          maxLength: 100
+        type:
+          $ref: '#/components/schemas/AccountType'
+        accountReference:
+          description: The IBAN, or Account Number and Sort Code, or Account Descriptor of the account held at the external bank or payment service provider.
+          oneOf:
+          - $ref: '#/components/schemas/Iban'
+          - $ref: '#/components/schemas/AccountNumberAndSortCode'
+          - $ref: '#/components/schemas/AccountDescriptor'
+        country:
+          description: The country of the bank or institution at which the account is held.
+          type: string
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]+$
+        friendlyName:
+          description: A user-friendly label assigned to the Linked Account to help end-users easily identify it within the application. This name can be updated at any time using the `PATCH` endpoint.
+          type: string
+          maxLength: 50
+        currency:
+          oneOf:
+          - $ref: '#/components/schemas/Currency'
+    LinkedAccountVerificationStep:
+      type: string
+      enum:
+      - TRANSFER_INSTRUCTION
+      - USER_DECLARATION_SCA_CHALLENGE
+      - INTERNAL_CHECKS
+      - MICRO_DEPOSIT
+    LinkedAccountMicroDepositVerification:
+      type: object
+      required:
+      - amount
+      properties:
+        amount:
+          $ref: '#/components/schemas/CurrencyAmount'
+        senderName:
+          type: string
     AccountDescriptor:
       required:
       - accountDescriptor
@@ -2572,47 +2312,6 @@ components:
       - PENDING_EXECUTION
       - REJECTED
       - COMPLETED
-    LinkedAccountVerificationRunState:
-      type: string
-      enum:
-      - PENDING
-      - VERIFIED
-      - REJECTED
-    LinkedAccountVerificationRun:
-      type: object
-      required:
-      - state
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the linked account verification
-        state:
-          description: The state of the linked account verification
-          $ref: '#/components/schemas/LinkedAccountVerificationRunState'
-        completedTimestamp:
-          type: integer
-          format: int64
-          description: The timestamp when the verification was completed, expressed in Epoch timestamp using millisecond precision.
-        verificationSteps:
-          type: array
-          items:
-            type: object
-            properties:
-              step:
-                $ref: '#/components/schemas/LinkedAccountVerificationStep'
-              details:
-                oneOf:
-                - $ref: '#/components/schemas/LinkedAccountVerificationTransferInstruction'
-                - $ref: '#/components/schemas/LinkedAccountMicroDepositVerification'
-              status:
-                $ref: '#/components/schemas/LinkedAccountVerificationStepStatus'
-              completedTimestamp:
-                type: integer
-                format: int64
-                description: The timestamp when the card will be renewed, expressed in Epoch timestamp using millisecond precision.
-        overriddenReason:
-          type: string
-          description: Optional field for users to provide a reason for overriding the verification steps
     InstrumentState:
       type: string
       description: "The state of the instrument indicating what it can and cannot do as follows:\n  - ACTIVE: The instrument is in an active state and can be used in transactions.\n  - BLOCKED: The instrument is temporarily blocked and cannot be used. Any funds on the instrument are also frozen. The `blockedReason` provides more information as to why it was blocked.\n  - DESTROYED: The instrument has been permanently destroyed. The `destroyReason` provides more information as to why it was destroyed.\n  - NOT_ENABLED: The instrument is not enabled for use, since the linked user has not completed all necessary verification steps.\n"
@@ -2621,39 +2320,39 @@ components:
       - BLOCKED
       - DESTROYED
       - NOT_ENABLED
-    ProfileId:
-      type: string
-      description: 'The profile Id which a specific identity, instrument or transaction type is linked to.
-
-
-        Profiles contain configuration and determine behavioral aspects of the newly created transaction, for example, fees that may apply.
-
-
-        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s needs.
-
-
-        Profile Ids can be found in the Multi Portal, in the API Credentials page.
-
-        '
-      pattern: ^[0-9]+$
-    AccountType:
-      type: string
-      description: "An account can be of two types, Personal or Business:\n  - PERSONAL means that the account held at the external bank or PSP is registered under the ownership of a natural person or consumer identity;\n  - BUSINESS means that the account held at the external bank or PSP is registered under the ownership of a corporate entity.\n"
-      enum:
-      - BUSINESS
-      - PERSONAL
-    Error:
+    VerifyStepsRequestConflict:
       type: object
       properties:
-        code:
-          type: string
-        message:
-          type: string
-    VerifyRequestByAccountIdVerificationState:
+        errorCode:
+          $ref: '#/components/schemas/VerifyStepsRequestConflictErrorCode'
+    LinkedAccountRunRequest:
+      type: object
+      properties:
+        state:
+          $ref: '#/components/schemas/LinkedAccountRunRequestState'
+    LinkedAccountRunRequestState:
       type: string
       enum:
-      - COMPLETED
+      - VERIFIED
       - REJECTED
+    FieldValidationErrors:
+      type: object
+      properties:
+        name:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidation'
+    VerifyRequestByAccountId:
+      type: object
+      properties:
+        steps:
+          type: array
+          items:
+            $ref: '#/components/schemas/VerifyRequestByAccountIdVerificationStep'
+        result:
+          $ref: '#/components/schemas/VerifyRequestByAccountIdVerificationState'
     FieldValidationType:
       type: string
       enum:
@@ -2669,25 +2368,6 @@ components:
       - AT_LEAST
       - AT_MOST
       - ALL_OR_NONE
-    LinkedAccountRunRequestState:
-      type: string
-      enum:
-      - VERIFIED
-      - REJECTED
-    VerifyStepsRequestConflictErrorCode:
-      type: string
-      enum:
-      - ALREADY_COMPLETED
-      - ALREADY_REJECTED
-    MessageValidation:
-      type: object
-      properties:
-        invalid:
-          type: boolean
-        fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldValidationErrors'
     DefaultError:
       type: object
       properties:
@@ -2697,11 +2377,27 @@ components:
           description: When present helps to identify and fix the problem.
           x-fieldValidation: size(_,255)
       description: A default error model in case of errors other than 400, 409 or 504.
-    LinkedAccountRunRequest:
+    VerifyRequestByAccountIdVerificationStep:
+      type: string
+      enum:
+      - INTERNAL_CHECKS
+      - TRANSFER_INSTRUCTION
+      - USER_DECLARATION_SCA_CHALLENGE
+      - MICRO_DEPOSIT
+    MessageValidation:
       type: object
       properties:
-        state:
-          $ref: '#/components/schemas/LinkedAccountRunRequestState'
+        invalid:
+          type: boolean
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValidationErrors'
+    VerifyRequestByAccountIdVerificationState:
+      type: string
+      enum:
+      - COMPLETED
+      - REJECTED
     ClientInvalidRequest:
       type: object
       properties:
@@ -2714,27 +2410,6 @@ components:
           allOf:
           - $ref: '#/components/schemas/MessageValidation'
           - description: Description of fields which were invalid.
-    FieldValidationErrors:
-      type: object
-      properties:
-        name:
-          type: string
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldValidation'
-    VerifyStepsRequestConflict:
-      type: object
-      properties:
-        errorCode:
-          $ref: '#/components/schemas/VerifyStepsRequestConflictErrorCode'
-    VerifyRequestByAccountIdVerificationStep:
-      type: string
-      enum:
-      - INTERNAL_CHECKS
-      - TRANSFER_INSTRUCTION
-      - USER_DECLARATION_SCA_CHALLENGE
-      - MICRO_DEPOSIT
     FieldValidation:
       type: object
       properties:
@@ -2744,15 +2419,20 @@ components:
           type: array
           items:
             type: string
-    VerifyRequestByAccountId:
-      type: object
-      properties:
-        steps:
-          type: array
-          items:
-            $ref: '#/components/schemas/VerifyRequestByAccountIdVerificationStep'
-        result:
-          $ref: '#/components/schemas/VerifyRequestByAccountIdVerificationState'
+    VerifyStepsRequestConflictErrorCode:
+      type: string
+      enum:
+      - ALREADY_COMPLETED
+      - ALREADY_REJECTED
+    LinkedAccountEventType:
+      type: string
+      enum:
+      - PENDING_VERIFICATION
+      - VERIFIED
+      - BLOCKED
+      - UNBLOCKED
+      - REMOVED
+      - REJECTED
     LinkedAccountEvent:
       required:
       - linkedAccount
@@ -2769,16 +2449,366 @@ components:
         eventType:
           description: "The type of event that occurred related to the linked account. Possible values are:\n  - **PENDING_VERIFICATION**: The linked account is pending verification.\n  - **VERIFIED**: The overall verification run was successfully completed. The linked account is now verified.\n  - **BLOCKED**: The linked account has been blocked.\n  - **UNBLOCKED**: The linked account has been unblocked.\n  - **REMOVED**: The linked account has been removed.\n  - **REJECTED**: The linked account was rejected.\n"
           $ref: '#/components/schemas/LinkedAccountEventType'
-    LinkedAccountEventType:
-      type: string
-      enum:
-      - PENDING_VERIFICATION
-      - VERIFIED
-      - BLOCKED
-      - UNBLOCKED
-      - REMOVED
-      - REJECTED
+  parameters:
+    profileId:
+      name: profileId
+      in: query
+      required: false
+      description: Filter by the managed account/card profile. Leave out to fetch all managed accounts/card.
+      schema:
+        $ref: '#/components/schemas/ProfileId'
+    idempotency-ref:
+      name: idempotency-ref
+      in: header
+      description: A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.
+      required: false
+      schema:
+        type: string
+    createdTo:
+      name: createdTo
+      in: query
+      required: false
+      description: Filter for managed accounts/cards created before `createdTo` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all managed accounts/cards.
+      schema:
+        type: integer
+        format: int64
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: The limit of the results for paging, starting at the offset. Limit is always capped at 100.
+      schema:
+        maximum: 100
+        minimum: 1
+        type: integer
+        format: int32
+    friendlyName:
+      name: friendlyName
+      in: query
+      required: false
+      description: 'Filter by the managed account/card friendly name. Leave out to fetch all managed accounts/card.
+
+
+        The exact name must be provided, as wildcards are not supported.
+
+        '
+      schema:
+        minLength: 1
+        maxLength: 50
+        type: string
+    verificationRunState:
+      name: state
+      in: query
+      required: false
+      schema:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/components/schemas/LinkedAccountVerificationRunState'
+    tag:
+      name: tag
+      in: query
+      required: false
+      description: Filter by the managed account/card tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all managed accounts/card.
+      schema:
+        type: string
+    state:
+      name: state
+      in: query
+      required: false
+      schema:
+        type: array
+        uniqueItems: true
+        items:
+          $ref: '#/components/schemas/InstrumentState'
+    currency:
+      name: currency
+      in: query
+      required: false
+      description: 'Filter by the managed account/card currency.
+
+
+        Currencies are expressed as an ISO 4217 code. Leave out to fetch all managed accounts/card.
+
+        '
+      schema:
+        $ref: '#/components/schemas/Currency'
+    createdFrom:
+      name: createdFrom
+      in: query
+      required: false
+      description: Filter for managed accounts/cards created after `createdFrom` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all managed accounts/cards.
+      schema:
+        type: integer
+        format: int64
+    offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.
+      schema:
+        minimum: 0
+        type: integer
+        format: int32
+    call-ref:
+      name: call-ref
+      in: header
+      description: A call reference generated by the caller and unique to the caller to provide correlation between the caller and system with a maximum length of 255
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+    published-timestamp:
+      name: published-timestamp
+      in: header
+      description: The timestamp, expressed in Epoch timestamp using millisecond precision, when this event was published.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        format: int64
+    call-ref_2:
+      description: A call reference generated by the caller and unique to the caller to provide correlation between the caller and system with a maximum length of 255
+      in: header
+      name: call-ref
+      required: false
+      schema:
+        type: string
+    signature-v2:
+      name: signature-v2
+      in: header
+      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `call-ref + payload + published-timestamp` using your API key.
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    signature:
+      name: signature
+      in: header
+      description: The signature to verify the authenticity of this request.  This is the base64 hash (HmacSHA256) of the `published-timestamp` using your API key.
+      required: true
+      style: simple
+      explode: false
+      deprecated: true
+      schema:
+        type: string
+  responses:
+    LinkedAccountRemoveConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - LINKED_ACCOUNT_ALREADY_REMOVED
+                - LINKED_ACCOUNT_HAS_PENDING_ACTIONS
+                - LINKED_ACCOUNT_REJECTED
+    LinkedAccountResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LinkedAccount'
+    LinkedAccountsGetResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              accounts:
+                description: The filtered managed accounts list.
+                type: array
+                items:
+                  $ref: '#/components/schemas/LinkedAccount'
+              count:
+                type: integer
+                description: The total number of records (excluding the paging limit).
+                format: int32
+              responseCount:
+                type: integer
+                description: The total number of records returned in this response (always capped at 100).
+                format: int32
+    NotFound:
+      description: Not found - The requested resource couldn't be found.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InstrumentForbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - STEP_UP_REQUIRED
+                - ACCESS_TOKEN_REQUIRED
+                - INSUFFICIENT_PERMISSIONS
+    LinkedAccountBlockConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - LINKED_ACCOUNT_INACTIVE
+                - LINKED_ACCOUNT_ALREADY_BLOCKED
+                - LINKED_ACCOUNT_REMOVED
+    InternalServerError:
+      description: Internal Server Error - There is a problem with the server. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    LinkedAccountVerificationRunsGetResponse:
+      description: Success
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              verificationRuns:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LinkedAccountVerificationRun'
+              count:
+                type: integer
+                description: The total number of records (excluding the paging limit).
+                format: int32
+              responseCount:
+                type: integer
+                description: The total number of records returned in this response (always capped at 100).
+                format: int32
+    NoContent:
+      description: Success - No Content.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Unauthorized:
+      description: Unauthorized - Your credentials or access token are invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden - Access to the requested resource or action is forbidden.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - INSUFFICIENT_PERMISSIONS
+    TooManyRequests:
+      description: Too many requests.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+        x-ratelimit-limit:
+          $ref: '#/components/headers/x-ratelimit-limit'
+        x-ratelimit-reset:
+          $ref: '#/components/headers/x-ratelimit-reset'
+    ServiceUnavailable:
+      description: Service Unavailable - The requested service is temporarily unavailable. Please try again later.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+    LinkedAccountRegisterConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - PROFILE_NOT_FOUND
+                - PROFILE_INACTIVE
+                - MODEL_CONSTRAINTS_VIOLATED
+                - CURRENCY_NOT_SUPPORTED_BY_PROFILE
+                - COUNTRY_NOT_SUPPORTED_BY_PROFILE
+                - ACCOUNT_NUMBER_MISSING
+                - SORT_CODE_MISSING
+                - ACCOUNT_NUMBER_AND_IBAN_PROVIDED
+                - SORT_CODE_AND_IBAN_PROVIDED
+                - NO_ACCOUNT_DETAILS_PROVIDED
+                - INVALID_IDENTITY_TYPE
+                - IBAN_MISSING
+                - LINKED_ACCOUNT_ALREADY_ADDED
+                - MANAGED_ACCOUNT_MISSING
+                - THIS_IS_A_MANAGED_ACCOUNT
+                - ACCOUNT_DESCRIPTOR_MISSING
+    BadRequestError:
+      description: Bad Request Error - Your request is invalid.
+      headers:
+        request-ref:
+          $ref: '#/components/headers/request-ref'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                maxLength: 255
+                type: string
+                description: When present helps to identify and fix the problem.
+              syntaxErrors:
+                $ref: '#/components/schemas/SyntaxError'
+    LinkedAccountUnblockConflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errorCode:
+                type: string
+                enum:
+                - LINKED_ACCOUNT_INACTIVE
+                - LINKED_ACCOUNT_NOT_BLOCKED
+                - LINKED_ACCOUNT_REMOVED
   requestBodies:
+    LinkedAccountCreationRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CreateLinkedAccountRequest'
     LinkedAccountMetadataUpdateRequest:
       required: true
       content:
@@ -2793,36 +2823,6 @@ components:
                 minLength: 1
                 type: string
                 description: Updates the friendly name of the linked account. Leave blank if no change is needed.
-    LinkedAccountCreationRequest:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CreateLinkedAccountRequest'
-  headers:
-    request-ref:
-      description: A request identifier. Providing this reference when contacting our support team will help us investigate your query.
-      required: true
-      schema:
-        type: string
-    x-ratelimit-reset:
-      description: The number of seconds until the window is reset.
-      required: true
-      schema:
-        minimum: 0
-        type: integer
-        format: int32
-    x-ratelimit-limit:
-      description: 'Example: `20, 10;w=60, 20;w=3600, 200;w=86400`
-
-        The first number (20) is the limit that has been exceeded.
-
-        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
-
-        '
-      required: true
-      schema:
-        type: string
   securitySchemes:
     api-key:
       type: apiKey
