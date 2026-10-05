@@ -1,0 +1,12 @@
+{
+ "url": "https://api.weavr.io/_bundle/products/multi/openapi.json?download",
+ "requested_url": "https://api.weavr.io/_bundle/products/multi/openapi.json?download",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 874958,
+ "sha256": "1248772552a3682b29ce116e1cc443cb707a441b2e4336384f6b6112d36e4c68",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 0.945), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
