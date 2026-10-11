@@ -1,0 +1,16 @@
+generated: '2026-10-12'
+method: none
+source:
+- https://zapier.com/apps/weavr/integrations
+- https://n8n.io/integrations/weavr/
+- https://composio.dev/toolkits/weavr
+- https://monid.ai/tools/weavr
+checked:
+- https://composio.dev/toolkits/weavr
+- https://monid.ai/tools/weavr
+- https://n8n.io/integrations/weavr/
+- https://zapier.com/apps/weavr/integrations
+summary: null
+marketplace_apps: []
+edges: []
+templates: []
