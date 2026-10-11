@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/weavr/main/json-schema/weavr-deposit-request-by-account-id-schema.json",
+  "title": "DepositRequestByAccountId",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/weavr-accounts-api-openapi.yml#/components/schemas/DepositRequestByAccountId",
+  "required": [
+    "depositAmount"
+  ],
+  "type": "object",
+  "properties": {
+    "depositAmount": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CurrencyAmount"
+        },
+        {
+          "description": "The amount of the incoming wire transfer",
+          "x-fieldValidation": "required"
+        }
+      ]
+    },
+    "senderName": {
+      "type": "string",
+      "description": "The name of the person or business sending the incoming wire transfer"
+    },
+    "reference": {
+      "type": "string",
+      "description": "The reference is the transaction description"
+    },
+    "receiverName": {
+      "type": "string",
+      "description": "The name of the recipient of the incoming wire transfer"
+    },
+    "txId": {
+      "type": "integer",
+      "description": "Id used for the transaction if provided, otherwise one will be generated",
+      "format": "int64"
+    },
+    "senderIban": {
+      "maxLength": 50,
+      "pattern": "^[a-zA-Z0-9_-]+$",
+      "type": "string",
+      "x-fieldValidation": "size(_,50) regex(^[a-zA-Z0-9_-]+$)"
+    },
+    "sepa": {
+      "$ref": "#/$defs/IBANDetails"
+    },
+    "fasterPayments": {
+      "$ref": "#/$defs/FasterPaymentsBankDetails"
+    },
+    "accountDescriptor": {
+      "$ref": "#/$defs/AccountDescriptorDetails"
+    },
+    "paymentNetwork": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/TransferType"
+        },
+        {
+          "description": "Optional field which indicates the payment network to use. If not provided, a default payment network will be chosen based on the currency."
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "AccountDescriptorDetails": {
+      "required": [
+        "accountDescriptor"
+      ],
+      "type": "object",
+      "properties": {
+        "accountDescriptor": {
+          "maxLength": 50,
+          "type": "string",
+          "description": "An identifier of an account that has neither an IBAN nor Faster Payments details.",
+          "x-fieldValidation": "required size(_,50)"
+        }
+      }
+    },
+    "CurrencyAmount": {
+      "required": [
+        "currency"
+      ],
+      "type": "object",
+      "properties": {
+        "currency": {
+          "maxLength": 3,
+          "minLength": 3,
+          "pattern": "^[A-Z]*$",
+          "type": "string",
+          "description": "The currency ISO-4217 code, i.e. a three letter uppercase code, such as GBP, EUR, USD.",
+          "x-fieldValidation": "required size(3,3) regex([A-Z]*)"
+        },
+        "amount": {
+          "type": "integer",
+          "description": "The monetary amount, scaled to the lowest denomination of the currency. For example, an amount of 1000 for a EUR currency is actually 1000 Euro cents, i.e. EUR 10.00.",
+          "format": "int64"
+        }
+      },
+      "description": "A message representing a monetary amount in a particular currency."
+    },
+    "FasterPaymentsBankDetails": {
+      "required": [
+        "accountNumber",
+        "sortCode"
+      ],
+      "type": "object",
+      "properties": {
+        "accountNumber": {
+          "maxLength": 8,
+          "minLength": 8,
+          "pattern": "^[0-9]{8}$",
+          "type": "string",
+          "description": "Account number, required for wire transfer over Faster Payments.",
+          "x-fieldValidation": "required size(8,8) regex(^[0-9]{8}$)"
+        },
+        "sortCode": {
+          "maxLength": 6,
+          "minLength": 6,
+          "pattern": "^[0-9]{6}$",
+          "type": "string",
+          "description": "Sort code, required for wire transfer over Faster Payments.",
+          "x-fieldValidation": "required size(6,6) regex(^[0-9]{6}$)"
+        }
+      }
+    },
+    "IBANDetails": {
+      "required": [
+        "iban"
+      ],
+      "type": "object",
+      "properties": {
+        "iban": {
+          "maxLength": 34,
+          "minLength": 15,
+          "pattern": "^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$",
+          "type": "string",
+          "description": "International Bank Account Number, required for wire transfer over SEPA or RIX",
+          "x-fieldValidation": "required size(15,34) regex(^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$)"
+        },
+        "bankIdentifierCode": {
+          "maxLength": 11,
+          "minLength": 8,
+          "pattern": "^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$",
+          "type": "string",
+          "description": "BIC, for wire transfer over SEPA or RIX",
+          "x-fieldValidation": "size(8,11) regex(^[a-zA-Z0-9]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}[a-zA-Z0-9]{0,3}$)"
+        }
+      }
+    },
+    "TransferType": {
+      "type": "string",
+      "enum": [
+        "SEPA",
+        "FASTER_PAYMENTS",
+        "SWIFT",
+        "BACS",
+        "CHAPS",
+        "RIX"
+      ]
+    }
+  }
+}

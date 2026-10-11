@@ -1,11 +1,14 @@
-generated: '2026-07-21'
-method: derived
-status: candidate
-source: openapi/weavr-multi-openapi-original.yml
-notes: No official hosted/remote Weavr MCP server was found. Weavr does publish an official Agent Skills
-  pack (github.com/weavr-io/skills, see skills/) that gives agents grounded API knowledge. The tool list
-  below is a DERIVED candidate, one tool per marquee operationId (verified against the Multi OpenAPI),
-  for a future MCP server built over the REST API.
+generated: '2026-10-12'
+method: probed
+status: live
+source: https://api.weavr.io/mcp (initialize + tools/list, HTTP 200)
+notes: Weavr serves a live, anonymous remote MCP server at https://api.weavr.io/mcp (serverInfo "Docs MCP server",
+  version 2026-10-11), announced by its A2A agent card at https://api.weavr.io/.well-known/agent-card.json. It exposes
+  documentation tools (describe-tools, execute) for API discovery and search, not REST operations. tools/list verbatim
+  in mcp/weavr-mcp-tools-list.json. The candidate_tools below remain a DERIVED list for a future REST-backed server.
+  No official hosted/remote Weavr MCP server was found. Weavr does publish an official Agent Skills pack (github.com/weavr-io/skills,
+  see skills/) that gives agents grounded API knowledge. The tool list below is a DERIVED candidate, one tool per
+  marquee operationId (verified against the Multi OpenAPI), for a future MCP server built over the REST API.
 server:
   name: weavr
   transport: http
@@ -45,8 +48,14 @@ tools:
   description: Create a batch of trusted beneficiaries.
   source_operation: openapi/weavr-multi-openapi-original.yml#beneficiaryBatchCreate
 deployment:
-  mode: none
-  verified: derived
-  tools: 11
-  checked: '2026-08-12'
-  source: catalog MCP census
+  mode: remote
+  endpoint: https://api.weavr.io/mcp
+  auth: none
+  verified: probed
+  transport: streamable-http
+  checked: '2026-10-12'
+  server_name: Docs MCP server
+  tools:
+  - execute
+  - describe-tools
+  scope: documentation tools only

@@ -2,6 +2,7 @@
 generated: '2026-09-20'
 method: searched
 source: https://www.weavr.io/pricing/
+name: Weavr API Plans
 sources:
 - https://www.weavr.io/pricing/
 provenance:

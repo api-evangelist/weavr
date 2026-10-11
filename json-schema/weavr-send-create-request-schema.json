@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/weavr/main/json-schema/weavr-send-create-request-schema.json",
+  "title": "SendCreateRequest",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/weavr-operations-api-openapi.yml#/components/schemas/SendCreateRequest",
+  "required": [
+    "profileId",
+    "source",
+    "destination",
+    "destinationAmount"
+  ],
+  "type": "object",
+  "properties": {
+    "profileId": {
+      "$ref": "#/$defs/ProfileId"
+    },
+    "tag": {
+      "$ref": "#/$defs/Tag"
+    },
+    "source": {
+      "$ref": "#/$defs/InstrumentId"
+    },
+    "destination": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/InstrumentId"
+        },
+        {
+          "$ref": "#/$defs/BeneficiaryId"
+        }
+      ]
+    },
+    "destinationAmount": {
+      "$ref": "#/$defs/CurrencyAmount"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 255,
+      "pattern": "^[a-zA-Z0-9\\/\\-?:().$_,'+\\s#=!\"%&*<>;\\{@\\r\\n]*$",
+      "description": "The description details that are passed to the beneficiary."
+    },
+    "scheduledTimestamp": {
+      "$ref": "#/$defs/ScheduledTimestamp"
+    }
+  },
+  "$defs": {
+    "BeneficiaryId": {
+      "required": [
+        "beneficiaryId"
+      ],
+      "type": "object",
+      "properties": {
+        "beneficiaryId": {
+          "$ref": "#/$defs/Id"
+        }
+      }
+    },
+    "Currency": {
+      "type": "string",
+      "description": "The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.",
+      "maxLength": 3,
+      "minLength": 3,
+      "pattern": "^[A-Z]*$"
+    },
+    "CurrencyAmount": {
+      "required": [
+        "currency",
+        "amount"
+      ],
+      "type": "object",
+      "properties": {
+        "currency": {
+          "$ref": "#/$defs/Currency"
+        },
+        "amount": {
+          "type": "integer",
+          "format": "int64",
+          "description": "The monetary amount, scaled to the lowest denomination of the currency.\n\nExample, an amount of 1000 for a EUR currency is actually 1000 Euro cents or EUR 10.00.\n"
+        }
+      },
+      "description": "The object representing a monetary amount in a particular currency."
+    },
+    "Id": {
+      "type": "string",
+      "pattern": "^[0-9]+$"
+    },
+    "InstrumentId": {
+      "required": [
+        "id",
+        "type"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "type": {
+          "$ref": "#/$defs/InstrumentType"
+        }
+      }
+    },
+    "InstrumentType": {
+      "type": "string",
+      "enum": [
+        "managed_cards",
+        "managed_accounts"
+      ]
+    },
+    "ProfileId": {
+      "type": "string",
+      "description": "The profile Id which a specific identity, instrument or transaction type is linked to.\n\nProfiles contain configuration and determine behavioral aspects of the newly created transaction, for example, fees that may apply.\n\nYou can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product's needs.\n\nProfile Ids can be found in the Multi Portal, in the API Credentials page.\n",
+      "pattern": "^[0-9]+$"
+    },
+    "ScheduledTimestamp": {
+      "pattern": "^[0-9]+$",
+      "type": "string",
+      "description": "The epoch timestamp at which the transaction is scheduled to be executed."
+    },
+    "Tag": {
+      "type": "string",
+      "description": "The tag field is a custom field that can be used to search and filter.",
+      "maxLength": 50,
+      "pattern": "^[a-zA-Z0-9_-]+$"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+generated: '2026-10-12'
+method: derived
+source: mcp/weavr-mcp-tools-list.json + openapi/_original/weavr-multi-openapi-original.yml
+crosswalk: []
+mcp_only:
+- tool: execute
+  reason: Documentation tool on the Docs MCP server; reads API docs/specs and does
+    not invoke a Weavr REST operation.
+- tool: describe-tools
+  reason: Documentation tool on the Docs MCP server; reads API docs/specs and does
+    not invoke a Weavr REST operation.
+surfaces:
+  openapi: openapi/_original/weavr-multi-openapi-original.yml
+  mcp: https://api.weavr.io/mcp
+  mcp_gated: false
+coverage:
+  tools: 2
+  bound: 0
+  mcp_only: 2

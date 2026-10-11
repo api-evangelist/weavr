@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/weavr/main/json-schema/weavr-mobile-schema.json",
+  "title": "Mobile",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/weavr-operations-api-openapi.yml#/components/schemas/Mobile",
+  "required": [
+    "number",
+    "countryCode"
+  ],
+  "type": "object",
+  "properties": {
+    "countryCode": {
+      "maxLength": 4,
+      "minLength": 1,
+      "type": "string",
+      "pattern": "^\\+[0-9]+$",
+      "description": "The country code of the user mobile number (e.g. +44)."
+    },
+    "number": {
+      "pattern": "^[0-9]{1,12}$",
+      "type": "string",
+      "description": "The mobile number of the user - excluding country code."
+    }
+  }
+}

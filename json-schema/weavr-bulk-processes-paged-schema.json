@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/weavr/main/json-schema/weavr-bulk-processes-paged-schema.json",
+  "title": "BulkProcessesPaged",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/weavr-manage-api-openapi.yml#/components/schemas/BulkProcessesPaged",
+  "properties": {
+    "count": {
+      "description": "Total number of records (excluding limit)",
+      "format": "int32",
+      "type": "integer"
+    },
+    "bulkProcesses": {
+      "items": {
+        "$ref": "#/$defs/BulkProcess"
+      },
+      "type": "array"
+    },
+    "responseCount": {
+      "description": "Total number of records returned in this response",
+      "format": "int32",
+      "type": "integer"
+    }
+  },
+  "type": "object",
+  "$defs": {
+    "BulkProcess": {
+      "type": "object",
+      "properties": {
+        "bulkId": {
+          "description": "The bulk id of the bulk process",
+          "type": "string"
+        },
+        "status": {
+          "description": "\"SUBMITTED\": the data for the bulk process operations has been persisted and bulk process is ready for execution. A bulk process in this status can be executed or submitted. This is the initial state for a bulk process\n\n\"RUNNING\" :  the bulk process is currently being executed by the system\n\n\"COMPLETED\"  : the execution of the bulk process is complete and all bulk operations of the bulk process were executed successfully. This is a final state for the bulk process \n\n\"PARTIALLY_COMPLETED\"  the execution of the bulk process is complete and some of the bulk operations of the bulk process failed. This is a final state for the bulk process\n\n\"FAILED\" : none of the operations of the bulk process have executed. This is a final state for the bulk process\n\n\"PAUSED\"  : the execution of bulk process has been paused through the Pause bulk process operation  Execution can be resumed through Resume bulk operation\n\n\"CANCELLED\" : the execution of bulk process has been cancelled through Cancel bulk operation. This is a final state for the bulk process\n",
+          "type": "string"
+        },
+        "submittedItemsCount": {
+          "description": "The number of bulk operations in the bulk process",
+          "type": "integer"
+        },
+        "executionStart": {
+          "description": "Timestamp of when the execution of the Bulk Process started",
+          "type": "integer",
+          "format": "int64"
+        },
+        "executionFinish": {
+          "description": "Timestamp of when the execution of the Bulk Process finished.",
+          "type": "integer",
+          "format": "int64"
+        },
+        "operation": {
+          "description": "The underlying operations contained within the Bulk; shown as the endpoint for the equivalent single operation.",
+          "type": "string"
+        },
+        "mode": {
+          "description": "The mode that was instructed when execution was started",
+          "$ref": "#/$defs/BulkProcessMode"
+        }
+      }
+    },
+    "BulkProcessMode": {
+      "description": "ON_FAILURE_STOP : the execution of the bulk process stops after the first bulk operation that fails (operation returns a 4xx or 5xx response code).\nON_FAILURE_CONTINUE: the execution of the bulk process resumes as normal even when any of the bulk operations fail.\n",
+      "type": "string",
+      "enum": [
+        "ON_FAILURE_STOP",
+        "ON_FAILURE_CONTINUE"
+      ]
+    }
+  }
+}

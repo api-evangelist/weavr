@@ -1,0 +1,176 @@
+generated: '2026-10-12'
+method: derived
+generator: derive-webhooks.py
+source:
+- openapi/weavr-authentication-factors-api-openapi.yml
+- openapi/weavr-authentication-factors-webhooks-api-openapi.yml
+- openapi/weavr-authorised-users-api-openapi.yml
+- openapi/weavr-bulk-operations-api-openapi.yml
+- openapi/weavr-buyers-webhooks-api-openapi.yml
+- openapi/weavr-consumers-api-openapi.yml
+- openapi/weavr-corporates-api-openapi.yml
+- openapi/weavr-correspondent-bank-transfers-api-openapi.yml
+- openapi/weavr-fees-api-openapi.yml
+- openapi/weavr-ibans-api-openapi.yml
+- openapi/weavr-incoming-wire-transfers-api-openapi.yml
+- openapi/weavr-linked-accounts-api-openapi.yml
+- openapi/weavr-linked-accounts-webhooks-api-openapi.yml
+- openapi/weavr-login-api-openapi.yml
+- openapi/weavr-managed-accounts-api-openapi.yml
+- openapi/weavr-managed-cards-api-openapi.yml
+- openapi/weavr-manual-transactions-api-openapi.yml
+- openapi/weavr-outgoing-wire-transfers-api-openapi.yml
+- openapi/weavr-payment-runs-webhooks-api-openapi.yml
+- openapi/weavr-sends-api-openapi.yml
+- openapi/weavr-spend-controls-api-openapi.yml
+- openapi/weavr-step-up-api-openapi.yml
+- openapi/weavr-stepup-webhooks-api-openapi.yml
+- openapi/weavr-tokens-webhooks-api-openapi.yml
+- openapi/weavr-transactions-webhooks-api-openapi.yml
+- openapi/weavr-transfers-api-openapi.yml
+- openapi/weavr-trusted-payees-api-openapi.yml
+description: 'Event surface derived from the provider''s own OpenAPI: webhooks. No AsyncAPI document is published by the provider; this catalog
+  lists the events the contract names.'
+management_operations: []
+events:
+- event: /authentication_factors/watch
+  description: Enrolment status
+  declared_in: webhooks
+- event: authenticationFactorsWatch
+  description: Enrolment status
+  declared_in: webhooks
+- event: /auth/users/user_deactivated/watch
+  description: Auth user deactivation
+  declared_in: webhooks
+- event: /bulk_process_end/watch
+  description: Bulk Process End
+  declared_in: webhooks
+- event: buyerKYBWatch
+  description: Buyer KYB status update
+  declared_in: webhooks
+- event: buyerBeneficiaryStatusWatch
+  description: Buyer Beneficiary status update
+  declared_in: webhooks
+- event: buyerWatch
+  description: Buyer update
+  declared_in: webhooks
+- event: buyerDeactivatedWatch
+  description: Buyer deactivation
+  declared_in: webhooks
+- event: /consumers/kyc/watch
+  description: Consumer KYC status update
+  declared_in: webhooks
+- event: /consumers/consumer_activated/watch
+  description: Consumer activation
+  declared_in: webhooks
+- event: /consumers/consumer_deactivated/watch
+  description: Consumer deactivation
+  declared_in: webhooks
+- event: /corporates/kyb/watch
+  description: Corporate KYB status update
+  declared_in: webhooks
+- event: /corporates/kyb/beneficiaries/watch
+  description: Corporate beneficiary status update
+  declared_in: webhooks
+- event: /corporates/corporate_activated/watch
+  description: Corporate activation
+  declared_in: webhooks
+- event: /corporates/corporate_deactivated/watch
+  description: Corporate deactivation
+  declared_in: webhooks
+- event: /correspondent_bank_transfers/watch
+  description: Correspondent Bank Transfer transaction
+  declared_in: webhooks
+- event: /fees/watch
+  description: FeeWatch
+  declared_in: webhooks
+- event: /ibans/watch
+  description: Iban update
+  declared_in: webhooks
+- event: /bank_transfers_in/authorisation_request
+  description: Approve or reject incoming wire transfers
+  declared_in: webhooks
+- event: /linked_accounts/watch
+  description: Linked Account Update
+  declared_in: webhooks
+- event: linkedAccountWatch
+  description: Linked Account Update
+  declared_in: webhooks
+- event: linkedAccountExpiringSoonWatch
+  description: Linked Account Expiring Soon
+  declared_in: webhooks
+- event: /login/watch
+  description: Login attempt
+  declared_in: webhooks
+- event: /managed_accounts/watch
+  description: Account update
+  declared_in: webhooks
+- event: /managed_accounts/deposits/watch
+  description: Account incoming wire transfer
+  declared_in: webhooks
+- event: /managed_accounts/low_balance/watch
+  description: Account low balance alert
+  declared_in: webhooks
+- event: /managed_cards/state_change/watch
+  description: Card state change
+  declared_in: webhooks
+- event: /managed_cards/authorisations/watch
+  description: Card authorisation
+  declared_in: webhooks
+- event: /managed_cards/adjustments/watch
+  description: Card adjustment
+  declared_in: webhooks
+- event: /managed_cards/settlements/watch
+  description: Card settlement
+  declared_in: webhooks
+- event: /managed_cards/expiries/watch
+  description: Card expiry and renewal
+  declared_in: webhooks
+- event: /managed_cards/physical_cards_upgrade/watch
+  description: Card upgrade to physical details
+  declared_in: webhooks
+- event: /managed_cards/replacement/watch
+  description: Card replacement
+  declared_in: webhooks
+- event: /managed_cards/payments/watch
+  description: Card transaction lifecycle update
+  declared_in: webhooks
+- event: /manual_transactions/watch
+  description: Manual transaction
+  declared_in: webhooks
+- event: /outgoing_wire_transfers/watch
+  description: Outgoing Wire Transfer transaction
+  declared_in: webhooks
+- event: paymentRunWatch
+  description: Payment Run Update
+  declared_in: webhooks
+- event: paymentRunPaymentWatch
+  description: Payment Update
+  declared_in: webhooks
+- event: paymentRunGroupNotFunded
+  description: Payment Run Group Not Funded
+  declared_in: webhooks
+- event: /send/watch
+  description: Send transaction
+  declared_in: webhooks
+- event: /managed_cards/authorisation_request
+  description: Approve or reject card payments
+  declared_in: webhooks
+- event: /stepup/watch
+  description: Step-up status
+  declared_in: webhooks
+- event: stepupWatch
+  description: Step-up status
+  declared_in: webhooks
+- event: loginWatch
+  description: Login attempt
+  declared_in: webhooks
+- event: sweepingWatch
+  description: Sweeping status update
+  declared_in: webhooks
+- event: /transfers/watch
+  description: Transfer transaction
+  declared_in: webhooks
+- event: /beneficiaries/batch/watch
+  description: Beneficiary batch
+  declared_in: webhooks

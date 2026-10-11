@@ -1,0 +1,906 @@
+{
+  "@context": {
+    "@vocab": "https://weavr.io/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "weavr": "https://weavr.io/schema#",
+    "CredentialId": "weavr:CredentialId",
+    "type": {
+      "@id": "weavr:type",
+      "@type": "xsd:string"
+    },
+    "id": {
+      "@id": "weavr:id",
+      "@type": "xsd:string"
+    },
+    "IdentityId": "weavr:IdentityId",
+    "Error": "weavr:Error",
+    "code": {
+      "@id": "weavr:code",
+      "@type": "xsd:string"
+    },
+    "message": {
+      "@id": "weavr:message",
+      "@type": "xsd:string"
+    },
+    "TokenResponse": "weavr:TokenResponse",
+    "token": {
+      "@id": "weavr:token",
+      "@type": "xsd:string"
+    },
+    "ImpersonateIdentityLoginRequest": "weavr:ImpersonateIdentityLoginRequest",
+    "identity": {
+      "@id": "weavr:identity",
+      "@type": "@id"
+    },
+    "temp": {
+      "@id": "weavr:temp",
+      "@type": "@id"
+    },
+    "SyntaxError": "weavr:SyntaxError",
+    "invalidFields": {
+      "@id": "weavr:invalidFields",
+      "@container": "@list"
+    },
+    "TransferType": "weavr:TransferType",
+    "CurrencyAmount": "weavr:CurrencyAmount",
+    "currency": {
+      "@id": "weavr:currency",
+      "@type": "xsd:string"
+    },
+    "amount": {
+      "@id": "weavr:amount",
+      "@type": "xsd:integer"
+    },
+    "FieldValidationType": "weavr:FieldValidationType",
+    "AccountDescriptorDetails": "weavr:AccountDescriptorDetails",
+    "accountDescriptor": {
+      "@id": "weavr:accountDescriptor",
+      "@type": "xsd:string"
+    },
+    "DefaultError": "weavr:DefaultError",
+    "DepositResponseDepositResponseCode1": "weavr:DepositResponseDepositResponseCode1",
+    "DepositRequestByAccountId": "weavr:DepositRequestByAccountId",
+    "depositAmount": {
+      "@id": "weavr:depositAmount"
+    },
+    "senderName": {
+      "@id": "weavr:senderName",
+      "@type": "xsd:string"
+    },
+    "reference": {
+      "@id": "weavr:reference",
+      "@type": "xsd:string"
+    },
+    "receiverName": {
+      "@id": "weavr:receiverName",
+      "@type": "xsd:string"
+    },
+    "txId": {
+      "@id": "weavr:txId",
+      "@type": "xsd:integer"
+    },
+    "senderIban": {
+      "@id": "weavr:senderIban",
+      "@type": "xsd:string"
+    },
+    "sepa": {
+      "@id": "weavr:sepa",
+      "@type": "@id"
+    },
+    "fasterPayments": {
+      "@id": "weavr:fasterPayments",
+      "@type": "@id"
+    },
+    "paymentNetwork": {
+      "@id": "weavr:paymentNetwork"
+    },
+    "FasterPaymentsBankDetails": "weavr:FasterPaymentsBankDetails",
+    "accountNumber": {
+      "@id": "weavr:accountNumber",
+      "@type": "xsd:string"
+    },
+    "sortCode": {
+      "@id": "weavr:sortCode",
+      "@type": "xsd:string"
+    },
+    "DepositRequest": "weavr:DepositRequest",
+    "iban": {
+      "@id": "weavr:iban",
+      "@type": "xsd:string"
+    },
+    "paymentReference": {
+      "@id": "weavr:paymentReference",
+      "@type": "xsd:string"
+    },
+    "senderIbanDetails": {
+      "@id": "weavr:senderIbanDetails",
+      "@type": "@id"
+    },
+    "senderFasterPaymentsDetails": {
+      "@id": "weavr:senderFasterPaymentsDetails",
+      "@type": "@id"
+    },
+    "senderAccountDescriptorDetails": {
+      "@id": "weavr:senderAccountDescriptorDetails",
+      "@type": "@id"
+    },
+    "destinationIbanDetails": {
+      "@id": "weavr:destinationIbanDetails",
+      "@type": "@id"
+    },
+    "destinationFasterPaymentsDetails": {
+      "@id": "weavr:destinationFasterPaymentsDetails",
+      "@type": "@id"
+    },
+    "FieldValidationErrors": "weavr:FieldValidationErrors",
+    "name": {
+      "@id": "weavr:name",
+      "@type": "xsd:string"
+    },
+    "errors": {
+      "@id": "weavr:errors",
+      "@container": "@list"
+    },
+    "DepositResponse1": "weavr:DepositResponse1",
+    "FieldValidation": "weavr:FieldValidation",
+    "params": {
+      "@id": "weavr:params",
+      "@container": "@list"
+    },
+    "DepositResponse0": "weavr:DepositResponse0",
+    "IBANDetails": "weavr:IBANDetails",
+    "bankIdentifierCode": {
+      "@id": "weavr:bankIdentifierCode",
+      "@type": "xsd:string"
+    },
+    "FasterPaymentsDetails": "weavr:FasterPaymentsDetails",
+    "secondaryReference": {
+      "@id": "weavr:secondaryReference",
+      "@type": "xsd:string"
+    },
+    "MessageValidation": "weavr:MessageValidation",
+    "invalid": {
+      "@id": "weavr:invalid",
+      "@type": "xsd:boolean"
+    },
+    "fields": {
+      "@id": "weavr:fields",
+      "@container": "@list"
+    },
+    "ClientInvalidRequest": "weavr:ClientInvalidRequest",
+    "validation": {
+      "@id": "weavr:validation"
+    },
+    "DepositResponseDepositResponseCode0": "weavr:DepositResponseDepositResponseCode0",
+    "IbanDetails": "weavr:IbanDetails",
+    "SCAChannel": "weavr:SCAChannel",
+    "SCAFactor": "weavr:SCAFactor",
+    "status": {
+      "@id": "weavr:status",
+      "@type": "@id"
+    },
+    "channel": {
+      "@id": "weavr:channel",
+      "@type": "@id"
+    },
+    "SensitivePassword": "weavr:SensitivePassword",
+    "value": {
+      "@id": "weavr:value",
+      "@type": "xsd:string"
+    },
+    "SCAPushChannel": "weavr:SCAPushChannel",
+    "PasswordInfo": "weavr:PasswordInfo",
+    "identityId": {
+      "@id": "weavr:identityId",
+      "@type": "@id"
+    },
+    "expiryDate": {
+      "@id": "weavr:expiryDate",
+      "@type": "xsd:integer"
+    },
+    "AuthSCAPushChannel": "weavr:AuthSCAPushChannel",
+    "SCAOtpChannel": "weavr:SCAOtpChannel",
+    "SCAFactorStatus": "weavr:SCAFactorStatus",
+    "SCAChallengeType": "weavr:SCAChallengeType",
+    "TokenError": "weavr:TokenError",
+    "errorCode": {
+      "@id": "weavr:errorCode",
+      "@type": "xsd:string"
+    },
+    "EnrolmentEventEnrolmentStatus": "weavr:EnrolmentEventEnrolmentStatus",
+    "EnrolmentEvent": "weavr:EnrolmentEvent",
+    "credentialId": {
+      "@id": "weavr:credentialId",
+      "@type": "@id"
+    },
+    "publishedTimestamp": {
+      "@id": "weavr:publishedTimestamp",
+      "@type": "xsd:string"
+    },
+    "Date": "weavr:Date",
+    "year": {
+      "@id": "weavr:year",
+      "@type": "xsd:integer"
+    },
+    "month": {
+      "@id": "weavr:month",
+      "@type": "xsd:integer"
+    },
+    "day": {
+      "@id": "weavr:day",
+      "@type": "xsd:integer"
+    },
+    "User": "weavr:User",
+    "surname": {
+      "@id": "weavr:surname",
+      "@type": "xsd:string"
+    },
+    "email": {
+      "@id": "weavr:email",
+      "@type": "@id"
+    },
+    "mobile": {
+      "@id": "weavr:mobile",
+      "@type": "@id"
+    },
+    "active": {
+      "@id": "weavr:active",
+      "@type": "xsd:boolean"
+    },
+    "dateOfBirth": {
+      "@id": "weavr:dateOfBirth",
+      "@type": "@id"
+    },
+    "tag": {
+      "@id": "weavr:tag",
+      "@type": "@id"
+    },
+    "countryOfResidence": {
+      "@id": "weavr:countryOfResidence",
+      "@type": "xsd:string"
+    },
+    "locale": {
+      "@id": "weavr:locale",
+      "@type": "@id"
+    },
+    "brand": {
+      "@id": "weavr:brand",
+      "@type": "@id"
+    },
+    "roles": {
+      "@id": "weavr:roles",
+      "@container": "@list"
+    },
+    "Mobile": "weavr:Mobile",
+    "countryCode": {
+      "@id": "weavr:countryCode",
+      "@type": "xsd:string"
+    },
+    "number": {
+      "@id": "weavr:number",
+      "@type": "xsd:string"
+    },
+    "UserPredefinedRole": "weavr:UserPredefinedRole",
+    "ActionDoneBy": "weavr:ActionDoneBy",
+    "IdentityDeactivatedReasonCode": "weavr:IdentityDeactivatedReasonCode",
+    "IdentityDeactivatedEvent": "weavr:IdentityDeactivatedEvent",
+    "actionDoneBy": {
+      "@id": "weavr:actionDoneBy",
+      "@type": "@id"
+    },
+    "emailAddress": {
+      "@id": "weavr:emailAddress",
+      "@type": "xsd:string"
+    },
+    "reasonCode": {
+      "@id": "weavr:reasonCode",
+      "@type": "@id"
+    },
+    "BulkProcessOperationStatusCounts": "weavr:BulkProcessOperationStatusCounts",
+    "count": {
+      "@id": "weavr:count",
+      "@type": "xsd:integer"
+    },
+    "BulkProcessOperationStatus": "weavr:BulkProcessOperationStatus",
+    "BulkProcessProgressStatus": "weavr:BulkProcessProgressStatus",
+    "BulkProcessProgressEvent": "weavr:BulkProcessProgressEvent",
+    "bulkId": {
+      "@id": "weavr:bulkId",
+      "@type": "xsd:string"
+    },
+    "submittedItemsCount": {
+      "@id": "weavr:submittedItemsCount",
+      "@type": "xsd:integer"
+    },
+    "operationStatusCounts": {
+      "@id": "weavr:operationStatusCounts",
+      "@container": "@list"
+    },
+    "Merchant": "weavr:Merchant",
+    "nameOther": {
+      "@id": "weavr:nameOther",
+      "@type": "xsd:string"
+    },
+    "networkId": {
+      "@id": "weavr:networkId",
+      "@type": "xsd:string"
+    },
+    "categoryCode": {
+      "@id": "weavr:categoryCode",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "weavr:description",
+      "@type": "xsd:string"
+    },
+    "street": {
+      "@id": "weavr:street",
+      "@type": "xsd:string"
+    },
+    "city": {
+      "@id": "weavr:city",
+      "@type": "xsd:string"
+    },
+    "state": {
+      "@id": "weavr:state",
+      "@type": "xsd:string"
+    },
+    "postalCode": {
+      "@id": "weavr:postalCode",
+      "@type": "xsd:string"
+    },
+    "country": {
+      "@id": "weavr:country",
+      "@type": "xsd:string"
+    },
+    "telephone": {
+      "@id": "weavr:telephone",
+      "@type": "xsd:string"
+    },
+    "url": {
+      "@id": "weavr:url",
+      "@type": "xsd:string"
+    },
+    "contact": {
+      "@id": "weavr:contact",
+      "@type": "xsd:string"
+    },
+    "logoUrl": {
+      "@id": "weavr:logoUrl",
+      "@type": "xsd:string"
+    },
+    "Card": "weavr:Card",
+    "mode": {
+      "@id": "weavr:mode",
+      "@type": "xsd:string"
+    },
+    "friendlyName": {
+      "@id": "weavr:friendlyName",
+      "@type": "xsd:string"
+    },
+    "nameOnCard": {
+      "@id": "weavr:nameOnCard",
+      "@type": "xsd:string"
+    },
+    "cardBrand": {
+      "@id": "weavr:cardBrand",
+      "@type": "xsd:string"
+    },
+    "cardNumberFirstSix": {
+      "@id": "weavr:cardNumberFirstSix",
+      "@type": "xsd:string"
+    },
+    "cardNumberLastFour": {
+      "@id": "weavr:cardNumberLastFour",
+      "@type": "xsd:string"
+    },
+    "linkedUserId": {
+      "@id": "weavr:linkedUserId",
+      "@type": "xsd:string"
+    },
+    "parentManagedAccountId": {
+      "@id": "weavr:parentManagedAccountId",
+      "@type": "xsd:string"
+    },
+    "CardPaymentEvent": "weavr:CardPaymentEvent",
+    "CardPaymentList": "weavr:CardPaymentList",
+    "cardPayments": {
+      "@id": "weavr:cardPayments",
+      "@container": "@list"
+    },
+    "responseCount": {
+      "@id": "weavr:responseCount",
+      "@type": "xsd:integer"
+    },
+    "CardPayment": "weavr:CardPayment",
+    "profileId": {
+      "@id": "weavr:profileId",
+      "@type": "@id"
+    },
+    "card": {
+      "@id": "weavr:card",
+      "@type": "@id"
+    },
+    "merchant": {
+      "@id": "weavr:merchant",
+      "@type": "@id"
+    },
+    "displayAmount": {
+      "@id": "weavr:displayAmount",
+      "@type": "@id"
+    },
+    "relatedCardPaymentId": {
+      "@id": "weavr:relatedCardPaymentId",
+      "@type": "xsd:string"
+    },
+    "events": {
+      "@id": "weavr:events",
+      "@container": "@list"
+    },
+    "creationTimestamp": {
+      "@id": "weavr:creationTimestamp",
+      "@type": "xsd:integer"
+    },
+    "lastUpdatedTimestamp": {
+      "@id": "weavr:lastUpdatedTimestamp",
+      "@type": "xsd:integer"
+    },
+    "CardPaymentStatus": "weavr:CardPaymentStatus",
+    "CardPaymentEventList": "weavr:CardPaymentEventList",
+    "CardPaymentEventDetail": "weavr:CardPaymentEventDetail",
+    "CardPaymentType": "weavr:CardPaymentType",
+    "CardPaymentSubtype": "weavr:CardPaymentSubtype",
+    "CardPaymentEventType": "weavr:CardPaymentEventType",
+    "PurchaseRequestByCardId": "weavr:PurchaseRequestByCardId",
+    "merchantName": {
+      "@id": "weavr:merchantName",
+      "@type": "xsd:string"
+    },
+    "merchantId": {
+      "@id": "weavr:merchantId",
+      "@type": "xsd:string"
+    },
+    "merchantCategoryCode": {
+      "@id": "weavr:merchantCategoryCode",
+      "@type": "xsd:string"
+    },
+    "transactionAmount": {
+      "@id": "weavr:transactionAmount"
+    },
+    "transactionCountry": {
+      "@id": "weavr:transactionCountry",
+      "@type": "xsd:string"
+    },
+    "forexFee": {
+      "@id": "weavr:forexFee",
+      "@type": "xsd:integer"
+    },
+    "forexPadding": {
+      "@id": "weavr:forexPadding",
+      "@type": "xsd:integer"
+    },
+    "atmWithdrawal": {
+      "@id": "weavr:atmWithdrawal",
+      "@type": "xsd:boolean"
+    },
+    "additionalMerchantData": {
+      "@id": "weavr:additionalMerchantData"
+    },
+    "cardHolderPresent": {
+      "@id": "weavr:cardHolderPresent"
+    },
+    "cardPresent": {
+      "@id": "weavr:cardPresent",
+      "@type": "xsd:boolean"
+    },
+    "initiateBiometricThreeDSecure": {
+      "@id": "weavr:initiateBiometricThreeDSecure",
+      "@type": "xsd:boolean"
+    },
+    "transactionTimestamp": {
+      "@id": "weavr:transactionTimestamp",
+      "@type": "xsd:integer"
+    },
+    "PurchaseRequest": "weavr:PurchaseRequest",
+    "cardNumber": {
+      "@id": "weavr:cardNumber",
+      "@type": "xsd:string"
+    },
+    "cvv": {
+      "@id": "weavr:cvv",
+      "@type": "xsd:string"
+    },
+    "ExpireManagedCardConflict": "weavr:ExpireManagedCardConflict",
+    "NullableInt64": "weavr:NullableInt64",
+    "hasValue": {
+      "@id": "weavr:hasValue",
+      "@type": "xsd:boolean"
+    },
+    "AdditionalMerchantData": "weavr:AdditionalMerchantData",
+    "merchantStreet": {
+      "@id": "weavr:merchantStreet",
+      "@type": "xsd:string"
+    },
+    "merchantCity": {
+      "@id": "weavr:merchantCity",
+      "@type": "xsd:string"
+    },
+    "merchantState": {
+      "@id": "weavr:merchantState",
+      "@type": "xsd:string"
+    },
+    "merchantPostalCode": {
+      "@id": "weavr:merchantPostalCode",
+      "@type": "xsd:string"
+    },
+    "merchantCountry": {
+      "@id": "weavr:merchantCountry",
+      "@type": "xsd:string"
+    },
+    "merchantTelephone": {
+      "@id": "weavr:merchantTelephone",
+      "@type": "xsd:string"
+    },
+    "merchantURL": {
+      "@id": "weavr:merchantURL",
+      "@type": "xsd:string"
+    },
+    "merchantNameOther": {
+      "@id": "weavr:merchantNameOther",
+      "@type": "xsd:string"
+    },
+    "merchantNetworkId": {
+      "@id": "weavr:merchantNetworkId",
+      "@type": "xsd:string"
+    },
+    "merchantContact": {
+      "@id": "weavr:merchantContact",
+      "@type": "xsd:string"
+    },
+    "RenewManagedCardConflict": "weavr:RenewManagedCardConflict",
+    "ExpireManagedCardConflictErrorCode": "weavr:ExpireManagedCardConflictErrorCode",
+    "PurchaseResponsePurchaseResponseCode": "weavr:PurchaseResponsePurchaseResponseCode",
+    "RenewManagedCardConflictErrorCode": "weavr:RenewManagedCardConflictErrorCode",
+    "CardHolderPresent": "weavr:CardHolderPresent",
+    "PurchaseResponse": "weavr:PurchaseResponse",
+    "threeDSecureChallengeId": {
+      "@id": "weavr:threeDSecureChallengeId",
+      "@type": "@id"
+    },
+    "MultipleSCAResourceType": "weavr:MultipleSCAResourceType",
+    "TransactionId": "weavr:TransactionId",
+    "TransactionState": "weavr:TransactionState",
+    "InstrumentId": "weavr:InstrumentId",
+    "Fee": "weavr:Fee",
+    "feeType": {
+      "@id": "weavr:feeType",
+      "@type": "xsd:string"
+    },
+    "source": {
+      "@id": "weavr:source",
+      "@type": "@id"
+    },
+    "ChargeFee": "weavr:ChargeFee",
+    "transactionId": {
+      "@id": "weavr:transactionId",
+      "@type": "@id"
+    },
+    "availableBalanceAdjustment": {
+      "@id": "weavr:availableBalanceAdjustment",
+      "@type": "@id"
+    },
+    "InstrumentType": "weavr:InstrumentType",
+    "ConsumerSourceOfFunds": "weavr:ConsumerSourceOfFunds",
+    "ConsumerRootUser": "weavr:ConsumerRootUser",
+    "occupation": {
+      "@id": "weavr:occupation",
+      "@type": "@id"
+    },
+    "emailVerified": {
+      "@id": "weavr:emailVerified",
+      "@type": "xsd:boolean"
+    },
+    "mobileNumberVerified": {
+      "@id": "weavr:mobileNumberVerified",
+      "@type": "xsd:boolean"
+    },
+    "address": {
+      "@id": "weavr:address",
+      "@type": "@id"
+    },
+    "nationality": {
+      "@id": "weavr:nationality",
+      "@type": "@id"
+    },
+    "placeOfBirth": {
+      "@id": "weavr:placeOfBirth",
+      "@type": "xsd:string"
+    },
+    "AddressWithNoRequiredFields": "weavr:AddressWithNoRequiredFields",
+    "addressLine1": {
+      "@id": "weavr:addressLine1",
+      "@type": "xsd:string"
+    },
+    "addressLine2": {
+      "@id": "weavr:addressLine2",
+      "@type": "xsd:string"
+    },
+    "postCode": {
+      "@id": "weavr:postCode",
+      "@type": "xsd:string"
+    },
+    "Occupation": "weavr:Occupation",
+    "AddressWithCountryRequired": "weavr:AddressWithCountryRequired",
+    "Consumer": "weavr:Consumer",
+    "rootUser": {
+      "@id": "weavr:rootUser",
+      "@type": "@id"
+    },
+    "ipAddress": {
+      "@id": "weavr:ipAddress",
+      "@type": "xsd:string"
+    },
+    "acceptedTerms": {
+      "@id": "weavr:acceptedTerms",
+      "@type": "xsd:boolean"
+    },
+    "baseCurrency": {
+      "@id": "weavr:baseCurrency",
+      "@type": "@id"
+    },
+    "feeGroup": {
+      "@id": "weavr:feeGroup",
+      "@type": "xsd:string"
+    },
+    "sourceOfFunds": {
+      "@id": "weavr:sourceOfFunds",
+      "@type": "@id"
+    },
+    "sourceOfFundsOther": {
+      "@id": "weavr:sourceOfFundsOther",
+      "@type": "xsd:string"
+    },
+    "KycLevel": "weavr:KycLevel",
+    "IdentityActivatedEvent": "weavr:IdentityActivatedEvent",
+    "KycEvent": "weavr:KycEvent",
+    "consumerId": {
+      "@id": "weavr:consumerId",
+      "@type": "xsd:string"
+    },
+    "consumerEmail": {
+      "@id": "weavr:consumerEmail",
+      "@type": "xsd:string"
+    },
+    "details": {
+      "@id": "weavr:details",
+      "@container": "@list"
+    },
+    "rejectionComment": {
+      "@id": "weavr:rejectionComment",
+      "@type": "xsd:string"
+    },
+    "kycLevel": {
+      "@id": "weavr:kycLevel",
+      "@type": "@id"
+    },
+    "ongoingStatus": {
+      "@id": "weavr:ongoingStatus",
+      "@type": "@id"
+    },
+    "ongoingKycLevel": {
+      "@id": "weavr:ongoingKycLevel",
+      "@type": "@id"
+    },
+    "eventTimestamp": {
+      "@id": "weavr:eventTimestamp",
+      "@type": "xsd:string"
+    },
+    "additionalInformation": {
+      "@id": "weavr:additionalInformation",
+      "@type": "@id"
+    },
+    "KyiStatus": "weavr:KyiStatus",
+    "KycRejectionReason": "weavr:KycRejectionReason",
+    "KycEventAdditionalInformation": "weavr:KycEventAdditionalInformation",
+    "documentExpiryDate": {
+      "@id": "weavr:documentExpiryDate",
+      "@type": "xsd:string"
+    },
+    "identityRestrictionDate": {
+      "@id": "weavr:identityRestrictionDate",
+      "@type": "xsd:string"
+    },
+    "CorporateSourceOfFunds": "weavr:CorporateSourceOfFunds",
+    "CompanyType": "weavr:CompanyType",
+    "CompanyPosition": "weavr:CompanyPosition",
+    "CorporateRootUser": "weavr:CorporateRootUser",
+    "companyPosition": {
+      "@id": "weavr:companyPosition",
+      "@type": "@id"
+    },
+    "Address": "weavr:Address",
+    "Industry": "weavr:Industry",
+    "Corporate": "weavr:Corporate",
+    "company": {
+      "@id": "weavr:company"
+    },
+    "industry": {
+      "@id": "weavr:industry",
+      "@type": "@id"
+    },
+    "retailQualifier": {
+      "@id": "weavr:retailQualifier",
+      "@type": "xsd:string"
+    },
+    "LegalAddress": "weavr:LegalAddress",
+    "BeneficiaryInfo": "weavr:BeneficiaryInfo",
+    "firstName": {
+      "@id": "weavr:firstName",
+      "@type": "xsd:string"
+    },
+    "middleName": {
+      "@id": "weavr:middleName",
+      "@type": "xsd:string"
+    },
+    "lastName": {
+      "@id": "weavr:lastName",
+      "@type": "xsd:string"
+    },
+    "ongoingKybStatus": {
+      "@id": "weavr:ongoingKybStatus",
+      "@type": "@id"
+    },
+    "CorporateKybFailureReason": "weavr:CorporateKybFailureReason",
+    "KybEvent": "weavr:KybEvent",
+    "corporateId": {
+      "@id": "weavr:corporateId",
+      "@type": "xsd:string"
+    },
+    "corporateEmail": {
+      "@id": "weavr:corporateEmail",
+      "@type": "xsd:string"
+    },
+    "BeneficiaryVerifiedEvent": "weavr:BeneficiaryVerifiedEvent",
+    "event": {
+      "@id": "weavr:event",
+      "@container": "@list"
+    },
+    "eventDetails": {
+      "@id": "weavr:eventDetails",
+      "@container": "@list"
+    },
+    "BeneficiaryEventType": "weavr:BeneficiaryEventType",
+    "BeneficiaryVerifiedEventAdditionalInformation": "weavr:BeneficiaryVerifiedEventAdditionalInformation",
+    "corporateName": {
+      "@id": "weavr:corporateName",
+      "@type": "xsd:string"
+    },
+    "rootUserEmail": {
+      "@id": "weavr:rootUserEmail",
+      "@type": "xsd:string"
+    },
+    "kybStatus": {
+      "@id": "weavr:kybStatus",
+      "@type": "@id"
+    },
+    "beneficiary": {
+      "@id": "weavr:beneficiary",
+      "@type": "@id"
+    },
+    "BeneficiaryType": "weavr:BeneficiaryType",
+    "CorrespondentBankingOwtValidationOutcome": "weavr:CorrespondentBankingOwtValidationOutcome",
+    "category": {
+      "@id": "weavr:category",
+      "@type": "xsd:string"
+    },
+    "categoryResult": {
+      "@id": "weavr:categoryResult"
+    },
+    "CorrespondentBankingBankAccountDetails": "weavr:CorrespondentBankingBankAccountDetails",
+    "account": {
+      "@id": "weavr:account",
+      "@type": "xsd:string"
+    },
+    "financialInstitution": {
+      "@id": "weavr:financialInstitution",
+      "@type": "xsd:string"
+    },
+    "CorrespondentBankingSEPABeneficiary": "weavr:CorrespondentBankingSEPABeneficiary",
+    "bankName": {
+      "@id": "weavr:bankName",
+      "@type": "xsd:string"
+    },
+    "bankAddress": {
+      "@id": "weavr:bankAddress",
+      "@type": "xsd:string"
+    },
+    "bankCountry": {
+      "@id": "weavr:bankCountry",
+      "@type": "xsd:string"
+    },
+    "CorrespondentBankingBusinessOriginator": "weavr:CorrespondentBankingBusinessOriginator",
+    "registrationAddress": {
+      "@id": "weavr:registrationAddress",
+      "@type": "xsd:string"
+    },
+    "registrationCountry": {
+      "@id": "weavr:registrationCountry",
+      "@type": "xsd:string"
+    },
+    "bankAccountDetails": {
+      "@id": "weavr:bankAccountDetails",
+      "@type": "@id"
+    },
+    "supplementaryInformation": {
+      "@id": "weavr:supplementaryInformation",
+      "@type": "@id"
+    },
+    "UKConfirmationOfPayeeResult": "weavr:UKConfirmationOfPayeeResult",
+    "match": {
+      "@id": "weavr:match",
+      "@type": "xsd:string"
+    },
+    "accountName": {
+      "@id": "weavr:accountName",
+      "@type": "xsd:string"
+    },
+    "CorrespondentBankingIndividualOriginator": "weavr:CorrespondentBankingIndividualOriginator",
+    "SourceInstrumentType": "weavr:SourceInstrumentType",
+    "CorrespondentBankingOwt": "weavr:CorrespondentBankingOwt",
+    "sourceInstrument": {
+      "@id": "weavr:sourceInstrument"
+    },
+    "originator": {
+      "@id": "weavr:originator"
+    },
+    "purpose": {
+      "@id": "weavr:purpose",
+      "@type": "xsd:string"
+    },
+    "externalData": {
+      "@id": "weavr:externalData",
+      "@container": "@list"
+    },
+    "scheduledTimestamp": {
+      "@id": "weavr:scheduledTimestamp",
+      "@type": "@id"
+    },
+    "cancellationReason": {
+      "@id": "weavr:cancellationReason",
+      "@type": "@id"
+    },
+    "validationOutcomes": {
+      "@id": "weavr:validationOutcomes",
+      "@container": "@list"
+    },
+    "CorrespondentBankingIndividualAddressAndBirthInfo": "weavr:CorrespondentBankingIndividualAddressAndBirthInfo",
+    "CorrespondentBankingRIXBeneficiary": "weavr:CorrespondentBankingRIXBeneficiary",
+    "CorrespondentBankingOwtState": "weavr:CorrespondentBankingOwtState",
+    "TransactionSingleCancelRequest": "weavr:TransactionSingleCancelRequest",
+    "CorrespondentBankingBusinessAddressAndIdInfo": "weavr:CorrespondentBankingBusinessAddressAndIdInfo",
+    "documentType": {
+      "@id": "weavr:documentType",
+      "@type": "xsd:string"
+    },
+    "documentNumber": {
+      "@id": "weavr:documentNumber",
+      "@type": "xsd:string"
+    },
+    "SEPAVerificationOfPayeeResult": "weavr:SEPAVerificationOfPayeeResult",
+    "CorrespondentBankingIndividualAddressAndIdInfo": "weavr:CorrespondentBankingIndividualAddressAndIdInfo",
+    "CorrespondentBankingExternalData": "weavr:CorrespondentBankingExternalData"
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "Weavr API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects Weavr's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-12) from openapi/weavr-access-token-api-openapi.yml, openapi/weavr-access-tokens-api-openapi.yml, openapi/weavr-accounts-api-openapi.yml.",
+  "dcterms:created": "2026-10-12",
+  "dcterms:source": [
+    "openapi/weavr-access-token-api-openapi.yml",
+    "openapi/weavr-access-tokens-api-openapi.yml",
+    "openapi/weavr-accounts-api-openapi.yml",
+    "openapi/weavr-additional-factors-api-openapi.yml",
+    "openapi/weavr-authentication-factors-api-openapi.yml"
+  ]
+}

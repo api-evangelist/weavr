@@ -1,0 +1,9 @@
+generated: '2026-10-12'
+method: none
+source:
+- https://www.weavr.io/legal/subprocessors
+- https://www.weavr.io/accessibility
+- https://www.weavr.io/.well-known/security.txt
+- https://docs.weavr.io/sitemap.xml
+note: Conventional regulatory paths on www.weavr.io returned 404 and the docs sitemap (1,135 pages) lists no SBOM, accessibility, subprocessor, data-residency or AI-transparency page. Trust center (ISO 27001, PCI DSS, CSA STAR) is recorded separately in security/.
+signals: {}

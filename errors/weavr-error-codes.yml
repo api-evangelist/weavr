@@ -1,0 +1,468 @@
+generated: '2026-10-12'
+method: searched
+source: https://docs.weavr.io/getting-started/troubleshooting/error-codes-reference/
+format: json
+envelope: errorCode field carries the uppercase snake_case code (docs-only grouping IDs like AUTH_001 are navigation
+  only)
+problems:
+- status: 401
+  code: UNAUTHORIZED
+  title: UNAUTHORIZED
+  doc_group: AUTH_001
+  description: Missing or invalid API key/token
+  remediation: Include valid api-key header
+- status: 403
+  code: FORBIDDEN
+  title: FORBIDDEN
+  doc_group: AUTH_002
+  description: Insufficient permissions for operation
+  remediation: Verify the user has the required role for the operation, and check the account state
+- status: 401
+  code: TOKEN_EXPIRED
+  title: TOKEN_EXPIRED
+  doc_group: AUTH_003
+  description: Authentication token has expired
+  remediation: 'Log in again to get fresh token Note: Stepped-up tokens Stepped-up token An access token that has
+    been elevated to a higher authentication level by successfully completing a step-up challenge (typically an
+    OTP via SMS or a biometric prompt). A stepped-up token is required to perform sensitive operat'
+- status: 401
+  code: INVALID_CREDENTIALS
+  title: INVALID_CREDENTIALS
+  doc_group: AUTH_004
+  description: Email/password combination incorrect
+  remediation: Verify credentials, check for typos
+- status: 403
+  code: ACCOUNT_LOCKED
+  title: ACCOUNT_LOCKED
+  doc_group: AUTH_005
+  description: Too many failed login attempts
+  remediation: Wait for lockout period or contact support
+- status: 403
+  code: STEP_UP_REQUIRED
+  title: STEP_UP_REQUIRED
+  doc_group: AUTH_006
+  description: 'Operation requires SCA SCA (Strong Customer Authentication). Strong Customer Authentication - a
+    two-factor authentication solution required by PSD2 regulations for when end-users are accessing their payment
+    account sensitive information or initiating transactions. SCA requires at least two of the following: something
+    you know (password), something you have (device), or something you are (biometrics). /step-up authentication'
+  remediation: Complete step-up flow before retrying
+- status: 400
+  code: CHANNEL_NOT_REGISTERED
+  title: CHANNEL_NOT_REGISTERED
+  doc_group: AUTH_007
+  description: Authentication factor (SMS) not enrolled
+  remediation: Enroll SMS via /authentication_factors/otp/SMS
+- status: 400
+  code: INVALID_VERIFICATION_CODE
+  title: INVALID_VERIFICATION_CODE
+  doc_group: AUTH_008
+  description: OTP/verification code incorrect or expired
+  remediation: Request new code, ensure using latest
+- status: 400
+  code: PASSWORD_POLICY_VIOLATION
+  title: PASSWORD_POLICY_VIOLATION
+  doc_group: AUTH_009
+  description: Password doesn't meet complexity requirements
+  remediation: Passwords must be 8 to 30 characters, contain at least one uppercase letter, one lowercase letter,
+    one number, and one special character, and differ from the user's last 5 passwords. See password complexity
+    for the canonical rules and the POST /passwords/validate endpoint you can call to pre-check a
+- status: 401
+  code: SESSION_EXPIRED
+  title: SESSION_EXPIRED
+  doc_group: AUTH_010
+  description: User session has timed out
+  remediation: Re-authenticate user
+- status: 403
+  code: OWNER_IDENTITY_NOT_VERIFIED
+  title: OWNER_IDENTITY_NOT_VERIFIED
+  doc_group: IDENTITY_001
+  description: Corporate/consumer needs KYC KYC (Know Your Customer). Know Your Customer - the identity verification
+    process for consumer customers. This process allows you to securely verify your user's identity. Weavr asks
+    users to submit the information and documentation they need for approval by financial providers. / KYB KYB (Know
+    Your Business). Know Your Business - the identity verification process for corporate customers. This process
+    allows you to securely verify your business customer's identity. Weavr asks users to submit the information
+    and documentation they need for approval by financial providers. verification (and email/mobile verification
+    in production)
+  remediation: Complete KYB KYB (Know Your Business).
+- status: 403
+  code: EMAIL_NOT_VERIFIED
+  title: EMAIL_NOT_VERIFIED
+  doc_group: IDENTITY_002
+  description: Email address requires verification
+  remediation: Complete email verification flow
+- status: 403
+  code: MOBILE_NOT_VERIFIED
+  title: MOBILE_NOT_VERIFIED
+  doc_group: IDENTITY_003
+  description: Mobile number not verified
+  remediation: Complete SMS enrollment process
+- status: 409
+  code: DUPLICATE_EMAIL
+  title: DUPLICATE_EMAIL
+  doc_group: IDENTITY_004
+  description: Email already registered
+  remediation: Use different email or log in with the existing user
+- status: 409
+  code: DUPLICATE_IDENTITY
+  title: DUPLICATE_IDENTITY
+  doc_group: IDENTITY_005
+  description: Identity already exists with these details
+  remediation: Check for existing registration
+- status: 403
+  code: KYB_REJECTED
+  title: KYB_REJECTED
+  doc_group: IDENTITY_006
+  description: KYB KYB (Know Your Business). Know Your Business - the identity verification process for corporate
+    customers. This process allows you to securely verify your business customer's identity. Weavr asks users to
+    submit the information and documentation they need for approval by financial providers. verification failed
+  remediation: Review rejection reason, resubmit documentation
+- status: 400
+  code: INVALID_COMPANY_TYPE
+  title: INVALID_COMPANY_TYPE
+  doc_group: IDENTITY_007
+  description: Company type not supported
+  remediation: 'Use valid enum: LIMITED_LIABILITY_COMPANY, etc.'
+- status: 400
+  code: INVALID_COUNTRY
+  title: INVALID_COUNTRY
+  doc_group: IDENTITY_008
+  description: Country not supported for operations
+  remediation: Check supported countries list
+- status: 403
+  code: ABANDONED_USER
+  title: ABANDONED_USER
+  doc_group: IDENTITY_009
+  description: User abandoned onboarding (email expired)
+  remediation: Re-register the user as new
+- status: 403
+  code: USER_SUSPENDED
+  title: USER_SUSPENDED
+  doc_group: IDENTITY_010
+  description: User account suspended, either by Weavr (for compliance or security reasons) or by your own administrator
+    via the API
+  remediation: If you did not initiate the suspension, contact Weavr support Managed accounts ​
+- status: 400
+  code: INSUFFICIENT_BALANCE
+  title: INSUFFICIENT_BALANCE
+  doc_group: ACCOUNT_001
+  description: Account balance too low for operation
+  remediation: Add funds before retrying
+- status: 400
+  code: DENIED_ACCOUNT_NOT_UPGRADED_TO_IBAN
+  title: DENIED_ACCOUNT_NOT_UPGRADED_TO_IBAN
+  doc_group: ACCOUNT_002
+  description: Account needs IBAN IBAN (International Bank Account Number). International Bank Account Number -
+    a standardized international bank account identifier. Managed accounts can be assigned an IBAN to enable wire
+    transfers to and from bank accounts outside of Weavr. IBANs are required for EUR accounts and enable SEPA transfers.
+    for receiving funds
+  remediation: Upgrade via /managed_accounts/{id}/iban
+- status: 403
+  code: ACCOUNT_BLOCKED
+  title: ACCOUNT_BLOCKED
+  doc_group: ACCOUNT_003
+  description: Account blocked for security/compliance reasons
+  remediation: Contact support for unblock
+- status: 400
+  code: CURRENCY_MISMATCH
+  title: CURRENCY_MISMATCH
+  doc_group: ACCOUNT_004
+  description: Operation currency doesn't match the account
+  remediation: Use correct currency or create an account in the same currency
+- status: 409
+  code: DUPLICATE_ACCOUNT
+  title: DUPLICATE_ACCOUNT
+  doc_group: ACCOUNT_005
+  description: Account with same details already exists
+  remediation: Use existing account or change parameters
+- status: 400
+  code: INVALID_PROFILE_ID
+  title: INVALID_PROFILE_ID
+  doc_group: ACCOUNT_006
+  description: Managed account Managed Account An account held at a financial institution that can be created and
+    managed through the Weavr platform. Each account has a balance where customers can hold funds. Optionally, an
+    IBAN can be assigned to enable wire transfers to bank accounts outside of Weavr. /card profile Profile A template
+    defining the configuration for one type of object - corporate identity, consumer identity, managed account,
+    managed card, transfer, or outgoing wire transfer. When you create one of these objects you reference its Profile
+    ID, which tells Weavr which limits, currencies, supported countries, branding, and fees to apply. Your programme
+    ships with one or more Profile IDs per supported object type. ID invalid/inactive
+  remediation: Use valid profile Profile A template defining the configuration for one type of object - corporate
+    identity, consumer identity, managed account, managed card, transfer, or outgoing wire transfer. When you create
+    one of these objects you reference its Profile ID, which tells Weavr which limits, curre
+- status: 403
+  code: ACCOUNT_CLOSED
+  title: ACCOUNT_CLOSED
+  doc_group: ACCOUNT_007
+  description: Account has been closed
+  remediation: Create new account
+- status: 409
+  code: IBAN_ALREADY_ASSIGNED
+  title: IBAN_ALREADY_ASSIGNED
+  doc_group: ACCOUNT_008
+  description: Account already has IBAN IBAN (International Bank Account Number). International Bank Account Number
+    - a standardized international bank account identifier. Managed accounts can be assigned an IBAN to enable wire
+    transfers to and from bank accounts outside of Weavr. IBANs are required for EUR accounts and enable SEPA transfers.
+  remediation: Use existing IBAN IBAN (International Bank Account Number).
+- status: 404
+  code: STATEMENT_NOT_READY
+  title: STATEMENT_NOT_READY
+  doc_group: ACCOUNT_009
+  description: Statement not yet generated
+  remediation: Wait for statement generation (usually monthly)
+- status: 400
+  code: EXCEEDS_ACCOUNT_LIMIT
+  title: EXCEEDS_ACCOUNT_LIMIT
+  doc_group: ACCOUNT_010
+  description: Exceeds maximum accounts per identity
+  remediation: Close unused accounts or contact support Managed cards ​
+- status: 403
+  code: CARD_BLOCKED
+  title: CARD_BLOCKED
+  doc_group: CARD_001
+  description: Card blocked due to a security/user request
+  remediation: Unblock via API or issue replacement
+- status: 400
+  code: CARD_EXPIRED
+  title: CARD_EXPIRED
+  doc_group: CARD_002
+  description: Card past expiry date
+  remediation: Issue replacement card
+- status: 400
+  code: INSUFFICIENT_CARD_BALANCE
+  title: INSUFFICIENT_CARD_BALANCE
+  doc_group: CARD_003
+  description: Card balance too low ( prepaid mode Prepaid Mode A card mode where the card has its own balance and
+    purchases are authorised based on this balance. Cards in prepaid mode can be topped up with funds and support
+    transactions such as transfers and sends. If there are insufficient funds, purchases are declined until the
+    card has sufficient funds. )
+  remediation: Transfer funds to card
+- status: 400
+  code: EXCEEDS_SPENDING_LIMIT
+  title: EXCEEDS_SPENDING_LIMIT
+  doc_group: CARD_004
+  description: Transaction exceeds card spending limits
+  remediation: Adjust limits or split transaction
+- status: 401
+  code: INVALID_PIN
+  title: INVALID_PIN
+  doc_group: CARD_005
+  description: Incorrect PIN PIN (Personal Identification Number). Personal Identification Number - the numeric
+    code a cardholder enters to authorize chip-and-PIN purchases and ATM withdrawals. PIN is only present on physical
+    managed cards. Weavr returns it tokenized on `GET /managed_cards/{id}` (with a stepped-up token), and the SDK
+    detokenizes it inside a secure PIN display component. entered
+  remediation: Use correct PIN PIN (Personal Identification Number).
+- status: 403
+  code: CARD_NOT_ACTIVATED
+  title: CARD_NOT_ACTIVATED
+  doc_group: CARD_006
+  description: Physical card Physical Card A payment card that is printed or embedded in wearables and sent to customers
+    directly. Physical cards are created by first creating a virtual card and then upgrading it to a physical card.
+    They are sent in an inactive state and must be activated by the card assignee before first use. not yet activated
+  remediation: Activate card first
+- status: 409
+  code: DUPLICATE_CARD
+  title: DUPLICATE_CARD
+  doc_group: CARD_007
+  description: Card with same details exists
+  remediation: Use existing card
+- status: 400
+  code: INVALID_CARD_MODE
+  title: INVALID_CARD_MODE
+  doc_group: CARD_008
+  description: Invalid mode (DEBIT_MODE/PREPAID_MODE)
+  remediation: Use valid card mode enum
+- status: 400
+  code: BILLING_ADDRESS_REQUIRED
+  title: BILLING_ADDRESS_REQUIRED
+  doc_group: CARD_009
+  description: Billing address missing for card
+  remediation: Provide complete billing address
+- status: 400
+  code: NAME_ON_CARD_INVALID
+  title: NAME_ON_CARD_INVALID
+  doc_group: CARD_010
+  description: Name contains invalid characters
+  remediation: Use only letters, spaces, hyphens Transactions ​
+- status: 400
+  code: INVALID_INSTRUMENT_TYPE
+  title: INVALID_INSTRUMENT_TYPE
+  doc_group: TRANS_001
+  description: 'Wrong instrument Instrument A financial product owned by a customer. There are two types: Managed
+    Accounts (stored-value accounts that hold balances and can receive wire transfers) and Managed Cards (prepaid
+    cards - virtual or physical - used for purchases). type in request'
+  remediation: 'Use plural: managed_accounts , managed_cards'
+- status: 404
+  code: SOURCE_INSTRUMENT_NOT_FOUND
+  title: SOURCE_INSTRUMENT_NOT_FOUND
+  doc_group: TRANS_002
+  description: Source account/card doesn't exist
+  remediation: 'Verify source instrument Instrument A financial product owned by a customer. There are two types:
+    Managed Accounts (stored-value accounts that hold balances and can receive wire transfers) and Managed Cards
+    (prepaid cards - virtual or physical - used for purchases). ID'
+- status: 404
+  code: DESTINATION_INSTRUMENT_NOT_FOUND
+  title: DESTINATION_INSTRUMENT_NOT_FOUND
+  doc_group: TRANS_003
+  description: Destination account/card doesn't exist
+  remediation: 'Verify destination instrument Instrument A financial product owned by a customer. There are two
+    types: Managed Accounts (stored-value accounts that hold balances and can receive wire transfers) and Managed
+    Cards (prepaid cards - virtual or physical - used for purchases). ID'
+- status: 400
+  code: INVALID_AMOUNT
+  title: INVALID_AMOUNT
+  doc_group: TRANS_004
+  description: Amount invalid (negative, zero, format)
+  remediation: Use positive integer in minor units
+- status: 400
+  code: EXCEEDS_TRANSACTION_LIMIT
+  title: EXCEEDS_TRANSACTION_LIMIT
+  doc_group: TRANS_005
+  description: Transaction exceeds configured limits
+  remediation: Split transaction or request limit increase
+- status: 409
+  code: DUPLICATE_TRANSACTION
+  title: DUPLICATE_TRANSACTION
+  doc_group: TRANS_006
+  description: Duplicate transaction detected
+  remediation: Use a unique idempotency-ref header per request
+- status: 403
+  code: TRANSFER_NOT_ALLOWED
+  title: TRANSFER_NOT_ALLOWED
+  doc_group: TRANS_007
+  description: 'Transfer between these instruments Instrument A financial product owned by a customer. There are
+    two types: Managed Accounts (stored-value accounts that hold balances and can receive wire transfers) and Managed
+    Cards (prepaid cards - virtual or physical - used for purchases). not allowed'
+  remediation: Check transfer rules and restrictions
+- status: 400
+  code: INVALID_BENEFICIARY
+  title: INVALID_BENEFICIARY
+  doc_group: TRANS_008
+  description: Payee details invalid/incomplete
+  remediation: Provide complete payee information
+- status: 400
+  code: TRANSACTION_DECLINED
+  title: TRANSACTION_DECLINED
+  doc_group: TRANS_009
+  description: Transaction declined by processor
+  remediation: Check decline reason, retry if temporary
+- status: 403
+  code: REVERSAL_NOT_ALLOWED
+  title: REVERSAL_NOT_ALLOWED
+  doc_group: TRANS_010
+  description: Transaction cannot be reversed
+  remediation: Only certain transaction types reversible
+- status: 400
+  code: MISSING_REQUIRED_FIELD
+  title: MISSING_REQUIRED_FIELD
+  doc_group: VALID_001
+  description: Required field not provided
+  remediation: Include all required fields as per API spec
+- status: 400
+  code: INVALID_FIELD_FORMAT
+  title: INVALID_FIELD_FORMAT
+  doc_group: VALID_002
+  description: Field format incorrect (email, phone, etc.)
+  remediation: Follow format requirements
+- status: 400
+  code: FIELD_TOO_LONG
+  title: FIELD_TOO_LONG
+  doc_group: VALID_003
+  description: Field exceeds maximum length
+  remediation: Truncate to max length as per spec
+- status: 400
+  code: INVALID_ENUM_VALUE
+  title: INVALID_ENUM_VALUE
+  doc_group: VALID_004
+  description: Value not in allowed enum list
+  remediation: Use exact enum value from spec
+- status: 400
+  code: INVALID_DATE_FORMAT
+  title: INVALID_DATE_FORMAT
+  doc_group: VALID_005
+  description: Date not in required format
+  remediation: 'Use ISO 8601 format: YYYY-MM-DD'
+- status: 400
+  code: DATE_IN_PAST
+  title: DATE_IN_PAST
+  doc_group: VALID_006
+  description: Date cannot be in the past
+  remediation: Use current or future date
+- status: 400
+  code: INVALID_CURRENCY_CODE
+  title: INVALID_CURRENCY_CODE
+  doc_group: VALID_007
+  description: Currency code not valid ISO 4217
+  remediation: 'Use 3-letter codes: EUR, GBP, USD'
+- status: 400
+  code: INVALID_COUNTRY_CODE
+  title: INVALID_COUNTRY_CODE
+  doc_group: VALID_008
+  description: Country code not valid ISO 3166
+  remediation: 'Use 2-letter codes: GB, DE, FR'
+- status: 400
+  code: INVALID_PHONE_NUMBER
+  title: INVALID_PHONE_NUMBER
+  doc_group: VALID_009
+  description: Phone number format invalid
+  remediation: 'Include country code: +447777000001'
+- status: 400
+  code: INVALID_JSON
+  title: INVALID_JSON
+  doc_group: VALID_010
+  description: Request body not valid JSON
+  remediation: Validate JSON syntax
+- status: 500
+  code: INTERNAL_SERVER_ERROR
+  title: INTERNAL_SERVER_ERROR
+  doc_group: SYSTEM_001
+  description: Unexpected server error
+  remediation: Retry with exponential backoff
+- status: 503
+  code: SERVICE_UNAVAILABLE
+  title: SERVICE_UNAVAILABLE
+  doc_group: SYSTEM_002
+  description: Service temporarily unavailable
+  remediation: Check status page, retry later
+- status: 429
+  code: RATE_LIMIT_EXCEEDED
+  title: RATE_LIMIT_EXCEEDED
+  doc_group: SYSTEM_003
+  description: Too many requests
+  remediation: Implement rate limiting, use backoff
+- status: 504
+  code: GATEWAY_TIMEOUT
+  title: GATEWAY_TIMEOUT
+  doc_group: SYSTEM_004
+  description: Request timeout
+  remediation: Retry or reduce request complexity
+- status: 503
+  code: MAINTENANCE_MODE
+  title: MAINTENANCE_MODE
+  doc_group: SYSTEM_005
+  description: System under maintenance
+  remediation: Check status page for updates
+- status: 410
+  code: DEPRECATED_ENDPOINT
+  title: DEPRECATED_ENDPOINT
+  doc_group: SYSTEM_006
+  description: Endpoint no longer available
+  remediation: Migrate to new endpoint version
+- status: 400
+  code: INVALID_API_VERSION
+  title: INVALID_API_VERSION
+  doc_group: SYSTEM_008
+  description: API version not supported
+  remediation: Use supported version
+- status: 413
+  code: REQUEST_TOO_LARGE
+  title: REQUEST_TOO_LARGE
+  doc_group: SYSTEM_009
+  description: Request body exceeds size limit
+  remediation: Reduce request size, batch operations
+- status: 409
+  code: IDEMPOTENCY_KEY_REUSED
+  title: IDEMPOTENCY_KEY_REUSED
+  doc_group: SYSTEM_010
+  description: the same idempotency-ref was reused with a different request payload
+  remediation: generate a unique idempotency-ref per distinct request, or repeat the original request unchanged.
+    See Idempotent requests . Quick resolution matrix ​ Symptom Likely error codes First check Can't log in AUTH_001
+    , AUTH_004 API key headers Can't create account IDENTITY_001 , AUTH_006 KYB KYB (Know You

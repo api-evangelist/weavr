@@ -107,7 +107,8 @@ components:
 
         The first number (20) is the limit that has been exceeded.
 
-        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)
+        The remaining numbers are the limits that are in force, with ''w'' meaning ''window in seconds''. In this example `20;w=3600` was exceeded.
+        20 calls in 3600secs (1hr)
 
         '
       required: true
@@ -182,7 +183,18 @@ components:
           - NOT_POSSIBLE
         reasonCode:
           type: string
-          description: "The reason why the matching failed at the UK Confirmation of Payee responder:\n\n  - ANNM: The CoP responder confirms that the account `name` provided does not match;\n  - MBAM: The CoP responder indicates that the account `name` provided closely matches the actual account in its records, the actual account name is returned in the `accountName` field;\n  - BANM: The account `type` that the user specified is 'PERSONAL', but the CoP responder indicates that the actual account matching the `name` provided is actually BUSINESS;\n  - PANM: The account `type` that the user specified is 'BUSINESS', but the CoP responder indicates that the actual account matching the `name` provided is actually PERSONAL;\n  - BAMM: The account `type` that the user specified is 'PERSONAL', but the CoP responder indicates that an account closely matching the `name` provided is BUSINESS;\n  - PAMM: The account `type` that the user specified is 'BUSINESS', but the CoP responder indicates that an account closely matching the `name` provided is PERSONAL;\n  - AC01: The account does not exist in the CoP responders books, the `accountNumber` specified is likely incorrect; \n  - IVCR: The CoP responder was unable to locate an account based on the `secondaryReference` field;\n  - ACNS: The account is not supported for CoP by the CoP responder;\n  - OPTO: The owner of the account has opted out of CoP service by the CoP responder;\n  - CASS: The account has been switched using the Current Account Switch Service;\n  - SCNS: The `sortCode` provided is not supported at endpoint;\n"
+          description: "The reason why the matching failed at the UK Confirmation of Payee responder:\n\n  - ANNM: The CoP responder confirms\
+            \ that the account `name` provided does not match;\n  - MBAM: The CoP responder indicates that the account `name` provided closely\
+            \ matches the actual account in its records, the actual account name is returned in the `accountName` field;\n  - BANM: The account\
+            \ `type` that the user specified is 'PERSONAL', but the CoP responder indicates that the actual account matching the `name` provided\
+            \ is actually BUSINESS;\n  - PANM: The account `type` that the user specified is 'BUSINESS', but the CoP responder indicates that\
+            \ the actual account matching the `name` provided is actually PERSONAL;\n  - BAMM: The account `type` that the user specified is 'PERSONAL',\
+            \ but the CoP responder indicates that an account closely matching the `name` provided is BUSINESS;\n  - PAMM: The account `type`\
+            \ that the user specified is 'BUSINESS', but the CoP responder indicates that an account closely matching the `name` provided is PERSONAL;\n\
+            \  - AC01: The account does not exist in the CoP responders books, the `accountNumber` specified is likely incorrect; \n  - IVCR:\
+            \ The CoP responder was unable to locate an account based on the `secondaryReference` field;\n  - ACNS: The account is not supported\
+            \ for CoP by the CoP responder;\n  - OPTO: The owner of the account has opted out of CoP service by the CoP responder;\n  - CASS:\
+            \ The account has been switched using the Current Account Switch Service;\n  - SCNS: The `sortCode` provided is not supported at endpoint;\n"
           enum:
           - ANNM
           - MBAM
@@ -310,7 +322,8 @@ components:
       required:
       - id
       - type
-      description: Information about a managed card — used wherever a card appears (the card on a card payment, or the access instrument that initiated a transaction).
+      description: Information about a managed card — used wherever a card appears (the card on a card payment, or the access instrument that
+        initiated a transaction).
       properties:
         id:
           type: string
@@ -325,7 +338,8 @@ components:
           enum:
           - prepaid
           - debit
-          description: "The mode the card was created in.\n  - `prepaid`: The card has its own balance and can have funds transferred to or from it.\n  - `debit`: The card has no balance of its own; it draws on its parent managed account up to a configurable spend limit.\n"
+          description: "The mode the card was created in.\n  - `prepaid`: The card has its own balance and can have funds transferred to or from\
+            \ it.\n  - `debit`: The card has no balance of its own; it draws on its parent managed account up to a configurable spend limit.\n"
         friendlyName:
           type: string
           description: The friendly name chosen for the card.
@@ -349,14 +363,23 @@ components:
         linkedUserId:
           type: string
           pattern: ^[0-9]+$
-          description: Identifier of the authorised user the card is assigned to. Populated only when the card has been assigned to a specific user.
+          description: Identifier of the authorised user the card is assigned to. Populated only when the card has been assigned to a specific
+            user.
         parentManagedAccountId:
           type: string
           pattern: ^[0-9]+$
           description: Identifier of the managed account this card draws funds from. Populated only when `mode` is `debit`.
     CardPayment:
       type: object
-      description: "One card transaction's full lifecycle — authorisation, settlement, refunds — as a single resource that the platform keeps up to date as scheme events arrive.\n\nDesigned for two audiences:\n  - **Building UI?** Read the top-level summary fields (`displayAmount`, `status`, `type`, `merchant`, `card`). They are platform-maintained — show them as-is. No need to understand auth-vs-clearing, reversals, or scheme messages. The debit/credit direction is implicit from `type` (purchases / cash withdrawals / account funding debit the card; refunds / original credits credit it). For the issuer authorisation code, walk `events[]` — every event in the lifecycle carries it.\n  - **Need scheme-level detail?** Walk `events[]` for the full per-step audit trail — every authorisation, clearing, reversal, and refund step — with original scheme amounts (merchant + card currency, with exchange rates), reason codes, and fees attached to the event that triggered them.\n\nEach card payment corresponds to one card-scheme lifecycle (Visa Transaction Identifier / Mastercard TLID). Related-but-separate transactions (refunds, tips, recurring follow-ups) are separate card payments linked via `relatedCardPaymentId` (direct parent).\n"
+      description: "One card transaction's full lifecycle — authorisation, settlement, refunds — as a single resource that the platform keeps\
+        \ up to date as scheme events arrive.\n\nDesigned for two audiences:\n  - **Building UI?** Read the top-level summary fields (`displayAmount`,\
+        \ `status`, `type`, `merchant`, `card`). They are platform-maintained — show them as-is. No need to understand auth-vs-clearing, reversals,\
+        \ or scheme messages. The debit/credit direction is implicit from `type` (purchases / cash withdrawals / account funding debit the card;\
+        \ refunds / original credits credit it). For the issuer authorisation code, walk `events[]` — every event in the lifecycle carries it.\n\
+        \  - **Need scheme-level detail?** Walk `events[]` for the full per-step audit trail — every authorisation, clearing, reversal, and refund\
+        \ step — with original scheme amounts (merchant + card currency, with exchange rates), reason codes, and fees attached to the event that\
+        \ triggered them.\n\nEach card payment corresponds to one card-scheme lifecycle (Visa Transaction Identifier / Mastercard TLID). Related-but-separate\
+        \ transactions (refunds, tips, recurring follow-ups) are separate card payments linked via `relatedCardPaymentId` (direct parent).\n"
       required:
       - id
       - type
@@ -374,7 +397,8 @@ components:
         profileId:
           $ref: '#/components/schemas/ProfileId'
         type:
-          description: The high-level type of card payment. For finer-grained classification (e.g. distinguishing a sale-purchase from a sale with cashback), see the per-event `subtype` field.
+          description: The high-level type of card payment. For finer-grained classification (e.g. distinguishing a sale-purchase from a sale
+            with cashback), see the per-event `subtype` field.
           $ref: '#/components/schemas/CardPaymentType'
         card:
           description: The managed card used for this payment.
@@ -382,17 +406,32 @@ components:
         merchant:
           $ref: '#/components/schemas/Merchant'
         displayAmount:
-          description: "Platform-maintained headline amount of the card payment, in the cardholder's preferred display currency (which matches the card billing currency unless a specific `userCurrency` was set when the card was created). The amount is derived from card payment events and can be displayed in your transaction activity UI as the amount of the card payment.\n\nAs a headline amount, it reflects the intended amount of the payment.\n  - In the case of a full reversal or cancellation and within-lifecycle dispute swings it stays stable. For example, an auth-50 → settle-50 → reverse-50 cycle still reads as 50 here, even though the net ledger impact is zero.\n  - In the case of a partial reversal it reflects the net amount, so the display amount of the card payment reflects the revised amount. For example, an auth-50 (displayAmount 50) → settle-40 with a release of the remaining auth of 10, displayAmount updated to 40.\n\nTo compute the actual net (for accounting), sum the amounts of your chosen type, from all the events, yourself.\n\nMagnitude is always positive. The debit/credit direction is implicit from `type` (purchases debit, refunds and OCTs credit). For the lifecycle phase, read `status`. For amounts in the merchant's currency (transaction currency) or the card's currency (if different from your preferred currency), read `events[]`.\n"
+          description: "Platform-maintained headline amount of the card payment, in the cardholder's preferred display currency (which matches\
+            \ the card billing currency unless a specific `userCurrency` was set when the card was created). The amount is derived from card payment\
+            \ events and can be displayed in your transaction activity UI as the amount of the card payment.\n\nAs a headline amount, it reflects\
+            \ the intended amount of the payment.\n  - In the case of a full reversal or cancellation and within-lifecycle dispute swings it stays\
+            \ stable. For example, an auth-50 → settle-50 → reverse-50 cycle still reads as 50 here, even though the net ledger impact is zero.\n\
+            \  - In the case of a partial reversal it reflects the net amount, so the display amount of the card payment reflects the revised\
+            \ amount. For example, an auth-50 (displayAmount 50) → settle-40 with a release of the remaining auth of 10, displayAmount updated\
+            \ to 40.\n\nTo compute the actual net (for accounting), sum the amounts of your chosen type, from all the events, yourself.\n\nMagnitude\
+            \ is always positive. The debit/credit direction is implicit from `type` (purchases debit, refunds and OCTs credit). For the lifecycle\
+            \ phase, read `status`. For amounts in the merchant's currency (transaction currency) or the card's currency (if different from your\
+            \ preferred currency), read `events[]`.\n"
           $ref: '#/components/schemas/CurrencyAmount'
         status:
           $ref: '#/components/schemas/CardPaymentStatus'
         relatedCardPaymentId:
           type: string
           pattern: ^[0-9]+$
-          description: "Direct parent linkage — id of the single prior card payment that this payment derives from. Set on:\n  - `REFUND` payments referring to the original purchase\n  - `ORIGINAL_CREDIT` payments referring to the prior purchase being credited\n  - Tip / add-on payments referring to the original ride / fare / service\n  - Installment / recurring payments referring to the initial setup transaction\n\nCorresponds to Visa's \"Original Transaction ID\" linkage and Mastercard's DE 105 subelement 002 (Economically Related Transaction Identifier). Not used for messages that share a single lifecycle — those are events on the same card payment.\n"
+          description: "Direct parent linkage — id of the single prior card payment that this payment derives from. Set on:\n  - `REFUND` payments\
+            \ referring to the original purchase\n  - `ORIGINAL_CREDIT` payments referring to the prior purchase being credited\n  - Tip / add-on\
+            \ payments referring to the original ride / fare / service\n  - Installment / recurring payments referring to the initial setup transaction\n\
+            \nCorresponds to Visa's \"Original Transaction ID\" linkage and Mastercard's DE 105 subelement 002 (Economically Related Transaction\
+            \ Identifier). Not used for messages that share a single lifecycle — those are events on the same card payment.\n"
         events:
           type: array
-          description: Ordered event stream — every scheme message in this card payment's lifecycle. For headline display use `displayAmount`; walk this when you need scheme-level detail (per-event amounts, fees, reason codes, reversals).
+          description: Ordered event stream — every scheme message in this card payment's lifecycle. For headline display use `displayAmount`;
+            walk this when you need scheme-level detail (per-event amounts, fees, reason codes, reversals).
           items:
             $ref: '#/components/schemas/CardPaymentEvent'
         creationTimestamp:
@@ -524,7 +563,8 @@ components:
       - BALANCE_INQUIRY
     TransactionActivitySortBy:
       type: string
-      description: "The field to sort transaction activity results by:\n  - creationTimestamp: Sort by when the transaction was first created (default).\n  - lastUpdatedTimestamp: Sort by when the transaction was most recently updated.\n"
+      description: "The field to sort transaction activity results by:\n  - creationTimestamp: Sort by when the transaction was first created\
+        \ (default).\n  - lastUpdatedTimestamp: Sort by when the transaction was most recently updated.\n"
       enum:
       - creationTimestamp
       - lastUpdatedTimestamp
@@ -667,7 +707,9 @@ components:
           description: 'The beneficiary''s full name. The allowed length and pattern is dependent on the bank account details type:
 
 
-            `IBANDetails`: >= `1` character and <= `150` characters. An extended character set is accepted to cater for all European languages. If `SEPA` does not support a particular character, it is automatically converted to an acceptable alternative, in line with `SEPA` scheme guidance.
+            `IBANDetails`: >= `1` character and <= `150` characters. An extended character set is accepted to cater for all European languages.
+            If `SEPA` does not support a particular character, it is automatically converted to an acceptable alternative, in line with `SEPA`
+            scheme guidance.
 
 
             `FasterPaymentsBankDetailsOrBACSBankDetails`: >= `1` character and <= `140` characters with a pattern of `^[a-zA-Z0-9\/\-?:().,’+\s#=!"%&*<>;\{@\r\n]*$`
@@ -685,7 +727,8 @@ components:
           maxLength: 150
           minLength: 1
           type: string
-          description: 'The beneficiary’s address. For `SEPA`, an extended character set is accepted to cater for all European languages. If `SEPA` does not support a particular character, it is automatically converted to an acceptable alternative, in line with `SEPA` scheme guidance.
+          description: 'The beneficiary’s address. For `SEPA`, an extended character set is accepted to cater for all European languages. If `SEPA`
+            does not support a particular character, it is automatically converted to an acceptable alternative, in line with `SEPA` scheme guidance.
 
             '
         bankName:
@@ -770,7 +813,8 @@ components:
         Profiles contain configuration and determine behavioral aspects of the newly created transaction, for example, fees that may apply.
 
 
-        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s needs.
+        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s
+        needs.
 
 
         Profile Ids can be found in the Multi Portal, in the API Credentials page.
@@ -840,7 +884,11 @@ components:
           $ref: '#/components/schemas/DateOfBirth'
     TransactionActivityType:
       type: string
-      description: "The type of transaction:\n  - transfers: Internal transfer between instruments of the same identity\n  - sends: Transfer between instruments of different identities\n  - outgoing_wire_transfers: Wire transfer to an external bank account\n  - correspondent_bank_transfers: Wire transfer on behalf of a third-party originator\n  - incoming_wire_transfers: Wire transfer received from an external bank account\n  - card_payments: Card payment (purchase, refund, OCT, etc.) with full lifecycle\n  - fees: Fee charged or reversed on an instrument\n  - system_transactions: System-generated transactions (balance adjustments, account closures, dispute outcomes, etc.)\n"
+      description: "The type of transaction:\n  - transfers: Internal transfer between instruments of the same identity\n  - sends: Transfer between\
+        \ instruments of different identities\n  - outgoing_wire_transfers: Wire transfer to an external bank account\n  - correspondent_bank_transfers:\
+        \ Wire transfer on behalf of a third-party originator\n  - incoming_wire_transfers: Wire transfer received from an external bank account\n\
+        \  - card_payments: Card payment (purchase, refund, OCT, etc.) with full lifecycle\n  - fees: Fee charged or reversed on an instrument\n\
+        \  - system_transactions: System-generated transactions (balance adjustments, account closures, dispute outcomes, etc.)\n"
       enum:
       - transfers
       - sends
@@ -897,7 +945,9 @@ components:
           $ref: '#/components/schemas/TransactionCancellationReason'
     IncomingWireTransferMultiState:
       type: string
-      description: "The state of an incoming wire transfer:\n  - PENDING: The transfer has been received and is being processed. Funds have not yet been credited to the destination account.\n  - COMPLETED: Funds have been credited to the destination account.\n  - REJECTED: The transfer was not accepted; funds were not credited.\n"
+      description: "The state of an incoming wire transfer:\n  - PENDING: The transfer has been received and is being processed. Funds have not\
+        \ yet been credited to the destination account.\n  - COMPLETED: Funds have been credited to the destination account.\n  - REJECTED: The\
+        \ transfer was not accepted; funds were not credited.\n"
       enum:
       - PENDING
       - COMPLETED
@@ -956,10 +1006,12 @@ components:
         description:
           maxLength: 35
           type: string
-          description: 'These details are passed to the beneficiary as the `reference`. This field is mandatory for wire transfers executed over `SEPA`. The allowed length is dependent on the payment type:
+          description: 'These details are passed to the beneficiary as the `reference`. This field is mandatory for wire transfers executed over
+            `SEPA`. The allowed length is dependent on the payment type:
 
 
-            `SEPA` <= `35` characters. An extended character set is accepted to cater for all European languages. If `SEPA` does not support a particular character, it is automatically converted to an acceptable alternative, in line with `SEPA` scheme guidance.
+            `SEPA` <= `35` characters. An extended character set is accepted to cater for all European languages. If `SEPA` does not support a
+            particular character, it is automatically converted to an acceptable alternative, in line with `SEPA` scheme guidance.
 
 
             `Faster Payments` <= `18` characters
@@ -1073,7 +1125,8 @@ components:
       - RIX
     CardPaymentEventType:
       type: string
-      description: Type of event recorded against a CardPayment. The `reversal` flag on each event distinguishes a reversal from the original action.
+      description: Type of event recorded against a CardPayment. The `reversal` flag on each event distinguishes a reversal from the original
+        action.
       enum:
       - AUTHORISATION
       - SETTLEMENT
@@ -1341,7 +1394,14 @@ components:
         message:
           type: string
     OutgoingWireTransferState:
-      description: "The state of the Outgoing wire transfer transaction, as follows:\n  - INVALID: The wire transfer has failed initial validation checks.\n  - PENDING_CHALLENGE: The wire transfer requires the completion of a transaction confirmation challenge before it can be submitted.\n  - SUBMITTED: The wire transfer has been submitted to the sending financial institution for processing.\n  - REJECTED: The wire transfer that was submitted was rejected.\n  - APPROVED: The wire transfer that was submitted has been approved and is being processed by the sending financial institution.\n  - FAILED: There was an issue with the wire transfer, and the transaction has failed.\n  - COMPLETED: The requested funds have been sent from the source instrument.\n  - RETURNED: The wire transfer has been returned to the sender.\n  - SCHEDULED: The wire transfer will be executed at the scheduled time.\n  - CANCELLED: The scheduled wire transfer has been cancelled.\n  - PENDING_CONFIRMATION: The wire transfer requires a manual confirmation by the user before proceeding.\n"
+      description: "The state of the Outgoing wire transfer transaction, as follows:\n  - INVALID: The wire transfer has failed initial validation\
+        \ checks.\n  - PENDING_CHALLENGE: The wire transfer requires the completion of a transaction confirmation challenge before it can be submitted.\n\
+        \  - SUBMITTED: The wire transfer has been submitted to the sending financial institution for processing.\n  - REJECTED: The wire transfer\
+        \ that was submitted was rejected.\n  - APPROVED: The wire transfer that was submitted has been approved and is being processed by the\
+        \ sending financial institution.\n  - FAILED: There was an issue with the wire transfer, and the transaction has failed.\n  - COMPLETED:\
+        \ The requested funds have been sent from the source instrument.\n  - RETURNED: The wire transfer has been returned to the sender.\n \
+        \ - SCHEDULED: The wire transfer will be executed at the scheduled time.\n  - CANCELLED: The scheduled wire transfer has been cancelled.\n\
+        \  - PENDING_CONFIRMATION: The wire transfer requires a manual confirmation by the user before proceeding.\n"
       type: string
       enum:
       - INVALID
@@ -1356,7 +1416,14 @@ components:
       - CANCELLED
       - PENDING_CONFIRMATION
     CorrespondentBankingOwtState:
-      description: "The state of the correspondent bank transfer transaction, as follows:\n  - INVALID: The transfer has failed initial validation checks.\n  - PENDING_CHALLENGE: The transfer requires the completion of a transaction confirmation challenge before it can be submitted.\n  - SUBMITTED: The transfer has been submitted to the sending financial institution for processing.\n  - REJECTED: The transfer that was submitted was rejected.\n  - APPROVED: The transfer that was submitted has been approved and is being processed by the sending financial institution.\n  - FAILED: There was an issue with the transfer, and the transaction has failed.\n  - COMPLETED: The requested funds have been sent from the source instrument.\n  - RETURNED: The transfer has been returned to the sender.\n  - SCHEDULED: The transfer will be executed at the scheduled time.\n  - CANCELLED: The scheduled transfer has been cancelled.\n  - PENDING_CONFIRMATION: The transfer requires a manual confirmation by the user before proceeding.\n"
+      description: "The state of the correspondent bank transfer transaction, as follows:\n  - INVALID: The transfer has failed initial validation\
+        \ checks.\n  - PENDING_CHALLENGE: The transfer requires the completion of a transaction confirmation challenge before it can be submitted.\n\
+        \  - SUBMITTED: The transfer has been submitted to the sending financial institution for processing.\n  - REJECTED: The transfer that\
+        \ was submitted was rejected.\n  - APPROVED: The transfer that was submitted has been approved and is being processed by the sending financial\
+        \ institution.\n  - FAILED: There was an issue with the transfer, and the transaction has failed.\n  - COMPLETED: The requested funds\
+        \ have been sent from the source instrument.\n  - RETURNED: The transfer has been returned to the sender.\n  - SCHEDULED: The transfer\
+        \ will be executed at the scheduled time.\n  - CANCELLED: The scheduled transfer has been cancelled.\n  - PENDING_CONFIRMATION: The transfer\
+        \ requires a manual confirmation by the user before proceeding.\n"
       type: string
       enum:
       - INVALID
@@ -1376,7 +1443,14 @@ components:
       description: The epoch timestamp at which the transaction is scheduled to be executed.
     SendState:
       type: string
-      description: "The state of the send transaction, as follows:\n - INVALID: The send transaction has failed initial validation checks. \n - INITIALISED: The initial state of a send transaction when SCA is not required.\n - PENDING_CHALLENGE: The send transaction requires the completion of a transaction confirmation challenge before it can be submitted.\n - PENDING: The send transaction has exceeded the destination limit and is pending treasury approval.\n - APPROVED: The send transaction that was submitted has been approved.\n - COMPLETED: The requested funds have been sent from the source instrument.\n - REJECTED: The send transaction that was submitted was rejected.\n - FAILED: There was an issue with the send transaction, and the transaction has failed.\n - RETURNED: The send transaction has been returned to the sender.\n - SCHEDULED: The send transaction will be executed at the scheduled time.\n - CANCELLED: The scheduled send transaction has been cancelled.\n"
+      description: "The state of the send transaction, as follows:\n - INVALID: The send transaction has failed initial validation checks. \n\
+        \ - INITIALISED: The initial state of a send transaction when SCA is not required.\n - PENDING_CHALLENGE: The send transaction requires\
+        \ the completion of a transaction confirmation challenge before it can be submitted.\n - PENDING: The send transaction has exceeded the\
+        \ destination limit and is pending treasury approval.\n - APPROVED: The send transaction that was submitted has been approved.\n - COMPLETED:\
+        \ The requested funds have been sent from the source instrument.\n - REJECTED: The send transaction that was submitted was rejected.\n\
+        \ - FAILED: There was an issue with the send transaction, and the transaction has failed.\n - RETURNED: The send transaction has been\
+        \ returned to the sender.\n - SCHEDULED: The send transaction will be executed at the scheduled time.\n - CANCELLED: The scheduled send\
+        \ transaction has been cancelled.\n"
       enum:
       - INVALID
       - INITIALISED
@@ -1391,7 +1465,14 @@ components:
       - CANCELLED
     TransactionActivityStatus:
       type: string
-      description: "Normalised lifecycle status of a transaction:\n  - DRAFT: Transaction ID has been created. There are additional user-actions required before the transaction is considered an “executable instruction” that is fully submitted. No balance movements have taken place on the target instrument yet.\n  - SUBMITTED: Transaction has been submitted and is awaiting processing. No balance movements have taken place yet. Transactions scheduled for processing on a future date remain in a submitted status.\n  - PROCESSING: The submitted transaction is being processed.\n  - COMPLETED: Executed and processed. Funds have moved, actual balance changed.\n  - CANCELLED: Transaction was cancelled before completion. Funds have been returned to the original instrument. \n  - RETURNED: The transaction was previously COMPLETED but has been returned. Funds have been returned to the original instrument. Note that card refunds may be separate transactions, not RETURNED purchases.\n"
+      description: "Normalised lifecycle status of a transaction:\n  - DRAFT: Transaction ID has been created. There are additional user-actions\
+        \ required before the transaction is considered an “executable instruction” that is fully submitted. No balance movements have taken place\
+        \ on the target instrument yet.\n  - SUBMITTED: Transaction has been submitted and is awaiting processing. No balance movements have taken\
+        \ place yet. Transactions scheduled for processing on a future date remain in a submitted status.\n  - PROCESSING: The submitted transaction\
+        \ is being processed.\n  - COMPLETED: Executed and processed. Funds have moved, actual balance changed.\n  - CANCELLED: Transaction was\
+        \ cancelled before completion. Funds have been returned to the original instrument. \n  - RETURNED: The transaction was previously COMPLETED\
+        \ but has been returned. Funds have been returned to the original instrument. Note that card refunds may be separate transactions, not\
+        \ RETURNED purchases.\n"
       enum:
       - DRAFT
       - SUBMITTED
@@ -1416,7 +1497,8 @@ components:
           minimum: -128
           type: integer
           format: int32
-      description: 'A floating point number, represented as a value and its scale. Its actual value can be obtained using the equation: value * pow(10, -scale).'
+      description: 'A floating point number, represented as a value and its scale. Its actual value can be obtained using the equation: value
+        * pow(10, -scale).'
     ExecutionTimestamp:
       pattern: ^[0-9]+$
       type: string
@@ -1581,7 +1663,8 @@ components:
         dateOfBirth:
           $ref: '#/components/schemas/DateOfBirth'
     OutgoingWireTransferRejectedInfo:
-      description: "Additional info when the outgoing wire transfer has been rejected, as follows:\n  - SYSTEM: The wire transfer was rejected by the system.\n  - USER: The wire transfer was rejected by the user.\n"
+      description: "Additional info when the outgoing wire transfer has been rejected, as follows:\n  - SYSTEM: The wire transfer was rejected\
+        \ by the system.\n  - USER: The wire transfer was rejected by the user.\n"
       type: string
       enum:
       - SYSTEM
@@ -1688,7 +1771,8 @@ components:
       properties:
         id:
           type: string
-          description: Merchant identifier (MID) — the acquirer-assigned code that identifies the merchant on card-scheme messages (ISO 8583 DE 42 Card Acceptor Identification Code).
+          description: Merchant identifier (MID) — the acquirer-assigned code that identifies the merchant on card-scheme messages (ISO 8583 DE
+            42 Card Acceptor Identification Code).
         name:
           type: string
           description: Merchant name (DBA name).
@@ -1736,7 +1820,12 @@ components:
           description: Merchant logo URL, when available.
     CardPaymentEvent:
       type: object
-      description: "An event in a card payment's lifecycle, lean — used **nested** inside `CardPayment.events[]`. The parent card payment provides `cardPaymentId`, `card`, and `merchant`, so the lean variants don't repeat them. Each event carries its own `authCode`. Four variants discriminated by `type`:\n\n  - `AUTHORISATION` → `CardPaymentAuthorisationEvent`\n  - `SETTLEMENT` → `CardPaymentSettlementEvent`\n  - `REFUND` → `CardPaymentRefundEvent`\n  - `ORIGINAL_CREDIT` → `CardPaymentOriginalCreditEvent` (Visa OCT / Mastercard MoneySend)\n\nFor the **standalone** version returned by `GET /card_payment_events` — which carries `cardPaymentId`, `card`, and `merchant` so each row is self-contained — see `CardPaymentEventDetail`.\n"
+      description: "An event in a card payment's lifecycle, lean — used **nested** inside `CardPayment.events[]`. The parent card payment provides\
+        \ `cardPaymentId`, `card`, and `merchant`, so the lean variants don't repeat them. Each event carries its own `authCode`. Four variants\
+        \ discriminated by `type`:\n\n  - `AUTHORISATION` → `CardPaymentAuthorisationEvent`\n  - `SETTLEMENT` → `CardPaymentSettlementEvent`\n\
+        \  - `REFUND` → `CardPaymentRefundEvent`\n  - `ORIGINAL_CREDIT` → `CardPaymentOriginalCreditEvent` (Visa OCT / Mastercard MoneySend)\n\
+        \nFor the **standalone** version returned by `GET /card_payment_events` — which carries `cardPaymentId`, `card`, and `merchant` so each\
+        \ row is self-contained — see `CardPaymentEventDetail`.\n"
       required:
       - type
       properties:
@@ -1868,7 +1957,8 @@ components:
           $ref: '#/components/schemas/DateOfBirth'
     SyntaxError:
       type: object
-      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their
+        syntax error will be provided.
       properties:
         invalidFields:
           type: array
@@ -1913,7 +2003,9 @@ components:
           format: int64
     FeeTransactionStatus:
       type: string
-      description: "Lifecycle status of a fee transaction:\n  - PENDING: Fee accompanies a transaction that is still processing; it may still be cancelled.\n  - COMPLETED: Fee was charged and posted to the instrument balance.\n  - CANCELLED: Fee was cancelled before being charged.\n  - REVERSED: Fee was previously charged and has been reversed.\n"
+      description: "Lifecycle status of a fee transaction:\n  - PENDING: Fee accompanies a transaction that is still processing; it may still\
+        \ be cancelled.\n  - COMPLETED: Fee was charged and posted to the instrument balance.\n  - CANCELLED: Fee was cancelled before being charged.\n\
+        \  - REVERSED: Fee was previously charged and has been reversed.\n"
       enum:
       - PENDING
       - COMPLETED
@@ -1927,7 +2019,8 @@ components:
       - amount
       properties:
         id:
-          description: Identifier of the fee — same value used as entryId on the corresponding fees-type entry, and as the fee transaction id in the Transaction Activity API.
+          description: Identifier of the fee — same value used as entryId on the corresponding fees-type entry, and as the fee transaction id
+            in the Transaction Activity API.
           type: string
           pattern: ^[0-9]+$
         type:
@@ -1941,6 +2034,26 @@ components:
         subtype:
           description: Categorises the fee — derived from the parent transaction type.
           $ref: '#/components/schemas/FeeSubtype'
+    CardPaymentAuthorisationEvent:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    CardPaymentOriginalCreditEvent:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    CardPaymentRefundEvent:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    CardPaymentSettlementEvent:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
   parameters:
     transactionActivityType:
       name: type
@@ -2012,7 +2125,8 @@ components:
       name: offset
       in: query
       required: false
-      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.
+      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria.
+        Leave out to fetch the first page of results.
       schema:
         minimum: 0
         type: integer
@@ -2021,7 +2135,8 @@ components:
       name: lastUpdatedTimestampFrom
       in: query
       required: false
-      description: Filter for transactions last updated after this timestamp. Useful for pulling recently changed transactions. Epoch timestamp using millisecond precision.
+      description: Filter for transactions last updated after this timestamp. Useful for pulling recently changed transactions. Epoch timestamp
+        using millisecond precision.
       schema:
         type: integer
         format: int64
@@ -2108,7 +2223,8 @@ components:
   securitySchemes:
     api-key:
       type: apiKey
-      description: An API key defined in your User API Client  (or Delegate API Client - this feature is available only to customers enabled with delegation functionality).  API Clients are as managed in the Embedder Portal
+      description: An API key defined in your User API Client  (or Delegate API Client - this feature is available only to customers enabled with
+        delegation functionality).  API Clients are as managed in the Embedder Portal
       name: api-key
       in: header
     auth_token:

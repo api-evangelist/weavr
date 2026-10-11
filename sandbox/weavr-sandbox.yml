@@ -1,12 +1,9 @@
 generated: '2026-07-21'
 method: searched
 source: https://docs.weavr.io/ + openapi/weavr-simulator-openapi-original.yml + github.com/weavr-io/skills
-summary: >-
-  Weavr provides a full sandbox environment plus a dedicated Simulator API for
-  simulating events that would normally originate from external systems (bank
-  transfers, card networks, identity-verification providers). Sandbox
-  credentials (api-key, programme-key, API Secret Key) are provisioned per
-  programme from the Embedder Portal.
+summary: Weavr provides a full sandbox environment plus a dedicated Simulator API for simulating events that would
+  normally originate from external systems (bank transfers, card networks, identity-verification providers). Sandbox
+  credentials (api-key, programme-key, API Secret Key) are provisioned per programme from the Embedder Portal.
 environments:
   sandbox:
     base_url: https://sandbox.weavr.io
@@ -34,14 +31,19 @@ simulator:
   - Pass / fail / expire 2FA challenges
   - Set / verify linked accounts
 test_values:
-  note: >-
-    Values below are the example test identifiers Weavr publishes in its docs /
-    official skills. Amounts are always in minor units.
+  note: Values below are the example test identifiers Weavr publishes in its docs / official skills. Amounts are
+    always in minor units.
   ibans:
   - GB29NWBK60161331926819
   - DE89370400440532013000
   bic: NWBKGB2L
-  payment_networks: [SEPA, FASTER_PAYMENTS, SWIFT, BACS, CHAPS, RIX]
+  payment_networks:
+  - SEPA
+  - FASTER_PAYMENTS
+  - SWIFT
+  - BACS
+  - CHAPS
+  - RIX
   merchant_category_code_example: '5411'
   deposit_response: '{ "code": "COMPLETED" }'
   purchase_response: '{ "code": "APPROVED" }'
@@ -53,3 +55,7 @@ typical_flow:
 - Simulate deposit (POST /accounts/{id}/deposit — simulator)
 - Issue card (POST /multi/managed_cards)
 - Simulate purchase (POST /cards/{id}/purchase — simulator)
+description: Weavr provides a full sandbox environment plus a dedicated Simulator API for simulating events that
+  would normally originate from external systems (bank transfers, card networks, identity-verification providers).
+  Sandbox credentials (api-key, programme-key, API Secret Key) are provisioned per programme from the Embedder Portal.
+docs: https://docs.weavr.io/getting-started/open-sandbox-account/

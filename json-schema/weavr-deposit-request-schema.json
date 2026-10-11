@@ -1,0 +1,169 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/weavr/main/json-schema/weavr-deposit-request-schema.json",
+  "title": "DepositRequest",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/weavr-accounts-api-openapi.yml#/components/schemas/DepositRequest",
+  "required": [
+    "depositAmount"
+  ],
+  "type": "object",
+  "properties": {
+    "iban": {
+      "type": "string",
+      "description": "The iban of the account the incoming wire transfer should be processed against",
+      "deprecated": true
+    },
+    "paymentReference": {
+      "type": "string",
+      "description": "The payment reference is needed to identify which account, in cases where the same iban is used"
+    },
+    "depositAmount": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CurrencyAmount"
+        },
+        {
+          "description": "The amount of the incoming wire transfer",
+          "x-fieldValidation": "required"
+        }
+      ]
+    },
+    "senderName": {
+      "type": "string",
+      "description": "The name of the person or business sending the incoming wire transfer"
+    },
+    "reference": {
+      "type": "string",
+      "description": "A reference provided by the sender of the incoming wire transfer."
+    },
+    "receiverName": {
+      "type": "string",
+      "description": "The name of the recipient of the incoming wire transfer"
+    },
+    "txId": {
+      "type": "integer",
+      "description": "Id used for the transaction if provided, otherwise one will be generated",
+      "format": "int64"
+    },
+    "senderIbanDetails": {
+      "$ref": "#/$defs/IbanDetails"
+    },
+    "senderFasterPaymentsDetails": {
+      "$ref": "#/$defs/FasterPaymentsDetails"
+    },
+    "senderAccountDescriptorDetails": {
+      "$ref": "#/$defs/AccountDescriptorDetails"
+    },
+    "destinationIbanDetails": {
+      "$ref": "#/$defs/IbanDetails"
+    },
+    "destinationFasterPaymentsDetails": {
+      "$ref": "#/$defs/FasterPaymentsDetails"
+    },
+    "paymentNetwork": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/TransferType"
+        },
+        {
+          "description": "Optional field which indicates the payment network to use. If not provided, a default payment network will be chosen based on the currency."
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "AccountDescriptorDetails": {
+      "required": [
+        "accountDescriptor"
+      ],
+      "type": "object",
+      "properties": {
+        "accountDescriptor": {
+          "maxLength": 50,
+          "type": "string",
+          "description": "An identifier of an account that has neither an IBAN nor Faster Payments details.",
+          "x-fieldValidation": "required size(_,50)"
+        }
+      }
+    },
+    "CurrencyAmount": {
+      "required": [
+        "currency"
+      ],
+      "type": "object",
+      "properties": {
+        "currency": {
+          "maxLength": 3,
+          "minLength": 3,
+          "pattern": "^[A-Z]*$",
+          "type": "string",
+          "description": "The currency ISO-4217 code, i.e. a three letter uppercase code, such as GBP, EUR, USD.",
+          "x-fieldValidation": "required size(3,3) regex([A-Z]*)"
+        },
+        "amount": {
+          "type": "integer",
+          "description": "The monetary amount, scaled to the lowest denomination of the currency. For example, an amount of 1000 for a EUR currency is actually 1000 Euro cents, i.e. EUR 10.00.",
+          "format": "int64"
+        }
+      },
+      "description": "A message representing a monetary amount in a particular currency."
+    },
+    "FasterPaymentsDetails": {
+      "required": [
+        "accountNumber",
+        "sortCode"
+      ],
+      "type": "object",
+      "properties": {
+        "sortCode": {
+          "maxLength": 6,
+          "minLength": 6,
+          "pattern": "^[0-9]*$",
+          "type": "string",
+          "x-fieldValidation": "required size(6,6) regex([0-9]*)"
+        },
+        "accountNumber": {
+          "pattern": "^[0-9]*$",
+          "type": "string",
+          "x-fieldValidation": "required regex([0-9]*)"
+        },
+        "secondaryReference": {
+          "type": "string",
+          "description": "Supplementary identifier used by financial institutions for accounts without unique sort codes, ensuring distinction between different accounts or customers"
+        }
+      }
+    },
+    "IbanDetails": {
+      "required": [
+        "iban"
+      ],
+      "type": "object",
+      "properties": {
+        "iban": {
+          "pattern": "^[A-Z0-9]*$",
+          "type": "string",
+          "x-fieldValidation": "required regex([A-Z0-9]*)"
+        },
+        "bankIdentifierCode": {
+          "pattern": "^[A-Z0-9]*$",
+          "type": "string",
+          "x-fieldValidation": "regex([A-Z0-9]*)"
+        }
+      }
+    },
+    "TransferType": {
+      "type": "string",
+      "enum": [
+        "SEPA",
+        "FASTER_PAYMENTS",
+        "SWIFT",
+        "BACS",
+        "CHAPS",
+        "RIX"
+      ]
+    }
+  }
+}

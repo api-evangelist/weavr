@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/weavr/main/json-schema/weavr-currency-amount-schema.json",
+  "title": "CurrencyAmount",
+  "description": "The object representing a monetary amount in a particular currency.",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/weavr-operations-api-openapi.yml#/components/schemas/CurrencyAmount",
+  "required": [
+    "currency",
+    "amount"
+  ],
+  "type": "object",
+  "properties": {
+    "currency": {
+      "$ref": "#/$defs/Currency"
+    },
+    "amount": {
+      "type": "integer",
+      "format": "int64",
+      "description": "The monetary amount, scaled to the lowest denomination of the currency.\n\nExample, an amount of 1000 for a EUR currency is actually 1000 Euro cents or EUR 10.00.\n"
+    }
+  },
+  "$defs": {
+    "Currency": {
+      "type": "string",
+      "description": "The currency expressed in ISO-4217 code. Example: GBP, EUR, USD.",
+      "maxLength": 3,
+      "minLength": 3,
+      "pattern": "^[A-Z]*$"
+    }
+  }
+}

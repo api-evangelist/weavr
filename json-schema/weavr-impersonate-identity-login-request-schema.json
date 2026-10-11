@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/weavr/main/json-schema/weavr-impersonate-identity-login-request-schema.json",
+  "title": "ImpersonateIdentityLoginRequest",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/weavr-access-token-api-openapi.yml#/components/schemas/ImpersonateIdentityLoginRequest",
+  "required": [
+    "identity"
+  ],
+  "type": "object",
+  "properties": {
+    "identity": {
+      "$ref": "#/$defs/IdentityId"
+    },
+    "temp": {
+      "$ref": "#/$defs/IdentityId"
+    }
+  },
+  "$defs": {
+    "IdentityId": {
+      "required": [
+        "type",
+        "id"
+      ],
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": [
+            "CONSUMER",
+            "CORPORATE"
+          ],
+          "type": "string",
+          "description": "Indicates the identity type."
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9]+$",
+          "description": "The identifier for the identity."
+        }
+      }
+    }
+  }
+}

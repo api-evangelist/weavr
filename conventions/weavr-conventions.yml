@@ -27,7 +27,12 @@ idempotency:
   supported: true
   mechanism: header
   header: idempotency-ref
-  scope: "payload + operation"
+  coverage: partial
+  key_scope: "payload + operation"
+  scope:
+  - "multi API: 55 of 103 write operations accept idempotency-ref"
+  - "backoffice API: 9 of 22 write operations"
+  - "payment-run API: 22 of 44 write operations"
   retention: ">= 24 hours"
   description: >-
     A unique caller-generated reference that, taking the payload and the

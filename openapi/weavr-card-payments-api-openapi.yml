@@ -23,7 +23,8 @@ paths:
       - Card Payments
       summary: Get all card payments
       operationId: cardPaymentsGet
-      description: Returns the aggregated card payments for the logged-in identity. A CardPayment represents the full lifecycle of a card payment (authorisation + settlements + optional reversal/expiry/refund/original credit) as a single business-level entity.
+      description: Returns the aggregated card payments for the logged-in identity. A CardPayment represents the full lifecycle of a card payment
+        (authorisation + settlements + optional reversal/expiry/refund/original credit) as a single business-level entity.
       x-permissions:
       - i:managed_cards:statement
       - i:managed_cards:statement:own
@@ -90,7 +91,8 @@ paths:
       - Card Payments
       summary: Get all card payment events
       operationId: cardPaymentEventsGet
-      description: Returns a flat, chronological list of card payment events across one or more card payments. Each entry carries the event plus the parent CardPayment context (card, merchant, group).
+      description: Returns a flat, chronological list of card payment events across one or more card payments. Each entry carries the event plus
+        the parent CardPayment context (card, merchant, group).
       x-permissions:
       - i:managed_cards:statement
       - i:managed_cards:statement:own
@@ -204,7 +206,8 @@ components:
     accept:
       name: accept
       in: header
-      description: 'A request parameter specifying the type of response the client would like. Must be one of `application/json`, `application/pdf` or `text/csv`.
+      description: 'A request parameter specifying the type of response the client would like. Must be one of `application/json`, `application/pdf`
+        or `text/csv`.
 
 
         The default response type (`application/json`) will be returned if specified incorrectly or not specified.
@@ -330,7 +333,8 @@ components:
       name: offset
       in: query
       required: false
-      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.
+      description: The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria.
+        Leave out to fetch the first page of results.
       schema:
         minimum: 0
         type: integer
@@ -362,7 +366,8 @@ components:
         Profiles contain configuration and determine behavioral aspects of the newly created transaction, for example, fees that may apply.
 
 
-        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s needs.
+        You can have one or more profiles linked to your application, and these can be used to drive different behaviors according to your product''s
+        needs.
 
 
         Profile Ids can be found in the Multi Portal, in the API Credentials page.
@@ -378,7 +383,8 @@ components:
       properties:
         id:
           type: string
-          description: Merchant identifier (MID) — the acquirer-assigned code that identifies the merchant on card-scheme messages (ISO 8583 DE 42 Card Acceptor Identification Code).
+          description: Merchant identifier (MID) — the acquirer-assigned code that identifies the merchant on card-scheme messages (ISO 8583 DE
+            42 Card Acceptor Identification Code).
         name:
           type: string
           description: Merchant name (DBA name).
@@ -429,7 +435,8 @@ components:
       required:
       - id
       - type
-      description: Information about a managed card — used wherever a card appears (the card on a card payment, or the access instrument that initiated a transaction).
+      description: Information about a managed card — used wherever a card appears (the card on a card payment, or the access instrument that
+        initiated a transaction).
       properties:
         id:
           type: string
@@ -444,7 +451,8 @@ components:
           enum:
           - prepaid
           - debit
-          description: "The mode the card was created in.\n  - `prepaid`: The card has its own balance and can have funds transferred to or from it.\n  - `debit`: The card has no balance of its own; it draws on its parent managed account up to a configurable spend limit.\n"
+          description: "The mode the card was created in.\n  - `prepaid`: The card has its own balance and can have funds transferred to or from\
+            \ it.\n  - `debit`: The card has no balance of its own; it draws on its parent managed account up to a configurable spend limit.\n"
         friendlyName:
           type: string
           description: The friendly name chosen for the card.
@@ -468,14 +476,20 @@ components:
         linkedUserId:
           type: string
           pattern: ^[0-9]+$
-          description: Identifier of the authorised user the card is assigned to. Populated only when the card has been assigned to a specific user.
+          description: Identifier of the authorised user the card is assigned to. Populated only when the card has been assigned to a specific
+            user.
         parentManagedAccountId:
           type: string
           pattern: ^[0-9]+$
           description: Identifier of the managed account this card draws funds from. Populated only when `mode` is `debit`.
     CardPaymentEvent:
       type: object
-      description: "An event in a card payment's lifecycle, lean — used **nested** inside `CardPayment.events[]`. The parent card payment provides `cardPaymentId`, `card`, and `merchant`, so the lean variants don't repeat them. Each event carries its own `authCode`. Four variants discriminated by `type`:\n\n  - `AUTHORISATION` → `CardPaymentAuthorisationEvent`\n  - `SETTLEMENT` → `CardPaymentSettlementEvent`\n  - `REFUND` → `CardPaymentRefundEvent`\n  - `ORIGINAL_CREDIT` → `CardPaymentOriginalCreditEvent` (Visa OCT / Mastercard MoneySend)\n\nFor the **standalone** version returned by `GET /card_payment_events` — which carries `cardPaymentId`, `card`, and `merchant` so each row is self-contained — see `CardPaymentEventDetail`.\n"
+      description: "An event in a card payment's lifecycle, lean — used **nested** inside `CardPayment.events[]`. The parent card payment provides\
+        \ `cardPaymentId`, `card`, and `merchant`, so the lean variants don't repeat them. Each event carries its own `authCode`. Four variants\
+        \ discriminated by `type`:\n\n  - `AUTHORISATION` → `CardPaymentAuthorisationEvent`\n  - `SETTLEMENT` → `CardPaymentSettlementEvent`\n\
+        \  - `REFUND` → `CardPaymentRefundEvent`\n  - `ORIGINAL_CREDIT` → `CardPaymentOriginalCreditEvent` (Visa OCT / Mastercard MoneySend)\n\
+        \nFor the **standalone** version returned by `GET /card_payment_events` — which carries `cardPaymentId`, `card`, and `merchant` so each\
+        \ row is self-contained — see `CardPaymentEventDetail`.\n"
       required:
       - type
       properties:
@@ -511,7 +525,15 @@ components:
           format: int64
     CardPayment:
       type: object
-      description: "One card transaction's full lifecycle — authorisation, settlement, refunds — as a single resource that the platform keeps up to date as scheme events arrive.\n\nDesigned for two audiences:\n  - **Building UI?** Read the top-level summary fields (`displayAmount`, `status`, `type`, `merchant`, `card`). They are platform-maintained — show them as-is. No need to understand auth-vs-clearing, reversals, or scheme messages. The debit/credit direction is implicit from `type` (purchases / cash withdrawals / account funding debit the card; refunds / original credits credit it). For the issuer authorisation code, walk `events[]` — every event in the lifecycle carries it.\n  - **Need scheme-level detail?** Walk `events[]` for the full per-step audit trail — every authorisation, clearing, reversal, and refund step — with original scheme amounts (merchant + card currency, with exchange rates), reason codes, and fees attached to the event that triggered them.\n\nEach card payment corresponds to one card-scheme lifecycle (Visa Transaction Identifier / Mastercard TLID). Related-but-separate transactions (refunds, tips, recurring follow-ups) are separate card payments linked via `relatedCardPaymentId` (direct parent).\n"
+      description: "One card transaction's full lifecycle — authorisation, settlement, refunds — as a single resource that the platform keeps\
+        \ up to date as scheme events arrive.\n\nDesigned for two audiences:\n  - **Building UI?** Read the top-level summary fields (`displayAmount`,\
+        \ `status`, `type`, `merchant`, `card`). They are platform-maintained — show them as-is. No need to understand auth-vs-clearing, reversals,\
+        \ or scheme messages. The debit/credit direction is implicit from `type` (purchases / cash withdrawals / account funding debit the card;\
+        \ refunds / original credits credit it). For the issuer authorisation code, walk `events[]` — every event in the lifecycle carries it.\n\
+        \  - **Need scheme-level detail?** Walk `events[]` for the full per-step audit trail — every authorisation, clearing, reversal, and refund\
+        \ step — with original scheme amounts (merchant + card currency, with exchange rates), reason codes, and fees attached to the event that\
+        \ triggered them.\n\nEach card payment corresponds to one card-scheme lifecycle (Visa Transaction Identifier / Mastercard TLID). Related-but-separate\
+        \ transactions (refunds, tips, recurring follow-ups) are separate card payments linked via `relatedCardPaymentId` (direct parent).\n"
       required:
       - id
       - type
@@ -529,7 +551,8 @@ components:
         profileId:
           $ref: '#/components/schemas/ProfileId'
         type:
-          description: The high-level type of card payment. For finer-grained classification (e.g. distinguishing a sale-purchase from a sale with cashback), see the per-event `subtype` field.
+          description: The high-level type of card payment. For finer-grained classification (e.g. distinguishing a sale-purchase from a sale
+            with cashback), see the per-event `subtype` field.
           $ref: '#/components/schemas/CardPaymentType'
         card:
           description: The managed card used for this payment.
@@ -537,17 +560,32 @@ components:
         merchant:
           $ref: '#/components/schemas/Merchant'
         displayAmount:
-          description: "Platform-maintained headline amount of the card payment, in the cardholder's preferred display currency (which matches the card billing currency unless a specific `userCurrency` was set when the card was created). The amount is derived from card payment events and can be displayed in your transaction activity UI as the amount of the card payment.\n\nAs a headline amount, it reflects the intended amount of the payment.\n  - In the case of a full reversal or cancellation and within-lifecycle dispute swings it stays stable. For example, an auth-50 → settle-50 → reverse-50 cycle still reads as 50 here, even though the net ledger impact is zero.\n  - In the case of a partial reversal it reflects the net amount, so the display amount of the card payment reflects the revised amount. For example, an auth-50 (displayAmount 50) → settle-40 with a release of the remaining auth of 10, displayAmount updated to 40.\n\nTo compute the actual net (for accounting), sum the amounts of your chosen type, from all the events, yourself.\n\nMagnitude is always positive. The debit/credit direction is implicit from `type` (purchases debit, refunds and OCTs credit). For the lifecycle phase, read `status`. For amounts in the merchant's currency (transaction currency) or the card's currency (if different from your preferred currency), read `events[]`.\n"
+          description: "Platform-maintained headline amount of the card payment, in the cardholder's preferred display currency (which matches\
+            \ the card billing currency unless a specific `userCurrency` was set when the card was created). The amount is derived from card payment\
+            \ events and can be displayed in your transaction activity UI as the amount of the card payment.\n\nAs a headline amount, it reflects\
+            \ the intended amount of the payment.\n  - In the case of a full reversal or cancellation and within-lifecycle dispute swings it stays\
+            \ stable. For example, an auth-50 → settle-50 → reverse-50 cycle still reads as 50 here, even though the net ledger impact is zero.\n\
+            \  - In the case of a partial reversal it reflects the net amount, so the display amount of the card payment reflects the revised\
+            \ amount. For example, an auth-50 (displayAmount 50) → settle-40 with a release of the remaining auth of 10, displayAmount updated\
+            \ to 40.\n\nTo compute the actual net (for accounting), sum the amounts of your chosen type, from all the events, yourself.\n\nMagnitude\
+            \ is always positive. The debit/credit direction is implicit from `type` (purchases debit, refunds and OCTs credit). For the lifecycle\
+            \ phase, read `status`. For amounts in the merchant's currency (transaction currency) or the card's currency (if different from your\
+            \ preferred currency), read `events[]`.\n"
           $ref: '#/components/schemas/CurrencyAmount'
         status:
           $ref: '#/components/schemas/CardPaymentStatus'
         relatedCardPaymentId:
           type: string
           pattern: ^[0-9]+$
-          description: "Direct parent linkage — id of the single prior card payment that this payment derives from. Set on:\n  - `REFUND` payments referring to the original purchase\n  - `ORIGINAL_CREDIT` payments referring to the prior purchase being credited\n  - Tip / add-on payments referring to the original ride / fare / service\n  - Installment / recurring payments referring to the initial setup transaction\n\nCorresponds to Visa's \"Original Transaction ID\" linkage and Mastercard's DE 105 subelement 002 (Economically Related Transaction Identifier). Not used for messages that share a single lifecycle — those are events on the same card payment.\n"
+          description: "Direct parent linkage — id of the single prior card payment that this payment derives from. Set on:\n  - `REFUND` payments\
+            \ referring to the original purchase\n  - `ORIGINAL_CREDIT` payments referring to the prior purchase being credited\n  - Tip / add-on\
+            \ payments referring to the original ride / fare / service\n  - Installment / recurring payments referring to the initial setup transaction\n\
+            \nCorresponds to Visa's \"Original Transaction ID\" linkage and Mastercard's DE 105 subelement 002 (Economically Related Transaction\
+            \ Identifier). Not used for messages that share a single lifecycle — those are events on the same card payment.\n"
         events:
           type: array
-          description: Ordered event stream — every scheme message in this card payment's lifecycle. For headline display use `displayAmount`; walk this when you need scheme-level detail (per-event amounts, fees, reason codes, reversals).
+          description: Ordered event stream — every scheme message in this card payment's lifecycle. For headline display use `displayAmount`;
+            walk this when you need scheme-level detail (per-event amounts, fees, reason codes, reversals).
           items:
             $ref: '#/components/schemas/CardPaymentEvent'
         creationTimestamp:
@@ -596,7 +634,9 @@ components:
           format: int64
     CardPaymentEventDetail:
       type: object
-      description: 'Standalone card payment event — same four variants as `CardPaymentEvent`, but each row also carries the parent `CardPayment` context (`cardPaymentId`, `card`, `merchant`) so embedders can render an event-centric history feed without fetching each parent card payment.
+      description: 'Standalone card payment event — same four variants as `CardPaymentEvent`, but each row also carries the parent `CardPayment`
+        context (`cardPaymentId`, `card`, `merchant`) so embedders can render an event-centric history feed without fetching each parent card
+        payment.
 
 
         Used as the item type of `GET /card_payment_events`. For the lean nested version (inside `CardPayment.events[]`), see `CardPaymentEvent`.
@@ -616,7 +656,8 @@ components:
           ORIGINAL_CREDIT: '#/components/schemas/CardPaymentOriginalCreditEventDetail'
     SyntaxError:
       type: object
-      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their syntax error will be provided.
+      description: Is returned as part of an HTTP error response whenever a syntax error is detected. A list of the fields together with their
+        syntax error will be provided.
       properties:
         invalidFields:
           type: array
@@ -677,7 +718,8 @@ components:
       - BALANCE_INQUIRY
     CardPaymentSubtype:
       type: string
-      description: Scheme-network subtype that further classifies an event. Reversal-vs-original lives on the separate `reversal` field on each event.
+      description: Scheme-network subtype that further classifies an event. Reversal-vs-original lives on the separate `reversal` field on each
+        event.
       enum:
       - sale_purchases
       - cash_withdrawals
@@ -692,12 +734,53 @@ components:
       - original_credit_transaction_reversals
     CardPaymentEventType:
       type: string
-      description: Type of event recorded against a CardPayment. The `reversal` flag on each event distinguishes a reversal from the original action.
+      description: Type of event recorded against a CardPayment. The `reversal` flag on each event distinguishes a reversal from the original
+        action.
       enum:
       - AUTHORISATION
       - SETTLEMENT
       - REFUND
       - ORIGINAL_CREDIT
+    CardPaymentAuthorisationEvent:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    CardPaymentAuthorisationEventDetail:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    CardPaymentOriginalCreditEvent:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    CardPaymentOriginalCreditEventDetail:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    CardPaymentRefundEvent:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    CardPaymentRefundEventDetail:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    CardPaymentSettlementEvent:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
+    CardPaymentSettlementEventDetail:
+      type: object
+      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
+        the shape is unknown and is NOT a claim about the API.
+      x-ae-placeholder: true
   responses:
     NotFound:
       description: Not found - The requested resource couldn't be found.
@@ -776,7 +859,8 @@ components:
   securitySchemes:
     api-key:
       type: apiKey
-      description: An API key defined in your User API Client  (or Delegate API Client - this feature is available only to customers enabled with delegation functionality).  API Clients are as managed in the Embedder Portal
+      description: An API key defined in your User API Client  (or Delegate API Client - this feature is available only to customers enabled with
+        delegation functionality).  API Clients are as managed in the Embedder Portal
       name: api-key
       in: header
     auth_token:

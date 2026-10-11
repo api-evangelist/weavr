@@ -1,0 +1,29 @@
+name: Weavr API rate limits
+generated: '2026-10-12'
+method: searched
+source: https://docs.weavr.io/apis/rate-limit/
+limit_count: 3
+exhaustion_status: 429
+headers: []
+note: Docs state the standard limits and the 429 response; no rate-limit response
+  headers are documented. Higher limits and multi-programme scoping are by request
+  through the Support Portal.
+limits:
+- name: API requests per day
+  limit_text: 10,000 Per day
+  max: 10000
+  limit: 10000
+  window: day
+  scope: programme (standard)
+- name: API requests per hour
+  limit_text: 1,000 Per hour
+  max: 1000
+  limit: 1000
+  window: hour
+  scope: programme (standard)
+- name: API requests per minute
+  limit_text: 100 Per minute
+  max: 100
+  limit: 100
+  window: minute
+  scope: programme (standard)

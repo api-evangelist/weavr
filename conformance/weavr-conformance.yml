@@ -1,9 +1,7 @@
 generated: '2026-07-21'
 method: searched
 source: https://security.weavr.io/ + https://docs.weavr.io/ + openapi/
-notes: >-
-  Weavr operates as regulated embedded-finance infrastructure via EMI partners
-  (Paynetics AD in the EU, Paynetics UK in the UK). Security/compliance
+notes: Weavr operates as regulated embedded-finance infrastructure via EMI partners (Paynetics AD in the EU, Paynetics UK in the UK). Security/compliance
   certifications are published at security.weavr.io.
 standards:
 - id: pci-dss
@@ -17,9 +15,8 @@ standards:
   evidence: CSA STAR listed on security.weavr.io trust page
 - id: psd2-sca
   conforms: true
-  evidence: >-
-    Strong Customer Authentication (step-up SCA/OTP/push challenges) implemented
-    across the Multi API (Step-up Challenges, Confirmation Challenges tags)
+  evidence: Strong Customer Authentication (step-up SCA/OTP/push challenges) implemented across the Multi API (Step-up Challenges, Confirmation
+    Challenges tags)
 - id: gdpr
   conforms: true
   evidence: EU/UK regulated EMI operation; privacy policy at weavr.io/privacy-policy
@@ -32,3 +29,18 @@ standards:
 - id: openapi-3-1
   conforms: true
   evidence: Multi, BackOffice and Webhooks specs are OpenAPI 3.1.0
+- id: openapi-3.2
+  conforms: true
+  evidence: the document declares 3.2.0
+- id: rfc9457
+  conforms: false
+  evidence: no response declares application/problem+json
+- id: idempotency
+  conforms: false
+  evidence: no idempotency key parameter on mutating operations
+- id: pagination
+  conforms: true
+  evidence: list operations take limit, offset
+- id: ratelimit-headers
+  conforms: true
+  evidence: responses declare x-ratelimit-limit, x-ratelimit-reset

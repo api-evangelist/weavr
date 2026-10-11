@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/weavr/main/json-schema/weavr-purchase-response-schema.json",
+  "title": "PurchaseResponse",
+  "x-generated": "2026-10-12",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/weavr-cards-api-openapi.yml#/components/schemas/PurchaseResponse",
+  "type": "object",
+  "properties": {
+    "code": {
+      "$ref": "#/$defs/PurchaseResponsePurchaseResponseCode"
+    },
+    "threeDSecureChallengeId": {
+      "$ref": "#/$defs/NullableInt64"
+    }
+  },
+  "$defs": {
+    "NullableInt64": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "integer",
+          "description": "If value is 0, set has_value to true",
+          "format": "int64"
+        },
+        "hasValue": {
+          "type": "boolean",
+          "description": "If value is default (0) then true indicates 0 while false indicates null"
+        }
+      }
+    },
+    "PurchaseResponsePurchaseResponseCode": {
+      "type": "string",
+      "enum": [
+        "APPROVED",
+        "DENIED_NOT_ENOUGH_FUNDS",
+        "DENIED_CARD_NOT_FOUND",
+        "DENIED_INCORRECT_CVV",
+        "DENIED_CARD_EXPIRY",
+        "DENIED_AMOUNT_NOT_POSITIVE",
+        "DENIED_CARD_INACTIVE",
+        "DENIED_OTHER",
+        "DENIED_SPEND_CONTROL",
+        "PENDING_BIOMETRIC_THREEDS_VERIFICATION",
+        "CARD_NOT_ENROLLED_FOR_BIOMETRIC_THREEDS"
+      ]
+    }
+  }
+}
