@@ -15,39 +15,49 @@ server:
   transport: http
   url: null
 tools:
-- name: create_corporate
-  description: Create a corporate identity.
-  source_operation: openapi/weavr-multi-openapi-original.yml#corporateCreate
-- name: get_corporate
-  description: Retrieve a corporate identity.
-  source_operation: openapi/weavr-multi-openapi-original.yml#corporateGet
-- name: start_kyb
-  description: Start KYB verification for a corporate.
-  source_operation: openapi/weavr-multi-openapi-original.yml#corporateKybStart
-- name: create_consumer
-  description: Create a consumer identity.
-  source_operation: openapi/weavr-multi-openapi-original.yml#consumerCreate
-- name: login_with_password
-  description: Authenticate a user and obtain an auth token.
-  source_operation: openapi/weavr-multi-openapi-original.yml#loginWithPassword
-- name: create_managed_account
-  description: Open a managed account for an identity.
-  source_operation: openapi/weavr-multi-openapi-original.yml#managedAccountCreate
-- name: create_managed_card
-  description: Issue a managed (virtual) card.
-  source_operation: openapi/weavr-multi-openapi-original.yml#managedCardCreate
-- name: create_transfer
-  description: Move funds between managed accounts.
-  source_operation: openapi/weavr-multi-openapi-original.yml#transferCreate
-- name: create_send
-  description: Send funds to an external destination.
-  source_operation: openapi/weavr-multi-openapi-original.yml#sendCreate
-- name: create_outgoing_wire_transfer
-  description: Initiate an outgoing wire transfer (SEPA/Faster Payments).
-  source_operation: openapi/weavr-multi-openapi-original.yml#outgoingWireTransferCreate
-- name: create_beneficiary_batch
-  description: Create a batch of trusted beneficiaries.
-  source_operation: openapi/weavr-multi-openapi-original.yml#beneficiaryBatchCreate
+- name: execute
+  description: 'Run JavaScript in a sandbox against the documentation tools on the global `tools` object.
+
+    The only extra global is `tools` - there is no `fetch`, `console`, `setTimeout`, `require`, or Node.js
+    API; all I/O goes through `tools`.
+
+
+    Workflow - minimize round-trips; one `describe-tools` call plus one `execute` call covers most requests:
+
+    1. Analyze the request and decide which sandbox tools it needs.
+
+    2. Call `describe-tools` with those names to get their exact TypeScript signatures - inputs, result
+    shapes, and a worked example. NEVER call `execute` with guessed method names, parameter names, enum
+    values, or result field names: read fields off the declared return types, not from assumptions.
+
+    3. Batch everything into a SINGLE script: chain tool calls, pass one call''s output into the next,
+    process results in plain JavaScript, and `return` only what the request needs.
+
+
+    Available tools (exact signatures come from `describe-tools`):
+
+    - listApis — Lists the APIs documented in this project
+
+    - getEndpoints — Get all endpoints for a specific API. When several definiti…
+
+    - getEndpointInfo — Get comprehensive information about specific endpoint inclu…
+
+    - getSecuritySchemes — Get the security schemes for a specific API. When several d…
+
+    - getFullApiDescription — Get the complete OpenAPI description. When several definiti…
+
+    - search — Search across the documentation to fetch relevant content f…
+
+    - submitFeedback — Report a documentation page that is wrong or incomplete'
+- name: describe-tools
+  description: 'Get the exact TypeScript signatures of the sandbox tools available to `execute`.
+
+    Analyze the user request first, then pass `tools` with only the tool names the request needs (every
+    name is listed in this input schema / description); omit `tools` only when you cannot tell which tools
+    apply.
+
+    Always call this before your first `execute` and never guess signatures. Request every tool the task
+    may need in ONE call instead of calling this repeatedly.'
 deployment:
   mode: remote
   endpoint: https://api.weavr.io/mcp
@@ -85,3 +95,4 @@ tool_quality:
   scored: false
   note: Facts from the saved tools/list capture (mcp_tool_quality.py); recorded, not scored. Checks learned
     from Glimind's agent-readiness audit.
+tools_count: 2
