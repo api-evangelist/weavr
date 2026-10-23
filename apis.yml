@@ -88,6 +88,8 @@ maintainers:
   email: info@apis.io
 
 common:
+- type: PostmanWorkspace
+  url: https://www.postman.com/kinlaneapi/weavr/overview
 - type: ToolCrosswalk
   url: mcp/weavr-tool-crosswalk.yml
 - type: MCPServer
