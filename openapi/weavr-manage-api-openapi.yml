@@ -690,3 +690,9 @@ x-tagGroups:
   tags:
   - Operations
   - Manage
+x-provenance:
+  method: harvested
+  publisher: Weavr
+  source: https://api.weavr.io/_bundle/products/multi/openapi.json?download
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
