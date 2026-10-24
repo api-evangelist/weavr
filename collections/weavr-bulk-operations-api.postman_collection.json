@@ -1,0 +1,19 @@
+{
+  "info": {
+    "_postman_id": "37136dd9-5e99-4f61-be2e-e5859e92af41",
+    "name": "Weavr Webhook Bulk Operations API",
+    "description": "For Verification, create a base64 hash using HmacSHA256 using Published-Timestamp header as message and your API key as secret. The result should match the Signature header.\n\nContact Support:\n Name: Weavr",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:56:10.000Z",
+    "updatedAt": "2026-10-21T19:56:10.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-37136dd9-5e99-4f61-be2e-e5859e92af41"
+  },
+  "item": [],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "\"\""
+    }
+  ]
+}

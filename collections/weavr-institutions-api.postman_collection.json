@@ -1,194 +1,94 @@
 {
+  "info": {
+    "_postman_id": "8ca2b8af-4b1e-4f03-9d81-9ed70ba5179b",
+    "name": "Weavr Embedded Payment Run Institutions API",
+    "description": "Weavr Payment Run Plug-in API provides a simple and flexible way for Embedders to add payment execution capabilities in their application.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:53:13.000Z",
+    "updatedAt": "2026-10-21T19:53:14.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-8ca2b8af-4b1e-4f03-9d81-9ed70ba5179b"
+  },
   "item": [
     {
-      "id": "41aebef8-0d95-46bb-8a88-be98438dcb93",
-      "name": "Institutions",
-      "description": {
-        "content": "Institutions supported by Embedded Payment Run.",
-        "type": "text/plain"
-      },
+      "name": "v1",
       "item": [
         {
-          "id": "ffe81ae2-2da4-4d6d-835b-6ac3d45080c4",
-          "name": "Get Institutions",
-          "request": {
-            "name": "Get Institutions",
-            "description": {
-              "content": "Retrieves the `Institutions` supported by Embedded Payment Run. The response payload should list all the institutions.\n\nPayment runs are funded from linked bank accounts provided by one of the supported institutions.\n\nWe recommend that you enable Buyers to check if their banks are supported before they start the registration and onboarding process.\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "institutions"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "country",
-                  "value": "<string>",
-                  "description": "Filter by country"
-                },
-                {
-                  "disabled": false,
-                  "key": "institutionIds",
-                  "value": "<string>",
-                  "description": "Filter by institution ID"
-                },
-                {
-                  "disabled": false,
-                  "key": "institutionIds",
-                  "value": "<string>",
-                  "description": "Filter by institution ID"
-                },
-                {
-                  "disabled": false,
-                  "key": "institutionName",
-                  "value": "<string>",
-                  "description": "Filter by institution name"
-                },
-                {
-                  "disabled": false,
-                  "key": "market",
-                  "value": "<string>",
-                  "description": "Filter by market"
-                },
-                {
-                  "disabled": false,
-                  "key": "market",
-                  "value": "<string>",
-                  "description": "Filter by market"
-                },
-                {
-                  "disabled": false,
-                  "key": "offset",
-                  "value": "<integer>"
-                },
-                {
-                  "disabled": false,
-                  "key": "limit",
-                  "value": "<integer>"
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET"
-          },
-          "response": [
+          "name": "institutions",
+          "item": [
             {
-              "id": "13a76cb7-9b28-461b-bb1d-4c803c9fc488",
-              "name": "OK",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "institutions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
+              "name": "Get Institutions",
+              "id": "6dc2a765-a170-406f-93d0-66d2df3f31fe",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
                     {
-                      "key": "country",
-                      "value": "<string>"
+                      "key": "key",
+                      "value": "api-key",
+                      "type": "string"
                     },
                     {
-                      "key": "institutionIds",
-                      "value": "<string>"
+                      "key": "value",
+                      "value": "{{apiKey}}",
+                      "type": "string"
                     },
                     {
-                      "key": "institutionIds",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "institutionName",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "market",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "market",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "offset",
-                      "value": "<integer>"
-                    },
-                    {
-                      "key": "limit",
-                      "value": "<integer>"
+                      "key": "in",
+                      "value": "header",
+                      "type": "string"
                     }
-                  ],
-                  "variable": []
+                  ]
                 },
+                "method": "GET",
                 "header": [
                   {
                     "key": "Accept",
                     "value": "application/json"
                   }
                 ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"count\": 10,\n  \"institutions\": [\n    {\n      \"id\": \"string\",\n      \"countries\": [\n        \"string\",\n        \"string\"\n      ],\n      \"displayName\": \"string\",\n      \"markets\": [\n        \"UK\",\n        \"EEA\"\n      ],\n      \"currencies\": [\n        \"GBP\",\n        \"EUR\"\n      ],\n      \"images\": {\n        \"logo\": \"http://JaQdltxFCGUTGllibQhjuGOlAGWr.mzc-kl4fPkG2uHGIsHu\",\n        \"icon\": \"https://Z.gwJjtUbBzyChB5zqB2\"\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"countries\": [\n        \"string\",\n        \"string\"\n      ],\n      \"displayName\": \"string\",\n      \"markets\": [\n        \"EEA\",\n        \"EEA\"\n      ],\n      \"currencies\": [\n        \"GBP\",\n        \"GBP\"\n      ],\n      \"images\": {\n        \"logo\": \"https://XKDj.rdcQhSLMeRk\",\n        \"icon\": \"http://zYtg.qkdunII4Tn+5-\"\n      }\n    }\n  ],\n  \"responseCount\": 100\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "720b74d9-81eb-48d2-b94f-812f466ef275",
-              "name": "Bad Request Error - Your request is invalid.",
-              "originalRequest": {
                 "url": {
+                  "raw": "{{baseUrl}}/v1/institutions?country=<string>&institutionIds=<string>&institutionIds=<string>&institutionName=<string>&market=EEA&market=EEA&offset=<integer>&limit=<integer>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
                   "path": [
                     "v1",
                     "institutions"
                   ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
                   "query": [
                     {
+                      "description": "Filter by country",
                       "key": "country",
                       "value": "<string>"
                     },
                     {
+                      "description": "Filter by institution ID",
                       "key": "institutionIds",
                       "value": "<string>"
                     },
                     {
+                      "description": "Filter by institution ID",
                       "key": "institutionIds",
                       "value": "<string>"
                     },
                     {
+                      "description": "Filter by institution name",
                       "key": "institutionName",
                       "value": "<string>"
                     },
                     {
+                      "description": "Filter by market",
                       "key": "market",
-                      "value": "<string>"
+                      "value": "EEA"
                     },
                     {
+                      "description": "Filter by market",
                       "key": "market",
-                      "value": "<string>"
+                      "value": "EEA"
                     },
                     {
                       "key": "offset",
@@ -198,493 +98,677 @@
                       "key": "limit",
                       "value": "<integer>"
                     }
-                  ],
-                  "variable": []
+                  ]
                 },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                "description": "Retrieves the `Institutions` supported by Embedded Payment Run. The response payload should list all the institutions.\n\nPayment runs are funded from linked bank accounts provided by one of the supported institutions.\n\nWe recommend that you enable Buyers to check if their banks are supported before they start the registration and onboarding process."
               },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
+              "response": [
                 {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
+                  "id": "41a1c28d-c1c4-4052-b700-c34767599f51",
+                  "name": "OK",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "api-key",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/institutions?country=<string>&institutionIds=<string>&institutionName=<string>&market=EEA&offset=<integer>&limit=<integer>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "institutions"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by country",
+                          "key": "country",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by institution ID",
+                          "key": "institutionIds",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by institution name",
+                          "key": "institutionName",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by market",
+                          "key": "market",
+                          "value": "EEA"
+                        },
+                        {
+                          "key": "offset",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"count\": \"<integer>\",\n  \"institutions\": [\n    {\n      \"id\": \"<string>\",\n      \"countries\": [\n        \"LU\",\n        \"FR\"\n      ],\n      \"displayName\": \"<string>\",\n      \"markets\": [\n        \"UK\",\n        \"EEA\"\n      ],\n      \"currencies\": [\n        \"GBP\",\n        \"EUR\"\n      ],\n      \"images\": {\n        \"logo\": \"<uri>\",\n        \"icon\": \"<uri>\"\n      }\n    },\n    {\n      \"id\": \"<string>\",\n      \"countries\": [\n        \"MT\",\n        \"CY\"\n      ],\n      \"displayName\": \"<string>\",\n      \"markets\": [\n        \"EEA\",\n        \"EEA\"\n      ],\n      \"currencies\": [\n        \"EUR\",\n        \"GBP\"\n      ],\n      \"images\": {\n        \"logo\": \"<uri>\",\n        \"icon\": \"<uri>\"\n      }\n    }\n  ],\n  \"responseCount\": \"<integer>\"\n}",
+                  "createdAt": "2026-10-21T19:53:14.000Z",
+                  "updatedAt": "2026-10-21T19:53:14.000Z",
+                  "uid": "35240-41a1c28d-c1c4-4052-b700-c34767599f51"
                 },
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"message\": \"string\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"REQUIRES\"\n      },\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"HAS_TEXT\"\n      }\n    ]\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "8509160e-31e4-43c3-b3c9-194b53799b6d",
-              "name": "Unauthorized - Your credentials or access token are invalid.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "institutions"
+                  "id": "d9e5c2a0-b9d1-4ba0-be18-8fcc0e05876f",
+                  "name": "Bad Request Error - Your request is invalid.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "api-key",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/institutions?country=<string>&institutionIds=<string>&institutionName=<string>&market=EEA&offset=<integer>&limit=<integer>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "institutions"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by country",
+                          "key": "country",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by institution ID",
+                          "key": "institutionIds",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by institution name",
+                          "key": "institutionName",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by market",
+                          "key": "market",
+                          "value": "EEA"
+                        },
+                        {
+                          "key": "offset",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                        "type": "text/plain"
+                      },
+                      "key": "request-ref",
+                      "value": "<string>"
+                    }
                   ],
-                  "host": [
-                    "{{baseUrl}}"
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"fieldName\": \"<string>\",\n        \"error\": \"EXACTLY\"\n      },\n      {\n        \"params\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"fieldName\": \"<string>\",\n        \"error\": \"REQUIRED\"\n      }\n    ]\n  }\n}",
+                  "createdAt": "2026-10-21T19:53:14.000Z",
+                  "updatedAt": "2026-10-21T19:53:14.000Z",
+                  "uid": "35240-d9e5c2a0-b9d1-4ba0-be18-8fcc0e05876f"
+                },
+                {
+                  "id": "af955c8e-d990-4025-b424-e641f53ad421",
+                  "name": "Unauthorized - Your credentials or access token are invalid.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "api-key",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/institutions?country=<string>&institutionIds=<string>&institutionName=<string>&market=EEA&offset=<integer>&limit=<integer>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "institutions"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by country",
+                          "key": "country",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by institution ID",
+                          "key": "institutionIds",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by institution name",
+                          "key": "institutionName",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by market",
+                          "key": "market",
+                          "value": "EEA"
+                        },
+                        {
+                          "key": "offset",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "text",
+                  "header": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                        "type": "text/plain"
+                      },
+                      "key": "request-ref",
+                      "value": "<string>"
+                    }
                   ],
-                  "query": [
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-10-21T19:53:14.000Z",
+                  "updatedAt": "2026-10-21T19:53:14.000Z",
+                  "uid": "35240-af955c8e-d990-4025-b424-e641f53ad421"
+                },
+                {
+                  "id": "33ccf937-2aec-46f0-a130-538a97be88e5",
+                  "name": "Forbidden - Access to the requested resource or action is forbidden.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "api-key",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/institutions?country=<string>&institutionIds=<string>&institutionName=<string>&market=EEA&offset=<integer>&limit=<integer>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "institutions"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by country",
+                          "key": "country",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by institution ID",
+                          "key": "institutionIds",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by institution name",
+                          "key": "institutionName",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by market",
+                          "key": "market",
+                          "value": "EEA"
+                        },
+                        {
+                          "key": "offset",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
                     {
-                      "key": "country",
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                        "type": "text/plain"
+                      },
+                      "key": "request-ref",
+                      "value": "<string>"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"errorCode\": \"INSUFFICIENT_PERMISSIONS\"\n}",
+                  "createdAt": "2026-10-21T19:53:14.000Z",
+                  "updatedAt": "2026-10-21T19:53:14.000Z",
+                  "uid": "35240-33ccf937-2aec-46f0-a130-538a97be88e5"
+                },
+                {
+                  "id": "966a51c8-313b-43f2-a031-be0efb66d19c",
+                  "name": "Too many requests.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "api-key",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/institutions?country=<string>&institutionIds=<string>&institutionName=<string>&market=EEA&offset=<integer>&limit=<integer>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "institutions"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by country",
+                          "key": "country",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by institution ID",
+                          "key": "institutionIds",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by institution name",
+                          "key": "institutionName",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by market",
+                          "key": "market",
+                          "value": "EEA"
+                        },
+                        {
+                          "key": "offset",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Too Many Requests",
+                  "code": 429,
+                  "_postman_previewlanguage": "text",
+                  "header": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                        "type": "text/plain"
+                      },
+                      "key": "request-ref",
                       "value": "<string>"
                     },
                     {
-                      "key": "institutionIds",
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) Example: `20, 10;w=60, 20;w=3600, 200;w=86400`\nThe first number (20) is the limit that has been exceeded.\nThe remaining numbers are the limits that are in force, with 'w' meaning 'window in seconds'. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)\n",
+                        "type": "text/plain"
+                      },
+                      "key": "x-ratelimit-limit",
                       "value": "<string>"
                     },
                     {
-                      "key": "institutionIds",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "institutionName",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "market",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "market",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "offset",
-                      "value": "<integer>"
-                    },
-                    {
-                      "key": "limit",
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The number of seconds until the window is reset.",
+                        "type": "text/plain"
+                      },
+                      "key": "x-ratelimit-reset",
                       "value": "<integer>"
                     }
                   ],
-                  "variable": []
-                },
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-10-21T19:53:14.000Z",
+                  "updatedAt": "2026-10-21T19:53:14.000Z",
+                  "uid": "35240-966a51c8-313b-43f2-a031-be0efb66d19c"
                 },
                 {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "bbfa2f9b-2aed-44ab-8959-66cab7e9f4ce",
-              "name": "Forbidden - Access to the requested resource or action is forbidden.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "institutions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
+                  "id": "7f63e534-e1b3-4656-b205-b3db8385fff4",
+                  "name": "Internal Server Error - There is a problem with the server. Please try again later.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "api-key",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/institutions?country=<string>&institutionIds=<string>&institutionName=<string>&market=EEA&offset=<integer>&limit=<integer>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "institutions"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by country",
+                          "key": "country",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by institution ID",
+                          "key": "institutionIds",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by institution name",
+                          "key": "institutionName",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by market",
+                          "key": "market",
+                          "value": "EEA"
+                        },
+                        {
+                          "key": "offset",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "text",
+                  "header": [
                     {
-                      "key": "country",
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                        "type": "text/plain"
+                      },
+                      "key": "request-ref",
                       "value": "<string>"
-                    },
-                    {
-                      "key": "institutionIds",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "institutionIds",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "institutionName",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "market",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "market",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "offset",
-                      "value": "<integer>"
-                    },
-                    {
-                      "key": "limit",
-                      "value": "<integer>"
                     }
                   ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-10-21T19:53:14.000Z",
+                  "updatedAt": "2026-10-21T19:53:14.000Z",
+                  "uid": "35240-7f63e534-e1b3-4656-b205-b3db8385fff4"
                 },
                 {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"errorCode\": \"INSUFFICIENT_PERMISSIONS\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "bff322d5-f8c4-41ee-8b7d-0227a2b76a51",
-              "name": "Too many requests.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "institutions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
+                  "id": "fd6af46e-1c71-418f-bde0-c5a5dfbd0783",
+                  "name": "Service Unavailable - We're temporarily offline for maintenance. Please try again later.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "api-key",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/institutions?country=<string>&institutionIds=<string>&institutionName=<string>&market=EEA&offset=<integer>&limit=<integer>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "institutions"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by country",
+                          "key": "country",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by institution ID",
+                          "key": "institutionIds",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by institution name",
+                          "key": "institutionName",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by market",
+                          "key": "market",
+                          "value": "EEA"
+                        },
+                        {
+                          "key": "offset",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Service Unavailable",
+                  "code": 503,
+                  "_postman_previewlanguage": "text",
+                  "header": [
                     {
-                      "key": "country",
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                        "type": "text/plain"
+                      },
+                      "key": "request-ref",
                       "value": "<string>"
-                    },
-                    {
-                      "key": "institutionIds",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "institutionIds",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "institutionName",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "market",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "market",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "offset",
-                      "value": "<integer>"
-                    },
-                    {
-                      "key": "limit",
-                      "value": "<integer>"
                     }
                   ],
-                  "variable": []
-                },
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-10-21T19:53:14.000Z",
+                  "updatedAt": "2026-10-21T19:53:14.000Z",
+                  "uid": "35240-fd6af46e-1c71-418f-bde0-c5a5dfbd0783"
                 },
                 {
-                  "disabled": false,
-                  "description": "(Required) Example: `20, 10;w=60, 20;w=3600, 200;w=86400`\nThe first number (20) is the limit that has been exceeded.\nThe remaining numbers are the limits that are in force, with 'w' meaning 'window in seconds'. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)\n",
-                  "key": "x-ratelimit-limit",
-                  "value": "string"
-                },
-                {
-                  "disabled": false,
-                  "description": "(Required) The number of seconds until the window is reset.",
-                  "key": "x-ratelimit-reset",
-                  "value": "3697"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "0e8d3aa1-1b02-48b4-8122-04f03462b51f",
-              "name": "Internal Server Error - There is a problem with the server. Please try again later.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "institutions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
+                  "id": "65b889ae-9ecf-42b2-b347-8cdef8ab05ab",
+                  "name": "Error",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: apikey",
+                        "key": "api-key",
+                        "value": "<API Key>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/v1/institutions?country=<string>&institutionIds=<string>&institutionName=<string>&market=EEA&offset=<integer>&limit=<integer>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "v1",
+                        "institutions"
+                      ],
+                      "query": [
+                        {
+                          "description": "Filter by country",
+                          "key": "country",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by institution ID",
+                          "key": "institutionIds",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by institution name",
+                          "key": "institutionName",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "Filter by market",
+                          "key": "market",
+                          "value": "EEA"
+                        },
+                        {
+                          "key": "offset",
+                          "value": "<integer>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "<integer>"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
                     {
-                      "key": "country",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "institutionIds",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "institutionIds",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "institutionName",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "market",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "market",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "offset",
-                      "value": "<integer>"
-                    },
-                    {
-                      "key": "limit",
-                      "value": "<integer>"
+                      "key": "Content-Type",
+                      "value": "application/json"
                     }
                   ],
-                  "variable": []
-                },
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"code\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-10-21T19:53:14.000Z",
+                  "updatedAt": "2026-10-21T19:53:14.000Z",
+                  "uid": "35240-65b889ae-9ecf-42b2-b347-8cdef8ab05ab"
                 }
               ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "8a3c9d55-78b0-442b-a760-8b892060514a",
-              "name": "Service Unavailable - We're temporarily offline for maintenance. Please try again later.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "institutions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "country",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "institutionIds",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "institutionIds",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "institutionName",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "market",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "market",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "offset",
-                      "value": "<integer>"
-                    },
-                    {
-                      "key": "limit",
-                      "value": "<integer>"
-                    }
-                  ],
-                  "variable": []
-                },
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Service Unavailable",
-              "code": 503,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "1b599157-0ce1-4690-8275-1be0886cce60",
-              "name": "Error",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "institutions"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "country",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "institutionIds",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "institutionIds",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "institutionName",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "market",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "market",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "offset",
-                      "value": "<integer>"
-                    },
-                    {
-                      "key": "limit",
-                      "value": "<integer>"
-                    }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "createdAt": "2026-10-21T19:53:14.000Z",
+              "updatedAt": "2026-10-21T19:53:14.000Z",
+              "uid": "35240-6dc2a765-a170-406f-93d0-66d2df3f31fe"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "b2f556f9-e8e1-49ab-b31e-42bf70dd6087",
+          "createdAt": "2026-10-21T19:53:14.000Z",
+          "updatedAt": "2026-10-21T19:53:14.000Z",
+          "uid": "35240-b2f556f9-e8e1-49ab-b31e-42bf70dd6087"
         }
       ],
-      "event": []
+      "id": "ccb24391-e31f-484c-9f54-997e90489af8",
+      "createdAt": "2026-10-21T19:53:14.000Z",
+      "updatedAt": "2026-10-21T19:53:14.000Z",
+      "uid": "35240-ccb24391-e31f-484c-9f54-997e90489af8"
     }
   ],
-  "event": [],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "api-key",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
   "variable": [
     {
-      "type": "string",
-      "value": "https://sandbox.weavr.io/multi/backoffice",
-      "key": "baseUrl"
+      "key": "baseUrl",
+      "value": "https://sandbox.weavr.io/payment-run"
     }
-  ],
-  "info": {
-    "_postman_id": "e77e0863-4e00-4f84-896e-f786952d22a2",
-    "name": "Weavr Multi Product BackOffice Access Token Institutions API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning\nidentities and their instruments, without requiring the users to be logged in.\n\nA token is to be obtained through the `access_token` method, and this will allow relevant operations\nto be performed on behalf of this same identity.\n\n\nContact Support:\n Name: Weavr",
-      "type": "text/plain"
-    }
-  }
+  ]
 }

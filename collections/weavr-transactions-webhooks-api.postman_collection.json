@@ -1,0 +1,39 @@
+{
+  "info": {
+    "_postman_id": "d88cb09f-b6fe-42a1-9d2d-f087468efb4b",
+    "name": "Weavr Transactions Webhooks API",
+    "description": "Operations tagged Transactions Webhooks across 2 of this provider's published API definitions: weavr-payment-run-openapi-original.yml, weavr-transactions-webhooks-api-openapi.yml. Each path carries the servers of the definition it was published in.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:56:59.000Z",
+    "updatedAt": "2026-10-21T19:56:59.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-d88cb09f-b6fe-42a1-9d2d-f087468efb4b"
+  },
+  "item": [],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "api-key",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://sandbox.weavr.io/payment-run"
+    }
+  ]
+}

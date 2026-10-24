@@ -1,1208 +1,1434 @@
 {
+  "info": {
+    "_postman_id": "068bef45-b44d-470d-b2a9-d5f31bd2f341",
+    "name": "Weavr Embedded Payment Run Additional Factors API",
+    "description": "Weavr Payment Run Plug-in API provides a simple and flexible way for Embedders to add payment execution capabilities in their application.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:51:27.000Z",
+    "updatedAt": "2026-10-21T19:51:28.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-068bef45-b44d-470d-b2a9-d5f31bd2f341"
+  },
   "item": [
     {
-      "id": "74357089-8d0c-40e0-82ec-e4f77a7c9af7",
-      "name": "Additional Factors",
-      "description": {
-        "content": "",
-        "type": "text/plain"
-      },
+      "name": "v1",
       "item": [
         {
-          "id": "5f6f683e-b995-46a1-b9be-ac0597b79ecb",
-          "name": "Enrol a user device for authentication using one-time passwords",
-          "request": {
-            "name": "Enrol a user device for authentication using one-time passwords",
-            "description": {
-              "content": "This is the first step in enrolling the logged-in user's mobile device, where a one-time password is sent to the device.\n\n_Note that on the Sandbox Environment, text messages are not sent and the one-time-password is always \\\"123456\\\"._\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "authentication_factors",
-                "otp",
-                ":channel"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "channel",
-                  "description": "(Required) The unique identifier for the channel."
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null
-          },
-          "response": [
+          "name": "authentication_factors",
+          "item": [
             {
-              "id": "6fb26b3e-c2f7-49fa-a666-e5cb9d636c63",
-              "name": "Success - No Content.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "authentication_factors",
-                    "otp",
-                    ":channel"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
+              "name": "otp",
+              "item": [
+                {
+                  "name": "{channel}",
+                  "item": [
                     {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "channel",
-                      "description": "(Required) The unique identifier for the channel."
+                      "name": "verify",
+                      "item": [
+                        {
+                          "name": "Verify enrolment of a user device for authentication using one-time passwords",
+                          "id": "a795156d-30b7-4b04-9fb5-4dcfa0456211",
+                          "protocolProfileBehavior": {
+                            "disableBodyPruning": true
+                          },
+                          "request": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "{\n  \"verificationCode\": \"371361\"\n}",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/authentication_factors/otp/:channel/verify",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "authentication_factors",
+                                "otp",
+                                ":channel",
+                                "verify"
+                              ],
+                              "variable": [
+                                {
+                                  "id": "8bcbf143-10f0-405b-9f65-587e6172a4d7",
+                                  "key": "channel",
+                                  "value": "SMS",
+                                  "description": "(Required) The unique identifier for the channel."
+                                }
+                              ]
+                            },
+                            "description": "The second step in enrolling the logged-in user (root or authorised user) to use one-time-passwords to enable verification of transactions.\n\n_Note that on the Sandbox Environment, text messages are not sent and the `verificationCode` is always set to \\\"123456\\\"._"
+                          },
+                          "response": [
+                            {
+                              "id": "85b73658-7dd4-4f44-a8a5-70533f3e0588",
+                              "name": "Success - No Content.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "api-key",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"verificationCode\": \"371361\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/authentication_factors/otp/:channel/verify",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "authentication_factors",
+                                    "otp",
+                                    ":channel",
+                                    "verify"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "channel"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "No Content",
+                              "code": 204,
+                              "_postman_previewlanguage": "text",
+                              "header": [
+                                {
+                                  "disabled": false,
+                                  "description": {
+                                    "content": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                                    "type": "text/plain"
+                                  },
+                                  "key": "request-ref",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": null,
+                              "createdAt": "2026-10-21T19:51:28.000Z",
+                              "updatedAt": "2026-10-21T19:51:28.000Z",
+                              "uid": "35240-85b73658-7dd4-4f44-a8a5-70533f3e0588"
+                            },
+                            {
+                              "id": "c2bd1536-019e-4c11-ab2e-e474ce23e0b2",
+                              "name": "Bad Request Error - Your request is invalid.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "api-key",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"verificationCode\": \"371361\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/authentication_factors/otp/:channel/verify",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "authentication_factors",
+                                    "otp",
+                                    ":channel",
+                                    "verify"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "channel"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Bad Request",
+                              "code": 400,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                },
+                                {
+                                  "disabled": false,
+                                  "description": {
+                                    "content": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                                    "type": "text/plain"
+                                  },
+                                  "key": "request-ref",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"message\": \"<string>\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"fieldName\": \"<string>\",\n        \"error\": \"EXACTLY\"\n      },\n      {\n        \"params\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"fieldName\": \"<string>\",\n        \"error\": \"REQUIRED\"\n      }\n    ]\n  }\n}",
+                              "createdAt": "2026-10-21T19:51:28.000Z",
+                              "updatedAt": "2026-10-21T19:51:28.000Z",
+                              "uid": "35240-c2bd1536-019e-4c11-ab2e-e474ce23e0b2"
+                            },
+                            {
+                              "id": "2e87ab77-fd0c-4929-b607-6e04c5369c91",
+                              "name": "Unauthorized - Your credentials or access token are invalid.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "api-key",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"verificationCode\": \"371361\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/authentication_factors/otp/:channel/verify",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "authentication_factors",
+                                    "otp",
+                                    ":channel",
+                                    "verify"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "channel"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Unauthorized",
+                              "code": 401,
+                              "_postman_previewlanguage": "text",
+                              "header": [
+                                {
+                                  "disabled": false,
+                                  "description": {
+                                    "content": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                                    "type": "text/plain"
+                                  },
+                                  "key": "request-ref",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": null,
+                              "createdAt": "2026-10-21T19:51:28.000Z",
+                              "updatedAt": "2026-10-21T19:51:28.000Z",
+                              "uid": "35240-2e87ab77-fd0c-4929-b607-6e04c5369c91"
+                            },
+                            {
+                              "id": "34f96f99-fddd-4c3b-b84f-10771efd8686",
+                              "name": "Forbidden - Access to the requested resource or action is forbidden.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "api-key",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"verificationCode\": \"371361\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/authentication_factors/otp/:channel/verify",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "authentication_factors",
+                                    "otp",
+                                    ":channel",
+                                    "verify"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "channel"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Forbidden",
+                              "code": 403,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                },
+                                {
+                                  "disabled": false,
+                                  "description": {
+                                    "content": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                                    "type": "text/plain"
+                                  },
+                                  "key": "request-ref",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"errorCode\": \"INSUFFICIENT_PERMISSIONS\"\n}",
+                              "createdAt": "2026-10-21T19:51:28.000Z",
+                              "updatedAt": "2026-10-21T19:51:28.000Z",
+                              "uid": "35240-34f96f99-fddd-4c3b-b84f-10771efd8686"
+                            },
+                            {
+                              "id": "a49486b8-aacf-4d9f-8ace-f15da77e7492",
+                              "name": "Not found - The requested resource couldn't be found.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "api-key",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"verificationCode\": \"371361\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/authentication_factors/otp/:channel/verify",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "authentication_factors",
+                                    "otp",
+                                    ":channel",
+                                    "verify"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "channel"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Not Found",
+                              "code": 404,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                },
+                                {
+                                  "disabled": false,
+                                  "description": {
+                                    "content": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                                    "type": "text/plain"
+                                  },
+                                  "key": "request-ref",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"code\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T19:51:28.000Z",
+                              "updatedAt": "2026-10-21T19:51:28.000Z",
+                              "uid": "35240-a49486b8-aacf-4d9f-8ace-f15da77e7492"
+                            },
+                            {
+                              "id": "7dfa7835-5e0b-483f-b9f5-3e0e74dce4b8",
+                              "name": "Conflict",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "api-key",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"verificationCode\": \"371361\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/authentication_factors/otp/:channel/verify",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "authentication_factors",
+                                    "otp",
+                                    ":channel",
+                                    "verify"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "channel"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Conflict",
+                              "code": 409,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"errorCode\": \"CREDENTIALS_INACTIVE\"\n}",
+                              "createdAt": "2026-10-21T19:51:28.000Z",
+                              "updatedAt": "2026-10-21T19:51:28.000Z",
+                              "uid": "35240-7dfa7835-5e0b-483f-b9f5-3e0e74dce4b8"
+                            },
+                            {
+                              "id": "07dd2074-16ae-4249-92da-ee3639b9fcc3",
+                              "name": "Too many requests.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "api-key",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"verificationCode\": \"371361\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/authentication_factors/otp/:channel/verify",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "authentication_factors",
+                                    "otp",
+                                    ":channel",
+                                    "verify"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "channel"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Too Many Requests",
+                              "code": 429,
+                              "_postman_previewlanguage": "text",
+                              "header": [
+                                {
+                                  "disabled": false,
+                                  "description": {
+                                    "content": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                                    "type": "text/plain"
+                                  },
+                                  "key": "request-ref",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "disabled": false,
+                                  "description": {
+                                    "content": "(Required) Example: `20, 10;w=60, 20;w=3600, 200;w=86400`\nThe first number (20) is the limit that has been exceeded.\nThe remaining numbers are the limits that are in force, with 'w' meaning 'window in seconds'. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)\n",
+                                    "type": "text/plain"
+                                  },
+                                  "key": "x-ratelimit-limit",
+                                  "value": "<string>"
+                                },
+                                {
+                                  "disabled": false,
+                                  "description": {
+                                    "content": "(Required) The number of seconds until the window is reset.",
+                                    "type": "text/plain"
+                                  },
+                                  "key": "x-ratelimit-reset",
+                                  "value": "<integer>"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": null,
+                              "createdAt": "2026-10-21T19:51:28.000Z",
+                              "updatedAt": "2026-10-21T19:51:28.000Z",
+                              "uid": "35240-07dd2074-16ae-4249-92da-ee3639b9fcc3"
+                            },
+                            {
+                              "id": "379f1e11-7cbe-43f2-900f-953a77563d74",
+                              "name": "Internal Server Error - There is a problem with the server. Please try again later.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "api-key",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"verificationCode\": \"371361\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/authentication_factors/otp/:channel/verify",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "authentication_factors",
+                                    "otp",
+                                    ":channel",
+                                    "verify"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "channel"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Internal Server Error",
+                              "code": 500,
+                              "_postman_previewlanguage": "text",
+                              "header": [
+                                {
+                                  "disabled": false,
+                                  "description": {
+                                    "content": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                                    "type": "text/plain"
+                                  },
+                                  "key": "request-ref",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": null,
+                              "createdAt": "2026-10-21T19:51:28.000Z",
+                              "updatedAt": "2026-10-21T19:51:28.000Z",
+                              "uid": "35240-379f1e11-7cbe-43f2-900f-953a77563d74"
+                            },
+                            {
+                              "id": "c67b534e-96b7-48d6-9c30-29c4aa03a881",
+                              "name": "Service Unavailable - We're temporarily offline for maintenance. Please try again later.",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "api-key",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"verificationCode\": \"371361\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/authentication_factors/otp/:channel/verify",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "authentication_factors",
+                                    "otp",
+                                    ":channel",
+                                    "verify"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "channel"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Service Unavailable",
+                              "code": 503,
+                              "_postman_previewlanguage": "text",
+                              "header": [
+                                {
+                                  "disabled": false,
+                                  "description": {
+                                    "content": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                                    "type": "text/plain"
+                                  },
+                                  "key": "request-ref",
+                                  "value": "<string>"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": null,
+                              "createdAt": "2026-10-21T19:51:28.000Z",
+                              "updatedAt": "2026-10-21T19:51:28.000Z",
+                              "uid": "35240-c67b534e-96b7-48d6-9c30-29c4aa03a881"
+                            },
+                            {
+                              "id": "f4839ac7-fb5c-4d8b-8b44-3730c48d7dcc",
+                              "name": "Error",
+                              "originalRequest": {
+                                "method": "POST",
+                                "header": [
+                                  {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "key": "Accept",
+                                    "value": "application/json"
+                                  },
+                                  {
+                                    "description": "Added as a part of security scheme: apikey",
+                                    "key": "api-key",
+                                    "value": "<API Key>"
+                                  }
+                                ],
+                                "body": {
+                                  "mode": "raw",
+                                  "raw": "{\n  \"verificationCode\": \"371361\"\n}",
+                                  "options": {
+                                    "raw": {
+                                      "headerFamily": "json",
+                                      "language": "json"
+                                    }
+                                  }
+                                },
+                                "url": {
+                                  "raw": "{{baseUrl}}/v1/authentication_factors/otp/:channel/verify",
+                                  "host": [
+                                    "{{baseUrl}}"
+                                  ],
+                                  "path": [
+                                    "v1",
+                                    "authentication_factors",
+                                    "otp",
+                                    ":channel",
+                                    "verify"
+                                  ],
+                                  "variable": [
+                                    {
+                                      "key": "channel"
+                                    }
+                                  ]
+                                }
+                              },
+                              "status": "Internal Server Error",
+                              "code": 500,
+                              "_postman_previewlanguage": "json",
+                              "header": [
+                                {
+                                  "key": "Content-Type",
+                                  "value": "application/json"
+                                }
+                              ],
+                              "cookie": [],
+                              "responseTime": null,
+                              "body": "{\n  \"code\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                              "createdAt": "2026-10-21T19:51:28.000Z",
+                              "updatedAt": "2026-10-21T19:51:28.000Z",
+                              "uid": "35240-f4839ac7-fb5c-4d8b-8b44-3730c48d7dcc"
+                            }
+                          ],
+                          "createdAt": "2026-10-21T19:51:28.000Z",
+                          "updatedAt": "2026-10-21T19:51:28.000Z",
+                          "uid": "35240-a795156d-30b7-4b04-9fb5-4dcfa0456211"
+                        }
+                      ],
+                      "id": "bbfe1d6c-032f-4e61-8e09-8e6aaa04e5ab",
+                      "createdAt": "2026-10-21T19:51:28.000Z",
+                      "updatedAt": "2026-10-21T19:51:28.000Z",
+                      "uid": "35240-bbfe1d6c-032f-4e61-8e09-8e6aaa04e5ab"
+                    },
+                    {
+                      "name": "Enrol a user device for authentication using one-time passwords",
+                      "id": "bbcff86e-5455-4595-95fa-f6697f6e055a",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/v1/authentication_factors/otp/:channel",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "v1",
+                            "authentication_factors",
+                            "otp",
+                            ":channel"
+                          ],
+                          "variable": [
+                            {
+                              "id": "509fe041-5ffa-41ad-9246-f64dc160fbc5",
+                              "key": "channel",
+                              "value": "SMS",
+                              "description": "(Required) The unique identifier for the channel."
+                            }
+                          ]
+                        },
+                        "description": "This is the first step in enrolling the logged-in user's mobile device, where a one-time password is sent to the device.\n\n_Note that on the Sandbox Environment, text messages are not sent and the one-time-password is always \\\"123456\\\"._"
+                      },
+                      "response": [
+                        {
+                          "id": "ed5ff649-2402-469d-b6a9-ddb544db554f",
+                          "name": "Success - No Content.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "api-key",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/authentication_factors/otp/:channel",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "authentication_factors",
+                                "otp",
+                                ":channel"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "channel"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "No Content",
+                          "code": 204,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                                "type": "text/plain"
+                              },
+                              "key": "request-ref",
+                              "value": "<string>"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-10-21T19:51:28.000Z",
+                          "updatedAt": "2026-10-21T19:51:28.000Z",
+                          "uid": "35240-ed5ff649-2402-469d-b6a9-ddb544db554f"
+                        },
+                        {
+                          "id": "6fd55803-0515-40c1-90bb-013bd7c538c9",
+                          "name": "Bad Request Error - Your request is invalid.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "api-key",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/authentication_factors/otp/:channel",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "authentication_factors",
+                                "otp",
+                                ":channel"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "channel"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                                "type": "text/plain"
+                              },
+                              "key": "request-ref",
+                              "value": "<string>"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"message\": \"<string>\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"fieldName\": \"<string>\",\n        \"error\": \"EXACTLY\"\n      },\n      {\n        \"params\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"fieldName\": \"<string>\",\n        \"error\": \"REQUIRED\"\n      }\n    ]\n  }\n}",
+                          "createdAt": "2026-10-21T19:51:28.000Z",
+                          "updatedAt": "2026-10-21T19:51:28.000Z",
+                          "uid": "35240-6fd55803-0515-40c1-90bb-013bd7c538c9"
+                        },
+                        {
+                          "id": "c7439d68-6aac-4027-b6c9-5e613233e74a",
+                          "name": "Unauthorized - Your credentials or access token are invalid.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "api-key",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/authentication_factors/otp/:channel",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "authentication_factors",
+                                "otp",
+                                ":channel"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "channel"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                                "type": "text/plain"
+                              },
+                              "key": "request-ref",
+                              "value": "<string>"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-10-21T19:51:28.000Z",
+                          "updatedAt": "2026-10-21T19:51:28.000Z",
+                          "uid": "35240-c7439d68-6aac-4027-b6c9-5e613233e74a"
+                        },
+                        {
+                          "id": "5739439c-be3f-47e0-815d-52b822ef5771",
+                          "name": "Forbidden - Access to the requested resource or action is forbidden.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "api-key",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/authentication_factors/otp/:channel",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "authentication_factors",
+                                "otp",
+                                ":channel"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "channel"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                                "type": "text/plain"
+                              },
+                              "key": "request-ref",
+                              "value": "<string>"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"errorCode\": \"INSUFFICIENT_PERMISSIONS\"\n}",
+                          "createdAt": "2026-10-21T19:51:28.000Z",
+                          "updatedAt": "2026-10-21T19:51:28.000Z",
+                          "uid": "35240-5739439c-be3f-47e0-815d-52b822ef5771"
+                        },
+                        {
+                          "id": "2207e498-d795-41d2-a977-c5bbe01459d3",
+                          "name": "Not found - The requested resource couldn't be found.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "api-key",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/authentication_factors/otp/:channel",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "authentication_factors",
+                                "otp",
+                                ":channel"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "channel"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                                "type": "text/plain"
+                              },
+                              "key": "request-ref",
+                              "value": "<string>"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"code\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T19:51:28.000Z",
+                          "updatedAt": "2026-10-21T19:51:28.000Z",
+                          "uid": "35240-2207e498-d795-41d2-a977-c5bbe01459d3"
+                        },
+                        {
+                          "id": "9e52a1ef-c7be-4c09-9ce2-16eb02cce2af",
+                          "name": "Conflict",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "api-key",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/authentication_factors/otp/:channel",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "authentication_factors",
+                                "otp",
+                                ":channel"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "channel"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Conflict",
+                          "code": 409,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"errorCode\": \"MOBILE_COUNTRY_NOT_SUPPORTED\"\n}",
+                          "createdAt": "2026-10-21T19:51:28.000Z",
+                          "updatedAt": "2026-10-21T19:51:28.000Z",
+                          "uid": "35240-9e52a1ef-c7be-4c09-9ce2-16eb02cce2af"
+                        },
+                        {
+                          "id": "8bc4d19d-ff8a-420f-b1a7-1aefc52e4719",
+                          "name": "Too many requests.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "api-key",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/authentication_factors/otp/:channel",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "authentication_factors",
+                                "otp",
+                                ":channel"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "channel"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                                "type": "text/plain"
+                              },
+                              "key": "request-ref",
+                              "value": "<string>"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "(Required) Example: `20, 10;w=60, 20;w=3600, 200;w=86400`\nThe first number (20) is the limit that has been exceeded.\nThe remaining numbers are the limits that are in force, with 'w' meaning 'window in seconds'. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)\n",
+                                "type": "text/plain"
+                              },
+                              "key": "x-ratelimit-limit",
+                              "value": "<string>"
+                            },
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "(Required) The number of seconds until the window is reset.",
+                                "type": "text/plain"
+                              },
+                              "key": "x-ratelimit-reset",
+                              "value": "<integer>"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-10-21T19:51:28.000Z",
+                          "updatedAt": "2026-10-21T19:51:28.000Z",
+                          "uid": "35240-8bc4d19d-ff8a-420f-b1a7-1aefc52e4719"
+                        },
+                        {
+                          "id": "a899b5e5-6b80-4994-902e-d605e3ada374",
+                          "name": "Internal Server Error - There is a problem with the server. Please try again later.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "api-key",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/authentication_factors/otp/:channel",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "authentication_factors",
+                                "otp",
+                                ":channel"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "channel"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                                "type": "text/plain"
+                              },
+                              "key": "request-ref",
+                              "value": "<string>"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-10-21T19:51:28.000Z",
+                          "updatedAt": "2026-10-21T19:51:28.000Z",
+                          "uid": "35240-a899b5e5-6b80-4994-902e-d605e3ada374"
+                        },
+                        {
+                          "id": "7a5d95a8-54c1-48d4-82f1-6da2cefca9e9",
+                          "name": "Service Unavailable - We're temporarily offline for maintenance. Please try again later.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "api-key",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/authentication_factors/otp/:channel",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "authentication_factors",
+                                "otp",
+                                ":channel"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "channel"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Service Unavailable",
+                          "code": 503,
+                          "_postman_previewlanguage": "text",
+                          "header": [
+                            {
+                              "disabled": false,
+                              "description": {
+                                "content": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                                "type": "text/plain"
+                              },
+                              "key": "request-ref",
+                              "value": "<string>"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-10-21T19:51:28.000Z",
+                          "updatedAt": "2026-10-21T19:51:28.000Z",
+                          "uid": "35240-7a5d95a8-54c1-48d4-82f1-6da2cefca9e9"
+                        },
+                        {
+                          "id": "b5c966b5-84f4-4141-93fb-2575a767e09e",
+                          "name": "Error",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: apikey",
+                                "key": "api-key",
+                                "value": "<API Key>"
+                              }
+                            ],
+                            "url": {
+                              "raw": "{{baseUrl}}/v1/authentication_factors/otp/:channel",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "v1",
+                                "authentication_factors",
+                                "otp",
+                                ":channel"
+                              ],
+                              "variable": [
+                                {
+                                  "key": "channel"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"code\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                          "createdAt": "2026-10-21T19:51:28.000Z",
+                          "updatedAt": "2026-10-21T19:51:28.000Z",
+                          "uid": "35240-b5c966b5-84f4-4141-93fb-2575a767e09e"
+                        }
+                      ],
+                      "createdAt": "2026-10-21T19:51:28.000Z",
+                      "updatedAt": "2026-10-21T19:51:28.000Z",
+                      "uid": "35240-bbcff86e-5455-4595-95fa-f6697f6e055a"
                     }
-                  ]
-                },
-                "method": "POST",
-                "body": {}
-              },
-              "status": "No Content",
-              "code": 204,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  ],
+                  "id": "0488264c-1591-4718-8aa6-12d4b11c4084",
+                  "createdAt": "2026-10-21T19:51:28.000Z",
+                  "updatedAt": "2026-10-21T19:51:28.000Z",
+                  "uid": "35240-0488264c-1591-4718-8aa6-12d4b11c4084"
                 }
               ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "b395e270-757f-407d-8446-3c8fec98dccb",
-              "name": "Bad Request Error - Your request is invalid.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "authentication_factors",
-                    "otp",
-                    ":channel"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "channel",
-                      "description": "(Required) The unique identifier for the channel."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {}
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"message\": \"string\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"NOT_IN\"\n      },\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"NOT_IN\"\n      }\n    ]\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "af307cff-dd8e-4ce2-b4c2-a9014ad12eb4",
-              "name": "Unauthorized - Your credentials or access token are invalid.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "authentication_factors",
-                    "otp",
-                    ":channel"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "channel",
-                      "description": "(Required) The unique identifier for the channel."
-                    }
-                  ]
-                },
-                "method": "POST",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "6adb24db-0d31-4280-839a-abaf74837a30",
-              "name": "Forbidden - Access to the requested resource or action is forbidden.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "authentication_factors",
-                    "otp",
-                    ":channel"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "channel",
-                      "description": "(Required) The unique identifier for the channel."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {}
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"errorCode\": \"INSUFFICIENT_PERMISSIONS\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "c47f9405-052f-47d9-a891-185ce96c497a",
-              "name": "Not found - The requested resource couldn't be found.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "authentication_factors",
-                    "otp",
-                    ":channel"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "channel",
-                      "description": "(Required) The unique identifier for the channel."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "86deb6e5-ff05-4666-8030-c93599f26f0c",
-              "name": "Conflict",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "authentication_factors",
-                    "otp",
-                    ":channel"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "channel",
-                      "description": "(Required) The unique identifier for the channel."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {}
-              },
-              "status": "Conflict",
-              "code": 409,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"errorCode\": \"CHANNEL_NOT_SUPPORTED\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "17e935c5-fd96-40da-8867-236d0ffa7842",
-              "name": "Too many requests.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "authentication_factors",
-                    "otp",
-                    ":channel"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "channel",
-                      "description": "(Required) The unique identifier for the channel."
-                    }
-                  ]
-                },
-                "method": "POST",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "disabled": false,
-                  "description": "(Required) Example: `20, 10;w=60, 20;w=3600, 200;w=86400`\nThe first number (20) is the limit that has been exceeded.\nThe remaining numbers are the limits that are in force, with 'w' meaning 'window in seconds'. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)\n",
-                  "key": "x-ratelimit-limit",
-                  "value": "string"
-                },
-                {
-                  "disabled": false,
-                  "description": "(Required) The number of seconds until the window is reset.",
-                  "key": "x-ratelimit-reset",
-                  "value": "5238"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "bb7b093c-694c-43a7-ba67-ddd44f1088ba",
-              "name": "Internal Server Error - There is a problem with the server. Please try again later.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "authentication_factors",
-                    "otp",
-                    ":channel"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "channel",
-                      "description": "(Required) The unique identifier for the channel."
-                    }
-                  ]
-                },
-                "method": "POST",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "dcac711b-a57c-484d-be94-9a9a6c0e18b8",
-              "name": "Service Unavailable - We're temporarily offline for maintenance. Please try again later.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "authentication_factors",
-                    "otp",
-                    ":channel"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "channel",
-                      "description": "(Required) The unique identifier for the channel."
-                    }
-                  ]
-                },
-                "method": "POST",
-                "body": {}
-              },
-              "status": "Service Unavailable",
-              "code": 503,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "e637c02b-690a-48b7-a19a-34dfc211f1f1",
-              "name": "Error",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "authentication_factors",
-                    "otp",
-                    ":channel"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "channel",
-                      "description": "(Required) The unique identifier for the channel."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "id": "eaf91b54-53da-4342-9003-9624c2d2d9f7",
+              "createdAt": "2026-10-21T19:51:28.000Z",
+              "updatedAt": "2026-10-21T19:51:28.000Z",
+              "uid": "35240-eaf91b54-53da-4342-9003-9624c2d2d9f7"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "19c22c0d-b511-4229-9bf5-42e024948e4d",
-          "name": "Verify enrolment of a user device for authentication using one-time passwords",
-          "request": {
-            "name": "Verify enrolment of a user device for authentication using one-time passwords",
-            "description": {
-              "content": "The second step in enrolling the logged-in user (root or authorised user) to use one-time-passwords to enable verification of transactions.\n\n_Note that on the Sandbox Environment, text messages are not sent and the `verificationCode` is always set to \\\"123456\\\"._\n",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "v1",
-                "authentication_factors",
-                "otp",
-                ":channel",
-                "verify"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "channel",
-                  "description": "(Required) The unique identifier for the channel."
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": null,
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"verificationCode\": \"<string>\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "85b10b3e-6880-45fe-b8e0-5984963f397c",
-              "name": "Success - No Content.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "authentication_factors",
-                    "otp",
-                    ":channel",
-                    "verify"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "channel",
-                      "description": "(Required) The unique identifier for the channel."
-                    }
-                  ]
-                },
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"verificationCode\": \"<string>\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "No Content",
-              "code": 204,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "747457bf-228e-4747-aafe-32b6fde1777e",
-              "name": "Bad Request Error - Your request is invalid.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "authentication_factors",
-                    "otp",
-                    ":channel",
-                    "verify"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "channel",
-                      "description": "(Required) The unique identifier for the channel."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"verificationCode\": \"<string>\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"message\": \"string\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"NOT_IN\"\n      },\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"NOT_IN\"\n      }\n    ]\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "afffff5b-2a5f-4197-b743-339d1dcd8e1f",
-              "name": "Unauthorized - Your credentials or access token are invalid.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "authentication_factors",
-                    "otp",
-                    ":channel",
-                    "verify"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "channel",
-                      "description": "(Required) The unique identifier for the channel."
-                    }
-                  ]
-                },
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"verificationCode\": \"<string>\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "42b8f216-5d15-4267-80a8-5d596b3db009",
-              "name": "Forbidden - Access to the requested resource or action is forbidden.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "authentication_factors",
-                    "otp",
-                    ":channel",
-                    "verify"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "channel",
-                      "description": "(Required) The unique identifier for the channel."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"verificationCode\": \"<string>\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"errorCode\": \"INSUFFICIENT_PERMISSIONS\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "d3a599c2-89b0-43ac-add2-f38360a82cff",
-              "name": "Not found - The requested resource couldn't be found.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "authentication_factors",
-                    "otp",
-                    ":channel",
-                    "verify"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "channel",
-                      "description": "(Required) The unique identifier for the channel."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"verificationCode\": \"<string>\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "fe4be307-bf1b-4480-b9ae-cc1b74cbd943",
-              "name": "Conflict",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "authentication_factors",
-                    "otp",
-                    ":channel",
-                    "verify"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "channel",
-                      "description": "(Required) The unique identifier for the channel."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"verificationCode\": \"<string>\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Conflict",
-              "code": 409,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"errorCode\": \"VERIFICATION_CODE_EXPIRED\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "3c2d83fa-0925-402d-bfa7-b99f6bc0200d",
-              "name": "Too many requests.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "authentication_factors",
-                    "otp",
-                    ":channel",
-                    "verify"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "channel",
-                      "description": "(Required) The unique identifier for the channel."
-                    }
-                  ]
-                },
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"verificationCode\": \"<string>\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "disabled": false,
-                  "description": "(Required) Example: `20, 10;w=60, 20;w=3600, 200;w=86400`\nThe first number (20) is the limit that has been exceeded.\nThe remaining numbers are the limits that are in force, with 'w' meaning 'window in seconds'. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)\n",
-                  "key": "x-ratelimit-limit",
-                  "value": "string"
-                },
-                {
-                  "disabled": false,
-                  "description": "(Required) The number of seconds until the window is reset.",
-                  "key": "x-ratelimit-reset",
-                  "value": "5238"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "68dcd235-f18d-4258-9cb9-67e9c5375377",
-              "name": "Internal Server Error - There is a problem with the server. Please try again later.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "authentication_factors",
-                    "otp",
-                    ":channel",
-                    "verify"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "channel",
-                      "description": "(Required) The unique identifier for the channel."
-                    }
-                  ]
-                },
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"verificationCode\": \"<string>\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "361406c3-42c0-42df-9a96-c60b018a4304",
-              "name": "Service Unavailable - We're temporarily offline for maintenance. Please try again later.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "authentication_factors",
-                    "otp",
-                    ":channel",
-                    "verify"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "channel",
-                      "description": "(Required) The unique identifier for the channel."
-                    }
-                  ]
-                },
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"verificationCode\": \"<string>\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Service Unavailable",
-              "code": 503,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "77c7b618-b06a-4608-a9ef-b2b754e03d98",
-              "name": "Error",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "v1",
-                    "authentication_factors",
-                    "otp",
-                    ":channel",
-                    "verify"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "channel",
-                      "description": "(Required) The unique identifier for the channel."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"verificationCode\": \"<string>\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "id": "719c0df8-2bfc-4274-b324-aa7751b5719d",
+          "createdAt": "2026-10-21T19:51:28.000Z",
+          "updatedAt": "2026-10-21T19:51:28.000Z",
+          "uid": "35240-719c0df8-2bfc-4274-b324-aa7751b5719d"
         }
       ],
-      "event": []
+      "id": "2cb778b2-2132-4b2a-aac7-c37f07eccc36",
+      "createdAt": "2026-10-21T19:51:28.000Z",
+      "updatedAt": "2026-10-21T19:51:28.000Z",
+      "uid": "35240-2cb778b2-2132-4b2a-aac7-c37f07eccc36"
     }
   ],
-  "event": [],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "api-key",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
   "variable": [
     {
-      "type": "string",
-      "value": "https://sandbox.weavr.io/multi/backoffice",
-      "key": "baseUrl"
+      "key": "baseUrl",
+      "value": "https://sandbox.weavr.io/payment-run"
     }
-  ],
-  "info": {
-    "_postman_id": "46a89b94-ccd4-4e36-92f6-0e4707c8fb6c",
-    "name": "Weavr Multi Product BackOffice Access Token Additional Factors API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning\nidentities and their instruments, without requiring the users to be logged in.\n\nA token is to be obtained through the `access_token` method, and this will allow relevant operations\nto be performed on behalf of this same identity.\n\n\nContact Support:\n Name: Weavr",
-      "type": "text/plain"
-    }
-  }
+  ]
 }

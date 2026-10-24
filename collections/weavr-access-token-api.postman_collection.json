@@ -1,32 +1,46 @@
 {
+  "info": {
+    "_postman_id": "cad114c1-ea95-49dd-a4bd-9457347a1db2",
+    "name": "Weavr Multi Product BackOffice Access Token API",
+    "description": "Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning\nidentities and their instruments, without requiring the users to be logged in.\n\nA token is to be obtained through the `access_token` method, and this will allow relevant operations\nto be performed on behalf of this same identity.\n\nContact Support:\n Name: Weavr",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:51:11.000Z",
+    "updatedAt": "2026-10-21T19:51:12.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-cad114c1-ea95-49dd-a4bd-9457347a1db2"
+  },
   "item": [
     {
-      "id": "aea225a2-9b13-4547-9dc7-d10a16bd703e",
-      "name": "Access Token",
-      "description": {
-        "content": "Acquire a token granting you access to perform sensitive operations on behalf of an identity.\n",
-        "type": "text/plain"
-      },
+      "name": "access_token",
       "item": [
         {
-          "id": "921b3b75-a1a3-4b27-ae65-bcc649dbb107",
           "name": "Acquire a new access token",
+          "id": "b6d06d73-4112-4566-b96c-5e73bf459296",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
           "request": {
-            "name": "Acquire a new access token",
-            "description": {
-              "content": "Acquire a `Bearer` token granting you access to securely perform delegated access operations on behalf of the given `identity`.\n\nThe token representing the identity should be included in the `Authorization` header of all requests to endpoints representing Delegated Access operations.\n",
-              "type": "text/plain"
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "api-key",
+                  "type": "string"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}",
+                  "type": "string"
+                },
+                {
+                  "key": "in",
+                  "value": "header",
+                  "type": "string"
+                }
+              ]
             },
-            "url": {
-              "path": [
-                "access_token"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
+            "method": "POST",
             "header": [
               {
                 "key": "Content-Type",
@@ -37,482 +51,504 @@
                 "value": "application/json"
               }
             ],
-            "method": "POST",
-            "auth": {
-              "type": "apikey",
-              "apikey": [
-                {
-                  "key": "key",
-                  "value": "api-key"
-                },
-                {
-                  "key": "value",
-                  "value": "{{apiKey}}"
-                },
-                {
-                  "key": "in",
-                  "value": "header"
-                }
-              ]
-            },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"identity\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\"\n  },\n  \"temp\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\"\n  }\n}",
+              "raw": "{\n  \"identity\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"36497\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"4229741793\"\n  }\n}",
               "options": {
                 "raw": {
+                  "headerFamily": "json",
                   "language": "json"
                 }
               }
-            }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/access_token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "access_token"
+              ]
+            },
+            "description": "Acquire a `Bearer` token granting you access to securely perform delegated access operations on behalf of the given `identity`.\n\nThe token representing the identity should be included in the `Authorization` header of all requests to endpoints representing Delegated Access operations."
           },
           "response": [
             {
-              "id": "3286ce40-7a18-40b3-92df-c9fef1c216a4",
+              "id": "6327c889-00a6-4e85-bb4b-ef02cd0ab46f",
               "name": "Success",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "access_token"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "api-key",
-                    "value": "<API Key>"
+                    "key": "Content-Type",
+                    "value": "application/json"
                   },
                   {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "api-key",
+                    "value": "<API Key>"
                   }
                 ],
-                "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"58618\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"37313341574\"\n  }\n}",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"36497\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"4229741793\"\n  }\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/access_token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "access_token"
+                  ]
                 }
               },
               "status": "OK",
               "code": 200,
+              "_postman_previewlanguage": "json",
               "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
+                },
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "request-ref",
+                  "value": ""
                 }
               ],
-              "body": "{\n  \"token\": {\n    \"token\": \"string\"\n  },\n  \"identity\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"05058\"\n  },\n  \"credentials\": {\n    \"type\": \"ROOT\",\n    \"id\": \"64\"\n  }\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"token\": {\n    \"token\": \"<string>\"\n  },\n  \"identity\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"521999160\"\n  },\n  \"credentials\": {\n    \"type\": \"ROOT\",\n    \"id\": \"134198116\"\n  }\n}",
+              "createdAt": "2026-10-21T19:51:12.000Z",
+              "updatedAt": "2026-10-21T19:51:12.000Z",
+              "uid": "35240-6327c889-00a6-4e85-bb4b-ef02cd0ab46f"
             },
             {
-              "id": "16cc11e1-681e-48c7-a92f-d6b6a1a2993c",
+              "id": "30002bb6-104d-444c-8511-16ae335bdbc9",
               "name": "Bad Request Error - Your request is invalid.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "access_token"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "api-key",
-                    "value": "<API Key>"
+                    "key": "Content-Type",
+                    "value": "application/json"
                   },
                   {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "api-key",
+                    "value": "<API Key>"
                   }
                 ],
-                "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"58618\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"37313341574\"\n  }\n}",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"36497\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"4229741793\"\n  }\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/access_token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "access_token"
+                  ]
                 }
               },
               "status": "Bad Request",
               "code": 400,
+              "_postman_previewlanguage": "json",
               "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
+                },
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "request-ref",
+                  "value": ""
                 }
               ],
-              "body": "{\n  \"message\": \"string\",\n  \"validationErrors\": [\n    {\n      \"fieldName\": \"string\",\n      \"message\": \"string\",\n      \"error\": \"PAST_OR_PRESENT\",\n      \"params\": [\n        \"string\",\n        \"string\"\n      ],\n      \"invalidValue\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"fieldName\": \"string\",\n      \"message\": \"string\",\n      \"error\": \"PAST_OR_PRESENT\",\n      \"params\": [\n        \"string\",\n        \"string\"\n      ],\n      \"invalidValue\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"validationErrors\": [\n    {\n      \"fieldName\": \"<string>\",\n      \"message\": \"<string>\",\n      \"error\": \"PAST\",\n      \"params\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"invalidValue\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"fieldName\": \"<string>\",\n      \"message\": \"<string>\",\n      \"error\": \"ALL_OR_NONE\",\n      \"params\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"invalidValue\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+              "createdAt": "2026-10-21T19:51:12.000Z",
+              "updatedAt": "2026-10-21T19:51:12.000Z",
+              "uid": "35240-30002bb6-104d-444c-8511-16ae335bdbc9"
             },
             {
-              "id": "636bafd7-1aef-49d3-8b29-6398c99f3367",
+              "id": "7b215b7b-0bee-4792-8f36-376496a5df94",
               "name": "Unauthorized - Your credentials or access token are invalid.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "access_token"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
                     "key": "api-key",
                     "value": "<API Key>"
                   }
                 ],
-                "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"58618\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"37313341574\"\n  }\n}",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"36497\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"4229741793\"\n  }\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/access_token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "access_token"
+                  ]
                 }
               },
               "status": "Unauthorized",
               "code": 401,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
                   "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "value": ""
                 }
               ],
-              "body": "",
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:51:12.000Z",
+              "updatedAt": "2026-10-21T19:51:12.000Z",
+              "uid": "35240-7b215b7b-0bee-4792-8f36-376496a5df94"
             },
             {
-              "id": "ba0ceaf5-6140-4316-bcbe-1b4b8e40e525",
+              "id": "7eec6b70-248d-46a8-a9bc-aa3394013959",
               "name": "The authentication credentials are not found or are incorrect.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "access_token"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
                     "key": "api-key",
                     "value": "<API Key>"
                   }
                 ],
-                "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"58618\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"37313341574\"\n  }\n}",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"36497\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"4229741793\"\n  }\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/access_token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "access_token"
+                  ]
                 }
               },
               "status": "Forbidden",
               "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
+              "_postman_previewlanguage": "text",
+              "header": [],
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:51:12.000Z",
+              "updatedAt": "2026-10-21T19:51:12.000Z",
+              "uid": "35240-7eec6b70-248d-46a8-a9bc-aa3394013959"
             },
             {
-              "id": "50563fb5-2047-44f1-b256-6aba59e241d5",
+              "id": "78fc3b26-04fb-4df9-8299-381d29b85251",
               "name": "Conflict",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "access_token"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "api-key",
-                    "value": "<API Key>"
+                    "key": "Content-Type",
+                    "value": "application/json"
                   },
                   {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "api-key",
+                    "value": "<API Key>"
                   }
                 ],
-                "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"58618\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"37313341574\"\n  }\n}",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"36497\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"4229741793\"\n  }\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/access_token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "access_token"
+                  ]
                 }
               },
               "status": "Conflict",
               "code": 409,
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"errorCode\": \"ALREADY_IMPERSONATED\"\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"errorCode\": \"UNRESOLVED_IDENTITY\"\n}",
+              "createdAt": "2026-10-21T19:51:12.000Z",
+              "updatedAt": "2026-10-21T19:51:12.000Z",
+              "uid": "35240-78fc3b26-04fb-4df9-8299-381d29b85251"
             },
             {
-              "id": "21de577c-3085-4a66-a6d0-40a84435d28e",
+              "id": "a46e2836-56a6-4c3f-9a31-2a2b4b507ed1",
               "name": "Internal Server Error - There is a problem with the server. Please try again later.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "access_token"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
                     "key": "api-key",
                     "value": "<API Key>"
                   }
                 ],
-                "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"58618\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"37313341574\"\n  }\n}",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"36497\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"4229741793\"\n  }\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/access_token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "access_token"
+                  ]
                 }
               },
               "status": "Internal Server Error",
               "code": 500,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
                   "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "value": ""
                 }
               ],
-              "body": "",
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:51:12.000Z",
+              "updatedAt": "2026-10-21T19:51:12.000Z",
+              "uid": "35240-a46e2836-56a6-4c3f-9a31-2a2b4b507ed1"
             },
             {
-              "id": "28afb1d9-8c58-4fef-8a0b-a82b2a8d9fd7",
+              "id": "531c5517-4bec-4a0b-b60d-e83e95abfd07",
               "name": "Service Unavailable - The requested service is temporarily unavailable. Please try again later.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "access_token"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
                     "key": "api-key",
                     "value": "<API Key>"
                   }
                 ],
-                "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"58618\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"37313341574\"\n  }\n}",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"36497\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"4229741793\"\n  }\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/access_token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "access_token"
+                  ]
                 }
               },
               "status": "Service Unavailable",
               "code": 503,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
                   "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "value": ""
                 }
               ],
-              "body": "",
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:51:12.000Z",
+              "updatedAt": "2026-10-21T19:51:12.000Z",
+              "uid": "35240-531c5517-4bec-4a0b-b60d-e83e95abfd07"
             },
             {
-              "id": "3319a7c3-2431-4007-8830-71155f353ab1",
+              "id": "361d7153-8bdd-43ed-a3e5-963eee4f571f",
               "name": "Error",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "access_token"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: apikey",
-                      "type": "text/plain"
-                    },
-                    "key": "api-key",
-                    "value": "<API Key>"
+                    "key": "Content-Type",
+                    "value": "application/json"
                   },
                   {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: apikey",
+                    "key": "api-key",
+                    "value": "<API Key>"
                   }
                 ],
-                "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"58618\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"37313341574\"\n  }\n}",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"36497\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"4229741793\"\n  }\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/access_token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "access_token"
+                  ]
                 }
               },
               "status": "Internal Server Error",
               "code": 500,
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"code\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-10-21T19:51:12.000Z",
+              "updatedAt": "2026-10-21T19:51:12.000Z",
+              "uid": "35240-361d7153-8bdd-43ed-a3e5-963eee4f571f"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "createdAt": "2026-10-21T19:51:12.000Z",
+          "updatedAt": "2026-10-21T19:51:12.000Z",
+          "uid": "35240-b6d06d73-4112-4566-b96c-5e73bf459296"
         }
       ],
-      "event": []
+      "id": "bc062459-d28d-4cf3-802d-16ebf60e53f2",
+      "createdAt": "2026-10-21T19:51:12.000Z",
+      "updatedAt": "2026-10-21T19:51:12.000Z",
+      "uid": "35240-bc062459-d28d-4cf3-802d-16ebf60e53f2"
     }
   ],
-  "event": [],
   "variable": [
     {
-      "type": "string",
-      "value": "https://sandbox.weavr.io/multi/backoffice",
-      "key": "baseUrl"
+      "key": "baseUrl",
+      "value": "https://sandbox.weavr.io/multi/backoffice"
     }
-  ],
-  "info": {
-    "_postman_id": "d89e1871-e7d9-4fc9-a1a4-efae6d1a9361",
-    "name": "Weavr Multi Product BackOffice Access Token API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning\nidentities and their instruments, without requiring the users to be logged in.\n\nA token is to be obtained through the `access_token` method, and this will allow relevant operations\nto be performed on behalf of this same identity.\n\n\nContact Support:\n Name: Weavr",
-      "type": "text/plain"
-    }
-  }
+  ]
 }

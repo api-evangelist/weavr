@@ -1,32 +1,36 @@
 {
+  "info": {
+    "_postman_id": "9d5d0fe2-2714-4920-a4cc-bb23edb46ee5",
+    "name": "Weavr Multi Product Access Tokens API",
+    "description": "Weavr Multi API provides a simple and flexible way to issue cards and accounts to your customers.\n\nContact Support:\n Name: Weavr",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:51:16.000Z",
+    "updatedAt": "2026-10-21T19:51:16.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-9d5d0fe2-2714-4920-a4cc-bb23edb46ee5"
+  },
   "item": [
     {
-      "id": "86a99feb-d0b7-4a7e-8b8f-9f8b7252379e",
-      "name": "Access Tokens",
-      "description": {
-        "content": "Acquire and revoke access tokens.",
-        "type": "text/plain"
-      },
+      "name": "access_token",
       "item": [
         {
-          "id": "16cbeaf6-d9ce-462e-b7c9-9634c188934d",
           "name": "Acquire a new access token",
+          "id": "37f597b6-cb13-42c0-9fa2-f8bc5fbbedae",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
           "request": {
-            "name": "Acquire a new access token",
-            "description": {
-              "content": "This API endpoint accepts a POST request with an auth_token parameter and returns an access_token that grants authorized access to additional resources within the API, with a different expiration time and unique signature.\n",
-              "type": "text/plain"
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}",
+                  "type": "string"
+                }
+              ]
             },
-            "url": {
-              "path": [
-                "access_token"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
+            "method": "POST",
             "header": [
               {
                 "key": "Content-Type",
@@ -37,469 +41,580 @@
                 "value": "application/json"
               }
             ],
-            "method": "POST",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"identity\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\"\n  },\n  \"clientAssertion\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+              "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"1\"\n  },\n  \"clientAssertion\": \"<string>\",\n  \"token\": \"<string>\"\n}",
               "options": {
                 "raw": {
+                  "headerFamily": "json",
                   "language": "json"
                 }
               }
-            }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/access_token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "access_token"
+              ]
+            },
+            "description": "This API endpoint accepts a POST request with an auth_token parameter and returns an access_token that grants authorized access to additional resources within the API, with a different expiration time and unique signature."
           },
           "response": [
             {
-              "id": "1acd0681-14d7-47a5-9288-d22f68679f66",
+              "id": "c5604fa9-5bdd-43a4-914a-d7c300748f17",
               "name": "Success",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "access_token"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
+                    "key": "Content-Type",
+                    "value": "application/json"
                   },
                   {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
-                "body": {}
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"1\"\n  },\n  \"clientAssertion\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/access_token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "access_token"
+                  ]
+                }
               },
               "status": "OK",
               "code": 200,
+              "_postman_previewlanguage": "json",
               "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
+                },
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "request-ref",
+                  "value": ""
                 }
               ],
-              "body": "{\n  \"token\": \"string\",\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"0\"\n  },\n  \"credentials\": {\n    \"type\": \"ROOT\",\n    \"id\": \"327\"\n  },\n  \"status\": \"STANDARD\"\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"token\": \"<string>\",\n  \"identity\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"3424191615\"\n  },\n  \"credentials\": {\n    \"type\": \"USER\",\n    \"id\": \"679477093\"\n  },\n  \"status\": \"STANDARD\"\n}",
+              "createdAt": "2026-10-21T19:51:16.000Z",
+              "updatedAt": "2026-10-21T19:51:16.000Z",
+              "uid": "35240-c5604fa9-5bdd-43a4-914a-d7c300748f17"
             },
             {
-              "id": "494c30ee-69a1-41ff-8485-468b2fc62cd5",
+              "id": "5783072b-0084-49c9-b795-2138f6ae4d77",
               "name": "Bad Request Error - Your request is invalid.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "access_token"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
+                    "key": "Content-Type",
+                    "value": "application/json"
                   },
                   {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
-                "body": {}
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"1\"\n  },\n  \"clientAssertion\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/access_token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "access_token"
+                  ]
+                }
               },
               "status": "Bad Request",
               "code": 400,
+              "_postman_previewlanguage": "json",
               "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
+                },
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "request-ref",
+                  "value": ""
                 }
               ],
-              "body": "{\n  \"message\": \"string\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"SIZE\"\n      },\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"AT_MOST\"\n      }\n    ]\n  }\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"fieldName\": \"<string>\",\n        \"error\": \"ALL_OR_NONE\"\n      },\n      {\n        \"params\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"fieldName\": \"<string>\",\n        \"error\": \"NOT_IN\"\n      }\n    ]\n  }\n}",
+              "createdAt": "2026-10-21T19:51:16.000Z",
+              "updatedAt": "2026-10-21T19:51:16.000Z",
+              "uid": "35240-5783072b-0084-49c9-b795-2138f6ae4d77"
             },
             {
-              "id": "8ac79d2a-4092-431d-b1b8-186f8a2c18f9",
+              "id": "963ecef7-dc9c-4265-913a-9724ecf5dd37",
               "name": "Unauthorized - Your credentials or access token are invalid.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "access_token"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
                     "key": "Authorization",
                     "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
-                "body": {}
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"1\"\n  },\n  \"clientAssertion\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/access_token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "access_token"
+                  ]
+                }
               },
               "status": "Unauthorized",
               "code": 401,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
                   "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "value": ""
                 }
               ],
-              "body": "",
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:51:16.000Z",
+              "updatedAt": "2026-10-21T19:51:16.000Z",
+              "uid": "35240-963ecef7-dc9c-4265-913a-9724ecf5dd37"
             },
             {
-              "id": "bf55cd85-b334-49f9-b6ab-d4871d5bb985",
+              "id": "d03e6ff6-82a9-4b4d-ab15-f043daa94918",
               "name": "The auth token is not specified or is incorrect.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "access_token"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
                     "key": "Authorization",
                     "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
-                "body": {}
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"1\"\n  },\n  \"clientAssertion\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/access_token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "access_token"
+                  ]
+                }
               },
               "status": "Forbidden",
               "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
+              "_postman_previewlanguage": "text",
+              "header": [],
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:51:16.000Z",
+              "updatedAt": "2026-10-21T19:51:16.000Z",
+              "uid": "35240-d03e6ff6-82a9-4b4d-ab15-f043daa94918"
             },
             {
-              "id": "1a09a3a8-c934-486f-834d-c021eb2eff0d",
+              "id": "7c0cdeea-638b-42ad-b9c8-7905096efc2b",
               "name": "Locked - Account is temporarily locked due to failed consecutive login attempts. Try again in 30 minutes.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "access_token"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
                     "key": "Authorization",
                     "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
-                "body": {}
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"1\"\n  },\n  \"clientAssertion\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/access_token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "access_token"
+                  ]
+                }
               },
               "status": "Locked (WebDAV) (RFC 4918)",
               "code": 423,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
                   "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "value": ""
                 }
               ],
-              "body": "",
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:51:16.000Z",
+              "updatedAt": "2026-10-21T19:51:16.000Z",
+              "uid": "35240-7c0cdeea-638b-42ad-b9c8-7905096efc2b"
             },
             {
-              "id": "8ca57c1d-1182-4601-8872-c37dfdd68804",
+              "id": "8c538a71-2aef-40c0-9156-5e5279e852da",
               "name": "Too many requests.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "access_token"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
                     "key": "Authorization",
                     "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
-                "body": {}
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"1\"\n  },\n  \"clientAssertion\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/access_token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "access_token"
+                  ]
+                }
               },
               "status": "Too Many Requests",
               "code": 429,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
                   "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "request-ref",
-                  "value": "string"
+                  "value": ""
                 },
                 {
                   "disabled": false,
-                  "description": "(Required) Example: `20, 10;w=60, 20;w=3600, 200;w=86400`\nThe first number (20) is the limit that has been exceeded.\nThe remaining numbers are the limits that are in force, with 'w' meaning 'window in seconds'. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)\n",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "x-ratelimit-limit",
-                  "value": "string"
+                  "value": ""
                 },
                 {
                   "disabled": false,
-                  "description": "(Required) The number of seconds until the window is reset.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "x-ratelimit-reset",
-                  "value": "5397"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "value": ""
                 }
               ],
-              "body": "",
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:51:16.000Z",
+              "updatedAt": "2026-10-21T19:51:16.000Z",
+              "uid": "35240-8c538a71-2aef-40c0-9156-5e5279e852da"
             },
             {
-              "id": "92c649f1-3e05-45f5-b3e0-766e8921daaf",
+              "id": "dbd5f5ce-4e1b-4393-9566-b2d1c5c3ceaa",
               "name": "Internal Server Error - There is a problem with the server. Please try again later.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "access_token"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
                     "key": "Authorization",
                     "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
-                "body": {}
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"1\"\n  },\n  \"clientAssertion\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/access_token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "access_token"
+                  ]
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
                   "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "value": ""
                 }
               ],
-              "body": "",
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:51:16.000Z",
+              "updatedAt": "2026-10-21T19:51:16.000Z",
+              "uid": "35240-dbd5f5ce-4e1b-4393-9566-b2d1c5c3ceaa"
             },
             {
-              "id": "4c3c466f-b0be-4a82-9d67-863c048c8cac",
+              "id": "f47d6ac5-b47b-422f-82f1-608bc10c9555",
               "name": "Service Unavailable - The requested service is temporarily unavailable. Please try again later.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "access_token"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
                     "key": "Authorization",
                     "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
-                "body": {}
-              },
-              "status": "Service Unavailable",
-              "code": 503,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"1\"\n  },\n  \"clientAssertion\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
                 },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "00af3310-21d5-47d6-88ba-ba280bef02d8",
-              "name": "Error",
-              "originalRequest": {
                 "url": {
-                  "path": [
-                    "access_token"
-                  ],
+                  "raw": "{{baseUrl}}/access_token",
                   "host": [
                     "{{baseUrl}}"
                   ],
-                  "query": [],
-                  "variable": []
-                },
+                  "path": [
+                    "access_token"
+                  ]
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "_postman_previewlanguage": "text",
+              "header": [
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "request-ref",
+                  "value": ""
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:51:16.000Z",
+              "updatedAt": "2026-10-21T19:51:16.000Z",
+              "uid": "35240-f47d6ac5-b47b-422f-82f1-608bc10c9555"
+            },
+            {
+              "id": "0909fbf1-b649-43d2-bfbf-54d50d088019",
+              "name": "Error",
+              "originalRequest": {
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
+                    "key": "Content-Type",
+                    "value": "application/json"
                   },
                   {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
-                "body": {}
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"1\"\n  },\n  \"clientAssertion\": \"<string>\",\n  \"token\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/access_token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "access_token"
+                  ]
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"code\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-10-21T19:51:16.000Z",
+              "updatedAt": "2026-10-21T19:51:16.000Z",
+              "uid": "35240-0909fbf1-b649-43d2-bfbf-54d50d088019"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "createdAt": "2026-10-21T19:51:16.000Z",
+          "updatedAt": "2026-10-21T19:51:16.000Z",
+          "uid": "35240-37f597b6-cb13-42c0-9fa2-f8bc5fbbedae"
         }
       ],
-      "event": []
+      "id": "bb7af599-e82e-4dca-be99-46f59e6b121e",
+      "createdAt": "2026-10-21T19:51:16.000Z",
+      "updatedAt": "2026-10-21T19:51:16.000Z",
+      "uid": "35240-bb7af599-e82e-4dca-be99-46f59e6b121e"
     }
   ],
-  "event": [],
   "variable": [
     {
-      "type": "string",
-      "value": "https://sandbox.weavr.io/multi/backoffice",
-      "key": "baseUrl"
+      "key": "baseUrl",
+      "value": "https://sandbox.weavr.io/multi"
     }
-  ],
-  "info": {
-    "_postman_id": "299a1ddd-136e-4d2d-8a81-9c96fff108cd",
-    "name": "Weavr Multi Product BackOffice Access Token Access Tokens API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning\nidentities and their instruments, without requiring the users to be logged in.\n\nA token is to be obtained through the `access_token` method, and this will allow relevant operations\nto be performed on behalf of this same identity.\n\n\nContact Support:\n Name: Weavr",
-      "type": "text/plain"
-    }
-  }
+  ]
 }

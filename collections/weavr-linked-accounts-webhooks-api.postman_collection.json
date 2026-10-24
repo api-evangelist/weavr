@@ -1,0 +1,39 @@
+{
+  "info": {
+    "_postman_id": "c9885036-313b-496f-9a78-c6b036208c2e",
+    "name": "Weavr Linked Accounts Webhooks API",
+    "description": "Operations tagged Linked Accounts Webhooks across 2 of this provider's published API definitions: weavr-payment-run-openapi-original.yml, weavr-linked-accounts-webhooks-api-openapi.yml. Each path carries the servers of the definition it was published in.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:56:23.000Z",
+    "updatedAt": "2026-10-21T19:56:23.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-c9885036-313b-496f-9a78-c6b036208c2e"
+  },
+  "item": [],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "api-key",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://sandbox.weavr.io/payment-run"
+    }
+  ]
+}

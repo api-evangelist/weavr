@@ -1,500 +1,497 @@
 {
+  "info": {
+    "_postman_id": "b3b965bd-4718-4538-a4bf-e1b028c77f1b",
+    "name": "Weavr Multi Product Roles API",
+    "description": "Weavr Multi API provides a simple and flexible way to issue cards and accounts to your customers.\n\nContact Support:\n Name: Weavr",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:54:27.000Z",
+    "updatedAt": "2026-10-21T19:54:27.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-b3b965bd-4718-4538-a4bf-e1b028c77f1b"
+  },
   "item": [
     {
-      "id": "2b6b28cd-ddb8-4c3e-9e2d-eb0344b7efb5",
-      "name": "Roles",
-      "description": {
-        "content": "",
-        "type": "text/plain"
-      },
+      "name": "roles",
       "item": [
         {
-          "id": "fd47661a-6af8-49c5-9606-7cb83f97e193",
           "name": "Get available roles",
+          "id": "129715dc-9381-4da3-ad2c-ad7d56bf93e1",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
           "request": {
-            "name": "Get available roles",
-            "description": {
-              "content": "Get available roles. Only available when RBAC is enabled for the tenant.",
-              "type": "text/plain"
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}",
+                  "type": "string"
+                }
+              ]
             },
-            "url": {
-              "path": [
-                "roles"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
+            "method": "GET",
             "header": [
               {
                 "key": "Accept",
                 "value": "application/json"
               }
             ],
-            "method": "GET",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
+            "url": {
+              "raw": "{{baseUrl}}/roles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "roles"
               ]
-            }
+            },
+            "description": "Get available roles. Only available when RBAC is enabled for the tenant."
           },
           "response": [
             {
-              "id": "6df4247d-0148-493a-8cfc-f1d26898f9fa",
+              "id": "d51d4e0b-da09-4367-b843-f918aa7f4714",
               "name": "List of available roles",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "roles"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "GET",
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "GET",
-                "body": {}
+                "url": {
+                  "raw": "{{baseUrl}}/roles",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "roles"
+                  ]
+                }
               },
               "status": "OK",
               "code": 200,
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "[\n  {\n    \"id\": \"57192\",\n    \"name\": \"string\",\n    \"description\": \"string\"\n  },\n  {\n    \"id\": \"869622655\",\n    \"name\": \"string\",\n    \"description\": \"string\"\n  }\n]",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "[\n  {\n    \"id\": \"9\",\n    \"name\": \"<string>\",\n    \"description\": \"<string>\"\n  },\n  {\n    \"id\": \"3819945420\",\n    \"name\": \"<string>\",\n    \"description\": \"<string>\"\n  }\n]",
+              "createdAt": "2026-10-21T19:54:28.000Z",
+              "updatedAt": "2026-10-21T19:54:28.000Z",
+              "uid": "35240-d51d4e0b-da09-4367-b843-f918aa7f4714"
             },
             {
-              "id": "8b876f7a-8f02-4db6-8cf9-fd66eefe999b",
+              "id": "b5ce887e-6090-4df7-828f-12030a2862e9",
               "name": "Bad Request Error - Your request is invalid.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "roles"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "GET",
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "GET",
-                "body": {}
+                "url": {
+                  "raw": "{{baseUrl}}/roles",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "roles"
+                  ]
+                }
               },
               "status": "Bad Request",
               "code": 400,
+              "_postman_previewlanguage": "json",
               "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
+                },
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "request-ref",
+                  "value": ""
                 }
               ],
-              "body": "{\n  \"message\": \"string\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"NOT_IN\"\n      },\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"IN\"\n      }\n    ]\n  }\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"fieldName\": \"<string>\",\n        \"error\": \"SIZE\"\n      },\n      {\n        \"params\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"fieldName\": \"<string>\",\n        \"error\": \"REGEX\"\n      }\n    ]\n  }\n}",
+              "createdAt": "2026-10-21T19:54:28.000Z",
+              "updatedAt": "2026-10-21T19:54:28.000Z",
+              "uid": "35240-b5ce887e-6090-4df7-828f-12030a2862e9"
             },
             {
-              "id": "7a7b958e-3d42-4ba7-8769-35723a268a15",
+              "id": "c13fd08f-0611-442b-a449-de324a580de9",
               "name": "Unauthorized - Your credentials or access token are invalid.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "roles"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "GET",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
+                    "description": "Added as a part of security scheme: bearer",
                     "key": "Authorization",
                     "value": "Bearer <token>"
                   }
                 ],
-                "method": "GET",
-                "body": {}
+                "url": {
+                  "raw": "{{baseUrl}}/roles",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "roles"
+                  ]
+                }
               },
               "status": "Unauthorized",
               "code": 401,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
                   "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "value": ""
                 }
               ],
-              "body": "",
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:54:28.000Z",
+              "updatedAt": "2026-10-21T19:54:28.000Z",
+              "uid": "35240-c13fd08f-0611-442b-a449-de324a580de9"
             },
             {
-              "id": "656a4857-7d53-4124-ac3a-0a7b396fabf3",
+              "id": "3728942b-9cbb-4f0a-b8c1-75fb131cb132",
               "name": "Forbidden - Access to the requested resource or action is forbidden.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "roles"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "GET",
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "GET",
-                "body": {}
+                "url": {
+                  "raw": "{{baseUrl}}/roles",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "roles"
+                  ]
+                }
               },
               "status": "Forbidden",
               "code": 403,
+              "_postman_previewlanguage": "json",
               "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
+                },
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "request-ref",
+                  "value": ""
                 }
               ],
-              "body": "{\n  \"errorCode\": \"INSUFFICIENT_PERMISSIONS\"\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"errorCode\": \"INSUFFICIENT_PERMISSIONS\"\n}",
+              "createdAt": "2026-10-21T19:54:28.000Z",
+              "updatedAt": "2026-10-21T19:54:28.000Z",
+              "uid": "35240-3728942b-9cbb-4f0a-b8c1-75fb131cb132"
             },
             {
-              "id": "9fb4c6db-2e9a-44d8-8718-53a67594ba89",
+              "id": "1af1ec8f-d811-4a39-a0c8-a5d556def1ee",
               "name": "Not found - The requested resource couldn't be found.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "roles"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "GET",
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "GET",
-                "body": {}
+                "url": {
+                  "raw": "{{baseUrl}}/roles",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "roles"
+                  ]
+                }
               },
               "status": "Not Found",
               "code": 404,
+              "_postman_previewlanguage": "json",
               "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
+                },
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "request-ref",
+                  "value": ""
                 }
               ],
-              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"code\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-10-21T19:54:28.000Z",
+              "updatedAt": "2026-10-21T19:54:28.000Z",
+              "uid": "35240-1af1ec8f-d811-4a39-a0c8-a5d556def1ee"
             },
             {
-              "id": "8945ea23-fa2f-4a62-8ebe-4547ab2a3d4a",
+              "id": "8f54e2fd-3e91-478a-8988-87dc895cc00f",
               "name": "Too many requests.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "roles"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "GET",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
+                    "description": "Added as a part of security scheme: bearer",
                     "key": "Authorization",
                     "value": "Bearer <token>"
                   }
                 ],
-                "method": "GET",
-                "body": {}
+                "url": {
+                  "raw": "{{baseUrl}}/roles",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "roles"
+                  ]
+                }
               },
               "status": "Too Many Requests",
               "code": 429,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
                   "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "request-ref",
-                  "value": "string"
+                  "value": ""
                 },
                 {
                   "disabled": false,
-                  "description": "(Required) Example: `20, 10;w=60, 20;w=3600, 200;w=86400`\nThe first number (20) is the limit that has been exceeded.\nThe remaining numbers are the limits that are in force, with 'w' meaning 'window in seconds'. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)\n",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "x-ratelimit-limit",
-                  "value": "string"
+                  "value": ""
                 },
                 {
                   "disabled": false,
-                  "description": "(Required) The number of seconds until the window is reset.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "x-ratelimit-reset",
-                  "value": "5057"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "value": ""
                 }
               ],
-              "body": "",
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:54:28.000Z",
+              "updatedAt": "2026-10-21T19:54:28.000Z",
+              "uid": "35240-8f54e2fd-3e91-478a-8988-87dc895cc00f"
             },
             {
-              "id": "40c06882-2282-4379-8c32-8c567d4177f4",
+              "id": "a8883f10-59bf-493c-916a-aaa0451e6965",
               "name": "Internal Server Error - There is a problem with the server. Please try again later.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "roles"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "GET",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
+                    "description": "Added as a part of security scheme: bearer",
                     "key": "Authorization",
                     "value": "Bearer <token>"
                   }
                 ],
-                "method": "GET",
-                "body": {}
+                "url": {
+                  "raw": "{{baseUrl}}/roles",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "roles"
+                  ]
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
                   "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "value": ""
                 }
               ],
-              "body": "",
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:54:28.000Z",
+              "updatedAt": "2026-10-21T19:54:28.000Z",
+              "uid": "35240-a8883f10-59bf-493c-916a-aaa0451e6965"
             },
             {
-              "id": "99090763-0ef8-4961-bad0-6388126d4537",
+              "id": "9bf15273-4ca8-45e6-8914-3925f9f25545",
               "name": "Service Unavailable - The requested service is temporarily unavailable. Please try again later.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "roles"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "GET",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
+                    "description": "Added as a part of security scheme: bearer",
                     "key": "Authorization",
                     "value": "Bearer <token>"
                   }
                 ],
-                "method": "GET",
-                "body": {}
+                "url": {
+                  "raw": "{{baseUrl}}/roles",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "roles"
+                  ]
+                }
               },
               "status": "Service Unavailable",
               "code": 503,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
                   "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "value": ""
                 }
               ],
-              "body": "",
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:54:28.000Z",
+              "updatedAt": "2026-10-21T19:54:28.000Z",
+              "uid": "35240-9bf15273-4ca8-45e6-8914-3925f9f25545"
             },
             {
-              "id": "8999d668-e53e-4e94-a9d7-6ffb6029e988",
+              "id": "78dce2b8-8044-4d35-92fe-e62911d6904b",
               "name": "Error",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "roles"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "GET",
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "GET",
-                "body": {}
+                "url": {
+                  "raw": "{{baseUrl}}/roles",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "roles"
+                  ]
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"code\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-10-21T19:54:28.000Z",
+              "updatedAt": "2026-10-21T19:54:28.000Z",
+              "uid": "35240-78dce2b8-8044-4d35-92fe-e62911d6904b"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "createdAt": "2026-10-21T19:54:28.000Z",
+          "updatedAt": "2026-10-21T19:54:28.000Z",
+          "uid": "35240-129715dc-9381-4da3-ad2c-ad7d56bf93e1"
         }
       ],
-      "event": []
+      "id": "0a697e58-7466-4237-9f8e-fb17fed1aacc",
+      "createdAt": "2026-10-21T19:54:28.000Z",
+      "updatedAt": "2026-10-21T19:54:28.000Z",
+      "uid": "35240-0a697e58-7466-4237-9f8e-fb17fed1aacc"
     }
   ],
-  "event": [],
   "variable": [
     {
-      "type": "string",
-      "value": "https://sandbox.weavr.io/multi/backoffice",
-      "key": "baseUrl"
+      "key": "baseUrl",
+      "value": "https://sandbox.weavr.io/multi"
     }
-  ],
-  "info": {
-    "_postman_id": "e2ebedf2-dd82-4684-b8b8-d15cd30e20e5",
-    "name": "Weavr Multi Product BackOffice Access Token Roles API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning\nidentities and their instruments, without requiring the users to be logged in.\n\nA token is to be obtained through the `access_token` method, and this will allow relevant operations\nto be performed on behalf of this same identity.\n\n\nContact Support:\n Name: Weavr",
-      "type": "text/plain"
-    }
-  }
+  ]
 }

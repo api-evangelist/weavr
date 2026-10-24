@@ -1,32 +1,36 @@
 {
+  "info": {
+    "_postman_id": "a8d6f8ca-2f03-44a8-96ab-a2e804e578c6",
+    "name": "Weavr Multi Product BackOffice User Impersonation API",
+    "description": "Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning\nidentities and their instruments, without requiring the users to be logged in.\n\nA token is to be obtained through the `access_token` method, and this will allow relevant operations\nto be performed on behalf of this same identity.\n\nContact Support:\n Name: Weavr",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:55:55.000Z",
+    "updatedAt": "2026-10-21T19:55:56.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-a8d6f8ca-2f03-44a8-96ab-a2e804e578c6"
+  },
   "item": [
     {
-      "id": "d84ee818-471d-47dc-a94a-42fd281c6663",
-      "name": "User Impersonation",
-      "description": {
-        "content": "",
-        "type": "text/plain"
-      },
+      "name": "impersonate_identity_login",
       "item": [
         {
-          "id": "0f2afe69-637e-4863-a349-9a6bd17c5edf",
           "name": "Impersonate login for an identity",
+          "id": "651ec33b-4584-4002-81e7-6e377a0d5d9e",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
           "request": {
-            "name": "Impersonate login for an identity",
-            "description": {
-              "content": "Get a token representing the given `identity`. This token can then be used to authorise certain secure\noperations on behalf of the identity.\n",
-              "type": "text/plain"
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}",
+                  "type": "string"
+                }
+              ]
             },
-            "url": {
-              "path": [
-                "impersonate_identity_login"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
+            "method": "POST",
             "header": [
               {
                 "key": "Content-Type",
@@ -37,474 +41,504 @@
                 "value": "application/json"
               }
             ],
-            "method": "POST",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"identity\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\"\n  },\n  \"temp\": {\n    \"type\": \"<string>\",\n    \"id\": \"<string>\"\n  }\n}",
+              "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"75\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"95603\"\n  }\n}",
               "options": {
                 "raw": {
+                  "headerFamily": "json",
                   "language": "json"
                 }
               }
-            }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/impersonate_identity_login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "impersonate_identity_login"
+              ]
+            },
+            "description": "Get a token representing the given `identity`. This token can then be used to authorise certain secure\noperations on behalf of the identity."
           },
           "response": [
             {
-              "id": "188c7b64-4c64-4c97-9277-8ff3b43b19fa",
+              "id": "cb2afb7d-b966-4943-9415-77695d4b21f1",
               "name": "Success",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "impersonate_identity_login"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
+                    "key": "Content-Type",
+                    "value": "application/json"
                   },
                   {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"identity\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"32741000\"\n  },\n  \"temp\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"964495\"\n  }\n}",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"75\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"95603\"\n  }\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/impersonate_identity_login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "impersonate_identity_login"
+                  ]
                 }
               },
               "status": "OK",
               "code": 200,
+              "_postman_previewlanguage": "json",
               "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
+                },
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "request-ref",
+                  "value": ""
                 }
               ],
-              "body": "{\n  \"token\": {\n    \"token\": \"string\"\n  },\n  \"identity\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"1349\"\n  },\n  \"credentials\": {\n    \"type\": \"USER\",\n    \"id\": \"1331\"\n  }\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"token\": {\n    \"token\": \"<string>\"\n  },\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"228\"\n  },\n  \"credentials\": {\n    \"type\": \"ROOT\",\n    \"id\": \"8016\"\n  }\n}",
+              "createdAt": "2026-10-21T19:55:56.000Z",
+              "updatedAt": "2026-10-21T19:55:56.000Z",
+              "uid": "35240-cb2afb7d-b966-4943-9415-77695d4b21f1"
             },
             {
-              "id": "d819e8bb-7917-4409-91af-6f12211e85fd",
+              "id": "516cd5de-888c-41f2-88cf-3bcfcc1e8daf",
               "name": "Bad Request Error - Your request is invalid.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "impersonate_identity_login"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
+                    "key": "Content-Type",
+                    "value": "application/json"
                   },
                   {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"identity\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"32741000\"\n  },\n  \"temp\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"964495\"\n  }\n}",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"75\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"95603\"\n  }\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/impersonate_identity_login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "impersonate_identity_login"
+                  ]
                 }
               },
               "status": "Bad Request",
               "code": 400,
+              "_postman_previewlanguage": "json",
               "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
+                },
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "request-ref",
+                  "value": ""
                 }
               ],
-              "body": "{\n  \"message\": \"string\",\n  \"validationErrors\": [\n    {\n      \"fieldName\": \"string\",\n      \"message\": \"string\",\n      \"error\": \"MUST_BE_FALSE\",\n      \"params\": [\n        \"string\",\n        \"string\"\n      ],\n      \"invalidValue\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"fieldName\": \"string\",\n      \"message\": \"string\",\n      \"error\": \"REQUIRED\",\n      \"params\": [\n        \"string\",\n        \"string\"\n      ],\n      \"invalidValue\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"validationErrors\": [\n    {\n      \"fieldName\": \"<string>\",\n      \"message\": \"<string>\",\n      \"error\": \"GREATER_THAN_ZERO\",\n      \"params\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"invalidValue\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"fieldName\": \"<string>\",\n      \"message\": \"<string>\",\n      \"error\": \"FUTURE_OR_PRESENT\",\n      \"params\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"invalidValue\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+              "createdAt": "2026-10-21T19:55:56.000Z",
+              "updatedAt": "2026-10-21T19:55:56.000Z",
+              "uid": "35240-516cd5de-888c-41f2-88cf-3bcfcc1e8daf"
             },
             {
-              "id": "c0d31bff-e9bd-4fa2-b546-a1097aa047bf",
+              "id": "b7841e99-2c80-452e-b6ed-ecad15a42ed9",
               "name": "Unauthorized - Your credentials or access token are invalid.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "impersonate_identity_login"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
                     "key": "Authorization",
                     "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"identity\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"32741000\"\n  },\n  \"temp\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"964495\"\n  }\n}",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"75\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"95603\"\n  }\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/impersonate_identity_login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "impersonate_identity_login"
+                  ]
                 }
               },
               "status": "Unauthorized",
               "code": 401,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
                   "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "value": ""
                 }
               ],
-              "body": "",
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:55:56.000Z",
+              "updatedAt": "2026-10-21T19:55:56.000Z",
+              "uid": "35240-b7841e99-2c80-452e-b6ed-ecad15a42ed9"
             },
             {
-              "id": "bcbedf7a-3dc5-4049-b97d-4d1fd5582ea3",
+              "id": "ee9a6941-8f04-4d41-b200-e8f6f1a63194",
               "name": "The authentication credentials are not found or are incorrect.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "impersonate_identity_login"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
                     "key": "Authorization",
                     "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"identity\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"32741000\"\n  },\n  \"temp\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"964495\"\n  }\n}",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"75\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"95603\"\n  }\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/impersonate_identity_login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "impersonate_identity_login"
+                  ]
                 }
               },
               "status": "Forbidden",
               "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
+              "_postman_previewlanguage": "text",
+              "header": [],
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:55:56.000Z",
+              "updatedAt": "2026-10-21T19:55:56.000Z",
+              "uid": "35240-ee9a6941-8f04-4d41-b200-e8f6f1a63194"
             },
             {
-              "id": "d5c1a483-2348-4580-be7c-a7b0941db030",
+              "id": "38824ed6-3a01-4fc4-9c75-8290bbe8fd90",
               "name": "Conflict",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "impersonate_identity_login"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
+                    "key": "Content-Type",
+                    "value": "application/json"
                   },
                   {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"identity\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"32741000\"\n  },\n  \"temp\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"964495\"\n  }\n}",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"75\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"95603\"\n  }\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/impersonate_identity_login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "impersonate_identity_login"
+                  ]
                 }
               },
               "status": "Conflict",
               "code": 409,
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"errorCode\": \"UNRESOLVED_IDENTITY\"\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"errorCode\": \"UNRESOLVED_IDENTITY\"\n}",
+              "createdAt": "2026-10-21T19:55:56.000Z",
+              "updatedAt": "2026-10-21T19:55:56.000Z",
+              "uid": "35240-38824ed6-3a01-4fc4-9c75-8290bbe8fd90"
             },
             {
-              "id": "62aa038d-3c25-4f92-b8eb-717abc06f078",
+              "id": "4e6bf742-4ff1-4c1b-9b42-1450e1e9329b",
               "name": "Internal Server Error - There is a problem with the server. Please try again later.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "impersonate_identity_login"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
                     "key": "Authorization",
                     "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"identity\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"32741000\"\n  },\n  \"temp\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"964495\"\n  }\n}",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"75\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"95603\"\n  }\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/impersonate_identity_login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "impersonate_identity_login"
+                  ]
                 }
               },
               "status": "Internal Server Error",
               "code": 500,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
                   "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "value": ""
                 }
               ],
-              "body": "",
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:55:56.000Z",
+              "updatedAt": "2026-10-21T19:55:56.000Z",
+              "uid": "35240-4e6bf742-4ff1-4c1b-9b42-1450e1e9329b"
             },
             {
-              "id": "acdb4063-ca0b-43d1-9eee-7c032b11f84b",
+              "id": "56546300-71dd-4269-a585-7b2b58f31c4f",
               "name": "Service Unavailable - The requested service is temporarily unavailable. Please try again later.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "impersonate_identity_login"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
                     "key": "Authorization",
                     "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"identity\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"32741000\"\n  },\n  \"temp\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"964495\"\n  }\n}",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"75\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"95603\"\n  }\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/impersonate_identity_login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "impersonate_identity_login"
+                  ]
                 }
               },
               "status": "Service Unavailable",
               "code": 503,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
                   "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "value": ""
                 }
               ],
-              "body": "",
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:55:56.000Z",
+              "updatedAt": "2026-10-21T19:55:56.000Z",
+              "uid": "35240-56546300-71dd-4269-a585-7b2b58f31c4f"
             },
             {
-              "id": "9dad6346-fcac-41bb-9dae-809fce4b99c9",
+              "id": "91fefe11-577a-4823-9543-d5dd6d0bed19",
               "name": "Error",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "impersonate_identity_login"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
+                    "key": "Content-Type",
+                    "value": "application/json"
                   },
                   {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"identity\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"32741000\"\n  },\n  \"temp\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"964495\"\n  }\n}",
+                  "raw": "{\n  \"identity\": {\n    \"type\": \"CONSUMER\",\n    \"id\": \"75\"\n  },\n  \"temp\": {\n    \"type\": \"CORPORATE\",\n    \"id\": \"95603\"\n  }\n}",
                   "options": {
                     "raw": {
+                      "headerFamily": "json",
                       "language": "json"
                     }
                   }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/impersonate_identity_login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "impersonate_identity_login"
+                  ]
                 }
               },
               "status": "Internal Server Error",
               "code": 500,
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"code\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-10-21T19:55:56.000Z",
+              "updatedAt": "2026-10-21T19:55:56.000Z",
+              "uid": "35240-91fefe11-577a-4823-9543-d5dd6d0bed19"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "createdAt": "2026-10-21T19:55:56.000Z",
+          "updatedAt": "2026-10-21T19:55:56.000Z",
+          "uid": "35240-651ec33b-4584-4002-81e7-6e377a0d5d9e"
         }
       ],
-      "event": []
+      "id": "b3f7011d-9647-4044-b6eb-cd1c0d5afaf1",
+      "createdAt": "2026-10-21T19:55:56.000Z",
+      "updatedAt": "2026-10-21T19:55:56.000Z",
+      "uid": "35240-b3f7011d-9647-4044-b6eb-cd1c0d5afaf1"
     }
   ],
-  "event": [],
   "variable": [
     {
-      "type": "string",
-      "value": "https://sandbox.weavr.io/multi/backoffice",
-      "key": "baseUrl"
+      "key": "baseUrl",
+      "value": "https://sandbox.weavr.io/multi/backoffice"
     }
-  ],
-  "info": {
-    "_postman_id": "9642e45a-ace9-4472-822f-3e05fbf5319f",
-    "name": "Weavr Multi Product BackOffice Access Token User Impersonation API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning\nidentities and their instruments, without requiring the users to be logged in.\n\nA token is to be obtained through the `access_token` method, and this will allow relevant operations\nto be performed on behalf of this same identity.\n\n\nContact Support:\n Name: Weavr",
-      "type": "text/plain"
-    }
-  }
+  ]
 }

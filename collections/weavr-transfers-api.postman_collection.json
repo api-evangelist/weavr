@@ -1,35 +1,1032 @@
 {
+  "info": {
+    "_postman_id": "e7f809e8-f9d5-42dd-8e1e-d3d812ec803c",
+    "name": "Weavr Transfers API",
+    "description": "Operations tagged Transfers across 3 of this provider's published API definitions: weavr-multi-backoffice-openapi-original.yml, weavr-multi-openapi-original.yml, weavr-webhooks-openapi-original.yml. Each path carries the servers of the definition it was published in.\n\nContact Support:\n Name: Weavr",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:55:40.000Z",
+    "updatedAt": "2026-10-21T19:55:41.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-e7f809e8-f9d5-42dd-8e1e-d3d812ec803c"
+  },
   "item": [
     {
-      "id": "59f17709-a745-46bd-a283-c54116d1ee6a",
-      "name": "Transfers",
-      "description": {
-        "content": "",
-        "type": "text/plain"
-      },
+      "name": "transfers",
       "item": [
         {
-          "id": "88b52678-1b6d-4acf-a3c9-5d1ca69266ef",
+          "name": "{id}",
+          "item": [
+            {
+              "name": "Get a transfer transaction",
+              "id": "ae735683-42d0-4347-9faa-fe2a9448ce69",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/transfers/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "transfers",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "id": "34a05e5b-dcd5-4e15-9bcb-21e8a0020c69",
+                      "key": "id",
+                      "value": "1283",
+                      "description": "(Required) The unique identifier of the Transfer transaction."
+                    }
+                  ]
+                },
+                "description": "Retrieve the transfer transaction identified by the `id` path parameter."
+              },
+              "response": [
+                {
+                  "id": "814e6ce1-6d49-4e1b-9cc6-470677ed92a0",
+                  "name": "Success",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/transfers/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "transfers",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "request-ref",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"186570534\",\n  \"profileId\": \"2504489460\",\n  \"creationTimestamp\": \"<long>\",\n  \"destination\": {\n    \"id\": \"7141211027\",\n    \"type\": \"managed_accounts\"\n  },\n  \"destinationAmount\": {\n    \"currency\": \"ZJX\",\n    \"amount\": \"<long>\"\n  },\n  \"source\": {\n    \"id\": \"5\",\n    \"type\": \"managed_accounts\"\n  },\n  \"state\": \"PENDING\",\n  \"tag\": \"NAtmxychqqf\",\n  \"description\": \"\u2029=f3\u2028d!Ki\",\n  \"scheduledTimestamp\": \"55280339\",\n  \"executionTimestamp\": \"9\",\n  \"cancellationReason\": \"JBZyi4E1k-H\"\n}",
+                  "createdAt": "2026-10-21T19:55:41.000Z",
+                  "updatedAt": "2026-10-21T19:55:41.000Z",
+                  "uid": "35240-814e6ce1-6d49-4e1b-9cc6-470677ed92a0"
+                },
+                {
+                  "id": "f9d2d848-e7f3-4f6b-8732-cad0a5687cc3",
+                  "name": "Bad Request Error - Your request is invalid.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/transfers/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "transfers",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "request-ref",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"message\": \"<string>\",\n  \"validationErrors\": [\n    {\n      \"fieldName\": \"<string>\",\n      \"message\": \"<string>\",\n      \"error\": \"FUTURE_OR_PRESENT\",\n      \"params\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"invalidValue\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"fieldName\": \"<string>\",\n      \"message\": \"<string>\",\n      \"error\": \"INVALID_REQUEST\",\n      \"params\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"invalidValue\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+                  "createdAt": "2026-10-21T19:55:41.000Z",
+                  "updatedAt": "2026-10-21T19:55:41.000Z",
+                  "uid": "35240-f9d2d848-e7f3-4f6b-8732-cad0a5687cc3"
+                },
+                {
+                  "id": "19abfb48-57d8-4b11-b26a-1941d04d4057",
+                  "name": "Unauthorized - Your credentials or access token are invalid.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/transfers/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "transfers",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "text",
+                  "header": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "request-ref",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-10-21T19:55:41.000Z",
+                  "updatedAt": "2026-10-21T19:55:41.000Z",
+                  "uid": "35240-19abfb48-57d8-4b11-b26a-1941d04d4057"
+                },
+                {
+                  "id": "b210b3f9-4b4e-4fae-8d29-a85dd6bc7459",
+                  "name": "Forbidden - Access to the requested resource or action is forbidden.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/transfers/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "transfers",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Forbidden",
+                  "code": 403,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"errorCode\": \"ACCESS_TOKEN_REQUIRED\"\n}",
+                  "createdAt": "2026-10-21T19:55:41.000Z",
+                  "updatedAt": "2026-10-21T19:55:41.000Z",
+                  "uid": "35240-b210b3f9-4b4e-4fae-8d29-a85dd6bc7459"
+                },
+                {
+                  "id": "67837d3f-705f-407a-b927-8b6fe8cef878",
+                  "name": "Not found - The requested resource couldn't be found.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/transfers/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "transfers",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "request-ref",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"code\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-10-21T19:55:41.000Z",
+                  "updatedAt": "2026-10-21T19:55:41.000Z",
+                  "uid": "35240-67837d3f-705f-407a-b927-8b6fe8cef878"
+                },
+                {
+                  "id": "7428b0a4-c48e-4b5a-b432-ef1514d8850b",
+                  "name": "Internal Server Error - There is a problem with the server. Please try again later.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/transfers/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "transfers",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "text",
+                  "header": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "request-ref",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-10-21T19:55:41.000Z",
+                  "updatedAt": "2026-10-21T19:55:41.000Z",
+                  "uid": "35240-7428b0a4-c48e-4b5a-b432-ef1514d8850b"
+                },
+                {
+                  "id": "10597807-3e27-45c2-ace5-d715b208ef51",
+                  "name": "Service Unavailable - The requested service is temporarily unavailable. Please try again later.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/transfers/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "transfers",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Service Unavailable",
+                  "code": 503,
+                  "_postman_previewlanguage": "text",
+                  "header": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "request-ref",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-10-21T19:55:41.000Z",
+                  "updatedAt": "2026-10-21T19:55:41.000Z",
+                  "uid": "35240-10597807-3e27-45c2-ace5-d715b208ef51"
+                },
+                {
+                  "id": "38cbfc02-7b73-4d76-9fbc-6c8096e7bc46",
+                  "name": "Error",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/transfers/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "transfers",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"code\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-10-21T19:55:41.000Z",
+                  "updatedAt": "2026-10-21T19:55:41.000Z",
+                  "uid": "35240-38cbfc02-7b73-4d76-9fbc-6c8096e7bc46"
+                }
+              ],
+              "createdAt": "2026-10-21T19:55:41.000Z",
+              "updatedAt": "2026-10-21T19:55:41.000Z",
+              "uid": "35240-ae735683-42d0-4347-9faa-fe2a9448ce69"
+            }
+          ],
+          "id": "817d28e5-f399-483d-b41f-a78926df44c9",
+          "createdAt": "2026-10-21T19:55:41.000Z",
+          "updatedAt": "2026-10-21T19:55:41.000Z",
+          "uid": "35240-817d28e5-f399-483d-b41f-a78926df44c9"
+        },
+        {
+          "name": "bulk",
+          "item": [
+            {
+              "name": "cancel",
+              "item": [
+                {
+                  "name": "Cancel transfer transactions",
+                  "id": "93a5d072-56bc-4039-bb8f-f270490cfa2a",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"cancellations\": [\n    {\n      \"id\": \"0\",\n      \"cancellationReason\": \"xPlIKd9Pi2_\"\n    },\n    {\n      \"id\": \"946901677\",\n      \"cancellationReason\": \"h\"\n    }\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/transfers/bulk/cancel",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "transfers",
+                        "bulk",
+                        "cancel"
+                      ]
+                    },
+                    "description": "Cancels transfers that are scheduled to be executed in the future."
+                  },
+                  "response": [
+                    {
+                      "id": "11141a8f-de25-489c-a1c5-d4f5130053a3",
+                      "name": "Success",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"cancellations\": [\n    {\n      \"id\": \"0\",\n      \"cancellationReason\": \"xPlIKd9Pi2_\"\n    },\n    {\n      \"id\": \"946901677\",\n      \"cancellationReason\": \"h\"\n    }\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/transfers/bulk/cancel",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "transfers",
+                            "bulk",
+                            "cancel"
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "request-ref",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"cancellations\": [\n    {\n      \"id\": \"538965864\",\n      \"state\": \"SUCCESS\",\n      \"errorCode\": \"GENERIC\"\n    },\n    {\n      \"id\": \"65\",\n      \"state\": \"ERROR\",\n      \"errorCode\": \"GENERIC\"\n    }\n  ]\n}",
+                      "createdAt": "2026-10-21T19:55:41.000Z",
+                      "updatedAt": "2026-10-21T19:55:41.000Z",
+                      "uid": "35240-11141a8f-de25-489c-a1c5-d4f5130053a3"
+                    },
+                    {
+                      "id": "b6b3ea35-a1d3-421f-b18b-f5abe60b6780",
+                      "name": "Bad Request Error - Your request is invalid.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"cancellations\": [\n    {\n      \"id\": \"0\",\n      \"cancellationReason\": \"xPlIKd9Pi2_\"\n    },\n    {\n      \"id\": \"946901677\",\n      \"cancellationReason\": \"h\"\n    }\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/transfers/bulk/cancel",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "transfers",
+                            "bulk",
+                            "cancel"
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "request-ref",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"message\": \"<string>\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"fieldName\": \"<string>\",\n        \"error\": \"AT_LEAST\"\n      },\n      {\n        \"params\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"fieldName\": \"<string>\",\n        \"error\": \"IN\"\n      }\n    ]\n  }\n}",
+                      "createdAt": "2026-10-21T19:55:41.000Z",
+                      "updatedAt": "2026-10-21T19:55:41.000Z",
+                      "uid": "35240-b6b3ea35-a1d3-421f-b18b-f5abe60b6780"
+                    },
+                    {
+                      "id": "e56a88e7-6291-47d3-8efd-ef17b8405719",
+                      "name": "Unauthorized - Your credentials or access token are invalid.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"cancellations\": [\n    {\n      \"id\": \"0\",\n      \"cancellationReason\": \"xPlIKd9Pi2_\"\n    },\n    {\n      \"id\": \"946901677\",\n      \"cancellationReason\": \"h\"\n    }\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/transfers/bulk/cancel",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "transfers",
+                            "bulk",
+                            "cancel"
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "request-ref",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-10-21T19:55:41.000Z",
+                      "updatedAt": "2026-10-21T19:55:41.000Z",
+                      "uid": "35240-e56a88e7-6291-47d3-8efd-ef17b8405719"
+                    },
+                    {
+                      "id": "66bf2bf1-bd0b-4de5-bb71-6c5abbda2fc4",
+                      "name": "Too many requests.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"cancellations\": [\n    {\n      \"id\": \"0\",\n      \"cancellationReason\": \"xPlIKd9Pi2_\"\n    },\n    {\n      \"id\": \"946901677\",\n      \"cancellationReason\": \"h\"\n    }\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/transfers/bulk/cancel",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "transfers",
+                            "bulk",
+                            "cancel"
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "request-ref",
+                          "value": ""
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "x-ratelimit-limit",
+                          "value": ""
+                        },
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "x-ratelimit-reset",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-10-21T19:55:41.000Z",
+                      "updatedAt": "2026-10-21T19:55:41.000Z",
+                      "uid": "35240-66bf2bf1-bd0b-4de5-bb71-6c5abbda2fc4"
+                    },
+                    {
+                      "id": "e04b13eb-63ef-4520-8f55-d5980e5e1edc",
+                      "name": "Internal Server Error - There is a problem with the server. Please try again later.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"cancellations\": [\n    {\n      \"id\": \"0\",\n      \"cancellationReason\": \"xPlIKd9Pi2_\"\n    },\n    {\n      \"id\": \"946901677\",\n      \"cancellationReason\": \"h\"\n    }\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/transfers/bulk/cancel",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "transfers",
+                            "bulk",
+                            "cancel"
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "request-ref",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-10-21T19:55:41.000Z",
+                      "updatedAt": "2026-10-21T19:55:41.000Z",
+                      "uid": "35240-e04b13eb-63ef-4520-8f55-d5980e5e1edc"
+                    },
+                    {
+                      "id": "c52cc5c0-c575-47d8-80f4-e1e28a0a3b61",
+                      "name": "Service Unavailable - The requested service is temporarily unavailable. Please try again later.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"cancellations\": [\n    {\n      \"id\": \"0\",\n      \"cancellationReason\": \"xPlIKd9Pi2_\"\n    },\n    {\n      \"id\": \"946901677\",\n      \"cancellationReason\": \"h\"\n    }\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/transfers/bulk/cancel",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "transfers",
+                            "bulk",
+                            "cancel"
+                          ]
+                        }
+                      },
+                      "status": "Service Unavailable",
+                      "code": 503,
+                      "_postman_previewlanguage": "text",
+                      "header": [
+                        {
+                          "disabled": false,
+                          "description": {
+                            "content": "",
+                            "type": "text/plain"
+                          },
+                          "key": "request-ref",
+                          "value": ""
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": null,
+                      "createdAt": "2026-10-21T19:55:41.000Z",
+                      "updatedAt": "2026-10-21T19:55:41.000Z",
+                      "uid": "35240-c52cc5c0-c575-47d8-80f4-e1e28a0a3b61"
+                    },
+                    {
+                      "id": "509f164b-43fb-4a61-bbf8-2c30e9b8f963",
+                      "name": "Error",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"cancellations\": [\n    {\n      \"id\": \"0\",\n      \"cancellationReason\": \"xPlIKd9Pi2_\"\n    },\n    {\n      \"id\": \"946901677\",\n      \"cancellationReason\": \"h\"\n    }\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/transfers/bulk/cancel",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "transfers",
+                            "bulk",
+                            "cancel"
+                          ]
+                        }
+                      },
+                      "status": "Internal Server Error",
+                      "code": 500,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"code\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                      "createdAt": "2026-10-21T19:55:41.000Z",
+                      "updatedAt": "2026-10-21T19:55:41.000Z",
+                      "uid": "35240-509f164b-43fb-4a61-bbf8-2c30e9b8f963"
+                    }
+                  ],
+                  "createdAt": "2026-10-21T19:55:41.000Z",
+                  "updatedAt": "2026-10-21T19:55:41.000Z",
+                  "uid": "35240-93a5d072-56bc-4039-bb8f-f270490cfa2a"
+                }
+              ],
+              "id": "436a8112-497f-4912-867f-6e242e0c0b18",
+              "createdAt": "2026-10-21T19:55:41.000Z",
+              "updatedAt": "2026-10-21T19:55:41.000Z",
+              "uid": "35240-436a8112-497f-4912-867f-6e242e0c0b18"
+            }
+          ],
+          "id": "2e457e47-5814-4d12-8ae3-17417b8ee5c9",
+          "createdAt": "2026-10-21T19:55:41.000Z",
+          "updatedAt": "2026-10-21T19:55:41.000Z",
+          "uid": "35240-2e457e47-5814-4d12-8ae3-17417b8ee5c9"
+        },
+        {
           "name": "Create a transfer transaction",
+          "id": "66212dc9-13c7-407c-8316-54e1fb346fc9",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
           "request": {
-            "name": "Create a transfer transaction",
-            "description": {
-              "content": "Transfers funds between managed accounts and managed cards belonging to the same corporate or consumer identity.\n\nThe Transfer Profile (configured in the Multi Portal) specified determines the behaviour and restrictions of the transaction (for example, fees).\n",
-              "type": "text/plain"
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}",
+                  "type": "string"
+                }
+              ]
             },
-            "url": {
-              "path": [
-                "transfers"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
+            "method": "POST",
             "header": [
               {
-                "disabled": false,
                 "description": "A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.",
                 "key": "idempotency-ref",
                 "value": "<string>"
@@ -43,2075 +1040,1299 @@
                 "value": "application/json"
               }
             ],
-            "method": "POST",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"profileId\": \"<string>\",\n  \"source\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"destination\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\"\n  },\n  \"destinationAmount\": {\n    \"currency\": \"<string>\",\n    \"amount\": \"<long>\"\n  },\n  \"tag\": \"<string>\",\n  \"description\": \"<string>\",\n  \"scheduledTimestamp\": \"<string>\"\n}",
+              "raw": "{\n  \"profileId\": \"41406\",\n  \"source\": {\n    \"id\": \"51532996702\",\n    \"type\": \"managed_cards\"\n  },\n  \"destination\": {\n    \"id\": \"53767\",\n    \"type\": \"managed_cards\"\n  },\n  \"destinationAmount\": {\n    \"currency\": \"LYL\",\n    \"amount\": \"<long>\"\n  },\n  \"tag\": \"4bpMX\",\n  \"description\": \"\u2005#;o\u180e\",\n  \"scheduledTimestamp\": \"4\"\n}",
               "options": {
                 "raw": {
+                  "headerFamily": "json",
                   "language": "json"
                 }
               }
-            }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/transfers",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "transfers"
+              ]
+            },
+            "description": "Transfers funds between managed accounts and managed cards belonging to the same corporate or consumer identity.\n\nThe Transfer Profile (configured in the Multi Portal) specified determines the behaviour and restrictions of the transaction (for example, fees)."
           },
           "response": [
             {
-              "id": "47459429-2724-490b-8606-4a085f240927",
+              "id": "b6ea01e4-2d25-452a-873d-c6937261b0d0",
               "name": "Success",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "disabled": false,
                     "description": "A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.",
                     "key": "idempotency-ref",
                     "value": "<string>"
                   },
                   {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
-                "body": {}
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profileId\": \"41406\",\n  \"source\": {\n    \"id\": \"51532996702\",\n    \"type\": \"managed_cards\"\n  },\n  \"destination\": {\n    \"id\": \"53767\",\n    \"type\": \"managed_cards\"\n  },\n  \"destinationAmount\": {\n    \"currency\": \"LYL\",\n    \"amount\": \"<long>\"\n  },\n  \"tag\": \"4bpMX\",\n  \"description\": \"\u2005#;o\u180e\",\n  \"scheduledTimestamp\": \"4\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/transfers",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "transfers"
+                  ]
+                }
               },
               "status": "OK",
               "code": 200,
+              "_postman_previewlanguage": "json",
               "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
+                },
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "request-ref",
+                  "value": ""
                 }
               ],
-              "body": "{\n  \"id\": \"7\",\n  \"profileId\": \"242569992\",\n  \"creationTimestamp\": 811,\n  \"destination\": {\n    \"id\": \"044308381\",\n    \"type\": \"managed_cards\"\n  },\n  \"destinationAmount\": {\n    \"currency\": \"ARA\",\n    \"amount\": 780\n  },\n  \"source\": {\n    \"id\": \"33622921287\",\n    \"type\": \"managed_cards\"\n  },\n  \"state\": \"COMPLETED\",\n  \"tag\": \"v0LdS5GV\",\n  \"description\": \".O @=\",\n  \"scheduledTimestamp\": \"72\",\n  \"executionTimestamp\": \"8856\",\n  \"cancellationReason\": \"y60sJ\"\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"id\": \"186570534\",\n  \"profileId\": \"2504489460\",\n  \"creationTimestamp\": \"<long>\",\n  \"destination\": {\n    \"id\": \"7141211027\",\n    \"type\": \"managed_accounts\"\n  },\n  \"destinationAmount\": {\n    \"currency\": \"ZJX\",\n    \"amount\": \"<long>\"\n  },\n  \"source\": {\n    \"id\": \"5\",\n    \"type\": \"managed_accounts\"\n  },\n  \"state\": \"PENDING\",\n  \"tag\": \"NAtmxychqqf\",\n  \"description\": \"\u2029=f3\u2028d!Ki\",\n  \"scheduledTimestamp\": \"55280339\",\n  \"executionTimestamp\": \"9\",\n  \"cancellationReason\": \"JBZyi4E1k-H\"\n}",
+              "createdAt": "2026-10-21T19:55:41.000Z",
+              "updatedAt": "2026-10-21T19:55:41.000Z",
+              "uid": "35240-b6ea01e4-2d25-452a-873d-c6937261b0d0"
             },
             {
-              "id": "46cf73b9-5fc7-4e26-894d-69229d85b0c2",
+              "id": "7c63de80-22c5-40ef-8c62-f1f24c11bffd",
               "name": "Bad Request Error - Your request is invalid.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "disabled": false,
                     "description": "A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.",
                     "key": "idempotency-ref",
                     "value": "<string>"
                   },
                   {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
-                "body": {}
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profileId\": \"41406\",\n  \"source\": {\n    \"id\": \"51532996702\",\n    \"type\": \"managed_cards\"\n  },\n  \"destination\": {\n    \"id\": \"53767\",\n    \"type\": \"managed_cards\"\n  },\n  \"destinationAmount\": {\n    \"currency\": \"LYL\",\n    \"amount\": \"<long>\"\n  },\n  \"tag\": \"4bpMX\",\n  \"description\": \"\u2005#;o\u180e\",\n  \"scheduledTimestamp\": \"4\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/transfers",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "transfers"
+                  ]
+                }
               },
               "status": "Bad Request",
               "code": 400,
+              "_postman_previewlanguage": "json",
               "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
+                },
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "request-ref",
+                  "value": ""
                 }
               ],
-              "body": "{\n  \"message\": \"string\",\n  \"validationErrors\": [\n    {\n      \"fieldName\": \"string\",\n      \"message\": \"string\",\n      \"error\": \"NOT_IN\",\n      \"params\": [\n        \"string\",\n        \"string\"\n      ],\n      \"invalidValue\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"fieldName\": \"string\",\n      \"message\": \"string\",\n      \"error\": \"HAS_TEXT\",\n      \"params\": [\n        \"string\",\n        \"string\"\n      ],\n      \"invalidValue\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"validationErrors\": [\n    {\n      \"fieldName\": \"<string>\",\n      \"message\": \"<string>\",\n      \"error\": \"FUTURE_OR_PRESENT\",\n      \"params\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"invalidValue\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"fieldName\": \"<string>\",\n      \"message\": \"<string>\",\n      \"error\": \"INVALID_REQUEST\",\n      \"params\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"invalidValue\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+              "createdAt": "2026-10-21T19:55:41.000Z",
+              "updatedAt": "2026-10-21T19:55:41.000Z",
+              "uid": "35240-7c63de80-22c5-40ef-8c62-f1f24c11bffd"
             },
             {
-              "id": "922f0030-a6cb-4e9c-932e-c34c2abf5ece",
+              "id": "476ca9ae-06f0-4cba-be1f-3834fdcbd3ea",
               "name": "Unauthorized - Your credentials or access token are invalid.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "disabled": false,
                     "description": "A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.",
                     "key": "idempotency-ref",
                     "value": "<string>"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
-                "body": {}
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profileId\": \"41406\",\n  \"source\": {\n    \"id\": \"51532996702\",\n    \"type\": \"managed_cards\"\n  },\n  \"destination\": {\n    \"id\": \"53767\",\n    \"type\": \"managed_cards\"\n  },\n  \"destinationAmount\": {\n    \"currency\": \"LYL\",\n    \"amount\": \"<long>\"\n  },\n  \"tag\": \"4bpMX\",\n  \"description\": \"\u2005#;o\u180e\",\n  \"scheduledTimestamp\": \"4\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/transfers",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "transfers"
+                  ]
+                }
               },
               "status": "Unauthorized",
               "code": 401,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
                   "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "value": ""
                 }
               ],
-              "body": "",
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:55:41.000Z",
+              "updatedAt": "2026-10-21T19:55:41.000Z",
+              "uid": "35240-476ca9ae-06f0-4cba-be1f-3834fdcbd3ea"
             },
             {
-              "id": "e9f2b4f2-45cd-481d-83a1-9a5dd657fecb",
+              "id": "d05e31ab-77d2-409f-91eb-c4f2ffe32743",
               "name": "Forbidden - Access to the requested resource or action is forbidden.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "disabled": false,
                     "description": "A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.",
                     "key": "idempotency-ref",
                     "value": "<string>"
                   },
                   {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
-                "body": {}
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profileId\": \"41406\",\n  \"source\": {\n    \"id\": \"51532996702\",\n    \"type\": \"managed_cards\"\n  },\n  \"destination\": {\n    \"id\": \"53767\",\n    \"type\": \"managed_cards\"\n  },\n  \"destinationAmount\": {\n    \"currency\": \"LYL\",\n    \"amount\": \"<long>\"\n  },\n  \"tag\": \"4bpMX\",\n  \"description\": \"\u2005#;o\u180e\",\n  \"scheduledTimestamp\": \"4\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/transfers",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "transfers"
+                  ]
+                }
               },
               "status": "Forbidden",
               "code": 403,
+              "_postman_previewlanguage": "json",
               "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
+                },
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "request-ref",
+                  "value": ""
                 }
               ],
-              "body": "{\n  \"errorCode\": \"INSUFFICIENT_PERMISSIONS\"\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"errorCode\": \"INSUFFICIENT_PERMISSIONS\"\n}",
+              "createdAt": "2026-10-21T19:55:41.000Z",
+              "updatedAt": "2026-10-21T19:55:41.000Z",
+              "uid": "35240-d05e31ab-77d2-409f-91eb-c4f2ffe32743"
             },
             {
-              "id": "c9768564-01c2-4107-992f-cb30430ec39d",
+              "id": "fccf01a1-d126-4468-82b5-24f44400dda4",
               "name": "Conflict",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "disabled": false,
                     "description": "A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.",
                     "key": "idempotency-ref",
                     "value": "<string>"
                   },
                   {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
-                "body": {}
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profileId\": \"41406\",\n  \"source\": {\n    \"id\": \"51532996702\",\n    \"type\": \"managed_cards\"\n  },\n  \"destination\": {\n    \"id\": \"53767\",\n    \"type\": \"managed_cards\"\n  },\n  \"destinationAmount\": {\n    \"currency\": \"LYL\",\n    \"amount\": \"<long>\"\n  },\n  \"tag\": \"4bpMX\",\n  \"description\": \"\u2005#;o\u180e\",\n  \"scheduledTimestamp\": \"4\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/transfers",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "transfers"
+                  ]
+                }
               },
               "status": "Conflict",
               "code": 409,
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"errorCode\": \"INTERCEPTOR_DENIED_TRANSACTION\"\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"errorCode\": \"MODEL_CONSTRAINTS_VIOLATED\"\n}",
+              "createdAt": "2026-10-21T19:55:41.000Z",
+              "updatedAt": "2026-10-21T19:55:41.000Z",
+              "uid": "35240-fccf01a1-d126-4468-82b5-24f44400dda4"
             },
             {
-              "id": "55366d03-2a24-408f-9820-9431b41c4cea",
+              "id": "603b4a87-58dd-4531-b04d-db87c64e2589",
               "name": "Internal Server Error - There is a problem with the server. Please try again later.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "disabled": false,
                     "description": "A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.",
                     "key": "idempotency-ref",
                     "value": "<string>"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
-                "body": {}
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profileId\": \"41406\",\n  \"source\": {\n    \"id\": \"51532996702\",\n    \"type\": \"managed_cards\"\n  },\n  \"destination\": {\n    \"id\": \"53767\",\n    \"type\": \"managed_cards\"\n  },\n  \"destinationAmount\": {\n    \"currency\": \"LYL\",\n    \"amount\": \"<long>\"\n  },\n  \"tag\": \"4bpMX\",\n  \"description\": \"\u2005#;o\u180e\",\n  \"scheduledTimestamp\": \"4\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/transfers",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "transfers"
+                  ]
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
                   "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "value": ""
                 }
               ],
-              "body": "",
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:55:41.000Z",
+              "updatedAt": "2026-10-21T19:55:41.000Z",
+              "uid": "35240-603b4a87-58dd-4531-b04d-db87c64e2589"
             },
             {
-              "id": "c6981b48-2b6e-4a36-b905-0a39874f3460",
+              "id": "0bca14f4-609e-4001-9a59-f274f438da8b",
               "name": "Service Unavailable - The requested service is temporarily unavailable. Please try again later.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "disabled": false,
                     "description": "A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.",
                     "key": "idempotency-ref",
                     "value": "<string>"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
-                "body": {}
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profileId\": \"41406\",\n  \"source\": {\n    \"id\": \"51532996702\",\n    \"type\": \"managed_cards\"\n  },\n  \"destination\": {\n    \"id\": \"53767\",\n    \"type\": \"managed_cards\"\n  },\n  \"destinationAmount\": {\n    \"currency\": \"LYL\",\n    \"amount\": \"<long>\"\n  },\n  \"tag\": \"4bpMX\",\n  \"description\": \"\u2005#;o\u180e\",\n  \"scheduledTimestamp\": \"4\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/transfers",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "transfers"
+                  ]
+                }
               },
               "status": "Service Unavailable",
               "code": 503,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
                   "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "value": ""
                 }
               ],
-              "body": "",
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:55:41.000Z",
+              "updatedAt": "2026-10-21T19:55:41.000Z",
+              "uid": "35240-0bca14f4-609e-4001-9a59-f274f438da8b"
             },
             {
-              "id": "e1e641c0-cb2f-4489-81ca-f54dcc320804",
+              "id": "50bb5a4c-70e8-4d8e-bac8-4333178a7205",
               "name": "Error",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
+                "method": "POST",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "disabled": false,
                     "description": "A unique call reference generated by the caller that, taking into consideration the payload as well as the operation itself, helps avoid duplicate operations. Idempotency reference uniqueness is maintained for at least 24 hours.",
                     "key": "idempotency-ref",
                     "value": "<string>"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
                   },
                   {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "POST",
-                "body": {}
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profileId\": \"41406\",\n  \"source\": {\n    \"id\": \"51532996702\",\n    \"type\": \"managed_cards\"\n  },\n  \"destination\": {\n    \"id\": \"53767\",\n    \"type\": \"managed_cards\"\n  },\n  \"destinationAmount\": {\n    \"currency\": \"LYL\",\n    \"amount\": \"<long>\"\n  },\n  \"tag\": \"4bpMX\",\n  \"description\": \"\u2005#;o\u180e\",\n  \"scheduledTimestamp\": \"4\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/transfers",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "transfers"
+                  ]
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"code\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-10-21T19:55:41.000Z",
+              "updatedAt": "2026-10-21T19:55:41.000Z",
+              "uid": "35240-50bb5a4c-70e8-4d8e-bac8-4333178a7205"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "createdAt": "2026-10-21T19:55:41.000Z",
+          "updatedAt": "2026-10-21T19:55:41.000Z",
+          "uid": "35240-66212dc9-13c7-407c-8316-54e1fb346fc9"
         },
         {
-          "id": "c9f73c28-fd55-46c5-ab41-8026e501028c",
           "name": "Get all transfer transactions",
+          "id": "bef309fb-b728-4af4-a35d-3b324057cc3b",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
           "request": {
-            "name": "Get all transfer transactions",
-            "description": {
-              "content": "Retrieves all the transfer transactions performed by the logged-in identity.",
-              "type": "text/plain"
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}",
+                  "type": "string"
+                }
+              ]
             },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
             "url": {
+              "raw": "{{baseUrl}}/transfers?offset=<integer>&limit=<integer>&profileId=77774281&id=48107515580&type=managed_accounts&state=CANCELLED&state=CANCELLED&createdFrom=<long>&createdTo=<long>&tag=<string>",
+              "host": [
+                "{{baseUrl}}"
+              ],
               "path": [
                 "transfers"
               ],
-              "host": [
-                "{{baseUrl}}"
-              ],
               "query": [
                 {
-                  "disabled": false,
+                  "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.",
                   "key": "offset",
-                  "value": "<integer>",
-                  "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+                  "value": "<integer>"
                 },
                 {
-                  "disabled": false,
+                  "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100.",
                   "key": "limit",
-                  "value": "<integer>",
-                  "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+                  "value": "<integer>"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter by the transfer profile. Leave out to fetch all transfer transactions.",
                   "key": "profileId",
-                  "value": "<string>",
-                  "description": "Filter by the transfer profile. Leave out to fetch all transfer transactions."
+                  "value": "77774281"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter by the source instrument id.",
                   "key": "id",
-                  "value": "<string>",
-                  "description": "Filter by the source instrument id."
+                  "value": "48107515580"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter by the source instrument id.",
                   "key": "type",
-                  "value": "<string>",
-                  "description": "Filter by the source instrument id."
+                  "value": "managed_accounts"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter by the transfer transaction state. Leave out to fetch all states.",
                   "key": "state",
-                  "value": "<string>",
-                  "description": "Filter by the transfer transaction state. Leave out to fetch all states."
+                  "value": "CANCELLED"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter by the transfer transaction state. Leave out to fetch all states.",
                   "key": "state",
-                  "value": "<string>",
-                  "description": "Filter by the transfer transaction state. Leave out to fetch all states."
+                  "value": "CANCELLED"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter for transfer transactions created after `createdFrom` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers.",
                   "key": "createdFrom",
-                  "value": "<long>",
-                  "description": "Filter for transfer transactions created after `createdFrom` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers."
+                  "value": "<long>"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter for transfer transactions created before `createdTo` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers.",
                   "key": "createdTo",
-                  "value": "<long>",
-                  "description": "Filter for transfer transactions created before `createdTo` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers."
+                  "value": "<long>"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter by the transfer tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all entries.",
                   "key": "tag",
-                  "value": "<string>",
-                  "description": "Filter by the transfer tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all entries."
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
+                  "value": "<string>"
                 }
               ]
-            }
+            },
+            "description": "Retrieves all the transfer transactions performed by the logged-in identity."
           },
           "response": [
             {
-              "id": "8325e023-ceb9-41be-9422-5934fb3ec9d2",
+              "id": "4b506a94-560f-4df3-829c-006bd17b3b05",
               "name": "Success",
               "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
                 "url": {
-                  "path": [
-                    "transfers"
-                  ],
+                  "raw": "{{baseUrl}}/transfers?offset=<integer>&limit=<integer>&profileId=77774281&id=48107515580&type=managed_accounts&state=CANCELLED&createdFrom=<long>&createdTo=<long>&tag=<string>",
                   "host": [
                     "{{baseUrl}}"
                   ],
+                  "path": [
+                    "transfers"
+                  ],
                   "query": [
                     {
+                      "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.",
                       "key": "offset",
                       "value": "<integer>"
                     },
                     {
+                      "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100.",
                       "key": "limit",
                       "value": "<integer>"
                     },
                     {
+                      "description": "Filter by the transfer profile. Leave out to fetch all transfer transactions.",
                       "key": "profileId",
-                      "value": "327306748"
+                      "value": "77774281"
                     },
                     {
+                      "description": "Filter by the source instrument id.",
                       "key": "id",
-                      "value": "13"
+                      "value": "48107515580"
                     },
                     {
+                      "description": "Filter by the source instrument id.",
                       "key": "type",
                       "value": "managed_accounts"
                     },
                     {
+                      "description": "Filter by the transfer transaction state. Leave out to fetch all states.",
                       "key": "state",
-                      "value": "COMPLETED"
+                      "value": "CANCELLED"
                     },
                     {
-                      "key": "state",
-                      "value": "FAILED"
-                    },
-                    {
+                      "description": "Filter for transfer transactions created after `createdFrom` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers.",
                       "key": "createdFrom",
                       "value": "<long>"
                     },
                     {
+                      "description": "Filter for transfer transactions created before `createdTo` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers.",
                       "key": "createdTo",
                       "value": "<long>"
                     },
                     {
+                      "description": "Filter by the transfer tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all entries.",
                       "key": "tag",
                       "value": "<string>"
                     }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                  ]
+                }
               },
               "status": "OK",
               "code": 200,
+              "_postman_previewlanguage": "json",
               "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
+                },
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "request-ref",
+                  "value": ""
                 }
               ],
-              "body": "{\n  \"transfer\": [\n    {\n      \"id\": \"3960526\",\n      \"profileId\": \"1691863355\",\n      \"creationTimestamp\": 6569,\n      \"destination\": {\n        \"id\": \"0\",\n        \"type\": \"managed_accounts\"\n      },\n      \"destinationAmount\": {\n        \"currency\": \"MMM\",\n        \"amount\": 4166\n      },\n      \"source\": {\n        \"id\": \"55248\",\n        \"type\": \"managed_cards\"\n      },\n      \"state\": \"FAILED\",\n      \"tag\": \"Tt\",\n      \"description\": \"Y(+>QKb\",\n      \"scheduledTimestamp\": \"7307664985\",\n      \"executionTimestamp\": \"48\",\n      \"cancellationReason\": \"w\"\n    },\n    {\n      \"id\": \"36005\",\n      \"profileId\": \"344\",\n      \"creationTimestamp\": 9791,\n      \"destination\": {\n        \"id\": \"6768961999\",\n        \"type\": \"managed_accounts\"\n      },\n      \"destinationAmount\": {\n        \"currency\": \"FVZ\",\n        \"amount\": 7016\n      },\n      \"source\": {\n        \"id\": \"0653\",\n        \"type\": \"managed_cards\"\n      },\n      \"state\": \"REJECTED\",\n      \"tag\": \"2G5Vt-O\",\n      \"description\": \";\\t6 \\f -　S\",\n      \"scheduledTimestamp\": \"013\",\n      \"executionTimestamp\": \"6153\",\n      \"cancellationReason\": \"yK\"\n    }\n  ],\n  \"count\": 9769,\n  \"responseCount\": 8325\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"transfer\": [\n    {\n      \"id\": \"025473045\",\n      \"profileId\": \"66711879672\",\n      \"creationTimestamp\": \"<long>\",\n      \"destination\": {\n        \"id\": \"0951\",\n        \"type\": \"managed_cards\"\n      },\n      \"destinationAmount\": {\n        \"currency\": \"INQ\",\n        \"amount\": \"<long>\"\n      },\n      \"source\": {\n        \"id\": \"5698\",\n        \"type\": \"managed_cards\"\n      },\n      \"state\": \"CANCELLED\",\n      \"tag\": \"NR\",\n      \"description\": \"\u2008\u2002\",\n      \"scheduledTimestamp\": \"69\",\n      \"executionTimestamp\": \"896\",\n      \"cancellationReason\": \"rd1Df6GUE\"\n    },\n    {\n      \"id\": \"843949691\",\n      \"profileId\": \"24370781\",\n      \"creationTimestamp\": \"<long>\",\n      \"destination\": {\n        \"id\": \"68\",\n        \"type\": \"managed_cards\"\n      },\n      \"destinationAmount\": {\n        \"currency\": \"YYM\",\n        \"amount\": \"<long>\"\n      },\n      \"source\": {\n        \"id\": \"912703\",\n        \"type\": \"managed_accounts\"\n      },\n      \"state\": \"FAILED\",\n      \"tag\": \"B_Gw\",\n      \"description\": \"r\\u000bEdb:\\f<\",\n      \"scheduledTimestamp\": \"17842678338\",\n      \"executionTimestamp\": \"814\",\n      \"cancellationReason\": \"E1R0dGNla\"\n    }\n  ],\n  \"count\": \"<integer>\",\n  \"responseCount\": \"<integer>\"\n}",
+              "createdAt": "2026-10-21T19:55:41.000Z",
+              "updatedAt": "2026-10-21T19:55:41.000Z",
+              "uid": "35240-4b506a94-560f-4df3-829c-006bd17b3b05"
             },
             {
-              "id": "b0811d9d-f177-48c1-8455-dab5b7b1f612",
+              "id": "b5142097-9cac-43e3-8999-7b93de76bb54",
               "name": "Bad Request Error - Your request is invalid.",
               "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
                 "url": {
-                  "path": [
-                    "transfers"
-                  ],
+                  "raw": "{{baseUrl}}/transfers?offset=<integer>&limit=<integer>&profileId=77774281&id=48107515580&type=managed_accounts&state=CANCELLED&createdFrom=<long>&createdTo=<long>&tag=<string>",
                   "host": [
                     "{{baseUrl}}"
                   ],
+                  "path": [
+                    "transfers"
+                  ],
                   "query": [
                     {
+                      "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.",
                       "key": "offset",
                       "value": "<integer>"
                     },
                     {
+                      "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100.",
                       "key": "limit",
                       "value": "<integer>"
                     },
                     {
+                      "description": "Filter by the transfer profile. Leave out to fetch all transfer transactions.",
                       "key": "profileId",
-                      "value": "327306748"
+                      "value": "77774281"
                     },
                     {
+                      "description": "Filter by the source instrument id.",
                       "key": "id",
-                      "value": "13"
+                      "value": "48107515580"
                     },
                     {
+                      "description": "Filter by the source instrument id.",
                       "key": "type",
                       "value": "managed_accounts"
                     },
                     {
+                      "description": "Filter by the transfer transaction state. Leave out to fetch all states.",
                       "key": "state",
-                      "value": "COMPLETED"
+                      "value": "CANCELLED"
                     },
                     {
-                      "key": "state",
-                      "value": "FAILED"
-                    },
-                    {
+                      "description": "Filter for transfer transactions created after `createdFrom` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers.",
                       "key": "createdFrom",
                       "value": "<long>"
                     },
                     {
+                      "description": "Filter for transfer transactions created before `createdTo` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers.",
                       "key": "createdTo",
                       "value": "<long>"
                     },
                     {
+                      "description": "Filter by the transfer tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all entries.",
                       "key": "tag",
                       "value": "<string>"
                     }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                  ]
+                }
               },
               "status": "Bad Request",
               "code": 400,
+              "_postman_previewlanguage": "json",
               "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
+                },
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "request-ref",
+                  "value": ""
                 }
               ],
-              "body": "{\n  \"message\": \"string\",\n  \"validationErrors\": [\n    {\n      \"fieldName\": \"string\",\n      \"message\": \"string\",\n      \"error\": \"NOT_IN\",\n      \"params\": [\n        \"string\",\n        \"string\"\n      ],\n      \"invalidValue\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"fieldName\": \"string\",\n      \"message\": \"string\",\n      \"error\": \"HAS_TEXT\",\n      \"params\": [\n        \"string\",\n        \"string\"\n      ],\n      \"invalidValue\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"validationErrors\": [\n    {\n      \"fieldName\": \"<string>\",\n      \"message\": \"<string>\",\n      \"error\": \"FUTURE_OR_PRESENT\",\n      \"params\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"invalidValue\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"fieldName\": \"<string>\",\n      \"message\": \"<string>\",\n      \"error\": \"INVALID_REQUEST\",\n      \"params\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"invalidValue\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+              "createdAt": "2026-10-21T19:55:41.000Z",
+              "updatedAt": "2026-10-21T19:55:41.000Z",
+              "uid": "35240-b5142097-9cac-43e3-8999-7b93de76bb54"
             },
             {
-              "id": "5ba696fc-9c48-42c7-ba08-963a0d327ad1",
+              "id": "6efb091e-0308-4960-8bca-64a184ac65eb",
               "name": "Unauthorized - Your credentials or access token are invalid.",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "offset",
-                      "value": "<integer>"
-                    },
-                    {
-                      "key": "limit",
-                      "value": "<integer>"
-                    },
-                    {
-                      "key": "profileId",
-                      "value": "327306748"
-                    },
-                    {
-                      "key": "id",
-                      "value": "13"
-                    },
-                    {
-                      "key": "type",
-                      "value": "managed_accounts"
-                    },
-                    {
-                      "key": "state",
-                      "value": "COMPLETED"
-                    },
-                    {
-                      "key": "state",
-                      "value": "FAILED"
-                    },
-                    {
-                      "key": "createdFrom",
-                      "value": "<long>"
-                    },
-                    {
-                      "key": "createdTo",
-                      "value": "<long>"
-                    },
-                    {
-                      "key": "tag",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": []
-                },
+                "method": "GET",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
+                    "description": "Added as a part of security scheme: bearer",
                     "key": "Authorization",
                     "value": "Bearer <token>"
                   }
                 ],
-                "method": "GET",
-                "body": {}
+                "url": {
+                  "raw": "{{baseUrl}}/transfers?offset=<integer>&limit=<integer>&profileId=77774281&id=48107515580&type=managed_accounts&state=CANCELLED&createdFrom=<long>&createdTo=<long>&tag=<string>",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "transfers"
+                  ],
+                  "query": [
+                    {
+                      "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.",
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100.",
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "description": "Filter by the transfer profile. Leave out to fetch all transfer transactions.",
+                      "key": "profileId",
+                      "value": "77774281"
+                    },
+                    {
+                      "description": "Filter by the source instrument id.",
+                      "key": "id",
+                      "value": "48107515580"
+                    },
+                    {
+                      "description": "Filter by the source instrument id.",
+                      "key": "type",
+                      "value": "managed_accounts"
+                    },
+                    {
+                      "description": "Filter by the transfer transaction state. Leave out to fetch all states.",
+                      "key": "state",
+                      "value": "CANCELLED"
+                    },
+                    {
+                      "description": "Filter for transfer transactions created after `createdFrom` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers.",
+                      "key": "createdFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "description": "Filter for transfer transactions created before `createdTo` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers.",
+                      "key": "createdTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "description": "Filter by the transfer tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all entries.",
+                      "key": "tag",
+                      "value": "<string>"
+                    }
+                  ]
+                }
               },
               "status": "Unauthorized",
               "code": 401,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
                   "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "value": ""
                 }
               ],
-              "body": "",
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:55:41.000Z",
+              "updatedAt": "2026-10-21T19:55:41.000Z",
+              "uid": "35240-6efb091e-0308-4960-8bca-64a184ac65eb"
             },
             {
-              "id": "ea7264e0-f6e7-4400-aea1-7e437d19a771",
+              "id": "036524fb-7511-486d-bf53-90f6fb9af50f",
               "name": "Forbidden - Access to the requested resource or action is forbidden.",
               "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
                 "url": {
-                  "path": [
-                    "transfers"
-                  ],
+                  "raw": "{{baseUrl}}/transfers?offset=<integer>&limit=<integer>&profileId=77774281&id=48107515580&type=managed_accounts&state=CANCELLED&createdFrom=<long>&createdTo=<long>&tag=<string>",
                   "host": [
                     "{{baseUrl}}"
                   ],
+                  "path": [
+                    "transfers"
+                  ],
                   "query": [
                     {
+                      "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.",
                       "key": "offset",
                       "value": "<integer>"
                     },
                     {
+                      "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100.",
                       "key": "limit",
                       "value": "<integer>"
                     },
                     {
+                      "description": "Filter by the transfer profile. Leave out to fetch all transfer transactions.",
                       "key": "profileId",
-                      "value": "327306748"
+                      "value": "77774281"
                     },
                     {
+                      "description": "Filter by the source instrument id.",
                       "key": "id",
-                      "value": "13"
+                      "value": "48107515580"
                     },
                     {
+                      "description": "Filter by the source instrument id.",
                       "key": "type",
                       "value": "managed_accounts"
                     },
                     {
+                      "description": "Filter by the transfer transaction state. Leave out to fetch all states.",
                       "key": "state",
-                      "value": "COMPLETED"
+                      "value": "CANCELLED"
                     },
                     {
-                      "key": "state",
-                      "value": "FAILED"
-                    },
-                    {
+                      "description": "Filter for transfer transactions created after `createdFrom` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers.",
                       "key": "createdFrom",
                       "value": "<long>"
                     },
                     {
+                      "description": "Filter for transfer transactions created before `createdTo` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers.",
                       "key": "createdTo",
                       "value": "<long>"
                     },
                     {
+                      "description": "Filter by the transfer tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all entries.",
                       "key": "tag",
                       "value": "<string>"
                     }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                  ]
+                }
               },
               "status": "Forbidden",
               "code": 403,
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
+              "cookie": [],
+              "responseTime": null,
               "body": "{\n  \"errorCode\": \"ACCESS_TOKEN_REQUIRED\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
+              "createdAt": "2026-10-21T19:55:41.000Z",
+              "updatedAt": "2026-10-21T19:55:41.000Z",
+              "uid": "35240-036524fb-7511-486d-bf53-90f6fb9af50f"
             },
             {
-              "id": "c45e3353-d35c-45f9-9a60-7d9fed640d94",
+              "id": "4fc80b08-48f8-4395-9558-099ce0cc1064",
               "name": "Internal Server Error - There is a problem with the server. Please try again later.",
               "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
                 "url": {
-                  "path": [
-                    "transfers"
-                  ],
+                  "raw": "{{baseUrl}}/transfers?offset=<integer>&limit=<integer>&profileId=77774281&id=48107515580&type=managed_accounts&state=CANCELLED&createdFrom=<long>&createdTo=<long>&tag=<string>",
                   "host": [
                     "{{baseUrl}}"
                   ],
+                  "path": [
+                    "transfers"
+                  ],
                   "query": [
                     {
+                      "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.",
                       "key": "offset",
                       "value": "<integer>"
                     },
                     {
+                      "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100.",
                       "key": "limit",
                       "value": "<integer>"
                     },
                     {
+                      "description": "Filter by the transfer profile. Leave out to fetch all transfer transactions.",
                       "key": "profileId",
-                      "value": "327306748"
+                      "value": "77774281"
                     },
                     {
+                      "description": "Filter by the source instrument id.",
                       "key": "id",
-                      "value": "13"
+                      "value": "48107515580"
                     },
                     {
+                      "description": "Filter by the source instrument id.",
                       "key": "type",
                       "value": "managed_accounts"
                     },
                     {
+                      "description": "Filter by the transfer transaction state. Leave out to fetch all states.",
                       "key": "state",
-                      "value": "COMPLETED"
+                      "value": "CANCELLED"
                     },
                     {
-                      "key": "state",
-                      "value": "FAILED"
-                    },
-                    {
+                      "description": "Filter for transfer transactions created after `createdFrom` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers.",
                       "key": "createdFrom",
                       "value": "<long>"
                     },
                     {
+                      "description": "Filter for transfer transactions created before `createdTo` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers.",
                       "key": "createdTo",
                       "value": "<long>"
                     },
                     {
+                      "description": "Filter by the transfer tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all entries.",
                       "key": "tag",
                       "value": "<string>"
                     }
-                  ],
-                  "variable": []
-                },
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "_postman_previewlanguage": "text",
+              "header": [
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "request-ref",
+                  "value": ""
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:55:41.000Z",
+              "updatedAt": "2026-10-21T19:55:41.000Z",
+              "uid": "35240-4fc80b08-48f8-4395-9558-099ce0cc1064"
+            },
+            {
+              "id": "c7a7cf6c-42f3-4d07-848e-0f15f8841060",
+              "name": "Service Unavailable - The requested service is temporarily unavailable. Please try again later.",
+              "originalRequest": {
+                "method": "GET",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
+                    "description": "Added as a part of security scheme: bearer",
                     "key": "Authorization",
                     "value": "Bearer <token>"
                   }
                 ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "3001a1f0-caa5-4ba0-bb68-dda902dd7e08",
-              "name": "Service Unavailable - The requested service is temporarily unavailable. Please try again later.",
-              "originalRequest": {
                 "url": {
-                  "path": [
-                    "transfers"
-                  ],
+                  "raw": "{{baseUrl}}/transfers?offset=<integer>&limit=<integer>&profileId=77774281&id=48107515580&type=managed_accounts&state=CANCELLED&createdFrom=<long>&createdTo=<long>&tag=<string>",
                   "host": [
                     "{{baseUrl}}"
                   ],
+                  "path": [
+                    "transfers"
+                  ],
                   "query": [
                     {
+                      "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.",
                       "key": "offset",
                       "value": "<integer>"
                     },
                     {
+                      "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100.",
                       "key": "limit",
                       "value": "<integer>"
                     },
                     {
+                      "description": "Filter by the transfer profile. Leave out to fetch all transfer transactions.",
                       "key": "profileId",
-                      "value": "327306748"
+                      "value": "77774281"
                     },
                     {
+                      "description": "Filter by the source instrument id.",
                       "key": "id",
-                      "value": "13"
+                      "value": "48107515580"
                     },
                     {
+                      "description": "Filter by the source instrument id.",
                       "key": "type",
                       "value": "managed_accounts"
                     },
                     {
+                      "description": "Filter by the transfer transaction state. Leave out to fetch all states.",
                       "key": "state",
-                      "value": "COMPLETED"
+                      "value": "CANCELLED"
                     },
                     {
-                      "key": "state",
-                      "value": "FAILED"
-                    },
-                    {
+                      "description": "Filter for transfer transactions created after `createdFrom` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers.",
                       "key": "createdFrom",
                       "value": "<long>"
                     },
                     {
+                      "description": "Filter for transfer transactions created before `createdTo` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers.",
                       "key": "createdTo",
                       "value": "<long>"
                     },
                     {
+                      "description": "Filter by the transfer tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all entries.",
                       "key": "tag",
                       "value": "<string>"
                     }
-                  ],
-                  "variable": []
-                },
+                  ]
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "_postman_previewlanguage": "text",
+              "header": [
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "request-ref",
+                  "value": ""
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:55:41.000Z",
+              "updatedAt": "2026-10-21T19:55:41.000Z",
+              "uid": "35240-c7a7cf6c-42f3-4d07-848e-0f15f8841060"
+            },
+            {
+              "id": "d35bf165-777f-483b-90fa-93144a94470e",
+              "name": "Error",
+              "originalRequest": {
+                "method": "GET",
                 "header": [
                   {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
                     "key": "Authorization",
                     "value": "Bearer <token>"
                   }
                 ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Service Unavailable",
-              "code": 503,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "eb891e9d-b374-4084-b22a-9f167da2f1d0",
-              "name": "Error",
-              "originalRequest": {
                 "url": {
-                  "path": [
-                    "transfers"
-                  ],
+                  "raw": "{{baseUrl}}/transfers?offset=<integer>&limit=<integer>&profileId=77774281&id=48107515580&type=managed_accounts&state=CANCELLED&createdFrom=<long>&createdTo=<long>&tag=<string>",
                   "host": [
                     "{{baseUrl}}"
                   ],
+                  "path": [
+                    "transfers"
+                  ],
                   "query": [
                     {
+                      "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.",
                       "key": "offset",
                       "value": "<integer>"
                     },
                     {
+                      "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100.",
                       "key": "limit",
                       "value": "<integer>"
                     },
                     {
+                      "description": "Filter by the transfer profile. Leave out to fetch all transfer transactions.",
                       "key": "profileId",
-                      "value": "327306748"
+                      "value": "77774281"
                     },
                     {
+                      "description": "Filter by the source instrument id.",
                       "key": "id",
-                      "value": "13"
+                      "value": "48107515580"
                     },
                     {
+                      "description": "Filter by the source instrument id.",
                       "key": "type",
                       "value": "managed_accounts"
                     },
                     {
+                      "description": "Filter by the transfer transaction state. Leave out to fetch all states.",
                       "key": "state",
-                      "value": "COMPLETED"
+                      "value": "CANCELLED"
                     },
                     {
-                      "key": "state",
-                      "value": "FAILED"
-                    },
-                    {
+                      "description": "Filter for transfer transactions created after `createdFrom` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers.",
                       "key": "createdFrom",
                       "value": "<long>"
                     },
                     {
+                      "description": "Filter for transfer transactions created before `createdTo` timestamp. Timestamp is expressed in Epoch timestamp using millisecond precision. Leave out to fetch all transfers.",
                       "key": "createdTo",
                       "value": "<long>"
                     },
                     {
+                      "description": "Filter by the transfer tag. The exact tag must be provided, as wildcards are not supported. Leave out to fetch all entries.",
                       "key": "tag",
                       "value": "<string>"
                     }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                  ]
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"code\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-10-21T19:55:41.000Z",
+              "updatedAt": "2026-10-21T19:55:41.000Z",
+              "uid": "35240-d35bf165-777f-483b-90fa-93144a94470e"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "d772fa5c-8e97-416c-a089-6db81997f6c9",
-          "name": "Get a transfer transaction",
-          "request": {
-            "name": "Get a transfer transaction",
-            "description": {
-              "content": "Retrieve the transfer transaction identified by the `id` path parameter.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "transfers",
-                ":id"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "id",
-                  "description": "(Required) The unique identifier of the Transfer transaction."
-                }
-              ]
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            }
-          },
-          "response": [
-            {
-              "id": "36a09dac-37dc-4032-a7cb-ee822c81582c",
-              "name": "Success",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers",
-                    ":id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "id",
-                      "description": "(Required) The unique identifier of the Transfer transaction."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"id\": \"7\",\n  \"profileId\": \"242569992\",\n  \"creationTimestamp\": 811,\n  \"destination\": {\n    \"id\": \"044308381\",\n    \"type\": \"managed_cards\"\n  },\n  \"destinationAmount\": {\n    \"currency\": \"ARA\",\n    \"amount\": 780\n  },\n  \"source\": {\n    \"id\": \"33622921287\",\n    \"type\": \"managed_cards\"\n  },\n  \"state\": \"COMPLETED\",\n  \"tag\": \"v0LdS5GV\",\n  \"description\": \".O @=\",\n  \"scheduledTimestamp\": \"72\",\n  \"executionTimestamp\": \"8856\",\n  \"cancellationReason\": \"y60sJ\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "34604606-ff35-403c-a2bd-f7762e1069b6",
-              "name": "Bad Request Error - Your request is invalid.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers",
-                    ":id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "id",
-                      "description": "(Required) The unique identifier of the Transfer transaction."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"message\": \"string\",\n  \"validationErrors\": [\n    {\n      \"fieldName\": \"string\",\n      \"message\": \"string\",\n      \"error\": \"NOT_IN\",\n      \"params\": [\n        \"string\",\n        \"string\"\n      ],\n      \"invalidValue\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"fieldName\": \"string\",\n      \"message\": \"string\",\n      \"error\": \"HAS_TEXT\",\n      \"params\": [\n        \"string\",\n        \"string\"\n      ],\n      \"invalidValue\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "246c2498-c335-49a6-b3f9-7e243fd51bbd",
-              "name": "Unauthorized - Your credentials or access token are invalid.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers",
-                    ":id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "id",
-                      "description": "(Required) The unique identifier of the Transfer transaction."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "07bd6443-071b-4c05-9a3f-c48e7b4715f1",
-              "name": "Forbidden - Access to the requested resource or action is forbidden.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers",
-                    ":id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "id",
-                      "description": "(Required) The unique identifier of the Transfer transaction."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Forbidden",
-              "code": 403,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"errorCode\": \"ACCESS_TOKEN_REQUIRED\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "b2065a31-88d2-4571-860a-daef07a62203",
-              "name": "Not found - The requested resource couldn't be found.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers",
-                    ":id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "id",
-                      "description": "(Required) The unique identifier of the Transfer transaction."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "fe6b9443-d1ab-45da-b88d-e567170d43e1",
-              "name": "Internal Server Error - There is a problem with the server. Please try again later.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers",
-                    ":id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "id",
-                      "description": "(Required) The unique identifier of the Transfer transaction."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "359c3a56-6375-44f1-8b64-28b061bb4cd7",
-              "name": "Service Unavailable - The requested service is temporarily unavailable. Please try again later.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers",
-                    ":id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "id",
-                      "description": "(Required) The unique identifier of the Transfer transaction."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Service Unavailable",
-              "code": 503,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "a22e77f1-3692-4114-beea-23f05cf6f0e2",
-              "name": "Error",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers",
-                    ":id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "id",
-                      "description": "(Required) The unique identifier of the Transfer transaction."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "2d51d0e1-f991-40b9-ba50-e9891d7d543b",
-          "name": "Cancel transfer transactions",
-          "request": {
-            "name": "Cancel transfer transactions",
-            "description": {
-              "content": "Cancels transfers that are scheduled to be executed in the future.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "transfers",
-                "bulk",
-                "cancel"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            },
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"cancellations\": [\n    {\n      \"id\": \"<string>\",\n      \"cancellationReason\": \"<string>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"cancellationReason\": \"<string>\"\n    }\n  ]\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
-          },
-          "response": [
-            {
-              "id": "92b58de5-6af5-4e66-afb3-e544f4135ede",
-              "name": "Success",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers",
-                    "bulk",
-                    "cancel"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"cancellations\": [\n    {\n      \"id\": \"21\",\n      \"state\": \"SUCCESS\",\n      \"errorCode\": \"TRANSACTION_NOT_SCHEDULED\"\n    },\n    {\n      \"id\": \"6496142587\",\n      \"state\": \"ERROR\",\n      \"errorCode\": \"FORBIDDEN\"\n    }\n  ]\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "c8054378-719f-47d3-a82c-8dbf800c8b8f",
-              "name": "Bad Request Error - Your request is invalid.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers",
-                    "bulk",
-                    "cancel"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {}
-              },
-              "status": "Bad Request",
-              "code": 400,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"message\": \"string\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"REGEX\"\n      },\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"RANGE\"\n      }\n    ]\n  }\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "8284d8b7-188e-4475-a25b-ff1b3ee0286f",
-              "name": "Unauthorized - Your credentials or access token are invalid.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers",
-                    "bulk",
-                    "cancel"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  }
-                ],
-                "method": "POST",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "9a144166-3d09-4597-b740-a1c959d24fa1",
-              "name": "Too many requests.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers",
-                    "bulk",
-                    "cancel"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  }
-                ],
-                "method": "POST",
-                "body": {}
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "disabled": false,
-                  "description": "(Required) Example: `20, 10;w=60, 20;w=3600, 200;w=86400`\nThe first number (20) is the limit that has been exceeded.\nThe remaining numbers are the limits that are in force, with 'w' meaning 'window in seconds'. In this example `20;w=3600` was exceeded. 20 calls in 3600secs (1hr)\n",
-                  "key": "x-ratelimit-limit",
-                  "value": "string"
-                },
-                {
-                  "disabled": false,
-                  "description": "(Required) The number of seconds until the window is reset.",
-                  "key": "x-ratelimit-reset",
-                  "value": "4790"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "6b27ac45-3a4b-470b-be41-ea948c16974f",
-              "name": "Internal Server Error - There is a problem with the server. Please try again later.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers",
-                    "bulk",
-                    "cancel"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  }
-                ],
-                "method": "POST",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "a35e0943-6d33-4704-b7fc-66e81be5e7c6",
-              "name": "Service Unavailable - The requested service is temporarily unavailable. Please try again later.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers",
-                    "bulk",
-                    "cancel"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  }
-                ],
-                "method": "POST",
-                "body": {}
-              },
-              "status": "Service Unavailable",
-              "code": 503,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "5c3f282a-06c5-4998-8b42-24121a102dd0",
-              "name": "Error",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "transfers",
-                    "bulk",
-                    "cancel"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "createdAt": "2026-10-21T19:55:41.000Z",
+          "updatedAt": "2026-10-21T19:55:41.000Z",
+          "uid": "35240-bef309fb-b728-4af4-a35d-3b324057cc3b"
         }
       ],
-      "event": []
+      "id": "a8d9abcf-cb41-4103-9232-a6b6fd1584ee",
+      "createdAt": "2026-10-21T19:55:41.000Z",
+      "updatedAt": "2026-10-21T19:55:41.000Z",
+      "uid": "35240-a8d9abcf-cb41-4103-9232-a6b6fd1584ee"
     }
   ],
-  "event": [],
   "variable": [
     {
-      "type": "string",
-      "value": "https://sandbox.weavr.io/multi/backoffice",
-      "key": "baseUrl"
+      "key": "baseUrl",
+      "value": "https://sandbox.weavr.io/multi/backoffice"
     }
-  ],
-  "info": {
-    "_postman_id": "a278bd2b-80d4-4c66-bd84-876590da77d2",
-    "name": "Weavr Multi Product BackOffice Access Token Transfers API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning\nidentities and their instruments, without requiring the users to be logged in.\n\nA token is to be obtained through the `access_token` method, and this will allow relevant operations\nto be performed on behalf of this same identity.\n\n\nContact Support:\n Name: Weavr",
-      "type": "text/plain"
-    }
-  }
+  ]
 }

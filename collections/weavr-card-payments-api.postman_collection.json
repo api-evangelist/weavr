@@ -1,188 +1,520 @@
 {
+  "info": {
+    "_postman_id": "7832872a-0c1f-41ea-8fc1-ec4312afbe1b",
+    "name": "Weavr Multi Product Card Payments API",
+    "description": "Weavr Multi API provides a simple and flexible way to issue cards and accounts to your customers.\n\nContact Support:\n Name: Weavr",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-10-21T19:52:10.000Z",
+    "updatedAt": "2026-10-21T19:52:11.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-7832872a-0c1f-41ea-8fc1-ec4312afbe1b"
+  },
   "item": [
     {
-      "id": "c0de0a68-25d4-411e-a411-cb26e1398638",
-      "name": "Card Payments",
-      "description": {
-        "content": "Retrieve card payment activity, including authorisations, settlements, and related events.",
-        "type": "text/plain"
-      },
+      "name": "card_payments",
       "item": [
         {
-          "id": "5e36ac50-c2ac-49cf-8865-1e37184138e9",
-          "name": "Get all card payments",
-          "request": {
-            "name": "Get all card payments",
-            "description": {
-              "content": "Returns the aggregated card payments for the logged-in identity. A CardPayment represents the full lifecycle of a card payment (authorisation + settlements + optional reversal/expiry/refund/original credit) as a single business-level entity.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "card_payments"
+          "name": "{id}",
+          "item": [
+            {
+              "name": "Get a single card payment",
+              "id": "91b6402d-7a0a-4d01-b023-a6886947fd1a",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/card_payments/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "card_payments",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "id": "7a31d55d-2561-4f56-9ba4-e7ce86700590",
+                      "key": "id",
+                      "value": "4805802",
+                      "description": "(Required) The unique identifier of a card payment."
+                    }
+                  ]
+                },
+                "description": "Returns a single card payment by id."
+              },
+              "response": [
+                {
+                  "id": "a85982a5-a0cc-4027-9066-81838059860b",
+                  "name": "Success",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/card_payments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "card_payments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "request-ref",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"id\": \"6449805319\",\n  \"type\": \"PURCHASE\",\n  \"card\": {\n    \"id\": \"509\",\n    \"type\": \"managed_cards\",\n    \"mode\": \"prepaid\",\n    \"friendlyName\": \"<string>\",\n    \"nameOnCard\": \"<string>\",\n    \"cardBrand\": \"VISA\",\n    \"cardNumberFirstSix\": \"034229\",\n    \"cardNumberLastFour\": \"9547\",\n    \"linkedUserId\": \"64960573400\",\n    \"parentManagedAccountId\": \"8079\"\n  },\n  \"merchant\": {\n    \"id\": \"<string>\",\n    \"name\": \"<string>\",\n    \"nameOther\": \"<string>\",\n    \"networkId\": \"<string>\",\n    \"categoryCode\": \"<string>\",\n    \"description\": \"<string>\",\n    \"street\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"postalCode\": \"<string>\",\n    \"country\": \"<string>\",\n    \"telephone\": \"<string>\",\n    \"url\": \"<string>\",\n    \"contact\": \"<string>\",\n    \"reference\": \"<string>\",\n    \"logoUrl\": \"<string>\"\n  },\n  \"displayAmount\": {\n    \"currency\": \"FFF\",\n    \"amount\": \"<long>\"\n  },\n  \"status\": \"CANCELLED\",\n  \"events\": [\n    {\n      \"type\": \"ORIGINAL_CREDIT\"\n    },\n    {\n      \"type\": \"ORIGINAL_CREDIT\"\n    }\n  ],\n  \"creationTimestamp\": \"<long>\",\n  \"profileId\": \"44060013\",\n  \"relatedCardPaymentId\": \"2154692\",\n  \"lastUpdatedTimestamp\": \"<long>\"\n}",
+                  "createdAt": "2026-10-21T19:52:11.000Z",
+                  "updatedAt": "2026-10-21T19:52:11.000Z",
+                  "uid": "35240-a85982a5-a0cc-4027-9066-81838059860b"
+                },
+                {
+                  "id": "c3b8e338-8b01-4377-88ac-abc6709bac96",
+                  "name": "Unauthorized - Your credentials or access token are invalid.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/card_payments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "card_payments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "_postman_previewlanguage": "text",
+                  "header": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "request-ref",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-10-21T19:52:11.000Z",
+                  "updatedAt": "2026-10-21T19:52:11.000Z",
+                  "uid": "35240-c3b8e338-8b01-4377-88ac-abc6709bac96"
+                },
+                {
+                  "id": "558a16ca-f3b5-4f08-be6c-b46efb9e849e",
+                  "name": "Not found - The requested resource couldn't be found.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/card_payments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "card_payments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "request-ref",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"code\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-10-21T19:52:11.000Z",
+                  "updatedAt": "2026-10-21T19:52:11.000Z",
+                  "uid": "35240-558a16ca-f3b5-4f08-be6c-b46efb9e849e"
+                },
+                {
+                  "id": "68637188-d23a-495c-9332-a70ddacbacc8",
+                  "name": "Internal Server Error - There is a problem with the server. Please try again later.",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/card_payments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "card_payments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "text",
+                  "header": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "key": "request-ref",
+                      "value": ""
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": null,
+                  "createdAt": "2026-10-21T19:52:11.000Z",
+                  "updatedAt": "2026-10-21T19:52:11.000Z",
+                  "uid": "35240-68637188-d23a-495c-9332-a70ddacbacc8"
+                },
+                {
+                  "id": "75c54a79-dfc3-4fb7-9d7d-93eaecfed69c",
+                  "name": "Error",
+                  "originalRequest": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "description": "Added as a part of security scheme: bearer",
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/card_payments/:id",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "card_payments",
+                        ":id"
+                      ],
+                      "variable": [
+                        {
+                          "key": "id"
+                        }
+                      ]
+                    }
+                  },
+                  "status": "Internal Server Error",
+                  "code": 500,
+                  "_postman_previewlanguage": "json",
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "cookie": [],
+                  "responseTime": null,
+                  "body": "{\n  \"code\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+                  "createdAt": "2026-10-21T19:52:11.000Z",
+                  "updatedAt": "2026-10-21T19:52:11.000Z",
+                  "uid": "35240-75c54a79-dfc3-4fb7-9d7d-93eaecfed69c"
+                }
               ],
+              "createdAt": "2026-10-21T19:52:11.000Z",
+              "updatedAt": "2026-10-21T19:52:11.000Z",
+              "uid": "35240-91b6402d-7a0a-4d01-b023-a6886947fd1a"
+            }
+          ],
+          "id": "30510754-5345-4309-9b07-b31e9daab0a2",
+          "createdAt": "2026-10-21T19:52:11.000Z",
+          "updatedAt": "2026-10-21T19:52:11.000Z",
+          "uid": "35240-30510754-5345-4309-9b07-b31e9daab0a2"
+        },
+        {
+          "name": "Get all card payments",
+          "id": "241e9c7d-64e4-4f5d-9e40-b725037dc9ce",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/card_payments?offset=<integer>&limit=<integer>&cardId=4805802&status=SETTLED,CANCELLED&type=REFUND,ACCOUNT_FUNDING&subtype=purchase_reversals,purchase_reversals&merchantName=<string>&amountFrom=<long>&amountTo=<long>&relatedCardPaymentId=4805802&creationTimestampFrom=<long>&creationTimestampTo=<long>&lastUpdatedTimestampFrom=<long>&lastUpdatedTimestampTo=<long>&sortOrder=DESC",
               "host": [
                 "{{baseUrl}}"
               ],
+              "path": [
+                "card_payments"
+              ],
               "query": [
                 {
-                  "disabled": false,
+                  "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.",
                   "key": "offset",
-                  "value": "<integer>",
-                  "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+                  "value": "<integer>"
                 },
                 {
-                  "disabled": false,
+                  "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100.",
                   "key": "limit",
-                  "value": "<integer>",
-                  "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+                  "value": "<integer>"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter by the managed card the payment belongs to.",
                   "key": "cardId",
-                  "value": "<string>",
-                  "description": "Filter by the managed card the payment belongs to."
+                  "value": "4805802"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter by one or more card payment statuses.",
                   "key": "status",
-                  "value": "<string>,<string>",
-                  "description": "Filter by one or more card payment statuses."
+                  "value": "SETTLED,CANCELLED"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter by one or more card payment types.",
                   "key": "type",
-                  "value": "<string>,<string>",
-                  "description": "Filter by one or more card payment types."
+                  "value": "REFUND,ACCOUNT_FUNDING"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter by one or more event subtypes (joined against the events timeline).",
                   "key": "subtype",
-                  "value": "<string>,<string>",
-                  "description": "Filter by one or more event subtypes (joined against the events timeline)."
+                  "value": "purchase_reversals,purchase_reversals"
                 },
                 {
-                  "disabled": false,
+                  "description": "Partial, case-insensitive match against merchant name.",
                   "key": "merchantName",
-                  "value": "<string>",
-                  "description": "Partial, case-insensitive match against merchant name."
+                  "value": "<string>"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter for `displayAmount.amount >= amountFrom`.",
                   "key": "amountFrom",
-                  "value": "<long>",
-                  "description": "Filter for `displayAmount.amount >= amountFrom`."
+                  "value": "<long>"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter for `displayAmount.amount <= amountTo`.",
                   "key": "amountTo",
-                  "value": "<long>",
-                  "description": "Filter for `displayAmount.amount <= amountTo`."
+                  "value": "<long>"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter for card payments related to the given parent id.",
                   "key": "relatedCardPaymentId",
-                  "value": "<string>",
-                  "description": "Filter for card payments related to the given parent id."
+                  "value": "4805802"
                 },
                 {
-                  "disabled": false,
                   "key": "creationTimestampFrom",
                   "value": "<long>"
                 },
                 {
-                  "disabled": false,
                   "key": "creationTimestampTo",
                   "value": "<long>"
                 },
                 {
-                  "disabled": false,
                   "key": "lastUpdatedTimestampFrom",
                   "value": "<long>"
                 },
                 {
-                  "disabled": false,
                   "key": "lastUpdatedTimestampTo",
                   "value": "<long>"
                 },
                 {
-                  "disabled": false,
+                  "description": "Sort order on `creationTimestamp`. ASC = oldest first.",
                   "key": "sortOrder",
-                  "value": "<string>",
-                  "description": "Sort order on `creationTimestamp`. ASC = oldest first."
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
+                  "value": "DESC"
                 }
               ]
-            }
+            },
+            "description": "Returns the aggregated card payments for the logged-in identity. A CardPayment represents the full lifecycle of a card payment (authorisation + settlements + optional reversal/expiry/refund/original credit) as a single business-level entity."
           },
           "response": [
             {
-              "id": "ac9ae754-1a98-4b8a-bbea-92f634e1445d",
+              "id": "0439fda2-e8b5-4ac7-bfa6-222171f341f4",
               "name": "Success",
               "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
                 "url": {
-                  "path": [
-                    "card_payments"
-                  ],
+                  "raw": "{{baseUrl}}/card_payments?offset=<integer>&limit=<integer>&cardId=4805802&status=SETTLED,CANCELLED&type=REFUND,ACCOUNT_FUNDING&subtype=purchase_reversals,purchase_reversals&merchantName=<string>&amountFrom=<long>&amountTo=<long>&relatedCardPaymentId=4805802&creationTimestampFrom=<long>&creationTimestampTo=<long>&lastUpdatedTimestampFrom=<long>&lastUpdatedTimestampTo=<long>&sortOrder=DESC",
                   "host": [
                     "{{baseUrl}}"
                   ],
+                  "path": [
+                    "card_payments"
+                  ],
                   "query": [
                     {
+                      "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.",
                       "key": "offset",
                       "value": "<integer>"
                     },
                     {
+                      "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100.",
                       "key": "limit",
                       "value": "<integer>"
                     },
                     {
+                      "description": "Filter by the managed card the payment belongs to.",
                       "key": "cardId",
-                      "value": "<string>"
+                      "value": "4805802"
                     },
                     {
+                      "description": "Filter by one or more card payment statuses.",
                       "key": "status",
-                      "value": "EXPIRED,DECLINED"
+                      "value": "SETTLED,CANCELLED"
                     },
                     {
+                      "description": "Filter by one or more card payment types.",
                       "key": "type",
-                      "value": "PURCHASE,ACCOUNT_FUNDING"
+                      "value": "REFUND,ACCOUNT_FUNDING"
                     },
                     {
+                      "description": "Filter by one or more event subtypes (joined against the events timeline).",
                       "key": "subtype",
-                      "value": "sale_purchases,purchase_reversals"
+                      "value": "purchase_reversals,purchase_reversals"
                     },
                     {
+                      "description": "Partial, case-insensitive match against merchant name.",
                       "key": "merchantName",
                       "value": "<string>"
                     },
                     {
+                      "description": "Filter for `displayAmount.amount >= amountFrom`.",
                       "key": "amountFrom",
                       "value": "<long>"
                     },
                     {
+                      "description": "Filter for `displayAmount.amount <= amountTo`.",
                       "key": "amountTo",
                       "value": "<long>"
                     },
                     {
+                      "description": "Filter for card payments related to the given parent id.",
                       "key": "relatedCardPaymentId",
-                      "value": "<string>"
+                      "value": "4805802"
                     },
                     {
                       "key": "creationTimestampFrom",
@@ -201,104 +533,112 @@
                       "value": "<long>"
                     },
                     {
+                      "description": "Sort order on `creationTimestamp`. ASC = oldest first.",
                       "key": "sortOrder",
-                      "value": "<string>"
+                      "value": "DESC"
                     }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "disabled": false,
-                    "description": "A request parameter specifying the type of response the client would like. Must be one of `application/json`, `application/pdf` or `text/csv`.\n\nThe default response type (`application/json`) will be returned if specified incorrectly or not specified.\n",
-                    "key": "accept",
-                    "value": "string"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                  ]
+                }
               },
               "status": "OK",
               "code": 200,
+              "_postman_previewlanguage": "json",
               "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
+                },
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "request-ref",
+                  "value": ""
                 }
               ],
-              "body": "{\n  \"cardPayments\": [\n    {\n      \"id\": \"041\",\n      \"type\": \"REFUND\",\n      \"card\": {\n        \"id\": \"79384587\",\n        \"type\": \"managed_cards\",\n        \"mode\": \"debit\",\n        \"friendlyName\": \"string\",\n        \"nameOnCard\": \"string\",\n        \"cardBrand\": \"VISA\",\n        \"cardNumberFirstSix\": \"906768\",\n        \"cardNumberLastFour\": \"8153\",\n        \"linkedUserId\": \"43635536687\",\n        \"parentManagedAccountId\": \"165642\"\n      },\n      \"merchant\": {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"nameOther\": \"string\",\n        \"networkId\": \"string\",\n        \"categoryCode\": \"string\",\n        \"description\": \"string\",\n        \"street\": \"string\",\n        \"city\": \"string\",\n        \"state\": \"string\",\n        \"postalCode\": \"string\",\n        \"country\": \"string\",\n        \"telephone\": \"string\",\n        \"url\": \"string\",\n        \"contact\": \"string\",\n        \"reference\": \"string\",\n        \"logoUrl\": \"string\"\n      },\n      \"displayAmount\": {\n        \"currency\": \"IOH\",\n        \"amount\": 6318\n      },\n      \"status\": \"EXPIRED\",\n      \"events\": [\n        {\n          \"type\": \"AUTHORISATION\"\n        },\n        {\n          \"type\": \"REFUND\"\n        }\n      ],\n      \"creationTimestamp\": 3571,\n      \"profileId\": \"47732912945\",\n      \"relatedCardPaymentId\": \"5015\",\n      \"lastUpdatedTimestamp\": 7634\n    },\n    {\n      \"id\": \"0677\",\n      \"type\": \"ACCOUNT_FUNDING\",\n      \"card\": {\n        \"id\": \"3015188\",\n        \"type\": \"managed_cards\",\n        \"mode\": \"debit\",\n        \"friendlyName\": \"string\",\n        \"nameOnCard\": \"string\",\n        \"cardBrand\": \"MASTERCARD\",\n        \"cardNumberFirstSix\": \"978130\",\n        \"cardNumberLastFour\": \"8189\",\n        \"linkedUserId\": \"1820485\",\n        \"parentManagedAccountId\": \"0140008222\"\n      },\n      \"merchant\": {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"nameOther\": \"string\",\n        \"networkId\": \"string\",\n        \"categoryCode\": \"string\",\n        \"description\": \"string\",\n        \"street\": \"string\",\n        \"city\": \"string\",\n        \"state\": \"string\",\n        \"postalCode\": \"string\",\n        \"country\": \"string\",\n        \"telephone\": \"string\",\n        \"url\": \"string\",\n        \"contact\": \"string\",\n        \"reference\": \"string\",\n        \"logoUrl\": \"string\"\n      },\n      \"displayAmount\": {\n        \"currency\": \"BBZ\",\n        \"amount\": 5609\n      },\n      \"status\": \"CANCELLED\",\n      \"events\": [\n        {\n          \"type\": \"REFUND\"\n        },\n        {\n          \"type\": \"REFUND\"\n        }\n      ],\n      \"creationTimestamp\": 4840,\n      \"profileId\": \"5\",\n      \"relatedCardPaymentId\": \"87\",\n      \"lastUpdatedTimestamp\": 1076\n    }\n  ],\n  \"count\": 6677,\n  \"responseCount\": 2685\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"cardPayments\": [\n    {\n      \"id\": \"84923801985\",\n      \"type\": \"CASH_WITHDRAWAL\",\n      \"card\": {\n        \"id\": \"9054733\",\n        \"type\": \"managed_cards\",\n        \"mode\": \"prepaid\",\n        \"friendlyName\": \"<string>\",\n        \"nameOnCard\": \"<string>\",\n        \"cardBrand\": \"VISA\",\n        \"cardNumberFirstSix\": \"931100\",\n        \"cardNumberLastFour\": \"7473\",\n        \"linkedUserId\": \"52\",\n        \"parentManagedAccountId\": \"18208851792\"\n      },\n      \"merchant\": {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"nameOther\": \"<string>\",\n        \"networkId\": \"<string>\",\n        \"categoryCode\": \"<string>\",\n        \"description\": \"<string>\",\n        \"street\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"<string>\",\n        \"postalCode\": \"<string>\",\n        \"country\": \"<string>\",\n        \"telephone\": \"<string>\",\n        \"url\": \"<string>\",\n        \"contact\": \"<string>\",\n        \"reference\": \"<string>\",\n        \"logoUrl\": \"<string>\"\n      },\n      \"displayAmount\": {\n        \"currency\": \"WBP\",\n        \"amount\": \"<long>\"\n      },\n      \"status\": \"EXPIRED\",\n      \"events\": [\n        {\n          \"type\": \"REFUND\"\n        },\n        {\n          \"type\": \"SETTLEMENT\"\n        }\n      ],\n      \"creationTimestamp\": \"<long>\",\n      \"profileId\": \"3\",\n      \"relatedCardPaymentId\": \"0\",\n      \"lastUpdatedTimestamp\": \"<long>\"\n    },\n    {\n      \"id\": \"5\",\n      \"type\": \"BALANCE_INQUIRY\",\n      \"card\": {\n        \"id\": \"1\",\n        \"type\": \"managed_cards\",\n        \"mode\": \"debit\",\n        \"friendlyName\": \"<string>\",\n        \"nameOnCard\": \"<string>\",\n        \"cardBrand\": \"VISA\",\n        \"cardNumberFirstSix\": \"186470\",\n        \"cardNumberLastFour\": \"4271\",\n        \"linkedUserId\": \"70\",\n        \"parentManagedAccountId\": \"2\"\n      },\n      \"merchant\": {\n        \"id\": \"<string>\",\n        \"name\": \"<string>\",\n        \"nameOther\": \"<string>\",\n        \"networkId\": \"<string>\",\n        \"categoryCode\": \"<string>\",\n        \"description\": \"<string>\",\n        \"street\": \"<string>\",\n        \"city\": \"<string>\",\n        \"state\": \"<string>\",\n        \"postalCode\": \"<string>\",\n        \"country\": \"<string>\",\n        \"telephone\": \"<string>\",\n        \"url\": \"<string>\",\n        \"contact\": \"<string>\",\n        \"reference\": \"<string>\",\n        \"logoUrl\": \"<string>\"\n      },\n      \"displayAmount\": {\n        \"currency\": \"HHH\",\n        \"amount\": \"<long>\"\n      },\n      \"status\": \"EXPIRED\",\n      \"events\": [\n        {\n          \"type\": \"SETTLEMENT\"\n        },\n        {\n          \"type\": \"REFUND\"\n        }\n      ],\n      \"creationTimestamp\": \"<long>\",\n      \"profileId\": \"718\",\n      \"relatedCardPaymentId\": \"957668\",\n      \"lastUpdatedTimestamp\": \"<long>\"\n    }\n  ],\n  \"count\": \"<long>\",\n  \"responseCount\": \"<long>\"\n}",
+              "createdAt": "2026-10-21T19:52:11.000Z",
+              "updatedAt": "2026-10-21T19:52:11.000Z",
+              "uid": "35240-0439fda2-e8b5-4ac7-bfa6-222171f341f4"
             },
             {
-              "id": "9bb61cd8-9a3a-4af9-b998-575f5a2c22c0",
+              "id": "a63cab0a-2aa0-4dec-b6ed-27943a3d5872",
               "name": "Bad Request Error - Your request is invalid.",
               "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
                 "url": {
-                  "path": [
-                    "card_payments"
-                  ],
+                  "raw": "{{baseUrl}}/card_payments?offset=<integer>&limit=<integer>&cardId=4805802&status=SETTLED,CANCELLED&type=REFUND,ACCOUNT_FUNDING&subtype=purchase_reversals,purchase_reversals&merchantName=<string>&amountFrom=<long>&amountTo=<long>&relatedCardPaymentId=4805802&creationTimestampFrom=<long>&creationTimestampTo=<long>&lastUpdatedTimestampFrom=<long>&lastUpdatedTimestampTo=<long>&sortOrder=DESC",
                   "host": [
                     "{{baseUrl}}"
                   ],
+                  "path": [
+                    "card_payments"
+                  ],
                   "query": [
                     {
+                      "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.",
                       "key": "offset",
                       "value": "<integer>"
                     },
                     {
+                      "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100.",
                       "key": "limit",
                       "value": "<integer>"
                     },
                     {
+                      "description": "Filter by the managed card the payment belongs to.",
                       "key": "cardId",
-                      "value": "<string>"
+                      "value": "4805802"
                     },
                     {
+                      "description": "Filter by one or more card payment statuses.",
                       "key": "status",
-                      "value": "EXPIRED,DECLINED"
+                      "value": "SETTLED,CANCELLED"
                     },
                     {
+                      "description": "Filter by one or more card payment types.",
                       "key": "type",
-                      "value": "PURCHASE,ACCOUNT_FUNDING"
+                      "value": "REFUND,ACCOUNT_FUNDING"
                     },
                     {
+                      "description": "Filter by one or more event subtypes (joined against the events timeline).",
                       "key": "subtype",
-                      "value": "sale_purchases,purchase_reversals"
+                      "value": "purchase_reversals,purchase_reversals"
                     },
                     {
+                      "description": "Partial, case-insensitive match against merchant name.",
                       "key": "merchantName",
                       "value": "<string>"
                     },
                     {
+                      "description": "Filter for `displayAmount.amount >= amountFrom`.",
                       "key": "amountFrom",
                       "value": "<long>"
                     },
                     {
+                      "description": "Filter for `displayAmount.amount <= amountTo`.",
                       "key": "amountTo",
                       "value": "<long>"
                     },
                     {
+                      "description": "Filter for card payments related to the given parent id.",
                       "key": "relatedCardPaymentId",
-                      "value": "<string>"
+                      "value": "4805802"
                     },
                     {
                       "key": "creationTimestampFrom",
@@ -317,104 +657,108 @@
                       "value": "<long>"
                     },
                     {
+                      "description": "Sort order on `creationTimestamp`. ASC = oldest first.",
                       "key": "sortOrder",
-                      "value": "<string>"
+                      "value": "DESC"
                     }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "disabled": false,
-                    "description": "A request parameter specifying the type of response the client would like. Must be one of `application/json`, `application/pdf` or `text/csv`.\n\nThe default response type (`application/json`) will be returned if specified incorrectly or not specified.\n",
-                    "key": "accept",
-                    "value": "string"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                  ]
+                }
               },
               "status": "Bad Request",
               "code": 400,
+              "_postman_previewlanguage": "json",
               "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
+                },
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "request-ref",
+                  "value": ""
                 }
               ],
-              "body": "{\n  \"message\": \"string\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"EXACTLY\"\n      },\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"AT_LEAST\"\n      }\n    ]\n  }\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"fieldName\": \"<string>\",\n        \"error\": \"IN\"\n      },\n      {\n        \"params\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"fieldName\": \"<string>\",\n        \"error\": \"NOT_IN\"\n      }\n    ]\n  }\n}",
+              "createdAt": "2026-10-21T19:52:11.000Z",
+              "updatedAt": "2026-10-21T19:52:11.000Z",
+              "uid": "35240-a63cab0a-2aa0-4dec-b6ed-27943a3d5872"
             },
             {
-              "id": "dd72ddca-ef3a-4af7-9379-44b067e2e86d",
+              "id": "df489819-2e41-44a2-b3f9-b150da28e174",
               "name": "Unauthorized - Your credentials or access token are invalid.",
               "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
                 "url": {
-                  "path": [
-                    "card_payments"
-                  ],
+                  "raw": "{{baseUrl}}/card_payments?offset=<integer>&limit=<integer>&cardId=4805802&status=SETTLED,CANCELLED&type=REFUND,ACCOUNT_FUNDING&subtype=purchase_reversals,purchase_reversals&merchantName=<string>&amountFrom=<long>&amountTo=<long>&relatedCardPaymentId=4805802&creationTimestampFrom=<long>&creationTimestampTo=<long>&lastUpdatedTimestampFrom=<long>&lastUpdatedTimestampTo=<long>&sortOrder=DESC",
                   "host": [
                     "{{baseUrl}}"
                   ],
+                  "path": [
+                    "card_payments"
+                  ],
                   "query": [
                     {
+                      "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.",
                       "key": "offset",
                       "value": "<integer>"
                     },
                     {
+                      "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100.",
                       "key": "limit",
                       "value": "<integer>"
                     },
                     {
+                      "description": "Filter by the managed card the payment belongs to.",
                       "key": "cardId",
-                      "value": "<string>"
+                      "value": "4805802"
                     },
                     {
+                      "description": "Filter by one or more card payment statuses.",
                       "key": "status",
-                      "value": "EXPIRED,DECLINED"
+                      "value": "SETTLED,CANCELLED"
                     },
                     {
+                      "description": "Filter by one or more card payment types.",
                       "key": "type",
-                      "value": "PURCHASE,ACCOUNT_FUNDING"
+                      "value": "REFUND,ACCOUNT_FUNDING"
                     },
                     {
+                      "description": "Filter by one or more event subtypes (joined against the events timeline).",
                       "key": "subtype",
-                      "value": "sale_purchases,purchase_reversals"
+                      "value": "purchase_reversals,purchase_reversals"
                     },
                     {
+                      "description": "Partial, case-insensitive match against merchant name.",
                       "key": "merchantName",
                       "value": "<string>"
                     },
                     {
+                      "description": "Filter for `displayAmount.amount >= amountFrom`.",
                       "key": "amountFrom",
                       "value": "<long>"
                     },
                     {
+                      "description": "Filter for `displayAmount.amount <= amountTo`.",
                       "key": "amountTo",
                       "value": "<long>"
                     },
                     {
+                      "description": "Filter for card payments related to the given parent id.",
                       "key": "relatedCardPaymentId",
-                      "value": "<string>"
+                      "value": "4805802"
                     },
                     {
                       "key": "creationTimestampFrom",
@@ -433,100 +777,104 @@
                       "value": "<long>"
                     },
                     {
+                      "description": "Sort order on `creationTimestamp`. ASC = oldest first.",
                       "key": "sortOrder",
-                      "value": "<string>"
+                      "value": "DESC"
                     }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "disabled": false,
-                    "description": "A request parameter specifying the type of response the client would like. Must be one of `application/json`, `application/pdf` or `text/csv`.\n\nThe default response type (`application/json`) will be returned if specified incorrectly or not specified.\n",
-                    "key": "accept",
-                    "value": "string"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                  ]
+                }
               },
               "status": "Unauthorized",
               "code": 401,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
                   "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "value": ""
                 }
               ],
-              "body": "",
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:52:11.000Z",
+              "updatedAt": "2026-10-21T19:52:11.000Z",
+              "uid": "35240-df489819-2e41-44a2-b3f9-b150da28e174"
             },
             {
-              "id": "f5c75eec-4bdf-4636-b51c-b41b07fa82d1",
+              "id": "f6d524c3-6372-4388-9a92-894cf9f8332c",
               "name": "Internal Server Error - There is a problem with the server. Please try again later.",
               "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
                 "url": {
-                  "path": [
-                    "card_payments"
-                  ],
+                  "raw": "{{baseUrl}}/card_payments?offset=<integer>&limit=<integer>&cardId=4805802&status=SETTLED,CANCELLED&type=REFUND,ACCOUNT_FUNDING&subtype=purchase_reversals,purchase_reversals&merchantName=<string>&amountFrom=<long>&amountTo=<long>&relatedCardPaymentId=4805802&creationTimestampFrom=<long>&creationTimestampTo=<long>&lastUpdatedTimestampFrom=<long>&lastUpdatedTimestampTo=<long>&sortOrder=DESC",
                   "host": [
                     "{{baseUrl}}"
                   ],
+                  "path": [
+                    "card_payments"
+                  ],
                   "query": [
                     {
+                      "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.",
                       "key": "offset",
                       "value": "<integer>"
                     },
                     {
+                      "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100.",
                       "key": "limit",
                       "value": "<integer>"
                     },
                     {
+                      "description": "Filter by the managed card the payment belongs to.",
                       "key": "cardId",
-                      "value": "<string>"
+                      "value": "4805802"
                     },
                     {
+                      "description": "Filter by one or more card payment statuses.",
                       "key": "status",
-                      "value": "EXPIRED,DECLINED"
+                      "value": "SETTLED,CANCELLED"
                     },
                     {
+                      "description": "Filter by one or more card payment types.",
                       "key": "type",
-                      "value": "PURCHASE,ACCOUNT_FUNDING"
+                      "value": "REFUND,ACCOUNT_FUNDING"
                     },
                     {
+                      "description": "Filter by one or more event subtypes (joined against the events timeline).",
                       "key": "subtype",
-                      "value": "sale_purchases,purchase_reversals"
+                      "value": "purchase_reversals,purchase_reversals"
                     },
                     {
+                      "description": "Partial, case-insensitive match against merchant name.",
                       "key": "merchantName",
                       "value": "<string>"
                     },
                     {
+                      "description": "Filter for `displayAmount.amount >= amountFrom`.",
                       "key": "amountFrom",
                       "value": "<long>"
                     },
                     {
+                      "description": "Filter for `displayAmount.amount <= amountTo`.",
                       "key": "amountTo",
                       "value": "<long>"
                     },
                     {
+                      "description": "Filter for card payments related to the given parent id.",
                       "key": "relatedCardPaymentId",
-                      "value": "<string>"
+                      "value": "4805802"
                     },
                     {
                       "key": "creationTimestampFrom",
@@ -545,626 +893,306 @@
                       "value": "<long>"
                     },
                     {
+                      "description": "Sort order on `creationTimestamp`. ASC = oldest first.",
                       "key": "sortOrder",
-                      "value": "<string>"
+                      "value": "DESC"
                     }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "disabled": false,
-                    "description": "A request parameter specifying the type of response the client would like. Must be one of `application/json`, `application/pdf` or `text/csv`.\n\nThe default response type (`application/json`) will be returned if specified incorrectly or not specified.\n",
-                    "key": "accept",
-                    "value": "string"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                  ]
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
                   "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "value": ""
                 }
               ],
-              "body": "",
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:52:11.000Z",
+              "updatedAt": "2026-10-21T19:52:11.000Z",
+              "uid": "35240-f6d524c3-6372-4388-9a92-894cf9f8332c"
             },
             {
-              "id": "863b16ca-edb0-4288-9525-55d7b4685ebe",
+              "id": "17f37110-5262-4b6d-8170-6f8d4b16f9c8",
               "name": "Error",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "card_payments"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "offset",
-                      "value": "<integer>"
-                    },
-                    {
-                      "key": "limit",
-                      "value": "<integer>"
-                    },
-                    {
-                      "key": "cardId",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "status",
-                      "value": "EXPIRED,DECLINED"
-                    },
-                    {
-                      "key": "type",
-                      "value": "PURCHASE,ACCOUNT_FUNDING"
-                    },
-                    {
-                      "key": "subtype",
-                      "value": "sale_purchases,purchase_reversals"
-                    },
-                    {
-                      "key": "merchantName",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "amountFrom",
-                      "value": "<long>"
-                    },
-                    {
-                      "key": "amountTo",
-                      "value": "<long>"
-                    },
-                    {
-                      "key": "relatedCardPaymentId",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "creationTimestampFrom",
-                      "value": "<long>"
-                    },
-                    {
-                      "key": "creationTimestampTo",
-                      "value": "<long>"
-                    },
-                    {
-                      "key": "lastUpdatedTimestampFrom",
-                      "value": "<long>"
-                    },
-                    {
-                      "key": "lastUpdatedTimestampTo",
-                      "value": "<long>"
-                    },
-                    {
-                      "key": "sortOrder",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": []
-                },
+                "method": "GET",
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "disabled": false,
-                    "description": "A request parameter specifying the type of response the client would like. Must be one of `application/json`, `application/pdf` or `text/csv`.\n\nThe default response type (`application/json`) will be returned if specified incorrectly or not specified.\n",
-                    "key": "accept",
-                    "value": "string"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "GET",
-                "body": {}
+                "url": {
+                  "raw": "{{baseUrl}}/card_payments?offset=<integer>&limit=<integer>&cardId=4805802&status=SETTLED,CANCELLED&type=REFUND,ACCOUNT_FUNDING&subtype=purchase_reversals,purchase_reversals&merchantName=<string>&amountFrom=<long>&amountTo=<long>&relatedCardPaymentId=4805802&creationTimestampFrom=<long>&creationTimestampTo=<long>&lastUpdatedTimestampFrom=<long>&lastUpdatedTimestampTo=<long>&sortOrder=DESC",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "card_payments"
+                  ],
+                  "query": [
+                    {
+                      "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.",
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100.",
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "description": "Filter by the managed card the payment belongs to.",
+                      "key": "cardId",
+                      "value": "4805802"
+                    },
+                    {
+                      "description": "Filter by one or more card payment statuses.",
+                      "key": "status",
+                      "value": "SETTLED,CANCELLED"
+                    },
+                    {
+                      "description": "Filter by one or more card payment types.",
+                      "key": "type",
+                      "value": "REFUND,ACCOUNT_FUNDING"
+                    },
+                    {
+                      "description": "Filter by one or more event subtypes (joined against the events timeline).",
+                      "key": "subtype",
+                      "value": "purchase_reversals,purchase_reversals"
+                    },
+                    {
+                      "description": "Partial, case-insensitive match against merchant name.",
+                      "key": "merchantName",
+                      "value": "<string>"
+                    },
+                    {
+                      "description": "Filter for `displayAmount.amount >= amountFrom`.",
+                      "key": "amountFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "description": "Filter for `displayAmount.amount <= amountTo`.",
+                      "key": "amountTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "description": "Filter for card payments related to the given parent id.",
+                      "key": "relatedCardPaymentId",
+                      "value": "4805802"
+                    },
+                    {
+                      "key": "creationTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "creationTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "lastUpdatedTimestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "description": "Sort order on `creationTimestamp`. ASC = oldest first.",
+                      "key": "sortOrder",
+                      "value": "DESC"
+                    }
+                  ]
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"code\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-10-21T19:52:11.000Z",
+              "updatedAt": "2026-10-21T19:52:11.000Z",
+              "uid": "35240-17f37110-5262-4b6d-8170-6f8d4b16f9c8"
             }
           ],
-          "event": [],
+          "createdAt": "2026-10-21T19:52:11.000Z",
+          "updatedAt": "2026-10-21T19:52:11.000Z",
+          "uid": "35240-241e9c7d-64e4-4f5d-9e40-b725037dc9ce"
+        }
+      ],
+      "id": "b8f52da5-3799-444e-91ab-30b75d4a60ca",
+      "createdAt": "2026-10-21T19:52:11.000Z",
+      "updatedAt": "2026-10-21T19:52:11.000Z",
+      "uid": "35240-b8f52da5-3799-444e-91ab-30b75d4a60ca"
+    },
+    {
+      "name": "card_payment_events",
+      "item": [
+        {
+          "name": "Get all card payment events",
+          "id": "43ff8038-3f44-41ee-906d-7b68e90b67e2",
           "protocolProfileBehavior": {
             "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "2e7bf7f0-4e54-4f1d-b0ed-99fb8f748e7f",
-          "name": "Get a single card payment",
+          },
           "request": {
-            "name": "Get a single card payment",
-            "description": {
-              "content": "Returns a single card payment by id.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "card_payments",
-                ":id"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": [
+            "auth": {
+              "type": "bearer",
+              "bearer": [
                 {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "<string>",
-                  "key": "id",
-                  "description": "(Required) The unique identifier of a card payment."
+                  "key": "token",
+                  "value": "{{bearerToken}}",
+                  "type": "string"
                 }
               ]
             },
+            "method": "GET",
             "header": [
               {
                 "key": "Accept",
                 "value": "application/json"
               }
             ],
-            "method": "GET",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
-                }
-              ]
-            }
-          },
-          "response": [
-            {
-              "id": "27473037-dc90-44d4-a109-8387d382f182",
-              "name": "Success",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "card_payments",
-                    ":id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "id",
-                      "description": "(Required) The unique identifier of a card payment."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"id\": \"8\",\n  \"type\": \"REFUND\",\n  \"card\": {\n    \"id\": \"47984818682\",\n    \"type\": \"managed_cards\",\n    \"mode\": \"debit\",\n    \"friendlyName\": \"string\",\n    \"nameOnCard\": \"string\",\n    \"cardBrand\": \"VISA\",\n    \"cardNumberFirstSix\": \"764260\",\n    \"cardNumberLastFour\": \"7267\",\n    \"linkedUserId\": \"3705\",\n    \"parentManagedAccountId\": \"67451503762\"\n  },\n  \"merchant\": {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"nameOther\": \"string\",\n    \"networkId\": \"string\",\n    \"categoryCode\": \"string\",\n    \"description\": \"string\",\n    \"street\": \"string\",\n    \"city\": \"string\",\n    \"state\": \"string\",\n    \"postalCode\": \"string\",\n    \"country\": \"string\",\n    \"telephone\": \"string\",\n    \"url\": \"string\",\n    \"contact\": \"string\",\n    \"reference\": \"string\",\n    \"logoUrl\": \"string\"\n  },\n  \"displayAmount\": {\n    \"currency\": \"OWH\",\n    \"amount\": 6799\n  },\n  \"status\": \"SETTLED\",\n  \"events\": [\n    {\n      \"type\": \"SETTLEMENT\"\n    },\n    {\n      \"type\": \"SETTLEMENT\"\n    }\n  ],\n  \"creationTimestamp\": 8330,\n  \"profileId\": \"660473\",\n  \"relatedCardPaymentId\": \"0\",\n  \"lastUpdatedTimestamp\": 2285\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "6537b22e-0299-45df-96bf-67518334dd07",
-              "name": "Unauthorized - Your credentials or access token are invalid.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "card_payments",
-                    ":id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "id",
-                      "description": "(Required) The unique identifier of a card payment."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "96d9fee4-6f4f-4150-bbb5-ccf7de8204f9",
-              "name": "Not found - The requested resource couldn't be found.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "card_payments",
-                    ":id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "id",
-                      "description": "(Required) The unique identifier of a card payment."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "155e1462-444c-4135-a816-b8523d345f72",
-              "name": "Internal Server Error - There is a problem with the server. Please try again later.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "card_payments",
-                    ":id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "id",
-                      "description": "(Required) The unique identifier of a card payment."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "51670856-cc1b-42e8-a7fd-a4e853fcd1de",
-              "name": "Error",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "card_payments",
-                    ":id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": [
-                    {
-                      "disabled": false,
-                      "type": "any",
-                      "value": "<string>",
-                      "key": "id",
-                      "description": "(Required) The unique identifier of a card payment."
-                    }
-                  ]
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Internal Server Error",
-              "code": 500,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            }
-          ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "0c2921dd-044f-483d-846a-487a293b34f8",
-          "name": "Get all card payment events",
-          "request": {
-            "name": "Get all card payment events",
-            "description": {
-              "content": "Returns a flat, chronological list of card payment events across one or more card payments. Each entry carries the event plus the parent CardPayment context (card, merchant, group).",
-              "type": "text/plain"
-            },
             "url": {
-              "path": [
-                "card_payment_events"
-              ],
+              "raw": "{{baseUrl}}/card_payment_events?offset=<integer>&limit=<integer>&cardPaymentId=4805802&cardId=4805802&type=ORIGINAL_CREDIT,AUTHORISATION&subtype=purchase_reversals,purchase_reversals&reversal=<boolean>&timestampFrom=<long>&timestampTo=<long>&sortOrder=DESC",
               "host": [
                 "{{baseUrl}}"
               ],
+              "path": [
+                "card_payment_events"
+              ],
               "query": [
                 {
-                  "disabled": false,
+                  "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.",
                   "key": "offset",
-                  "value": "<integer>",
-                  "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results."
+                  "value": "<integer>"
                 },
                 {
-                  "disabled": false,
+                  "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100.",
                   "key": "limit",
-                  "value": "<integer>",
-                  "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100."
+                  "value": "<integer>"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter events to a single card payment.",
                   "key": "cardPaymentId",
-                  "value": "<string>",
-                  "description": "Filter events to a single card payment."
+                  "value": "4805802"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter events to those on a single managed card.",
                   "key": "cardId",
-                  "value": "<string>",
-                  "description": "Filter events to those on a single managed card."
+                  "value": "4805802"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter by one or more event types.",
                   "key": "type",
-                  "value": "<string>,<string>",
-                  "description": "Filter by one or more event types."
+                  "value": "ORIGINAL_CREDIT,AUTHORISATION"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter events by one or more network subtypes.",
                   "key": "subtype",
-                  "value": "<string>,<string>",
-                  "description": "Filter events by one or more network subtypes."
+                  "value": "purchase_reversals,purchase_reversals"
                 },
                 {
-                  "disabled": false,
+                  "description": "Filter events by reversal flag.",
                   "key": "reversal",
-                  "value": "<boolean>",
-                  "description": "Filter events by reversal flag."
+                  "value": "<boolean>"
                 },
                 {
-                  "disabled": false,
                   "key": "timestampFrom",
                   "value": "<long>"
                 },
                 {
-                  "disabled": false,
                   "key": "timestampTo",
                   "value": "<long>"
                 },
                 {
-                  "disabled": false,
+                  "description": "Sort order on event timestamp. ASC = oldest first (default DESC).",
                   "key": "sortOrder",
-                  "value": "<string>",
-                  "description": "Sort order on event timestamp. ASC = oldest first (default DESC)."
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "Accept",
-                "value": "application/json"
-              }
-            ],
-            "method": "GET",
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{bearerToken}}"
+                  "value": "DESC"
                 }
               ]
-            }
+            },
+            "description": "Returns a flat, chronological list of card payment events across one or more card payments. Each entry carries the event plus the parent CardPayment context (card, merchant, group)."
           },
           "response": [
             {
-              "id": "b1761d7e-1677-47e6-89a6-6f3b7096c0c5",
+              "id": "f48044ea-c554-4539-bb04-56ad85a619fb",
               "name": "Success",
               "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
                 "url": {
-                  "path": [
-                    "card_payment_events"
-                  ],
+                  "raw": "{{baseUrl}}/card_payment_events?offset=<integer>&limit=<integer>&cardPaymentId=4805802&cardId=4805802&type=ORIGINAL_CREDIT,AUTHORISATION&subtype=purchase_reversals,purchase_reversals&reversal=<boolean>&timestampFrom=<long>&timestampTo=<long>&sortOrder=DESC",
                   "host": [
                     "{{baseUrl}}"
                   ],
+                  "path": [
+                    "card_payment_events"
+                  ],
                   "query": [
                     {
+                      "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.",
                       "key": "offset",
                       "value": "<integer>"
                     },
                     {
+                      "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100.",
                       "key": "limit",
                       "value": "<integer>"
                     },
                     {
+                      "description": "Filter events to a single card payment.",
                       "key": "cardPaymentId",
-                      "value": "<string>"
+                      "value": "4805802"
                     },
                     {
+                      "description": "Filter events to those on a single managed card.",
                       "key": "cardId",
-                      "value": "<string>"
+                      "value": "4805802"
                     },
                     {
+                      "description": "Filter by one or more event types.",
                       "key": "type",
-                      "value": "REFUND,SETTLEMENT"
+                      "value": "ORIGINAL_CREDIT,AUTHORISATION"
                     },
                     {
+                      "description": "Filter events by one or more network subtypes.",
                       "key": "subtype",
-                      "value": "sale_purchases,purchase_reversals"
+                      "value": "purchase_reversals,purchase_reversals"
                     },
                     {
+                      "description": "Filter events by reversal flag.",
                       "key": "reversal",
                       "value": "<boolean>"
                     },
@@ -1177,90 +1205,95 @@
                       "value": "<long>"
                     },
                     {
+                      "description": "Sort order on event timestamp. ASC = oldest first (default DESC).",
                       "key": "sortOrder",
-                      "value": "<string>"
+                      "value": "DESC"
                     }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "disabled": false,
-                    "description": "A request parameter specifying the type of response the client would like. Must be one of `application/json`, `application/pdf` or `text/csv`.\n\nThe default response type (`application/json`) will be returned if specified incorrectly or not specified.\n",
-                    "key": "accept",
-                    "value": "string"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                  ]
+                }
               },
               "status": "OK",
               "code": 200,
+              "_postman_previewlanguage": "json",
               "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
+                },
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "request-ref",
+                  "value": ""
                 }
               ],
-              "body": "{\n  \"events\": [\n    {\n      \"type\": \"SETTLEMENT\"\n    },\n    {\n      \"type\": \"SETTLEMENT\"\n    }\n  ],\n  \"count\": 9732,\n  \"responseCount\": 9298\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"events\": [\n    {\n      \"type\": \"AUTHORISATION\"\n    },\n    {\n      \"type\": \"ORIGINAL_CREDIT\"\n    }\n  ],\n  \"count\": \"<long>\",\n  \"responseCount\": \"<long>\"\n}",
+              "createdAt": "2026-10-21T19:52:11.000Z",
+              "updatedAt": "2026-10-21T19:52:11.000Z",
+              "uid": "35240-f48044ea-c554-4539-bb04-56ad85a619fb"
             },
             {
-              "id": "f6b12848-2fda-4fe0-b1ff-59ba35a59522",
+              "id": "ef60806a-c8aa-4661-8b06-41b68959cb27",
               "name": "Bad Request Error - Your request is invalid.",
               "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
                 "url": {
-                  "path": [
-                    "card_payment_events"
-                  ],
+                  "raw": "{{baseUrl}}/card_payment_events?offset=<integer>&limit=<integer>&cardPaymentId=4805802&cardId=4805802&type=ORIGINAL_CREDIT,AUTHORISATION&subtype=purchase_reversals,purchase_reversals&reversal=<boolean>&timestampFrom=<long>&timestampTo=<long>&sortOrder=DESC",
                   "host": [
                     "{{baseUrl}}"
                   ],
+                  "path": [
+                    "card_payment_events"
+                  ],
                   "query": [
                     {
+                      "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.",
                       "key": "offset",
                       "value": "<integer>"
                     },
                     {
+                      "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100.",
                       "key": "limit",
                       "value": "<integer>"
                     },
                     {
+                      "description": "Filter events to a single card payment.",
                       "key": "cardPaymentId",
-                      "value": "<string>"
+                      "value": "4805802"
                     },
                     {
+                      "description": "Filter events to those on a single managed card.",
                       "key": "cardId",
-                      "value": "<string>"
+                      "value": "4805802"
                     },
                     {
+                      "description": "Filter by one or more event types.",
                       "key": "type",
-                      "value": "REFUND,SETTLEMENT"
+                      "value": "ORIGINAL_CREDIT,AUTHORISATION"
                     },
                     {
+                      "description": "Filter events by one or more network subtypes.",
                       "key": "subtype",
-                      "value": "sale_purchases,purchase_reversals"
+                      "value": "purchase_reversals,purchase_reversals"
                     },
                     {
+                      "description": "Filter events by reversal flag.",
                       "key": "reversal",
                       "value": "<boolean>"
                     },
@@ -1273,90 +1306,91 @@
                       "value": "<long>"
                     },
                     {
+                      "description": "Sort order on event timestamp. ASC = oldest first (default DESC).",
                       "key": "sortOrder",
-                      "value": "<string>"
+                      "value": "DESC"
                     }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "disabled": false,
-                    "description": "A request parameter specifying the type of response the client would like. Must be one of `application/json`, `application/pdf` or `text/csv`.\n\nThe default response type (`application/json`) will be returned if specified incorrectly or not specified.\n",
-                    "key": "accept",
-                    "value": "string"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                  ]
+                }
               },
               "status": "Bad Request",
               "code": 400,
+              "_postman_previewlanguage": "json",
               "header": [
-                {
-                  "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
-                  "key": "request-ref",
-                  "value": "string"
-                },
                 {
                   "key": "Content-Type",
                   "value": "application/json"
+                },
+                {
+                  "disabled": false,
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "key": "request-ref",
+                  "value": ""
                 }
               ],
-              "body": "{\n  \"message\": \"string\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"EXACTLY\"\n      },\n      {\n        \"params\": [\n          \"string\",\n          \"string\"\n        ],\n        \"fieldName\": \"string\",\n        \"error\": \"AT_LEAST\"\n      }\n    ]\n  }\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"message\": \"<string>\",\n  \"syntaxErrors\": {\n    \"invalidFields\": [\n      {\n        \"params\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"fieldName\": \"<string>\",\n        \"error\": \"IN\"\n      },\n      {\n        \"params\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"fieldName\": \"<string>\",\n        \"error\": \"NOT_IN\"\n      }\n    ]\n  }\n}",
+              "createdAt": "2026-10-21T19:52:11.000Z",
+              "updatedAt": "2026-10-21T19:52:11.000Z",
+              "uid": "35240-ef60806a-c8aa-4661-8b06-41b68959cb27"
             },
             {
-              "id": "b671a0a7-e018-4ad6-85bc-996a134b9ec3",
+              "id": "2a8cb260-71b4-4ad3-bc1c-889eeeaa84bf",
               "name": "Unauthorized - Your credentials or access token are invalid.",
               "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
                 "url": {
-                  "path": [
-                    "card_payment_events"
-                  ],
+                  "raw": "{{baseUrl}}/card_payment_events?offset=<integer>&limit=<integer>&cardPaymentId=4805802&cardId=4805802&type=ORIGINAL_CREDIT,AUTHORISATION&subtype=purchase_reversals,purchase_reversals&reversal=<boolean>&timestampFrom=<long>&timestampTo=<long>&sortOrder=DESC",
                   "host": [
                     "{{baseUrl}}"
                   ],
+                  "path": [
+                    "card_payment_events"
+                  ],
                   "query": [
                     {
+                      "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.",
                       "key": "offset",
                       "value": "<integer>"
                     },
                     {
+                      "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100.",
                       "key": "limit",
                       "value": "<integer>"
                     },
                     {
+                      "description": "Filter events to a single card payment.",
                       "key": "cardPaymentId",
-                      "value": "<string>"
+                      "value": "4805802"
                     },
                     {
+                      "description": "Filter events to those on a single managed card.",
                       "key": "cardId",
-                      "value": "<string>"
+                      "value": "4805802"
                     },
                     {
+                      "description": "Filter by one or more event types.",
                       "key": "type",
-                      "value": "REFUND,SETTLEMENT"
+                      "value": "ORIGINAL_CREDIT,AUTHORISATION"
                     },
                     {
+                      "description": "Filter events by one or more network subtypes.",
                       "key": "subtype",
-                      "value": "sale_purchases,purchase_reversals"
+                      "value": "purchase_reversals,purchase_reversals"
                     },
                     {
+                      "description": "Filter events by reversal flag.",
                       "key": "reversal",
                       "value": "<boolean>"
                     },
@@ -1369,86 +1403,87 @@
                       "value": "<long>"
                     },
                     {
+                      "description": "Sort order on event timestamp. ASC = oldest first (default DESC).",
                       "key": "sortOrder",
-                      "value": "<string>"
+                      "value": "DESC"
                     }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "disabled": false,
-                    "description": "A request parameter specifying the type of response the client would like. Must be one of `application/json`, `application/pdf` or `text/csv`.\n\nThe default response type (`application/json`) will be returned if specified incorrectly or not specified.\n",
-                    "key": "accept",
-                    "value": "string"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                  ]
+                }
               },
               "status": "Unauthorized",
               "code": 401,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
                   "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "value": ""
                 }
               ],
-              "body": "",
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:52:11.000Z",
+              "updatedAt": "2026-10-21T19:52:11.000Z",
+              "uid": "35240-2a8cb260-71b4-4ad3-bc1c-889eeeaa84bf"
             },
             {
-              "id": "4ab23bbe-0dcc-4be8-a5ce-feafb0d9531c",
+              "id": "dfd83947-2582-45b1-8138-36779b7d5e8a",
               "name": "Internal Server Error - There is a problem with the server. Please try again later.",
               "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
                 "url": {
-                  "path": [
-                    "card_payment_events"
-                  ],
+                  "raw": "{{baseUrl}}/card_payment_events?offset=<integer>&limit=<integer>&cardPaymentId=4805802&cardId=4805802&type=ORIGINAL_CREDIT,AUTHORISATION&subtype=purchase_reversals,purchase_reversals&reversal=<boolean>&timestampFrom=<long>&timestampTo=<long>&sortOrder=DESC",
                   "host": [
                     "{{baseUrl}}"
                   ],
+                  "path": [
+                    "card_payment_events"
+                  ],
                   "query": [
                     {
+                      "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.",
                       "key": "offset",
                       "value": "<integer>"
                     },
                     {
+                      "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100.",
                       "key": "limit",
                       "value": "<integer>"
                     },
                     {
+                      "description": "Filter events to a single card payment.",
                       "key": "cardPaymentId",
-                      "value": "<string>"
+                      "value": "4805802"
                     },
                     {
+                      "description": "Filter events to those on a single managed card.",
                       "key": "cardId",
-                      "value": "<string>"
+                      "value": "4805802"
                     },
                     {
+                      "description": "Filter by one or more event types.",
                       "key": "type",
-                      "value": "REFUND,SETTLEMENT"
+                      "value": "ORIGINAL_CREDIT,AUTHORISATION"
                     },
                     {
+                      "description": "Filter events by one or more network subtypes.",
                       "key": "subtype",
-                      "value": "sale_purchases,purchase_reversals"
+                      "value": "purchase_reversals,purchase_reversals"
                     },
                     {
+                      "description": "Filter events by reversal flag.",
                       "key": "reversal",
                       "value": "<boolean>"
                     },
@@ -1461,164 +1496,142 @@
                       "value": "<long>"
                     },
                     {
+                      "description": "Sort order on event timestamp. ASC = oldest first (default DESC).",
                       "key": "sortOrder",
-                      "value": "<string>"
+                      "value": "DESC"
                     }
-                  ],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "disabled": false,
-                    "description": "A request parameter specifying the type of response the client would like. Must be one of `application/json`, `application/pdf` or `text/csv`.\n\nThe default response type (`application/json`) will be returned if specified incorrectly or not specified.\n",
-                    "key": "accept",
-                    "value": "string"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
+                  ]
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
+              "_postman_previewlanguage": "text",
               "header": [
                 {
                   "disabled": false,
-                  "description": "(Required) A request identifier. Providing this reference when contacting our support team will help us investigate your query.",
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
                   "key": "request-ref",
-                  "value": "string"
-                },
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
+                  "value": ""
                 }
               ],
-              "body": "",
               "cookie": [],
-              "_postman_previewlanguage": "text"
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-10-21T19:52:11.000Z",
+              "updatedAt": "2026-10-21T19:52:11.000Z",
+              "uid": "35240-dfd83947-2582-45b1-8138-36779b7d5e8a"
             },
             {
-              "id": "8643ff5e-6737-4f47-8348-0316eb25533d",
+              "id": "3acef644-18c2-46f9-a11a-d7bcaa7ba33c",
               "name": "Error",
               "originalRequest": {
-                "url": {
-                  "path": [
-                    "card_payment_events"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "offset",
-                      "value": "<integer>"
-                    },
-                    {
-                      "key": "limit",
-                      "value": "<integer>"
-                    },
-                    {
-                      "key": "cardPaymentId",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "cardId",
-                      "value": "<string>"
-                    },
-                    {
-                      "key": "type",
-                      "value": "REFUND,SETTLEMENT"
-                    },
-                    {
-                      "key": "subtype",
-                      "value": "sale_purchases,purchase_reversals"
-                    },
-                    {
-                      "key": "reversal",
-                      "value": "<boolean>"
-                    },
-                    {
-                      "key": "timestampFrom",
-                      "value": "<long>"
-                    },
-                    {
-                      "key": "timestampTo",
-                      "value": "<long>"
-                    },
-                    {
-                      "key": "sortOrder",
-                      "value": "<string>"
-                    }
-                  ],
-                  "variable": []
-                },
+                "method": "GET",
                 "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "disabled": false,
-                    "description": "A request parameter specifying the type of response the client would like. Must be one of `application/json`, `application/pdf` or `text/csv`.\n\nThe default response type (`application/json`) will be returned if specified incorrectly or not specified.\n",
-                    "key": "accept",
-                    "value": "string"
-                  },
                   {
                     "key": "Accept",
                     "value": "application/json"
+                  },
+                  {
+                    "description": "Added as a part of security scheme: bearer",
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
                   }
                 ],
-                "method": "GET",
-                "body": {}
+                "url": {
+                  "raw": "{{baseUrl}}/card_payment_events?offset=<integer>&limit=<integer>&cardPaymentId=4805802&cardId=4805802&type=ORIGINAL_CREDIT,AUTHORISATION&subtype=purchase_reversals,purchase_reversals&reversal=<boolean>&timestampFrom=<long>&timestampTo=<long>&sortOrder=DESC",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "card_payment_events"
+                  ],
+                  "query": [
+                    {
+                      "description": "The offset value for paging, indicating the initial item number to be returned from the data set satisfying the given criteria. Leave out to fetch the first page of results.",
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "description": "The limit of the results for paging, starting at the offset. Limit is always capped at 100.",
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "description": "Filter events to a single card payment.",
+                      "key": "cardPaymentId",
+                      "value": "4805802"
+                    },
+                    {
+                      "description": "Filter events to those on a single managed card.",
+                      "key": "cardId",
+                      "value": "4805802"
+                    },
+                    {
+                      "description": "Filter by one or more event types.",
+                      "key": "type",
+                      "value": "ORIGINAL_CREDIT,AUTHORISATION"
+                    },
+                    {
+                      "description": "Filter events by one or more network subtypes.",
+                      "key": "subtype",
+                      "value": "purchase_reversals,purchase_reversals"
+                    },
+                    {
+                      "description": "Filter events by reversal flag.",
+                      "key": "reversal",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "timestampFrom",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "timestampTo",
+                      "value": "<long>"
+                    },
+                    {
+                      "description": "Sort order on event timestamp. ASC = oldest first (default DESC).",
+                      "key": "sortOrder",
+                      "value": "DESC"
+                    }
+                  ]
+                }
               },
               "status": "Internal Server Error",
               "code": 500,
+              "_postman_previewlanguage": "json",
               "header": [
                 {
                   "key": "Content-Type",
                   "value": "application/json"
                 }
               ],
-              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\"\n}",
               "cookie": [],
-              "_postman_previewlanguage": "json"
+              "responseTime": null,
+              "body": "{\n  \"code\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+              "createdAt": "2026-10-21T19:52:11.000Z",
+              "updatedAt": "2026-10-21T19:52:11.000Z",
+              "uid": "35240-3acef644-18c2-46f9-a11a-d7bcaa7ba33c"
             }
           ],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
+          "createdAt": "2026-10-21T19:52:11.000Z",
+          "updatedAt": "2026-10-21T19:52:11.000Z",
+          "uid": "35240-43ff8038-3f44-41ee-906d-7b68e90b67e2"
         }
       ],
-      "event": []
+      "id": "20ea2e95-9b37-463e-99e5-5550e9e063da",
+      "createdAt": "2026-10-21T19:52:11.000Z",
+      "updatedAt": "2026-10-21T19:52:11.000Z",
+      "uid": "35240-20ea2e95-9b37-463e-99e5-5550e9e063da"
     }
   ],
-  "event": [],
   "variable": [
     {
-      "type": "string",
-      "value": "https://sandbox.weavr.io/multi/backoffice",
-      "key": "baseUrl"
+      "key": "baseUrl",
+      "value": "https://sandbox.weavr.io/multi"
     }
-  ],
-  "info": {
-    "_postman_id": "055f1a3f-ce06-41bd-8f38-4966ce114e1a",
-    "name": "Weavr Multi Product BackOffice Access Token Card Payments API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "description": {
-      "content": "Weavr Multi Back Office API allows you, as an innovator, to perform various back office operations concerning\nidentities and their instruments, without requiring the users to be logged in.\n\nA token is to be obtained through the `access_token` method, and this will allow relevant operations\nto be performed on behalf of this same identity.\n\n\nContact Support:\n Name: Weavr",
-      "type": "text/plain"
-    }
-  }
+  ]
 }
